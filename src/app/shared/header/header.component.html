@@ -1,0 +1,23 @@
+<mat-toolbar
+	color="accent"
+	class="toolbar">
+	<span>IBEScore Companion</span>
+	<span class="spacer"></span>
+	<div class="header-right">
+		<button
+			mat-flat-button
+			color="warn"
+			routerLink="/forgot-password"
+			*ngIf="!isLoggedIn()"
+			(click)="forgotPassword()">
+			Forgot Password
+		</button>
+		<button
+			mat-flat-button
+			color="warn"
+			routerLink="/auth/logout"
+			*ngIf="isLoggedIn()">
+			logout
+		</button>
+	</div>
+</mat-toolbar>

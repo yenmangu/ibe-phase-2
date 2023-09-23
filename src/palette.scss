@@ -1,0 +1,100 @@
+@import '@angular/material/theming';
+
+// Custom IBESCORE palettes
+$ibe-green-palette: (
+	50: #f1f9e8,
+	100: #dcf0c5,
+	200: #c5e79f,
+	300: #addd76,
+	400: #99d555,
+	500: #86cd32,
+	600: #77bd2a,
+	700: #61a91f,
+	800: #4b9914,
+	900: #237201,
+	contrast: (50: #3c3c3c,
+		100: #3c3c3c,
+		200: #3c3c3c,
+		300: #3c3c3c,
+		400: #3c3c3c,
+		500: #3c3c3c,
+		600: whitesmoke,
+		700: whitesmoke,
+		800: whitesmoke,
+		900: whitesmoke,
+	)
+);
+
+$ibe-dark-violet: (
+	300:#a575dd,
+	400: #9155d5,
+	500: #7d34cd,
+	600: #732ec6,
+	contrast:(300: #3c3c3c,
+		400: #3c3c3c,
+		500: #3c3c3c,
+		600: whitesmoke,
+	)
+);
+
+$ibe-magenta-palette: (
+	50:#ffe2fc,
+	100: #fbb5f6,
+	200: #f97ef2,
+	300: #f428ed,
+	400: #ef00e9,
+	500: #e000dc,
+	600: #ce00d9,
+	700: #b600d4,
+	800: #a100d0,
+	900: #7600c7,
+	contrast: (50: #3c3c3c,
+		100: #3c3c3c,
+		200: #3c3c3c,
+		300: #3c3c3c,
+		400: #3c3c3c,
+		500: #3c3c3c,
+		600: whitesmoke,
+		700: whitesmoke,
+		800: whitesmoke,
+		900: whitesmoke,
+	)
+);
+
+$ibe-indigo-dye-palette: (
+	50: #e2eff4,
+	100: #b9d7e6,
+	200: #8fbed6,
+	300: #6aa4c6,
+	400: #5093bc,
+	500: #3982b2,
+	600: #2f76a7,
+	700: #236696,
+	800: #1b5685,
+	900: #0d3b66,
+	contrast: (50: #3c3c3c,
+		100: #3c3c3c,
+		200: #3c3c3c,
+		300: #3c3c3c,
+		400: #3c3c3c,
+		500: #3c3c3c,
+		600: whitesmoke,
+		700: whitesmoke,
+		800: whitesmoke,
+		900: whitesmoke,
+	)
+);
+
+$ibe-pumpkin-palette: (
+	800: #ffb14d,
+	900: #ff8c42,
+	contrast: (800: #3c3c3c,
+		900: #3c3c3c)
+);
+
+$ibe-red-alert-palette: (
+	700: #d0342c,
+	900: #b42319,
+	contrast: (700: whitesmoke,
+		900: whitesmoke)
+);

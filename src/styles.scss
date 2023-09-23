@@ -1,0 +1,54 @@
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@use '@angular/material' as mat;
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat.core();
+
+// custom theme
+@import './palette.scss';
+
+$ibe-primary: mat.define-palette($ibe-green-palette, 400, 300, 800);
+$ibe-accent: mat.define-palette($ibe-dark-violet, 600, 300, 600);
+$ibe-indigo: mat.define-palette($ibe-indigo-dye-palette, 900, 700, 900);
+$ibe-tertiary: mat.define-palette($ibe-magenta-palette, 400, 300, 700);
+$ibe-warn: mat.define-palette($ibe-pumpkin-palette, 900, 800, 900);
+$ibe-alert: mat.define-palette($ibe-red-alert-palette, 900, 700, 900);
+
+$ibescore-theme: mat.define-light-theme((color: (primary: $ibe-primary,
+        accent: $ibe-accent,
+        indigo_dye: $ibe-indigo,
+        tertiary: $ibe-tertiary,
+        warn: $ibe-warn,
+        alert: $ibe-alert)));
+
+@include mat.all-component-themes($ibescore-theme);
+
+/* You can add global styles to this file, and also import other style files */
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.container {
+  display: flex;
+
+}
+
+.container.columns {
+  flex-direction: column;
+
+}
+
+.container.rows {
+  flex-direction: row;
+}

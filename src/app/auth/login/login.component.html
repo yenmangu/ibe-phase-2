@@ -1,0 +1,20 @@
+<form [formGroup]="loginForm">
+	<mat-form-field>
+		<input
+			matInput
+			formControlName="gameCode"
+			placeholder="Game Code" />
+	</mat-form-field>
+	<mat-form-field>
+		<input
+			matInput
+			formControlName="key"
+			placeholder="Director Key" />
+	</mat-form-field>
+	<button
+		mat-flat-button
+		color="accent"
+		(click)="onSubmit()">
+		Login
+	</button>
+</form>
