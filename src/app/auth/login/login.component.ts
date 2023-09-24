@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DialogService } from 'src/app/shared/services/dialog.service';
-import { AuthService } from '../auth.service';
+import { AuthService } from '../services/auth.service';
 import { SharedDataService } from 'src/app/shared/services/shared-data.service';
 @Component({
 	selector: 'app-login',
@@ -31,16 +31,16 @@ export class LoginComponent implements OnInit {
 			type: 'slot',
 			username: this.loginForm.get('gameCode').value,
 			password: this.loginForm.get('key').value
-		}
-		
-
+		};
 		formData.type = 'slot';
 		console.log('formData : ', formData);
 		console.log('Submit Button Clicked');
 		this.authService.login(formData).subscribe({
 			next: response => {
-				console.log('Success from onSubmit(): ', response)
+				console.log('response from authService: ', response);
 				// this.sharedDataService.updateGameCode(response.slot)
+				this.sharedDataService.updateGameCode(response.directorSlot);
+				this.sharedDataService.updateEmail(response.directorEmail);
 			}
 		});
 	}

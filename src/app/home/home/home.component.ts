@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { LoginComponent } from 'src/app/auth/login/login.component';
 import { RegisterComponent } from 'src/app/auth/register/register.component';
 import { DialogService } from 'src/app/shared/services/dialog.service';
-import { AuthService } from 'src/app/auth/auth.service';
+import { AuthService } from 'src/app/auth/services/auth.service';
 
 @Component({
 	selector: 'app-home',

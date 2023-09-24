@@ -1,17 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import {
-	BehaviorSubject,
-	Observable,
-	of,
-	map,
-	switchMap,
-	tap,
-	catchError
-} from 'rxjs';
+import { BehaviorSubject, Observable, of, switchMap, tap, catchError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { DateTime } from 'luxon';
 import { TokenService } from './token.service';
+import { SharedDataService } from '../../shared/services/shared-data.service';
 
 @Injectable({
 	providedIn: 'root'
@@ -24,7 +17,11 @@ export class AuthService {
 	private apiUrl: string = environment.API_URL;
 	private tokenKey: any = null;
 
-	constructor(private http: HttpClient, private tokenService: TokenService) {
+	constructor(
+		private http: HttpClient,
+		private tokenService: TokenService,
+		private sharedDataService: SharedDataService
+	) {
 		this.tokenService.isTokenExpired().subscribe(isExpired => {
 			if (isExpired) {
 				// when token is expired
@@ -53,7 +50,7 @@ export class AuthService {
 		return this.http
 			.post<any>(`${this.apiUrl}/auth/login`, { type, username, password })
 			.pipe(
-				map(response => {
+				tap(response => {
 					console.log('login response: ', response);
 					const token = response.idToken;
 					const expiresIn = response.expires;
@@ -62,15 +59,13 @@ export class AuthService {
 						const expires: number = response.expires;
 						this.storeTokenExpiration(expires);
 					}
-
-					return response.isAuthed;
-				}),
-				tap(isAuthenticated => {
-					if (isAuthenticated) {
+					if (response.status === 'LOGGEDIN') {
 						this.isAuthed.next(true);
 						console.log('User Authenticated');
 					}
+					return response.isAuthed;
 				}),
+
 				catchError(err => {
 					console.error('Error authenticating user', err);
 					return of(false);
@@ -78,9 +73,10 @@ export class AuthService {
 			);
 	}
 
-	login(credentials): Observable<boolean> {
+	login(credentials): Observable<any> {
 		return this.authenticateUser(credentials).pipe(
 			switchMap(authResult => {
+				console.log('login() authResult: ', authResult);
 				return of(authResult);
 			})
 		);
