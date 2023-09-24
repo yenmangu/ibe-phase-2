@@ -11,6 +11,7 @@ import {
 } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { DateTime } from 'luxon';
+import { TokenService } from './token.service';
 
 @Injectable({
 	providedIn: 'root'
@@ -21,53 +22,53 @@ export class AuthService {
 	private _authed: boolean = false;
 	private userExist: boolean = false;
 	private apiUrl: string = environment.API_URL;
-	private tokenExpiration: DateTime | null = null;
 	private tokenKey: any = null;
 
-	constructor(private http: HttpClient) {}
+	constructor(private http: HttpClient, private tokenService: TokenService) {
+		this.tokenService.isTokenExpired().subscribe(isExpired => {
+			if (isExpired) {
+				// when token is expired
+				this.logout();
+			}
+		});
+	}
 
 	public get authStatus() {
 		return this._authed;
 	}
 
-	setToken(token: any): void {
-		localStorage.setItem('auth_token', token);
-	}
-
-	getToken(): any | null {
-		return localStorage.getItem('auth_token');
-	}
-
-	removeToken(): void {
-		localStorage.removeItem('auth_token');
-	}
-
-	isTokenExpired(): boolean {
-		return this.tokenExpiration !== null && DateTime.now() >= this.tokenExpiration;
-	}
-
-	private storeTokenExpiration(expiresIn: string): void {
-		const regexResult = expiresIn.match(/(\d+)(\w+)/);
-		if (regexResult)
-		const expiration = DateTime.now().plus({ millisecond: expiresIn });
-		localStorage.setItem('auth_token_expiration', expiration.toISO());
+	private storeTokenExpiration(expires: number): void {
+		console.log('auth.service storeTokenExpiration() ');
+		// const milliseconds = this.convertToMilliseconds(expiresIn);
+		const milliseconds = expires;
+		if (milliseconds !== null) {
+			const expiration = DateTime.now().plus({ milliseconds });
+			console.log('expiration: ', expiration);
+			localStorage.setItem('auth_token_expiration', expiration.toISO());
+		}
 	}
 
 	authenticateUser(data): Observable<boolean> {
 		const { type, username, password } = data;
 		return this.http
-			.post<any>(`${this.apiUrl}/login`, { type, username, password })
+			.post<any>(`${this.apiUrl}/auth/login`, { type, username, password })
 			.pipe(
 				map(response => {
 					console.log('login response: ', response);
-					const token = response.token;
+					const token = response.idToken;
 					const expiresIn = response.expires;
+					if (token && expiresIn) {
+						this.tokenService.setToken(token, expiresIn);
+						const expires: number = response.expires;
+						this.storeTokenExpiration(expires);
+					}
 
 					return response.isAuthed;
 				}),
 				tap(isAuthenticated => {
 					if (isAuthenticated) {
 						this.isAuthed.next(true);
+						console.log('User Authenticated');
 					}
 				}),
 				catchError(err => {
@@ -86,6 +87,7 @@ export class AuthService {
 	}
 
 	logout(): void {
-		localStorage.removeItem(this.tokenKey);
+		this.tokenService.removeToken;
+		this.isAuthed.next(false);
 	}
 }
