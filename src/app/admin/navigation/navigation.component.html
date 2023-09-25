@@ -1,0 +1,50 @@
+<div class="container">
+	<mat-drawer-container
+		class="sidenav"
+		autosize>
+		<!-- <button
+		type="button"
+		mat-flat-button
+		color="primary"
+		(click)="drawer.toggle()"></button> -->
+		<mat-drawer
+			class="drawer"
+			#drawer
+			opened="true"
+			mode="side">
+			<div class="nav-links container columns">
+				<a
+					routerLink="/admin/games"
+					class="nav-link"
+					>Tables</a
+				>
+				<a
+					routerLink="/admin/game-setup"
+					class="nav-link"
+					>Game Setup</a
+				>
+				<a
+					routerLink="/admin/game-actions"
+					class="nav-link"
+					>Game Actions <mat-icon svgIcon="upload-download"></mat-icon>
+				</a>
+				<a
+					routerLink="/admin/game-settings"
+					class="nav-link"
+					>Game Settings</a
+				>
+				<a
+					routerLink="/admin/account"
+					class="nav-link"
+					>Account Settings</a
+				>
+				<!-- <a routerLink="/admin/" class="nav-link"></a> -->
+				<!-- <a class="nav-link"></a> -->
+			</div>
+		</mat-drawer>
+		<mat-drawer-content class="content" [ngClass]="contentClass">
+			<!-- main application content -->
+			<router-outlet></router-outlet>
+		</mat-drawer-content>
+	</mat-drawer-container>
+</div>

@@ -25,14 +25,6 @@ export class DialogService implements OnInit {
 		console.log('Game Code: ', this.gameCode);
 	}
 
-	// openDialog(title: string): MatDialogRef<DialogComponent> {
-	// 	const dialogRef = this.dialog.open(DialogComponent, {
-	// 		width: '300px',
-	// 		data: { title }
-	// 	});
-	// 	return dialogRef;
-	// }
-
 	findDialog(name: string): DialogModel | undefined {
 		return this.dialogs.find(dialog => dialog.dialogName === name);
 	}
@@ -51,13 +43,29 @@ export class DialogService implements OnInit {
 	}
 
 	openDialog(dialogName: string): MatDialogRef<any> | undefined {
+		const dialogConfig = this.findDialog(dialogName);
+		let matDialogConfig: MatDialogConfig | undefined;
+		if (dialogConfig) {
+			matDialogConfig = {
+				width: dialogConfig.width,
+				data: dialogConfig.data
+			};
+		}
+		if (matDialogConfig) {
+			this.dialogRef = this.dialog.open(DialogComponent, matDialogConfig);
+			return this.dialogRef;
+		}
+		return undefined;
+	}
+
+	openDialogManipulated(dialogName: string): MatDialogRef<any> | undefined {
 		this.sharedDataService.gameCode$.subscribe(gamecode => {
 			this.gameCode = gamecode;
 			console.log('openDialog service game code: ', this.gameCode);
 		});
 		const dialogConfig = this.findAndManipulateDialog(dialogName);
 		let matDialogConfig: MatDialogConfig | undefined;
-		if (DialogConfig) {
+		if (dialogConfig) {
 			matDialogConfig = {
 				width: dialogConfig.width,
 				data: dialogConfig.data

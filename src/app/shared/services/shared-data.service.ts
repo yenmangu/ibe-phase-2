@@ -4,32 +4,42 @@ import { Observable, BehaviorSubject } from 'rxjs';
 @Injectable({
 	providedIn: 'root'
 })
-export class SharedDataService {
+export class SharedDataService  {
 	private gameCodeSubject = new BehaviorSubject<string>('');
 	private emailSubject = new BehaviorSubject<string>('');
 
 	email$: Observable<string> = this.emailSubject.asObservable();
 	gameCode$: Observable<string> = this.gameCodeSubject.asObservable();
 
-	constructor() {}
-	public updateGameCode(gameCode: string) {
-		console.log('shared data service updating game code: ', gameCode);
-		this.gameCodeSubject.next(gameCode);
-		// console.log(
-		// 	'shared data service Game Code: ',
-		// 	gameCode,
-		// 	'gameCode observable: ',
-		// 	this.gameCode$
-		// );
+	constructor() {
+		const gameCode = localStorage.getItem('game_code');
+		if (gameCode){
+			this.updateGameCode(gameCode)
+		} else {
+			this.updateGameCode('No Game Code Found')
+		}
+
+		const email = localStorage.getItem('user_email');
+		if (email) {
+			this.updateEmail(email)
+		} else {
+			this.updateEmail('No Email Found')
+		}
 	}
-	public updateEmail(email: string) {
+
+	public updateUserData(gameCode: string, email: string) {
+		this.updateEmail(email);
+		this.updateGameCode(gameCode);
+	}
+
+	private updateGameCode(gameCode: string) {
+		console.log('shared data service updating game code: ', gameCode);
+		localStorage.setItem('game_code', gameCode);
+		this.gameCodeSubject.next(gameCode);
+	}
+	private updateEmail(email: string) {
 		console.log('shared data service updating email: ', email);
+		localStorage.setItem('user_email', email);
 		this.emailSubject.next(email);
-		// console.log(
-		// 	'shared data service Email: ',
-		// 	email,
-		// 	'gameCode observable: ',
-		// 	this.email$
-		// );
 	}
 }

@@ -49,6 +49,11 @@ body {
 
 }
 
-.container.rows {
+.container.row {
   flex-direction: row;
+}
+
+app-root {
+  display: block;
+  // height: 100vh;
 }

@@ -9,6 +9,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 // Components
 import { AppComponent } from './app.component';
+import { SidenavService } from './shared/services/sidenav.service';
 
 // Custom Modules
 
@@ -28,7 +29,8 @@ import { HomeModule } from './home/home.module';
 	],
 	providers: [
 		{ provide: MatDialogModule, useValue: {} },
-		{ provide: MatDialogRef, useValue: {} }
+		{ provide: MatDialogRef, useValue: {} },
+		SidenavService
 	],
 	bootstrap: [AppComponent]
 })

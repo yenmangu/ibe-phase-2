@@ -1,22 +1,38 @@
 <mat-toolbar
 	color="accent"
 	class="toolbar">
+	<ng-container *ngIf="authService.isAuthedSubject$ | async">
+		
+		<button
+			mat-mini-fab
+			(click)="toggleSidenav()">
+			<mat-icon>menu</mat-icon>
+		</button>
+	</ng-container>
+
 	<span>IBEScore Companion</span>
 	<span class="spacer"></span>
-	<div class="header-right">
+	<div class="header-right container">
 		<button
 			mat-flat-button
 			color="warn"
 			routerLink="/forgot-password"
-			*ngIf="!isLoggedIn()"
+			*ngIf="!(authService.isAuthedSubject$ | async)"
 			(click)="forgotPassword()">
 			Forgot Password
 		</button>
+		<div
+			*ngIf="authService.isAuthedSubject$ | async"
+			class="user-data container">
+			<span class="gamecode">{{ sharedDataService.gameCode$ | async }}</span>
+			<span class="email">{{ sharedDataService.email$ | async }}</span>
+		</div>
 		<button
 			mat-flat-button
 			color="warn"
 			routerLink="/auth/logout"
-			*ngIf="isLoggedIn()">
+			*ngIf="authService.isAuthedSubject$ | async"
+			(click)="logout()">
 			logout
 		</button>
 	</div>

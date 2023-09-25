@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { DialogService } from 'src/app/shared/services/dialog.service';
 import { AuthService } from '../services/auth.service';
 import { SharedDataService } from 'src/app/shared/services/shared-data.service';
@@ -13,6 +14,7 @@ export class LoginComponent implements OnInit {
 
 	constructor(
 		private fb: FormBuilder,
+		private router: Router,
 		private dialogService: DialogService,
 		private authService: AuthService,
 		private sharedDataService: SharedDataService
@@ -38,19 +40,17 @@ export class LoginComponent implements OnInit {
 		this.authService.login(formData).subscribe({
 			next: response => {
 				console.log('response from authService: ', response);
-				// this.sharedDataService.updateGameCode(response.slot)
-				this.sharedDataService.updateGameCode(response.directorSlot);
-				this.sharedDataService.updateEmail(response.directorEmail);
+				this.sharedDataService.updateUserData(
+					response.directorSlot,
+					response.directorEmail
+				);
+				this.router.navigate(['/admin'])
+				this.dialogService.closeDialog();
 			}
 		});
 	}
 
 	openRegistrationSuccessDialog() {
-		const dialogRef = this.dialogService.openDialog('registrationSuccess');
-		dialogRef.afterClosed().subscribe(result => {
-			if (result === 'success') {
-				// handle success
-			}
-		});
+		return this.dialogService.openDialog('registrationSuccess');
 	}
 }

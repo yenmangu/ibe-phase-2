@@ -1,6 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, of, switchMap, tap, catchError } from 'rxjs';
+import {
+	BehaviorSubject,
+	Observable,
+	of,
+	switchMap,
+	tap,
+	map,
+	catchError
+} from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { DateTime } from 'luxon';
 import { TokenService } from './token.service';
@@ -10,7 +18,8 @@ import { SharedDataService } from '../../shared/services/shared-data.service';
 	providedIn: 'root'
 })
 export class AuthService {
-	private isAuthed = new BehaviorSubject<boolean>(false);
+	private isAuthedSubject = new BehaviorSubject<boolean>(false);
+	private statusSubject = new BehaviorSubject<any>('')
 
 	private _authed: boolean = false;
 	private userExist: boolean = false;
@@ -22,6 +31,10 @@ export class AuthService {
 		private tokenService: TokenService,
 		private sharedDataService: SharedDataService
 	) {
+		const token = this.tokenService.getToken();
+		if (token) {
+			this.isAuthedSubject.next(true);
+		}
 		this.tokenService.isTokenExpired().subscribe(isExpired => {
 			if (isExpired) {
 				// when token is expired
@@ -30,9 +43,20 @@ export class AuthService {
 		});
 	}
 
-	public get authStatus() {
-		return this._authed;
+	public get isAuthedSubject$(): Observable<boolean> {
+		return this.isAuthedSubject.asObservable();
 	}
+	public get statusSubject$(): Observable<any> {
+		return this.statusSubject.asObservable()
+	}
+
+	setAuthenticationStatus(isAuthenticated: boolean) {
+		this.isAuthedSubject.next(isAuthenticated);
+	}
+
+	// public get authStatus() {
+	// 	return this.isAuthedSubject.asObservable();
+	// }
 
 	private storeTokenExpiration(expires: number): void {
 		console.log('auth.service storeTokenExpiration() ');
@@ -50,6 +74,10 @@ export class AuthService {
 		return this.http
 			.post<any>(`${this.apiUrl}/auth/login`, { type, username, password })
 			.pipe(
+				// map(response => {
+				// 	// mutate response
+				// 	return response;
+				// }),
 				tap(response => {
 					console.log('login response: ', response);
 					const token = response.idToken;
@@ -60,12 +88,22 @@ export class AuthService {
 						this.storeTokenExpiration(expires);
 					}
 					if (response.status === 'LOGGEDIN') {
-						this.isAuthed.next(true);
+						this.isAuthedSubject.next(true);
+						this.statusSubject.next('AUTHED')
 						console.log('User Authenticated');
 					}
-					return response.isAuthed;
-				}),
+					if (response.status === 'ERRORNOUSER') {
+						this.isAuthedSubject.next(false);
+						this.statusSubject.next('NO_USER')
+						console.log('No User Found');
 
+					}
+					if (response.status === 'ERRORPASS') {
+						this.isAuthedSubject.next(false);
+						this.statusSubject.next('INCORRECT_PASS')
+						console.log('Incorrect Password');
+					}
+				}),
 				catchError(err => {
 					console.error('Error authenticating user', err);
 					return of(false);
@@ -82,8 +120,9 @@ export class AuthService {
 		);
 	}
 
-	logout(): void {
-		this.tokenService.removeToken;
-		this.isAuthed.next(false);
+	logout(): void{
+		this.tokenService.removeToken();
+		this.isAuthedSubject.next(false);
+
 	}
 }

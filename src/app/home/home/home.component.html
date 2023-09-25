@@ -1,10 +1,8 @@
-<app-header></app-header>
 <div class="container columns">
 	<button
 		mat-flat-button
 		color="primary"
 		class="login"
-		routerLink="/login"
 		(click)="openDialog('login')"
 		*ngIf="!isLoggedIn()">
 		Log In
@@ -13,10 +11,8 @@
 		mat-flat-button
 		color="primary"
 		class="register"
-		routerLink="/register"
 		(click)="openDialog('register')"
 		*ngIf="!isLoggedIn()">
 		Register
 	</button>
 </div>
-<app-footer></app-footer>
