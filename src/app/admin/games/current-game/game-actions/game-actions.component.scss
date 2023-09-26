@@ -1,0 +1,60 @@
+.container.row {
+	padding: 2rem;
+	justify-content: center;
+	align-items: flex-start;
+	gap: 2rem
+}
+
+.container.center {
+	width: 400px
+}
+
+.container.center .row {
+	padding-top: 0;
+	align-items: center;
+}
+
+.container.right {
+	align-items: flex-start;
+}
+.container.right .row {
+	padding: 0
+}
+
+.button-wrapper {
+	gap: 0.4em;
+}
+
+h4 {
+	margin-block-start: 0;
+	margin-block-end: 0
+}
+
+.calendar-card {
+	width: 100%
+}
+
+.mat-mdc-form-field-icon-suffix.ng-star-inserted {
+	padding: 0 4px !important;
+	position: absolute;
+	right: 10px
+}
+
+.mat-mdc-form-field-has-icon-suffix .mat-mdc-text-field-wrapper.mdc-text-field {
+	padding-right: 1.2em !important
+}
+
+.mat-mdc-text-field-wrapper.mdc-text-field {
+	padding-right: 0.2em !important
+}
+
+.row.handset {
+	flex-direction: column;
+}
+
+.button-wrapper.handset {
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+}

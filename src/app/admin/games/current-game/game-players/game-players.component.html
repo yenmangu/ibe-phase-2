@@ -1,0 +1,29 @@
+<div
+	class="container row top"
+	[ngClass]="currentBreakpoint">
+	<div
+		class="container column top"
+		[ngClass]="currentBreakpoint">
+		<mat-form-field [ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }">
+			<mat-label [ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }"
+				>Show Details</mat-label
+			>
+			<mat-select
+				[ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }"
+				name="detail">
+				<mat-option [ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }"
+					>None</mat-option
+				>
+				<mat-option
+					[ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }"
+					*ngFor="let detail of eventDetails"
+					[value]="detail.value"
+					>{{ detail.option }}</mat-option
+				>
+			</mat-select>
+		</mat-form-field>
+	</div>
+</div>
+<div class="container row table">
+	
+</div>

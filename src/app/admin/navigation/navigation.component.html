@@ -12,7 +12,7 @@
 			#drawer
 			opened="true"
 			mode="side">
-			<div class="nav-links container columns">
+			<div class="nav-links column">
 				<a
 					routerLink="/admin/games"
 					class="nav-link"
@@ -41,8 +41,27 @@
 				<!-- <a routerLink="/admin/" class="nav-link"></a> -->
 				<!-- <a class="nav-link"></a> -->
 			</div>
+			<div class="button-wrapper column">
+				<h4>Development</h4>
+				<mat-radio-group
+					[formControl]="matchTypeControl"
+					#matchTypeGroup>
+					<mat-radio-button value="pairs">Pairs</mat-radio-button>
+					<mat-radio-button value="teams">Teams</mat-radio-button>
+					<mat-radio-button value="sides">Sides</mat-radio-button>
+				</mat-radio-group>
+				<br /><br />
+				<div
+					class="container column"
+					style="align-items: center; justify-content: center">
+					<p>Match Type</p>
+					<p>{{ (selectedMatchType$ | async) || matchTypeControl.value }}</p>
+				</div>
+			</div>
 		</mat-drawer>
-		<mat-drawer-content class="content" [ngClass]="contentClass">
+		<mat-drawer-content
+			class="content"
+			[ngClass]="contentClass">
 			<!-- main application content -->
 			<router-outlet></router-outlet>
 		</mat-drawer-content>

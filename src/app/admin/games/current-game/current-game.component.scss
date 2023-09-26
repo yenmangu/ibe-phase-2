@@ -1,3 +1,32 @@
-.tab{
-	padding: 2em
+.tab.container.column {
+	padding-top: 1rem;
+	padding-left: 1rem
+}
+
+.tab.container.row {
+	// height: 2em;
+	padding: 1rem 1rem 0 1rem;
+	align-items: baseline;
+	justify-content: center;
+	gap: 2em;
+}
+
+.input-row {
+	gap: 2em
+}
+
+mat-form-field {
+	width: 100%
+}
+
+button.save,
+button.names,
+button.actions {
+	height: 50px;
+}
+
+.actions-row {
+	width: 100%;
+	justify-content: flex-start;
+
 }

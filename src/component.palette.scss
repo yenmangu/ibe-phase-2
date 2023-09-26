@@ -1,0 +1,6 @@
+@import '@angular/material/theming';
+
+// Grey-Magenta Theme
+
+$magenta-primary: mat.define-palette($ibe-magenta-palette, 400, 400, 400);
+$grey-accent: mat.define-palette($mat-grey-palette, 400, 400, 400)

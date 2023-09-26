@@ -10,6 +10,7 @@
 
 // custom theme
 @import './palette.scss';
+@import './component.palette.scss';
 
 $ibe-primary: mat.define-palette($ibe-green-palette, 400, 300, 800);
 $ibe-accent: mat.define-palette($ibe-dark-violet, 600, 300, 600);
@@ -25,9 +26,23 @@ $ibescore-theme: mat.define-light-theme((color: (primary: $ibe-primary,
         warn: $ibe-warn,
         alert: $ibe-alert)));
 
+$magenta-grey-theme: mat.define-light-theme((color: (primary: $magenta-primary,
+        accent: $grey-accent)));
+
 @include mat.all-component-themes($ibescore-theme);
 
+// Custom Component Themes
+
+.grey-magenta-theme {
+
+  @include mat.all-component-colors($magenta-grey-theme);
+}
+
 /* You can add global styles to this file, and also import other style files */
+* {
+  --webkit-font-smoothing: subpixel-antialiased;
+  font-smooth: always;
+}
 
 html,
 body {
@@ -44,7 +59,7 @@ body {
 
 }
 
-.container.columns {
+.container.column {
   flex-direction: column;
 
 }
@@ -55,5 +70,25 @@ body {
 
 app-root {
   display: block;
-  // height: 100vh;
 }
+
+.mdc-floating-label {
+  will-change: unset !important;
+}
+
+mat-mdc-form-field-flex {
+  height: 50px
+}
+
+.mat-mdc-form-field-infix {
+  min-height: 40px !important;
+  backface-visibility: hidden;
+}
+
+mat-label {
+  font-size: 14px;
+}
+
+// Mobile Global Styles
+
+// .row.handset

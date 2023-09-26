@@ -4,26 +4,32 @@ import { Observable, BehaviorSubject } from 'rxjs';
 @Injectable({
 	providedIn: 'root'
 })
-export class SharedDataService  {
+export class SharedDataService {
 	private gameCodeSubject = new BehaviorSubject<string>('');
 	private emailSubject = new BehaviorSubject<string>('');
 
 	email$: Observable<string> = this.emailSubject.asObservable();
 	gameCode$: Observable<string> = this.gameCodeSubject.asObservable();
 
+	// Dev for updating match type
+
+	private selectedMatchTypeSubject = new BehaviorSubject<string>('');
+	selectedMatchType$: Observable<string> =
+		this.selectedMatchTypeSubject.asObservable();
+
 	constructor() {
 		const gameCode = localStorage.getItem('game_code');
-		if (gameCode){
-			this.updateGameCode(gameCode)
+		if (gameCode) {
+			this.updateGameCode(gameCode);
 		} else {
-			this.updateGameCode('No Game Code Found')
+			this.updateGameCode('No Game Code Found');
 		}
 
 		const email = localStorage.getItem('user_email');
 		if (email) {
-			this.updateEmail(email)
+			this.updateEmail(email);
 		} else {
-			this.updateEmail('No Email Found')
+			this.updateEmail('No Email Found');
 		}
 	}
 
@@ -41,5 +47,10 @@ export class SharedDataService  {
 		console.log('shared data service updating email: ', email);
 		localStorage.setItem('user_email', email);
 		this.emailSubject.next(email);
+	}
+
+	public updateMatchType(type) {
+		console.log('Shared data service updating match type: ', type);
+		this.selectedMatchTypeSubject.next(type);
 	}
 }

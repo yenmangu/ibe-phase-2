@@ -1,0 +1,71 @@
+<div class="container row" [ngClass]="currentBreakpoint">
+	<div class="container column left">
+		<div class="button-wrapper container column" [ngClass]="currentBreakpoint">
+			<h4></h4>
+			<button
+				mat-flat-button
+				color="primary">
+				Finalise Game
+			</button>
+			<button
+				mat-flat-button
+				color="primary">
+				Lock
+			</button>
+			<button
+				mat-flat-button
+				color="primary">
+				BBO 2 BriAn
+			</button>
+			<button
+				mat-flat-button
+				color="primary">
+				BCL 2 BRiAn
+			</button>
+			<button
+				mat-flat-button
+				color="primary">
+				Import USEBIO
+			</button>
+			<button
+				mat-flat-button
+				color="warn">
+				Purge Game
+			</button>
+		</div>
+	</div>
+	<div class="container column center">
+		<div class="container row">
+			<h4>Re-date current game</h4>
+			<button
+			mat-flat-button
+			color="primary">
+			Save
+		</button>
+		</div>
+		<mat-card class="calendar-card">
+			<mat-calendar
+				[ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }"
+				[(selected)]="dateSelected"></mat-calendar>
+		</mat-card>
+	</div>
+	<div class="container column right">
+		<div class="container row">
+			<mat-form-field [ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }">
+				<mat-label>Set Simultaneous</mat-label>
+				<input
+					type="text"
+					matInput />
+				<button
+					[ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }"
+					color="primary"
+					mat-flat-button
+					class="save"
+					matSuffix>Save</button>
+			</mat-form-field>
+		</div>
+		<div class="container row">
+
+		</div>
+	</div>
+</div>

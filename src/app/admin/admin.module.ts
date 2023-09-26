@@ -2,12 +2,14 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { AdminRoutingModule } from './admin-routing.module';
+import { ReactiveFormsModule } from '@angular/forms';
 // Material
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTableModule } from '@angular/material/table';
+import { MatRadioModule } from '@angular/material/radio';
 //  Custom
 import { NavigationComponent } from './navigation/navigation.component';
 import { AdminComponent } from './admin.component';
@@ -25,19 +27,19 @@ import { GamesModule } from './games/games.module';
 		GameSetupComponent,
 		GameSettingsComponent,
 		GameActionsComponent,
-		AccountSettingsComponent,
-
-
+		AccountSettingsComponent
 	],
 	imports: [
 		CommonModule,
 		AdminRoutingModule,
+		ReactiveFormsModule,
 		// Material
 		MatSidenavModule,
 		MatButtonModule,
 		MatIconModule,
 		MatTabsModule,
 		MatTableModule,
+		MatRadioModule,
 		// Custom
 		DashboardModule,
 		GamesModule

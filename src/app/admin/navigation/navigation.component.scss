@@ -1,7 +1,15 @@
+:host {
+	height: 100%
+}
+
+.container {
+	height: 100%
+}
+
 .sidenav {
 	display: block;
 	width: 100%;
-	height: 600px;
+	// height:
 	overflow-x: hidden;
 }
 
@@ -12,6 +20,34 @@
 	padding-left: 2em;
 	padding-top: 2em;
 	// position: fixed
+}
+
+.drawer .mat-drawer-inner-container {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: flex-start;
+	gap: 2em
+}
+
+.button-wrapper.column {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 1em;
+	padding-top: 2em;
+	padding-right: 2em;
+}
+
+.button-wrapper h4 {
+
+	margin-block-start: 0;
+	margin-block-end: 0;
+}
+
+.button-wrapper button {
+	width: 90%
 }
 
 .mat-drawer-container.mat-drawer-opened .content {
