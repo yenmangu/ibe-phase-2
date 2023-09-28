@@ -8,6 +8,7 @@
 		"strict": false,
 		"noImplicitOverride": true,
 		"resolveJsonModule": true,
+		"esModuleInterop": true,
 		"noPropertyAccessFromIndexSignature": false,
 		"allowSyntheticDefaultImports": true,
 		"noImplicitReturns": true,

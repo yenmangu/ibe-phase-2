@@ -8,7 +8,9 @@ import { Subject, takeUntil } from 'rxjs';
 	styleUrls: ['./current-game.component.scss']
 })
 export class CurrentGameComponent implements OnInit, OnDestroy {
+	applyMagentaGreyTheme = true;
 	currentBreakpoint: string = '';
+	dateSelected: Date | null
 	private destroy$ = new Subject<void>();
 	constructor(private breakpointService: BreakpointService) {}
 	ngOnInit(): void {

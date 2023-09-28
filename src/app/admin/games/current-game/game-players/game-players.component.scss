@@ -1,4 +1,28 @@
 .row.top {
 	width: fit-content;
-	padding: 1em 0 0 0
+	padding: 1em 0 0 0;
+	gap: 2rem;
+	margin-bottom: 2rem;
+}
+.table {
+	display: block;
+	width: 100%;
+	background-color: whitesmoke;
+	border: none;
+	// overflow-y: scroll;
+}
+
+.actions-row {
+	width: 100%;
+	justify-content: flex-start;
+	align-items: flex-end;
+}
+.download.row {
+	display: grid;
+	grid-auto-flow: column;
+	align-self: flex-end;
+	margin-top: 3rem;
+	width: 100%;
+	gap: 2rem;
+	justify-content: flex-start;
 }

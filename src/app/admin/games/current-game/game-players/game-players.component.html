@@ -2,16 +2,20 @@
 	class="container row top"
 	[ngClass]="currentBreakpoint">
 	<div
-		class="container column top"
+		class="container row top"
 		[ngClass]="currentBreakpoint">
 		<mat-form-field [ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }">
 			<mat-label [ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }"
 				>Show Details</mat-label
 			>
 			<mat-select
+				[(ngModel)]="tableOption"
 				[ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }"
-				name="detail">
-				<mat-option [ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }"
+				name="detail"
+				(valueChange)="onOptionSelected($event)">
+				<mat-option
+					value="none"
+					[ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }"
 					>None</mat-option
 				>
 				<mat-option
@@ -22,8 +26,34 @@
 				>
 			</mat-select>
 		</mat-form-field>
+		<button class="main-save" mat-flat-button color="primary">SAVE CHANGES</button>
 	</div>
 </div>
 <div class="container row table">
-	
+	<app-match-tables
+		(formValuesChanged)="onTableValueChanged($event)"></app-match-tables>
+</div>
+<div class="container row download">
+	<button id="start_pdf"
+		mat-flat-button
+		color="accent">
+		Get Start Positions PDF
+	</button>
+
+	<mat-form-field [ngClass]="{ ' grey-magenta-theme': applyMagentaGreyTheme }">
+		<mat-label>Forward-Date (Optional) </mat-label>
+		<input
+			[ngClass]="{ 'grey-magenta-theme:': applyMagentaGreyTheme }"
+			type="text"
+			matInput
+			[matDatepicker]="date" />
+		<mat-datepicker-toggle
+			[ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }"
+			matIconSuffix
+			[for]="date"></mat-datepicker-toggle>
+		<mat-datepicker
+			#date
+			[ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }"></mat-datepicker>
+	</mat-form-field>
+
 </div>

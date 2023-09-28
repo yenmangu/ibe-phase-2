@@ -1,0 +1,152 @@
+// @import '@riapacheco/yutes/main.scss';
+// @import '@riapacheco/yutes/season/two.scss';
+// @import '';
+:host {
+	// overflow: scroll;
+	padding-bottom: 2rem;
+}
+
+.main {
+	background-attachment: fixed;
+	background-color: whitesmoke;
+	border: none;
+	// width: 70%;
+	// overflow-y: scroll;
+}
+
+$column-spacing: 1rem;
+.table-wrapper {
+	width: fit-content;
+}
+
+table {
+	width: 100%;
+	margin-top: 0;
+	margin-bottom: 1rem;
+	border: none;
+}
+
+tr.header-row {
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	gap: 1rem;
+
+	.divider {
+		width: 2rem;
+	}
+}
+
+tr.header-row th {
+	height: 2rem;
+	text-align: center;
+	flex-grow: 1;
+	flex-shrink: 1;
+	width: 100%;
+	// width: 100%;
+}
+
+th {
+	display: flex;
+	justify-content: center;
+}
+
+tr.tables-row {
+	width: 100%;
+	// height: 2.5rem;
+	display: flex;
+	align-items: flex-end;
+	justify-content: center;
+	gap: 1rem;
+
+	td {
+		display: flex;
+		text-align: center;
+		// width: 100%;
+		// height: 4rem;
+		flex-grow: 1;
+		flex-shrink: 1;
+		display: flex;
+		justify-content: center;
+		align-items: end;
+		padding: 0.2em;
+	}
+	td.divider {
+		width: 2rem;
+	}
+	th.divider {
+		width: 2rem;
+	}
+
+	// margin-left: $column-spacing / 2;
+	// margin-right: $column-spacing / 2;
+
+	&:first-child {
+		margin-left: 0;
+	}
+
+	&:last-child {
+		margin-left: 0;
+	}
+}
+.north,
+.south,
+.east,
+.west {
+	width: 100%;
+}
+
+th.table-number,
+td.table-number {
+	width: 100%;
+}
+
+.options-wrapper {
+	width: fit-content;
+}
+// Condiitional Elements
+.option clr-input-container.clr-form-control {
+	width: 100%;
+}
+
+td.venue {
+}
+.strat,
+#strat,
+#adjustments,
+.adjustments,
+#abbreviations,
+.abbreviations {
+	width: 80%;
+}
+
+#boardCol,
+.board-col {
+	width: 90%;
+}
+th.sitters {
+	justify-content: flex-end;
+}
+.times-lunch.wrapper {
+	display: flex;
+	justify-content: flex-start;
+}
+.container.times-lunch {
+	width: fit-content;
+	gap: 1rem;
+	align-items: flex-start;
+	.head-row,
+	.body-row,
+	.foot-row {
+		width: 100%;
+		justify-content: center;
+		gap: 2rem;
+	}
+	.head-row {
+		gap: 2rem;
+	}
+
+	.foot-row {
+		margin-top: 1rem;
+	}
+}

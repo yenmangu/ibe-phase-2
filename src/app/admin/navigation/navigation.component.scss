@@ -1,9 +1,9 @@
 :host {
-	height: 100%
+	height: 100%;
 }
 
 .container {
-	height: 100%
+	height: 100%;
 }
 
 .sidenav {
@@ -27,7 +27,7 @@
 	flex-direction: column;
 	justify-content: center;
 	align-items: flex-start;
-	gap: 2em
+	gap: 2em;
 }
 
 .button-wrapper.column {
@@ -41,19 +41,18 @@
 }
 
 .button-wrapper h4 {
-
 	margin-block-start: 0;
 	margin-block-end: 0;
 }
 
 .button-wrapper button {
-	width: 90%
+	width: 90%;
 }
 
 .mat-drawer-container.mat-drawer-opened .content {
 	margin-left: 220px;
 	// width: calc(100% - 220px) !important;
-	transition: margin-left 225ms cubic-bezier(0.42, 0, 0.58, 1)
+	transition: margin-left 225ms cubic-bezier(0.42, 0, 0.58, 1);
 }
 
 .mat-drawer-container.mat-drawer-opened .drawer {
@@ -65,13 +64,14 @@
 }
 
 .content {
+	background-color: whitesmoke;
 	width: 100%;
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
 	align-items: flex-start;
 	flex-grow: 1;
-	transition: margin-left 225ms cubic-bezier(0.42, 0, 0.58, 1)
+	transition: margin-left 225ms cubic-bezier(0.42, 0, 0.58, 1);
 }
 
 .mat-drawer-content {
@@ -79,11 +79,11 @@
 }
 
 .mat-drawer-content.full {
-	width: 100%
+	width: 100%;
 }
 
 .mat-drawer-content.shrink {
-	width: calc(100% - 220px)
+	width: calc(100% - 220px);
 }
 
 .nav-link {
