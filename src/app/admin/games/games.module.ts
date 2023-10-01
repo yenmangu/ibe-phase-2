@@ -14,10 +14,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSelectModule } from '@angular/material/select';
 
 // Clarity
-import { ClrInputModule } from '@clr/angular';
-import { ClrFormsModule } from '@clr/angular';
-import { ClrCheckboxModule } from '@clr/angular';
-import { ClrRadioModule } from '@clr/angular';
+
 
 import { GamesRoutingModule } from './games-routing.module';
 import { GamesComponent } from './games.component';
@@ -27,8 +24,14 @@ import { PlayerDatabaseComponent } from './player-database/player-database.compo
 import { GameActionsComponent } from './current-game/game-actions/game-actions.component';
 import { GamePlayersComponent } from './current-game/game-players/game-players.component';
 
+// Pipes
+
+import { KeysPipe } from 'src/app/shared/pipes/keys.pipe';
+
 import { DataService } from './services/data.service';
 import { MatchTablesComponent } from './match-tables/match-tables.component';
+import { TeamTablesComponent } from './team-tables/team-tables.component';
+import { PairsTableComponent } from './pairs-table/pairs-table.component';
 @NgModule({
 	declarations: [
 		GamesComponent,
@@ -37,7 +40,10 @@ import { MatchTablesComponent } from './match-tables/match-tables.component';
 		PlayerDatabaseComponent,
 		GameActionsComponent,
 		GamePlayersComponent,
-		MatchTablesComponent
+		MatchTablesComponent,
+		TeamTablesComponent,
+		PairsTableComponent,
+		KeysPipe
 	],
 	imports: [
 		CommonModule,
@@ -54,10 +60,7 @@ import { MatchTablesComponent } from './match-tables/match-tables.component';
 		MatDatepickerModule,
 		MatSelectModule,
 		// Clarity
-		ClrInputModule,
-		ClrFormsModule,
-		ClrCheckboxModule,
-		ClrRadioModule
+	
 	],
 	providers: [DataService]
 })

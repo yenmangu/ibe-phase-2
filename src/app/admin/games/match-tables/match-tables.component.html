@@ -1,332 +1,783 @@
 <div
 	class="main pt-1"
 	[ngClass]="currentBreakpoint">
-	<form (ngSubmit)="onFormValueChange()">
-		<div
-			*ngIf="!tablesConfig.timesLunch"
-			class="table-wrapper">
-			<tr class="header-row">
-				<th class="table-number">Table Number</th>
-				<th
-					class="conditional"
-					*ngIf="tablesConfig.venues">
-					Venues
-				</th>
-				<th
-					*ngIf="tablesConfig.boardCol"
-					class="conditional empty">
-					Colours
-				</th>
-				<th class="north">North</th>
-				<th class="divider"></th>
-				<th class="south">South</th>
-				<th
-					*ngIf="tablesConfig.stratification"
-					class="conditional empty">
-					Stratification
-				</th>
-				<th
-					*ngIf="tablesConfig.sitters"
-					class="conditional empty sitters">
-					Sitters
-				</th>
-				<th
-					*ngIf="tablesConfig.adjustments"
-					class="conditional empty">
-					Adjust
-				</th>
-				<th
-					*ngIf="tablesConfig.handicaps"
-					class="conditional empty">
-					Handicap
-				</th>
-				<th
-					*ngIf="tablesConfig.labels"
-					class="conditional empty">
-					Labels
-				</th>
-				<th
-					*ngIf="tablesConfig.abbrev"
-					class="conditional empty">
-					Abbreviations
-				</th>
-				<th class="east">East</th>
-				<th class="divider"></th>
-				<th class="west">West</th>
-				<th
-					*ngIf="tablesConfig.stratification"
-					class="conditional empty">
-					Stratification
-				</th>
-				<th
-					*ngIf="tablesConfig.sitters"
-					class="conditional empty sitters">
-					Sitters
-				</th>
-				<th
-					*ngIf="tablesConfig.adjustments"
-					class="conditional empty">
-					Adjust
-				</th>
-				<th
-					*ngIf="tablesConfig.handicaps"
-					class="conditional empty">
-					Handicap
-				</th>
-				<th
-					*ngIf="tablesConfig.labels"
-					class="conditional empty">
-					Labels
-				</th>
-				<th
-					*ngIf="tablesConfig.abbrev"
-					class="conditional empty">
-					Abbreviations
-				</th>
-			</tr>
-			<table class="seating table table-noborder">
-				<tr
-					*ngFor="let tableObj of table_data"
-					class="tables-row seating">
-					<td
-						class="table-number"
-						*ngFor="let tableKey of getTableKeys(tableObj)">
-						{{ tableKey }}
-					</td>
-					<div
-						*ngIf="tablesConfig.venues"
-						class="options-wrapper venue">
-						<td
-							*ngFor="let tableKey of getTableKeys(tableObj)"
-							class="venue">
-							<input
-								class="venue"
-								clrInput />
-						</td>
-					</div>
-					<div
-						*ngIf="tablesConfig.boardCol"
-						class="options-wrapper board-col">
-						<td
-							id="boardCol"
-							*ngFor="let tableKey of getTableKeys(tableObj)"
-							class="board-col">
-							<input
-								class="board-col"
-								clrInput />
-						</td>
-					</div>
-					<td
-						class="north"
-						*ngFor="let tableKey of getTableKeys(tableObj)">
-						<input clrInput />
-					</td>
-					<td
-						class="divider"
-						*ngFor="let tableKey of getTableKeys(tableObj)">
-						&
-					</td>
-					<td
-						class="south"
-						*ngFor="let tableKey of getTableKeys(tableObj)">
-						<input clrInput />
-					</td>
-					<div
-						class="options-wrapper strat"
-						*ngIf="tablesConfig.stratification">
-						<td
-							id="strat"
-							class="option text stratification"
-							*ngFor="let tableKey of getTableKeys(tableObj)">
-							<input
-								clrInput
-								class="strat" />
-						</td>
-					</div>
-					<div
-						class="options-wrapper adjustments"
-						*ngIf="tablesConfig.adjustments">
-						<td
-							id="adjustments"
-							class="option text adjustment"
-							*ngFor="let tableKey of getTableKeys(tableObj)">
-							<input
-								clrInput
-								class="adjustments" />
-						</td>
-					</div>
-					<div
-						class="options-wrapper handicap"
-						*ngIf="tablesConfig.handicaps">
-						<td
-							id="handicap"
-							class="option text handicap"
-							*ngFor="let tableKey of getTableKeys(tableObj)">
-							<input
-								clrInput
-								class="handicap" />
-						</td>
-					</div>
-					<div
-						class="options-wrapper labels"
-						*ngIf="tablesConfig.labels">
-						<td
-							id="labels"
-							class="option text labels"
-							*ngFor="let tableKey of getTableKeys(tableObj)">
-							<input
-								clrInput
-								class="labels" />
-						</td>
-					</div>
-					<div
-						class="options-wrapper abbreviations"
-						*ngIf="tablesConfig.abbrev">
-						<td
-							id="abbreviations"
-							class="option text abbreviations"
-							*ngFor="let tableKey of getTableKeys(tableObj)">
-							<input
-								clrInput
-								class="abbreviations" />
-						</td>
-					</div>
-					<div
-						*ngIf="tablesConfig.sitters"
-						class="options-wrapper sitters">
-						<td
-							id="sitters"
-							*ngFor="let tableKey of getTableKeys(tableObj)"
-							class="sitters">
-							<input
-								clrCheckbox
-								type="checkbox" />
-						</td>
-					</div>
-					<td
-						class="east"
-						*ngFor="let tableKey of getTableKeys(tableObj)">
-						<input clrInput />
-					</td>
-					<td
-						class="divider"
-						*ngFor="let tableKey of getTableKeys(tableObj)">
-						&
-					</td>
-					<td
-						class="west"
-						*ngFor="let tableKey of getTableKeys(tableObj)">
-						<input clrInput />
-					</td>
-					<div
-						class="options-wrapper strat"
-						*ngIf="tablesConfig.stratification">
-						<td
-							id="strat"
-							class="option text stratification"
-							*ngFor="let tableKey of getTableKeys(tableObj)">
-							<input
-								clrInput
-								class="strat" />
-						</td>
-					</div>
-					<div
-						class="options-wrapper adjustments"
-						*ngIf="tablesConfig.adjustments">
-						<td
-							id="adjustments"
-							class="option text adjustment"
-							*ngFor="let tableKey of getTableKeys(tableObj)">
-							<input
-								clrInput
-								class="adjustments" />
-						</td>
-					</div>
-					<div
-						class="options-wrapper handicap"
-						*ngIf="tablesConfig.handicaps">
-						<td
-							id="handicap"
-							class="option text handicap"
-							*ngFor="let tableKey of getTableKeys(tableObj)">
-							<input
-								clrInput
-								class="handicap" />
-						</td>
-					</div>
-					<div
-						class="options-wrapper labels"
-						*ngIf="tablesConfig.labels">
-						<td
-							id="labels"
-							class="option text labels"
-							*ngFor="let tableKey of getTableKeys(tableObj)">
-							<input
-								clrInput
-								class="labels" />
-						</td>
-					</div>
-					<div
-						class="options-wrapper abbreviations"
-						*ngIf="tablesConfig.abbrev">
-						<td
-							id="abbreviations"
-							class="option text abbreviations"
-							*ngFor="let tableKey of getTableKeys(tableObj)">
-							<input
-								clrInput
-								class="abbreviations" />
-						</td>
-					</div>
-					<div
-						*ngIf="tablesConfig.sitters"
-						class="options-wrappe sitters">
-						<td
-							id="sitters"
-							*ngFor="let tableKey of getTableKeys(tableObj)"
-							class="sitters">
-							<input
-								clrCheckbox
-								type="checkbox" />
-						</td>
-					</div>
-				</tr>
-			</table>
-		</div>
-		<div
-			*ngIf="tablesConfig.timesLunch"
-			class="times-lunch wrapper">
-			<div class="times-lunch container column">
-				<div
-					[ngClass]="currentBreakpoint"
-					class="container row head-row">
-					<span class="head">Round</span>
-					<span class="head">Timings</span>
-					<span class="head">Lunch</span>
-				</div>
-				<div
-					*ngFor="let rounds of getRoundKeys(roundConfig)"
-					class="container row body-row">
-					<span class="round-number">{{ roundConfig[rounds].round_number }}</span>
-					<input
-						clrInput
-						type="text" />
-					<input
-						clrRadio
-						type="radio"
-						
-						[value]="true" />
-				</div>
-				<div class="container row foot-row">
-					<span class="round-number"></span>
-					<span class="round-number"> No Lunch Round</span>
+	<!-- ///////////////////////////////////////////////////////////////////// -->
+	<!--                                                                       -->
+	<!-- *************************** Pairs Tables***************************** -->
+	<!--                                                                       -->
+	<!-- ///////////////////////////////////////////////////////////////////// -->
+	<ng-container *ngIf="matchType === 'pairs'">
+		<!-- <form
+			#pairsForm
+			(ngSubmit)="onPairsFormValueChange()">
+			<div
+				*ngIf="!tablesConfig.timesLunch"
+				class="table-wrapper">
+				<tr class="header-row">
+					<th class="table-number">Table Number</th>
 
-					<input
-						clrRadio
-						type="radio"
-						value="nolunch" />
+					<th
+						class="conditional"
+						*ngIf="tablesConfig.venues">
+						Venues
+					</th>
+					<th
+						*ngIf="tablesConfig.boardCol"
+						class="conditional empty">
+						Colours
+					</th>
+					<th class="north">North</th>
+					<th class="divider"></th>
+					<th class="south">South</th>
+					<th
+						*ngIf="tablesConfig.stratification"
+						class="conditional empty">
+						Stratification
+					</th>
+					<th
+						*ngIf="tablesConfig.sitters"
+						class="conditional empty sitters">
+						Sitters
+					</th>
+					<th
+						*ngIf="tablesConfig.adjustments"
+						class="conditional empty">
+						Adjust
+					</th>
+					<th
+						*ngIf="tablesConfig.handicaps"
+						class="conditional empty">
+						Handicap
+					</th>
+					<th
+						*ngIf="tablesConfig.labels"
+						class="conditional empty">
+						Labels
+					</th>
+					<th
+						*ngIf="tablesConfig.abbrev"
+						class="conditional empty">
+						Abbreviations
+					</th>
+					<th class="east">East</th>
+					<th class="divider"></th>
+					<th class="west">West</th>
+					<th
+						*ngIf="tablesConfig.stratification"
+						class="conditional empty">
+						Stratification
+					</th>
+					<th
+						*ngIf="tablesConfig.sitters"
+						class="conditional empty sitters">
+						Sitters
+					</th>
+					<th
+						*ngIf="tablesConfig.adjustments"
+						class="conditional empty">
+						Adjust
+					</th>
+					<th
+						*ngIf="tablesConfig.handicaps"
+						class="conditional empty">
+						Handicap
+					</th>
+					<th
+						*ngIf="tablesConfig.labels"
+						class="conditional empty">
+						Labels
+					</th>
+					<th
+						*ngIf="tablesConfig.abbrev"
+						class="conditional empty">
+						Abbreviations
+					</th>
+				</tr>
+				<table class="seating table table-noborder">
+					<tr
+						*ngFor="let tableObj of table_data"
+						class="tables-row seating">
+						<td
+							class="table-number"
+							*ngFor="let tableKey of getTableKeys(tableObj)">
+							{{ tableKey }}
+						</td>
+
+						<div
+							*ngIf="tablesConfig.venues"
+							class="options-wrapper venue">
+							<td
+								*ngFor="let tableKey of getTableKeys(tableObj)"
+								class="venue">
+								<input
+									class="venue"
+									clrInput />
+							</td>
+						</div>
+						<div
+							*ngIf="tablesConfig.boardCol"
+							class="options-wrapper board-col">
+							<td
+								id="boardCol"
+								*ngFor="let tableKey of getTableKeys(tableObj)"
+								class="board-col">
+								<input
+									class="board-col"
+									clrInput />
+							</td>
+						</div>
+						<td
+							class="north"
+							*ngFor="let tableKey of getTableKeys(tableObj)">
+							<input clrInput />
+						</td>
+						<td
+							class="divider"
+							*ngFor="let tableKey of getTableKeys(tableObj)">
+							&
+						</td>
+						<td
+							class="south"
+							*ngFor="let tableKey of getTableKeys(tableObj)">
+							<input clrInput />
+						</td>
+						<div
+							class="options-wrapper strat"
+							*ngIf="tablesConfig.stratification">
+							<td
+								id="strat"
+								class="option text stratification"
+								*ngFor="let tableKey of getTableKeys(tableObj)">
+								<input
+									clrInput
+									class="strat" />
+							</td>
+						</div>
+						<div
+							class="options-wrapper adjustments"
+							*ngIf="tablesConfig.adjustments">
+							<td
+								id="adjustments"
+								class="option text adjustment"
+								*ngFor="let tableKey of getTableKeys(tableObj)">
+								<input
+									clrInput
+									class="adjustments" />
+							</td>
+						</div>
+						<div
+							class="options-wrapper handicap"
+							*ngIf="tablesConfig.handicaps">
+							<td
+								id="handicap"
+								class="option text handicap"
+								*ngFor="let tableKey of getTableKeys(tableObj)">
+								<input
+									clrInput
+									class="handicap" />
+							</td>
+						</div>
+						<div
+							class="options-wrapper labels"
+							*ngIf="tablesConfig.labels">
+							<td
+								id="labels"
+								class="option text labels"
+								*ngFor="let tableKey of getTableKeys(tableObj)">
+								<input
+									clrInput
+									class="labels" />
+							</td>
+						</div>
+						<div
+							class="options-wrapper abbreviations"
+							*ngIf="tablesConfig.abbrev">
+							<td
+								id="abbreviations"
+								class="option text abbreviations"
+								*ngFor="let tableKey of getTableKeys(tableObj)">
+								<input
+									clrInput
+									class="abbreviations" />
+							</td>
+						</div>
+						<div
+							*ngIf="tablesConfig.sitters"
+							class="options-wrapper sitters">
+							<td
+								id="sitters"
+								*ngFor="let tableKey of getTableKeys(tableObj)"
+								class="sitters">
+								<input
+									clrCheckbox
+									type="checkbox" />
+							</td>
+						</div>
+						<td
+							class="east"
+							*ngFor="let tableKey of getTableKeys(tableObj)">
+							<input clrInput />
+						</td>
+						<td
+							class="divider"
+							*ngFor="let tableKey of getTableKeys(tableObj)">
+							&
+						</td>
+						<td
+							class="west"
+							*ngFor="let tableKey of getTableKeys(tableObj)">
+							<input clrInput />
+						</td>
+						<div
+							class="options-wrapper strat"
+							*ngIf="tablesConfig.stratification">
+							<td
+								id="strat"
+								class="option text stratification"
+								*ngFor="let tableKey of getTableKeys(tableObj)">
+								<input
+									clrInput
+									class="strat" />
+							</td>
+						</div>
+						<div
+							class="options-wrapper adjustments"
+							*ngIf="tablesConfig.adjustments">
+							<td
+								id="adjustments"
+								class="option text adjustment"
+								*ngFor="let tableKey of getTableKeys(tableObj)">
+								<input
+									clrInput
+									class="adjustments" />
+							</td>
+						</div>
+						<div
+							class="options-wrapper handicap"
+							*ngIf="tablesConfig.handicaps">
+							<td
+								id="handicap"
+								class="option text handicap"
+								*ngFor="let tableKey of getTableKeys(tableObj)">
+								<input
+									clrInput
+									class="handicap" />
+							</td>
+						</div>
+						<div
+							class="options-wrapper labels"
+							*ngIf="tablesConfig.labels">
+							<td
+								id="labels"
+								class="option text labels"
+								*ngFor="let tableKey of getTableKeys(tableObj)">
+								<input
+									clrInput
+									class="labels" />
+							</td>
+						</div>
+						<div
+							class="options-wrapper abbreviations"
+							*ngIf="tablesConfig.abbrev">
+							<td
+								id="abbreviations"
+								class="option text abbreviations"
+								*ngFor="let tableKey of getTableKeys(tableObj)">
+								<input
+									clrInput
+									class="abbreviations" />
+							</td>
+						</div>
+						<div
+							*ngIf="tablesConfig.sitters"
+							class="options-wrappe sitters">
+							<td
+								id="sitters"
+								*ngFor="let tableKey of getTableKeys(tableObj)"
+								class="sitters">
+								<input
+									clrCheckbox
+									type="checkbox" />
+							</td>
+						</div>
+					</tr>
+				</table>
+			</div>
+			<div
+				*ngIf="tablesConfig.timesLunch"
+				class="times-lunch wrapper">
+				<div class="times-lunch container column">
+					<div
+						[ngClass]="currentBreakpoint"
+						class="container row head-row">
+						<span class="head">Round</span>
+						<span class="head">Timings</span>
+						<span class="head">Lunch</span>
+					</div>
+					<div
+						*ngFor="let rounds of getRoundKeys(roundConfig)"
+						class="container row body-row">
+						<span class="round-number">{{ roundConfig[rounds].round_number }}</span>
+						<input
+							clrInput
+							type="text" />
+						<input
+							clrRadio
+							type="radio"
+							[value]="true" />
+					</div>
+					<div class="container row foot-row">
+						<span class="round-number"></span>
+						<span class="round-number"> No Lunch Round</span>
+
+						<input
+							clrRadio
+							type="radio"
+							value="nolunch" />
+					</div>
 				</div>
 			</div>
-		</div>
-	</form>
+		</form> -->
+
+		<!--  -->
+		<form
+			[formGroup]="teamsForm"
+			(ngSubmit)="onTeamsFormValueChange()">
+			<div
+				class="table-wrapper"
+				*ngIf="!tablesConfig.timesLunch">
+				<table class="seating table">
+					<tr class="header-row">
+						<th class="table-number">Table Number</th><br>
+						<span>Side 1</span>
+						<th class="table-number">Team Name</th>
+						<th
+							class="conditional"
+							*ngIf="tablesConfig.venues">
+							Venues
+						</th>
+						<th
+							*ngIf="tablesConfig.boardCol"
+							class="conditional empty">
+							Colours
+						</th>
+						<th class="north">North</th>
+						<th class="divider"></th>
+						<th class="south">South</th>
+						<th
+							*ngIf="tablesConfig.stratification"
+							class="conditional empty">
+							Stratification
+						</th>
+						<th
+							*ngIf="tablesConfig.sitters"
+							class="conditional empty sitters">
+							Sitters
+						</th>
+						<th
+							*ngIf="tablesConfig.adjustments"
+							class="conditional empty">
+							Adjust
+						</th>
+						<th
+							*ngIf="tablesConfig.handicaps"
+							class="conditional empty">
+							Handicap
+						</th>
+						<th
+							*ngIf="tablesConfig.labels"
+							class="conditional empty">
+							Labels
+						</th>
+						<th
+							*ngIf="tablesConfig.abbrev"
+							class="conditional empty">
+							Abbreviations
+						</th>
+						<th class="east">East</th>
+						<th class="divider"></th>
+						<th class="west">West</th>
+						<th
+							*ngIf="tablesConfig.stratification"
+							class="conditional empty">
+							Stratification
+						</th>
+						<th
+							*ngIf="tablesConfig.sitters"
+							class="conditional empty sitters">
+							Sitters
+						</th>
+						<th
+							*ngIf="tablesConfig.adjustments"
+							class="conditional empty">
+							Adjust
+						</th>
+						<th
+							*ngIf="tablesConfig.handicaps"
+							class="conditional empty">
+							Handicap
+						</th>
+						<th
+							*ngIf="tablesConfig.labels"
+							class="conditional empty">
+							Labels
+						</th>
+						<th
+							*ngIf="tablesConfig.abbrev"
+							class="conditional empty">
+							Abbreviations
+						</th>
+					</tr>
+					<tbody formArrayName="teams">
+						<!-- <ng-container
+							*ngFor="
+								let teamGroup of teamsForm.get('teams').controls;
+								let i = index
+							">
+
+						</ng-container> -->
+					</tbody>
+				</table>
+			</div>
+		</form>
+		<!--  -->
+	</ng-container>
+	<!-- ///////////////////////////////////////////////////////////////////// -->
+	<!--                                                                       -->
+	<!-- *************************** Team Tables****************************** -->
+	<!--                                                                       -->
+	<!-- ///////////////////////////////////////////////////////////////////// -->
+	<ng-container *ngIf="matchType === 'teams' || matchType === 'sides'">
+		<form
+			#teamsForm
+			(ngSubmit)="onTeamsFormValueChange()">
+			<div
+				*ngIf="!tablesConfig.timesLunch"
+				class="table-wrapper">
+				<tr class="header-row">
+					<th class="table-number">Table Number</th>
+
+					<th
+						class="conditional"
+						*ngIf="tablesConfig.venues">
+						Venues
+					</th>
+					<th
+						*ngIf="tablesConfig.boardCol"
+						class="conditional empty">
+						Colours
+					</th>
+					<th class="north">North</th>
+					<th class="divider"></th>
+					<th class="south">South</th>
+					<th
+						*ngIf="tablesConfig.stratification"
+						class="conditional empty">
+						Stratification
+					</th>
+					<th
+						*ngIf="tablesConfig.sitters"
+						class="conditional empty sitters">
+						Sitters
+					</th>
+					<th
+						*ngIf="tablesConfig.adjustments"
+						class="conditional empty">
+						Adjust
+					</th>
+					<th
+						*ngIf="tablesConfig.handicaps"
+						class="conditional empty">
+						Handicap
+					</th>
+					<th
+						*ngIf="tablesConfig.labels"
+						class="conditional empty">
+						Labels
+					</th>
+					<th
+						*ngIf="tablesConfig.abbrev"
+						class="conditional empty">
+						Abbreviations
+					</th>
+					<th class="east">East</th>
+					<th class="divider"></th>
+					<th class="west">West</th>
+					<th
+						*ngIf="tablesConfig.stratification"
+						class="conditional empty">
+						Stratification
+					</th>
+					<th
+						*ngIf="tablesConfig.sitters"
+						class="conditional empty sitters">
+						Sitters
+					</th>
+					<th
+						*ngIf="tablesConfig.adjustments"
+						class="conditional empty">
+						Adjust
+					</th>
+					<th
+						*ngIf="tablesConfig.handicaps"
+						class="conditional empty">
+						Handicap
+					</th>
+					<th
+						*ngIf="tablesConfig.labels"
+						class="conditional empty">
+						Labels
+					</th>
+					<th
+						*ngIf="tablesConfig.abbrev"
+						class="conditional empty">
+						Abbreviations
+					</th>
+				</tr>
+				<table class="seating table table-noborder">
+					<tr
+						*ngFor="let tableObj of table_data"
+						class="tables-row seating">
+						<td
+							class="table-number"
+							*ngFor="let tableKey of getTableKeys(tableObj)">
+							{{ tableKey }}
+						</td>
+
+						<div
+							*ngIf="tablesConfig.venues"
+							class="options-wrapper venue">
+							<td
+								*ngFor="let tableKey of getTableKeys(tableObj)"
+								class="venue">
+								<input
+									class="venue"
+									clrInput />
+							</td>
+						</div>
+						<div
+							*ngIf="tablesConfig.boardCol"
+							class="options-wrapper board-col">
+							<td
+								id="boardCol"
+								*ngFor="let tableKey of getTableKeys(tableObj)"
+								class="board-col">
+								<input
+									class="board-col"
+									clrInput />
+							</td>
+						</div>
+						<td
+							class="north"
+							*ngFor="let tableKey of getTableKeys(tableObj)">
+							<input clrInput />
+						</td>
+						<td
+							class="divider"
+							*ngFor="let tableKey of getTableKeys(tableObj)">
+							&
+						</td>
+						<td
+							class="south"
+							*ngFor="let tableKey of getTableKeys(tableObj)">
+							<input clrInput />
+						</td>
+						<div
+							class="options-wrapper strat"
+							*ngIf="tablesConfig.stratification">
+							<td
+								id="strat"
+								class="option text stratification"
+								*ngFor="let tableKey of getTableKeys(tableObj)">
+								<input
+									clrInput
+									class="strat" />
+							</td>
+						</div>
+						<div
+							class="options-wrapper adjustments"
+							*ngIf="tablesConfig.adjustments">
+							<td
+								id="adjustments"
+								class="option text adjustment"
+								*ngFor="let tableKey of getTableKeys(tableObj)">
+								<input
+									clrInput
+									class="adjustments" />
+							</td>
+						</div>
+						<div
+							class="options-wrapper handicap"
+							*ngIf="tablesConfig.handicaps">
+							<td
+								id="handicap"
+								class="option text handicap"
+								*ngFor="let tableKey of getTableKeys(tableObj)">
+								<input
+									clrInput
+									class="handicap" />
+							</td>
+						</div>
+						<div
+							class="options-wrapper labels"
+							*ngIf="tablesConfig.labels">
+							<td
+								id="labels"
+								class="option text labels"
+								*ngFor="let tableKey of getTableKeys(tableObj)">
+								<input
+									clrInput
+									class="labels" />
+							</td>
+						</div>
+						<div
+							class="options-wrapper abbreviations"
+							*ngIf="tablesConfig.abbrev">
+							<td
+								id="abbreviations"
+								class="option text abbreviations"
+								*ngFor="let tableKey of getTableKeys(tableObj)">
+								<input
+									clrInput
+									class="abbreviations" />
+							</td>
+						</div>
+						<div
+							*ngIf="tablesConfig.sitters"
+							class="options-wrapper sitters">
+							<td
+								id="sitters"
+								*ngFor="let tableKey of getTableKeys(tableObj)"
+								class="sitters">
+								<input
+									clrCheckbox
+									type="checkbox" />
+							</td>
+						</div>
+						<td
+							class="east"
+							*ngFor="let tableKey of getTableKeys(tableObj)">
+							<input clrInput />
+						</td>
+						<td
+							class="divider"
+							*ngFor="let tableKey of getTableKeys(tableObj)">
+							&
+						</td>
+						<td
+							class="west"
+							*ngFor="let tableKey of getTableKeys(tableObj)">
+							<input clrInput />
+						</td>
+						<div
+							class="options-wrapper strat"
+							*ngIf="tablesConfig.stratification">
+							<td
+								id="strat"
+								class="option text stratification"
+								*ngFor="let tableKey of getTableKeys(tableObj)">
+								<input
+									clrInput
+									class="strat" />
+							</td>
+						</div>
+						<div
+							class="options-wrapper adjustments"
+							*ngIf="tablesConfig.adjustments">
+							<td
+								id="adjustments"
+								class="option text adjustment"
+								*ngFor="let tableKey of getTableKeys(tableObj)">
+								<input
+									clrInput
+									class="adjustments" />
+							</td>
+						</div>
+						<div
+							class="options-wrapper handicap"
+							*ngIf="tablesConfig.handicaps">
+							<td
+								id="handicap"
+								class="option text handicap"
+								*ngFor="let tableKey of getTableKeys(tableObj)">
+								<input
+									clrInput
+									class="handicap" />
+							</td>
+						</div>
+						<div
+							class="options-wrapper labels"
+							*ngIf="tablesConfig.labels">
+							<td
+								id="labels"
+								class="option text labels"
+								*ngFor="let tableKey of getTableKeys(tableObj)">
+								<input
+									clrInput
+									class="labels" />
+							</td>
+						</div>
+						<div
+							class="options-wrapper abbreviations"
+							*ngIf="tablesConfig.abbrev">
+							<td
+								id="abbreviations"
+								class="option text abbreviations"
+								*ngFor="let tableKey of getTableKeys(tableObj)">
+								<input
+									clrInput
+									class="abbreviations" />
+							</td>
+						</div>
+						<div
+							*ngIf="tablesConfig.sitters"
+							class="options-wrappe sitters">
+							<td
+								id="sitters"
+								*ngFor="let tableKey of getTableKeys(tableObj)"
+								class="sitters">
+								<input
+									clrCheckbox
+									type="checkbox" />
+							</td>
+						</div>
+					</tr>
+				</table>
+			</div>
+			<div
+				*ngIf="tablesConfig.timesLunch"
+				class="times-lunch wrapper">
+				<div class="times-lunch container column">
+					<div
+						[ngClass]="currentBreakpoint"
+						class="container row head-row">
+						<span class="head">Round</span>
+						<span class="head">Timings</span>
+						<span class="head">Lunch</span>
+					</div>
+					<div
+						*ngFor="let rounds of getRoundKeys(roundConfig)"
+						class="container row body-row">
+						<span class="round-number">{{ roundConfig[rounds].round_number }}</span>
+						<input
+							clrInput
+							type="text" />
+						<input
+							clrRadio
+							type="radio"
+							[value]="true" />
+					</div>
+					<div class="container row foot-row">
+						<span class="round-number"></span>
+						<span class="round-number"> No Lunch Round</span>
+
+						<input
+							clrRadio
+							type="radio"
+							value="nolunch" />
+					</div>
+				</div>
+			</div>
+		</form>
+	</ng-container>
 </div>

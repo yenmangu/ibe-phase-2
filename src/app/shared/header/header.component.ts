@@ -28,7 +28,7 @@ export class HeaderComponent implements OnInit {
 		});
 
 		this.sidenavSubscription = this.sidenavService.isOpen$.subscribe(isOpen => {
-			console.log('Sidenav State: ', isOpen);
+			// console.log('Sidenav State: ', isOpen);
 			this.isSidenavOpen = isOpen;
 		});
 	}
@@ -48,7 +48,7 @@ export class HeaderComponent implements OnInit {
 
 	logout(): void {
 		this.authService.logout();
-		
+
 		this.router.navigate(['/home'])
 
 	}

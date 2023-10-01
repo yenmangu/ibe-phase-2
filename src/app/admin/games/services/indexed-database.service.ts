@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { openDB, IDBPDatabase, IDBPTransaction, StoreNames, DBSchema } from 'idb';
+import { IndexedDatabaseStatusService } from 'src/app/shared/services/indexed-database-status.service';
 
 @Injectable({
 	providedIn: 'root'
@@ -7,22 +8,16 @@ import { openDB, IDBPDatabase, IDBPTransaction, StoreNames, DBSchema } from 'idb
 export class IndexedDatabaseService {
 	private db: IDBPDatabase | null = null;
 
-	constructor() {}
+	constructor(private indexedDatabaseStatus: IndexedDatabaseStatusService) {}
 
-	async initDatabase(dbName: string): Promise<IDBPDatabase<unknown>> {
+	async initDatabase(
+		storeMapping: Record<string, any>,
+		dbName: string
+	): Promise<IDBPDatabase<unknown>> {
 		try {
-			const data = {
-				current_game_data: 'currentgamedata',
-				historic_game_data: 'hist',
-				hand_data: 'hands',
-				handanxs_data: 'handanxs',
-				player_db: 'playerdb',
-				params: 'params',
-				xml_settings: 'xmlsettings',
-				slot_name: 'slotname',
-				hrev_txt: 'hrevtxt',
-				lock: 'lock'
-			};
+			const storeNames = Object.keys(storeMapping);
+			// console.log('initDatabase storemapping: ', storeNames);
+
 			this.db = await openDB(dbName, 2, {
 				upgrade(db, oldVersion, newVersion, transaction) {
 					if (oldVersion < 1) {
@@ -31,9 +26,9 @@ export class IndexedDatabaseService {
 						}
 					}
 
-					const storeNames = Object.keys(data);
 					// console.log('init db storeMapping keys', storeNames);
 					for (const storeName of storeNames) {
+						// console.log('for..of storeName: ',storeName)
 						if (!db.objectStoreNames.contains(storeName)) {
 							db.createObjectStore(storeName, { keyPath: 'key' });
 							// console.log(storeName, 'created');
@@ -44,22 +39,28 @@ export class IndexedDatabaseService {
 				}
 			});
 			// console.log('initDB finished');
+			this.indexedDatabaseStatus.setStatus(true);
+			console.log()
 			return this.db;
 		} catch (err) {
 			console.error('Error initialising database', err);
 			return err;
 		}
 	}
+	async doesDatabaseExist(dbName){
+		const databaseNames = await indexedDB.databases();
+		return databaseNames.some(dbInfo => dbInfo.name === dbName)
+	}
 
 	async initialiseWithGameData(
 		storeMapping: Record<string, any>,
 		dbName: string
 	): Promise<boolean> {
-
 		try {
+			const data = Object.keys(storeMapping);
 			if (this.db === null) {
-				console.log('Database not init, initialising database')
-				this.db = await this.initDatabase(dbName);
+				console.log('Database not init, initialising database');
+				this.db = await this.initDatabase(data, dbName);
 			} else {
 				// console.log('database created');
 			}
@@ -126,9 +127,48 @@ export class IndexedDatabaseService {
 		return storeMapping;
 	}
 
-	async getData(id: any, storeName: string) {
-		const tx = this.db.transaction(storeName, 'readonly');
-		const store = tx.objectStore(storeName);
-		return store.get(id);
+	public async readFromDB(storeNames: string[], key: string) {
+		try {
+			if (!this.db) {
+				throw new Error('Database is not initialised');
+			}
+			const data = {};
+
+			for (const storeName of storeNames) {
+				const tx = this.db.transaction(storeName, 'readonly');
+				const store = tx.objectStore(storeName);
+				data[storeName] = await store.get(key);
+			}
+			return data;
+		} catch (err) {
+			console.error('Error retrieving data:', err);
+			throw err;
+		}
+	}
+
+	public async writeToDB(
+		dataToWriteArray: {
+			storeName: string;
+			key: string;
+			value: any;
+		}[]
+	) {
+		try {
+			if (!this.db) {
+				throw new Error('Database is not initialised');
+			}
+			const tx = this.db.transaction(
+				dataToWriteArray.map(data => data.storeName),
+				'readwrite'
+			);
+			for (const dataToWrite of dataToWriteArray) {
+				const store = tx.objectStore(dataToWrite.storeName);
+				await store.put({ key: dataToWrite.key, value: dataToWrite.value });
+			}
+			await tx.done;
+		} catch (err) {
+			console.error('Error writing data: ', err);
+			throw err;
+		}
 	}
 }

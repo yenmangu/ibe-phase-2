@@ -3,7 +3,7 @@
 // @import '';
 :host {
 	// overflow: scroll;
-	padding-bottom: 2rem;
+	// padding-bottom: 2rem;
 }
 
 .main {
@@ -17,6 +17,7 @@
 $column-spacing: 1rem;
 .table-wrapper {
 	width: fit-content;
+	margin: auto;
 }
 
 table {

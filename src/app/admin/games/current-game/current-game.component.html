@@ -1,6 +1,6 @@
 <div class="tab container column">
 	<div class="tab container row">
-		<div class="container input-row">
+		<div class="container row input-row">
 			<mat-form-field>
 				<mat-label>Event Name</mat-label>
 				<input
@@ -12,23 +12,24 @@
 				mat-flat-button
 				matSuffix
 				color="primary">
-				SAVE
+				SAVE ALL
 			</button>
 		</div>
 	</div>
-	<div class="container row actions-row">
+	<div class="container column actions-row">
 		<mat-tab-group
 			animationDuration="200ms"
 			mat-stretch-tabs="false"
 			[attr.mat-align-tabs]="shouldAlignTabsToStart() ? 'start' : 'center'"
 			mat-align-tabs="start">
 			<mat-tab label="Names">
-				<app-game-players></app-game-players>
+				<app-game-players
+					*ngIf="initialTableData"
+					[initialTableData]="initialTableData"></app-game-players>
 			</mat-tab>
 			<mat-tab label="Game Actions">
 				<app-game-actions></app-game-actions>
 			</mat-tab>
 		</mat-tab-group>
 	</div>
-
 </div>

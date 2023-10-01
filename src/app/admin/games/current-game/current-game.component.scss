@@ -1,18 +1,40 @@
 .tab.container.column {
 	padding: 1rem;
+	flex-direction: column;
+	height: 100%;
 }
 
 .tab.container.row {
 	// height: 2em;
+	height: 100%;
+	width: 100%;
+	position: relative;
 	padding: 1rem 1rem 0 1rem;
 	align-items: baseline;
-	justify-content: center;
-	gap: 2em;
+	justify-content: space-between;
+	gap: 1rem;
+	flex: 1;
 }
 
 .input-row {
 	gap: 2em;
+	width: 50%;
+	margin: auto;
+	
 }
+
+.container.save.row {
+	flex-grow: 1;
+	width: 100%;
+	justify-content: space-between;
+	padding-bottom: 1rem;
+	border: 1px solid blue;
+}
+// button.main-save {
+// 	position: absolute;
+// 	bottom: 0;
+// 	right: 0;
+// }
 
 mat-form-field {
 	width: 100%;
@@ -24,8 +46,10 @@ button.actions {
 	height: 50px;
 }
 
-.actions-row {
+.actions {
 	width: 100%;
+	flex-direction: column;
+	flex-grow: 1;
 	justify-content: flex-start;
 }
 .download.row {

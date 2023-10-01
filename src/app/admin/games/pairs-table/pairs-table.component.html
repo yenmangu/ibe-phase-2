@@ -1,0 +1,114 @@
+<pre>form values: {{ pairsForm.get('venues') | json }}</pre>
+<form
+	[formGroup]="pairsForm"
+	(ngSubmit)="onSubmit()">
+	<table>
+		<tr>
+			<th>Table Number</th>
+			<th
+				class="conditional"
+				*ngIf="tableConfig.venues">
+				Venues
+			</th>
+			<th
+				*ngIf="tableConfig.boardCol"
+				class="conditional empty">
+				Colours
+			</th>
+			<th class="north">North</th>
+			<th class="divider"></th>
+			<th class="south">South</th>
+			<th
+				*ngIf="tableConfig.stratification"
+				class="conditional empty">
+				Stratification
+			</th>
+			<th
+				*ngIf="tableConfig.sitters"
+				class="conditional empty sitters">
+				Sitters
+			</th>
+			<th
+				*ngIf="tableConfig.adjustments"
+				class="conditional empty">
+				Adjust
+			</th>
+			<th
+				*ngIf="tableConfig.handicaps"
+				class="conditional empty">
+				Handicap
+			</th>
+			<th
+				*ngIf="tableConfig.labels"
+				class="conditional empty">
+				Labels
+			</th>
+			<th
+				*ngIf="tableConfig.abbrev"
+				class="conditional empty">
+				Abbreviations
+			</th>
+			<th class="east">East</th>
+			<th class="divider"></th>
+			<th class="west">West</th>
+			<th
+				*ngIf="tableConfig.stratification"
+				class="conditional empty">
+				Stratification
+			</th>
+			<th
+				*ngIf="tableConfig.sitters"
+				class="conditional empty sitters">
+				Sitters
+			</th>
+			<th
+				*ngIf="tableConfig.adjustments"
+				class="conditional empty">
+				Adjust
+			</th>
+			<th
+				*ngIf="tableConfig.handicaps"
+				class="conditional empty">
+				Handicap
+			</th>
+			<th
+				*ngIf="tableConfig.labels"
+				class="conditional empty">
+				Labels
+			</th>
+			<th
+				*ngIf="tableConfig.abbrev"
+				class="conditional empty">
+				Abbreviations
+			</th>
+		</tr>
+		<ng-container *ngFor="let tableNumber of getTableNumbers(); let i = index">
+			<tr
+				*ngIf="pairsForm?.get(tableNumber.toString())"
+				[formGroupName]="tableNumber.toString()">
+				<td>{{ i + 1 }}</td>
+				<!-- Venues -->
+				<ng-container *ngIf="tableConfig.venues">
+					<td *ngFor="let column of ['venues']">
+						<input [formControlName]="column" />
+					</td>
+				</ng-container>
+				<td *ngFor="let column of ['north']">
+					<input [formControlName]="column" />
+				</td>
+				<td class="divider"></td>
+				<td *ngFor="let column of ['south']">
+					<input [formControlName]="column" />
+				</td>
+				<td *ngFor="let column of ['east']">
+					<input [formControlName]="column" />
+				</td>
+				<td class="divider"></td>
+				<td *ngFor="let column of ['west']">
+					<input [formControlName]="column" />
+				</td>
+			</tr>
+		</ng-container>
+	</table>
+	<button type="submit">Submit</button>
+</form>

@@ -13,7 +13,7 @@ export class GameActionsComponent implements OnInit, OnDestroy {
 	currentBreakpoint: string = '';
 	private destroy$ = new Subject<void>();
 
-	
+
 
 	constructor(private breakpointService: BreakpointService) {}
 	ngOnInit(): void {
@@ -22,7 +22,7 @@ export class GameActionsComponent implements OnInit, OnDestroy {
 			.pipe(takeUntil(this.destroy$))
 			.subscribe(value => {
 				this.currentBreakpoint = value;
-        console.log(this.currentBreakpoint)
+        // console.log(this.currentBreakpoint)
 			});
 	}
 	ngOnDestroy(): void {

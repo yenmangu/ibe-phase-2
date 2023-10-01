@@ -39,18 +39,18 @@ export class SharedDataService {
 	}
 
 	private updateGameCode(gameCode: string) {
-		console.log('shared data service updating game code: ', gameCode);
+		// console.log('shared data service updating game code: ', gameCode);
 		localStorage.setItem('game_code', gameCode);
 		this.gameCodeSubject.next(gameCode);
 	}
 	private updateEmail(email: string) {
-		console.log('shared data service updating email: ', email);
+		// console.log('shared data service updating email: ', email);
 		localStorage.setItem('user_email', email);
 		this.emailSubject.next(email);
 	}
 
 	public updateMatchType(type) {
-		console.log('Shared data service updating match type: ', type);
+		// console.log('Shared data service updating match type: ', type);
 		this.selectedMatchTypeSubject.next(type);
 	}
 }

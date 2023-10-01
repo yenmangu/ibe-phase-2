@@ -1,9 +1,19 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import {
+	Component,
+	EventEmitter,
+	OnDestroy,
+	OnInit,
+	Output,
+	Input
+} from '@angular/core';
 import { take, takeUntil, Subject, Subscription } from 'rxjs';
+import { FormBuilder, FormGroup, FormControl, FormArray } from '@angular/forms';
 import { BreakpointService } from 'src/app/shared/services/breakpoint.service';
 import * as data from '../dev/temp_table.json';
 import { SharedGameDataService } from '../services/shared-game-data.service';
-
+import { SharedDataService } from 'src/app/shared/services/shared-data.service';
+import { CurrentEventService } from '../services/current-event.service';
+import { ProcessMatchDataService } from '../services/process-match-data.service';
 
 @Component({
 	selector: 'app-match-tables',
@@ -11,12 +21,16 @@ import { SharedGameDataService } from '../services/shared-game-data.service';
 	styleUrls: ['./match-tables.component.scss']
 })
 export class MatchTablesComponent implements OnInit, OnDestroy {
-	@Output() formValuesChanged = new EventEmitter<any>()
+	@Input() initialTableData: any;
+	@Output() formValuesChanged = new EventEmitter<any>();
 	// @Output() formSubmitted = new EventEmitter<any>()
-	formData: any ={}
-
+	formData: any = {};
+	matchType: string = '';
+	matchTypeSubscription: Subscription;
 
 	currentBreakpoint: string = '';
+
+	// Dev Data ////////////////////////////////////
 	table_data: any = (data as any).default;
 
 	tablesConfig: any = {
@@ -92,24 +106,47 @@ export class MatchTablesComponent implements OnInit, OnDestroy {
 
 	public currentDisplayedData: string[] = [
 		'table_number',
-				'north',
-				'n/s',
-				'south',
-				'east',
-				'e/w',
-				'west'
-	]
+		'north',
+		'n/s',
+		'south',
+		'east',
+		'e/w',
+		'west'
+	];
 
+	// Live Properties /////////////////////////////
+
+	pairsForm: FormGroup;
+	teamsForm: FormGroup;
+	pairsInputColumns: { name: string; fields: { label: string; name: string }[] }[] =
+		[];
+	teamsInputColumns: { name: string; fields: { label: string; name: string }[] }[] =
+		[];
+
+	//
 	private tableConfigSubscription: Subscription;
 	private destroy$ = new Subject<void>();
 	constructor(
+		private fb: FormBuilder,
 		private breakpointService: BreakpointService,
-		private sharedGamedataService: SharedGameDataService
+		private sharedGamedataService: SharedGameDataService,
+		private sharedDataService: SharedDataService,
+		private processMatchData: ProcessMatchDataService
 	) {
 		this.tableConfigSubscription =
 			this.sharedGamedataService.tableConfigOption$.subscribe(selectedOption => {
 				this.updateTableConfig(selectedOption);
 			});
+		this.matchTypeSubscription = this.sharedDataService.selectedMatchType$
+			.pipe(takeUntil(this.destroy$))
+			.subscribe({
+				next: matchType => {
+					this.matchType = matchType;
+					console.log('confirming: ', this.matchType);
+				}
+			});
+
+		console.log('', this.matchType);
 	}
 
 	ngOnInit(): void {
@@ -118,16 +155,30 @@ export class MatchTablesComponent implements OnInit, OnDestroy {
 			.subscribe(value => {
 				this.currentBreakpoint = value;
 			});
+		// Form management
+		this.teamsForm = this.fb.group({
+			teams: this.fb.array([])
+		});
+
+		const teamsFormArray = this.teamsForm.get('teams') as FormArray;
+		// 	const numberOfTeams =
+
+		// 	for (let i = 0; i < number)
+		// }
+
+		console.log('match tables initial table data: ', this.initialTableData);
+		// this.processMatchData.getNames()
 	}
 
 	getEntries(table: any): string[] {
 		return [table.n, table.s, table.e, table.w];
 	}
 	getTableKeys(tableObj: any): string[] {
+	
 		return Object.keys(tableObj);
 	}
-	getRoundKeys(roundConfig: any): string []{
-		return Object.keys(roundConfig)
+	getRoundKeys(roundConfig: any): string[] {
+		return Object.keys(roundConfig);
 	}
 
 	private updateTableConfig(selectedOption: string) {
@@ -139,8 +190,11 @@ export class MatchTablesComponent implements OnInit, OnDestroy {
 		console.log(this.tablesConfig);
 	}
 
-	onFormValueChange(){
-		this.formValuesChanged.emit(this.formData)
+	onPairsFormValueChange() {
+		this.formValuesChanged.emit(this.formData);
+	}
+	onTeamsFormValueChange() {
+		this.formValuesChanged.emit(this.formData);
 	}
 
 	ngOnDestroy(): void {

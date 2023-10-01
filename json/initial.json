@@ -1,0 +1,114 @@
+{
+  "playerConfig": {
+    "north": [
+      "Maurice Lancaster",
+      "Paul Barker",
+      "Mike Harris",
+      "Sarah Jolliffe",
+      "Elaine Bollinghaus",
+      "Peter Phillips",
+      "Anne Green",
+      "Carol Knight",
+      "Pauline Harbourne",
+      "Peter Knight"
+    ],
+    "south": [
+      "Uday Hegde",
+      "Averil Barker",
+      "Dinah Kane",
+      "Elaine Silove",
+      "Steph Walters",
+      "Richard Lawman",
+      "Rosemary Drake",
+      "Birthe Morris",
+      "Wendy Aarons",
+      "Richard Roberts"
+    ],
+    "east": [
+      "Pat Angear",
+      "Graham Drake",
+      "Joe Engel",
+      "John Grossman",
+      "Peter Fellowes",
+      "Pat Fallan",
+      "Jan Fossett",
+      "Ginny Nevill",
+      "Anita Metcalfe",
+      "Barry Savery"
+    ],
+    "west": [
+      "Wendy Durrant",
+      "Chris McCullough",
+      "Janice Engel",
+      "Sonia Grossman",
+      "Claire Fellowes",
+      "Gaynor Turner",
+      "Christiana Roth",
+      "Frances Watson",
+      "Margaret Maguire",
+      "Charles Croft"
+    ]
+  },
+  "tables": {
+    "1": [
+      "Maurice Lancaster",
+      "Pat Angear",
+      "Uday Hegde",
+      "Wendy Durrant"
+    ],
+    "2": [
+      "Paul Barker",
+      "Graham Drake",
+      "Averil Barker",
+      "Chris McCullough"
+    ],
+    "3": [
+      "Mike Harris",
+      "Joe Engel",
+      "Dinah Kane",
+      "Janice Engel"
+    ],
+    "4": [
+      "Sarah Jolliffe",
+      "John Grossman",
+      "Elaine Silove",
+      "Sonia Grossman"
+    ],
+    "5": [
+      "Elaine Bollinghaus",
+      "Peter Fellowes",
+      "Steph Walters",
+      "Claire Fellowes"
+    ],
+    "6": [
+      "Peter Phillips",
+      "Pat Fallan",
+      "Richard Lawman",
+      "Gaynor Turner"
+    ],
+    "7": [
+      "Anne Green",
+      "Jan Fossett",
+      "Rosemary Drake",
+      "Christiana Roth"
+    ],
+    "8": [
+      "Carol Knight",
+      "Ginny Nevill",
+      "Birthe Morris",
+      "Frances Watson"
+    ],
+    "9": [
+      "Pauline Harbourne",
+      "Anita Metcalfe",
+      "Wendy Aarons",
+      "Margaret Maguire"
+    ],
+    "10": [
+      "Peter Knight",
+      "Barry Savery",
+      "Richard Roberts",
+      "Charles Croft"
+    ]
+  }
+}

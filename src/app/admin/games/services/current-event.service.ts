@@ -27,13 +27,13 @@ export class CurrentEventService implements OnInit {
 	}
 
 	private getDummyXmlData(matchType): Observable<any> {
-		console.log('private getDummyData called')
+		console.log(`private getDummyData to ${this.apiUrl}/dev/dummy_xml?filename=${matchType} called`)
 		return this.http
 			.get<any>(`${this.apiUrl}/dev/dummy_xml?filename=${matchType}`)
 			.pipe(
-				// tap((data)=> {
-				// 	console.log('data',data)
-				// }),
+				tap((data)=> {
+					// console.log('data tapped from http-response',data)
+				}),
 				catchError(err => {
 					console.error('Error', err);
 					throw err;

@@ -2,7 +2,7 @@
 	class="container row top"
 	[ngClass]="currentBreakpoint">
 	<div
-		class="container row top"
+		class="container column top"
 		[ngClass]="currentBreakpoint">
 		<mat-form-field [ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }">
 			<mat-label [ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }"
@@ -26,21 +26,26 @@
 				>
 			</mat-select>
 		</mat-form-field>
-		<button class="main-save" mat-flat-button color="primary">SAVE CHANGES</button>
 	</div>
 </div>
 <div class="container row table">
-	<app-match-tables
-		(formValuesChanged)="onTableValueChanged($event)"></app-match-tables>
+	<app-pairs-table
+		*ngIf="initialTableData"
+		[initialTableData]="initialTableData"></app-pairs-table>
+	<!-- <app-match-tables [initialTableData]="initialTableData"
+		(formValuesChanged)="(onTeamTableValueChanged)"></app-match-tables> -->
 </div>
 <div class="container row download">
-	<button id="start_pdf"
+	<button
+		id="start_pdf"
 		mat-flat-button
 		color="accent">
 		Get Start Positions PDF
 	</button>
 
-	<mat-form-field [ngClass]="{ ' grey-magenta-theme': applyMagentaGreyTheme }">
+	<mat-form-field
+		class="date-picker"
+		[ngClass]="{ ' grey-magenta-theme': applyMagentaGreyTheme }">
 		<mat-label>Forward-Date (Optional) </mat-label>
 		<input
 			[ngClass]="{ 'grey-magenta-theme:': applyMagentaGreyTheme }"
@@ -55,5 +60,10 @@
 			#date
 			[ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }"></mat-datepicker>
 	</mat-form-field>
-
+	<button
+		class="main-save"
+		mat-flat-button
+		color="primary">
+		SAVE
+	</button>
 </div>

@@ -17,6 +17,9 @@ import { SidenavService } from './shared/services/sidenav.service';
 import { SharedModule } from './shared/shared.module';
 import { HomeModule } from './home/home.module';
 
+// Pipes
+// import { KeysPipe } from './shared/pipes/keys.pipe';
+
 @NgModule({
 	declarations: [AppComponent],
 	imports: [

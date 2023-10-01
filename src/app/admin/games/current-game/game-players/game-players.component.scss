@@ -1,3 +1,8 @@
+:host {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+}
 .row.top {
 	width: fit-content;
 	padding: 1em 0 0 0;
@@ -9,6 +14,7 @@
 	width: 100%;
 	background-color: whitesmoke;
 	border: none;
+	// padding: 0 2rem 0 2rem;
 	// overflow-y: scroll;
 }
 
@@ -18,11 +24,19 @@
 	align-items: flex-end;
 }
 .download.row {
-	display: grid;
-	grid-auto-flow: column;
-	align-self: flex-end;
+	display: flex;
 	margin-top: 3rem;
 	width: 100%;
 	gap: 2rem;
+	flex: 1;
 	justify-content: flex-start;
+
+	.date-picker {
+		margin-right: auto;
+	}
+	button.main-save {
+		margin-left: auto;
+		justify-self: flex-end;
+		padding: 0 2rem;
+	}
 }

@@ -53,6 +53,7 @@ $magenta-grey-theme: mat.define-light-theme(
 * {
 	--webkit-font-smoothing: subpixel-antialiased;
 	font-smooth: always;
+  box-sizing: border-box;
 }
 
 html,

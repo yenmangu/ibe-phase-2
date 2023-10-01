@@ -27,7 +27,7 @@ import { GamesModule } from './games/games.module';
 		GameSetupComponent,
 		GameSettingsComponent,
 		GameActionsComponent,
-		AccountSettingsComponent
+		AccountSettingsComponent,
 	],
 	imports: [
 		CommonModule,
