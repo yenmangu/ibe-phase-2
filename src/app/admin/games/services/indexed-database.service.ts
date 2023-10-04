@@ -40,7 +40,6 @@ export class IndexedDatabaseService {
 			});
 			// console.log('initDB finished');
 			this.indexedDatabaseStatus.setStatus(true);
-			console.log()
 			return this.db;
 		} catch (err) {
 			console.error('Error initialising database', err);

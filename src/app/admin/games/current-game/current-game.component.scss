@@ -20,7 +20,7 @@
 	gap: 2em;
 	width: 50%;
 	margin: auto;
-	
+
 }
 
 .container.save.row {
@@ -38,6 +38,10 @@
 
 mat-form-field {
 	width: 100%;
+}
+
+button.save{
+	padding: 0.2rem
 }
 
 button.save,

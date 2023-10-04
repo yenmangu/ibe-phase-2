@@ -4,6 +4,7 @@
 	<div
 		class="container column top"
 		[ngClass]="currentBreakpoint">
+		{{ eventName }}
 		<mat-form-field [ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }">
 			<mat-label [ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }"
 				>Show Details</mat-label
@@ -31,7 +32,8 @@
 <div class="container row table">
 	<app-pairs-table
 		*ngIf="initialTableData"
-		[initialTableData]="initialTableData"></app-pairs-table>
+		[initialTableData]="initialTableData"
+		[loadingStatus]="isLoading"></app-pairs-table>
 	<!-- <app-match-tables [initialTableData]="initialTableData"
 		(formValuesChanged)="(onTeamTableValueChanged)"></app-match-tables> -->
 </div>
@@ -50,6 +52,7 @@
 		<input
 			[ngClass]="{ 'grey-magenta-theme:': applyMagentaGreyTheme }"
 			type="text"
+			[(ngModel)]="forwardDate"
 			matInput
 			[matDatepicker]="date" />
 		<mat-datepicker-toggle
@@ -63,7 +66,8 @@
 	<button
 		class="main-save"
 		mat-flat-button
-		color="primary">
+		color="primary"
+		(click)="captureFormData()">
 		SAVE
 	</button>
 </div>

@@ -1,0 +1,28 @@
+<table>
+	<tr class="header-row">
+		<th class="header-cell number"># <mat-icon svgIcon="sort"></mat-icon></th>
+		<th class="header-cell player">Player Name</th>
+		<th class="header-cell email">Email</th>
+		<th class="header-cell phone">Phone</th>
+		<th class="header-cell player-id">IDs</th>
+		<th class="header-cell last-play">Last Play</th>
+		<th class="header-cell added">Added</th>
+		<th class="header-cell delete">Delete</th>
+	</tr>
+	<ng-container *ngFor="let value of this.playerDatabase.item; let i = index">
+		<tr class="table-row">
+			<td class="body-cell number">{{ value.$?.n ? value.$?.n : '' }}</td>
+			<td class="body-cell player">{{ value?.name ? value?.name : '' }}</td>
+			<td class="body-cell email">{{ value?.email ? value?.email : '' }}</td>
+			<td class="body-cell phone">{{ value?.phone ? value?.phone : '' }}</td>
+			<td class="body-cell player-id">
+				{{ getIds(value?.id)?.join(', ') || '' }}
+			</td>
+			<!-- <td class="body-cell">{{ value?.id[0]?.$?.type }}</td> -->
+			<td class="body-cell added">
+				{{ value.$?.adddate ? value.$?.adddate : '' }}
+			</td>
+			<td class="body-cell delete"><mat-icon>delete</mat-icon></td>
+		</tr>
+	</ng-container>
+</table>

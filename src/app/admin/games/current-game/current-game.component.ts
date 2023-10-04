@@ -14,10 +14,12 @@ import { SharedGameDataService } from '../services/shared-game-data.service';
 })
 export class CurrentGameComponent implements OnInit, OnDestroy {
 	@Input() initialTableData: any;
+	isLoading: boolean = true;
 	applyMagentaGreyTheme = true;
 	currentBreakpoint: string = '';
 	dateSelected: Date | null;
 	currentMatchType: string = '';
+	eventName: string = '';
 	private matchTypeSubscription: Subscription | undefined;
 	private destroy$ = new Subject<void>();
 	constructor(
@@ -25,7 +27,8 @@ export class CurrentGameComponent implements OnInit, OnDestroy {
 		private currentEventService: CurrentEventService,
 		private dataService: DataService,
 		private sharedDataService: SharedDataService,
-		private processMatchDataService: ProcessMatchDataService
+		private processMatchDataService: ProcessMatchDataService,
+		private sharedGameDataService: SharedGameDataService
 	) {}
 	async ngOnInit(): Promise<void> {
 		this.matchTypeSubscription = this.sharedDataService.selectedMatchType$
@@ -40,10 +43,11 @@ export class CurrentGameComponent implements OnInit, OnDestroy {
 				next: async data => {
 					if (!data) {
 						console.log('No data from http');
+						this.isLoading = true;
 						await this.processMatchDataService
 							.getInitialTableData()
 							.then(result => {
-								console.log('Initial Table Data: ', result);
+								// console.log('Initial Table Data: ', result);
 								this.initialTableData = result;
 							});
 					} else {
@@ -51,7 +55,14 @@ export class CurrentGameComponent implements OnInit, OnDestroy {
 							.getInitialTableData()
 							.then(result => {
 								this.initialTableData = result;
-								console.log('current-game initial table data: ',this.initialTableData)
+								this.sharedGameDataService.setLoadingStatus(false);
+								this.sharedGameDataService.tableLoading$.subscribe(status => {
+									this.isLoading = status;
+								});
+								// console.log('current-game initial table data: ',this.initialTableData)
+							})
+							.finally(() => {
+								this.isLoading = false;
 							});
 					}
 				}
@@ -65,6 +76,7 @@ export class CurrentGameComponent implements OnInit, OnDestroy {
 
 	private async handleMatchTypeChange(): Promise<boolean> {
 		try {
+			this.sharedGameDataService.setLoadingStatus(true);
 			const data = await this.callCurrentEventService();
 			if (data) {
 				await this.processData(data);
@@ -115,6 +127,7 @@ export class CurrentGameComponent implements OnInit, OnDestroy {
 			if (!dbResponse) {
 				throw new Error('Error calling data service');
 			}
+			this.sharedGameDataService.setLoadingStatus(false);
 		} catch (err) {
 			console.error('Error performing high level requestAndStore(): ', err);
 		}

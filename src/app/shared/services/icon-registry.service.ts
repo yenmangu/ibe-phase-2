@@ -22,5 +22,17 @@ export class IconRegistryService {
 				domain + svgUrlBase + 'upload-and-download-from-the-cloud.svg'
 			)
 		);
+		this._matIconRegistry.addSvgIcon(
+			'sort',
+			this._domSanitizer.bypassSecurityTrustResourceUrl(
+				domain + svgUrlBase + 'sort.svg'
+			)
+		);
+		this._matIconRegistry.addSvgIcon(
+			'x',
+			this._domSanitizer.bypassSecurityTrustResourceUrl(
+				domain + svgUrlBase + 'x.svg'
+			)
+		);
 	}
 }

@@ -5,15 +5,16 @@
 				<mat-label>Event Name</mat-label>
 				<input
 					type="text"
+					[(ngModel)]="eventName"
 					matInput />
 			</mat-form-field>
-			<button
+			<!-- <button
 				class="save"
 				mat-flat-button
 				matSuffix
 				color="primary">
-				SAVE ALL
-			</button>
+				SAVE
+			</button> -->
 		</div>
 	</div>
 	<div class="container column actions-row">
@@ -25,10 +26,15 @@
 			<mat-tab label="Names">
 				<app-game-players
 					*ngIf="initialTableData"
-					[initialTableData]="initialTableData"></app-game-players>
+					[initialTableData]="initialTableData"
+					[eventName]="eventName"
+					[isLoading]="isLoading"></app-game-players>
 			</mat-tab>
 			<mat-tab label="Game Actions">
 				<app-game-actions></app-game-actions>
+			</mat-tab>
+			<mat-tab label="Game Settings">
+				<app-game-settings></app-game-settings>
 			</mat-tab>
 		</mat-tab-group>
 	</div>

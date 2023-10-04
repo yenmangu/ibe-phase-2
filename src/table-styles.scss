@@ -1,0 +1,101 @@
+.main {
+	width: 100%;
+	padding: 2rem;
+	gap: 2rem;
+}
+.head,
+.search {
+	gap: 2rem;
+}
+mat-spinner {
+	margin: auto;
+	margin-top: 1rem;
+}
+
+.table-wrapper {
+	max-height: 100%;
+	margin-top: -1px;
+}
+
+table {
+	width: fit-content;
+}
+.mat-sort-header-container {
+	align-items: center;
+}
+table,
+th,
+td {
+	text-align: center;
+}
+table {
+	margin: auto;
+	border-collapse: collapse;
+}
+
+th {
+	padding-bottom: 1rem;
+}
+
+th,
+td {
+	text-align: center;
+	padding: 0.2rem 0.4rem;
+}
+
+.mat-mdc-row .mat-mdc-cell {
+	border-bottom: 1px solid transparent;
+	border-top: 1px solid transparent;
+}
+.mat-mdc-row:hover .mat-mdc-cell {
+	border-color: currentColor;
+}
+.mat-sort-header-container {
+	justify-content: center;
+	gap: 0.8rem;
+}
+/*
+tr.no-data-row {
+	display: flex;
+	border-width: 0;
+	border-style: solid;
+	align-items: center;
+	box-sizing: border-box;
+	td {
+		flex: 1;
+		display: flex;
+		align-items: center;
+		overflow: hidden;
+		word-wrap: break-word;
+		min-height: inherit;
+		height: 100%;
+	}
+}
+*/
+
+.delete:hover {
+	cursor: pointer;
+}
+
+.date {
+	width: 10rem;
+}
+.id {
+	width: 8rem;
+}
+.name {
+	width: 16rem;
+}
+.delete {
+	width: 6rem;
+}
+
+.delete svg {
+	height: 1rem !important;
+}
+
+.mdc-button.add-row,
+.mdc-button.save {
+	height: 3.2rem;
+	width: 6rem;
+}

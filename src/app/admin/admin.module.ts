@@ -10,12 +10,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTableModule } from '@angular/material/table';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatSortModule } from '@angular/material/sort';
 //  Custom
 import { NavigationComponent } from './navigation/navigation.component';
 import { AdminComponent } from './admin.component';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { GameSetupComponent } from './game-setup/game-setup.component';
-import { GameSettingsComponent } from './game-settings/game-settings.component';
 import { GameActionsComponent } from './game-actions/game-actions.component';
 import { AccountSettingsComponent } from './account-settings/account-settings.component';
 import { GamesModule } from './games/games.module';
@@ -25,9 +25,8 @@ import { GamesModule } from './games/games.module';
 		NavigationComponent,
 		AdminComponent,
 		GameSetupComponent,
-		GameSettingsComponent,
 		GameActionsComponent,
-		AccountSettingsComponent,
+		AccountSettingsComponent
 	],
 	imports: [
 		CommonModule,
@@ -40,6 +39,7 @@ import { GamesModule } from './games/games.module';
 		MatTabsModule,
 		MatTableModule,
 		MatRadioModule,
+		MatSortModule,
 		// Custom
 		DashboardModule,
 		GamesModule

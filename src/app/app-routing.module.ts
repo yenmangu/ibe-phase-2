@@ -2,8 +2,12 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './home/home/home.component';
 import { AuthGuard } from './shared/services/permissions.service';
+// Dev Routes
+import { PairsTableComponent } from './admin/games/pairs-table/pairs-table.component';
+import { GamesComponent } from './admin/games/games.component';
 
 const routes: Routes = [
+	{ path: 'dev', component: GamesComponent },
 	{ path: '', pathMatch: 'full', redirectTo: '/home' },
 	{ path: 'home', component: HomeComponent, canActivate:[AuthGuard] },
 	{

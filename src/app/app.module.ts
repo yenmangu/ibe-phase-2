@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { MaterialModule } from './material/material.module';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { HttpClientModule } from '@angular/common/http';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -28,6 +29,7 @@ import { HomeModule } from './home/home.module';
 		AppRoutingModule,
 		BrowserAnimationsModule,
 		HttpClientModule,
+		ScrollingModule,
 		SharedModule,
 		HomeModule,
 		ClarityModule

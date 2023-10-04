@@ -21,7 +21,7 @@ export class DataService implements OnInit, OnDestroy {
 		this.subscription = this.sharedDataService.selectedMatchType$.subscribe(
 			matchType => {
 				this.matchType = matchType;
-				console.log('data-service subscription: ', this.matchType);
+				// console.log('data-service subscription: ', this.matchType);
 			}
 		);
 	}
@@ -31,7 +31,7 @@ export class DataService implements OnInit, OnDestroy {
 	}
 
 	public initialiseDB = async data => {
-		console.log('matchType :', this.matchType);
+		// console.log('matchType :', this.matchType);
 		const storeMapping = this.mapData(data);
 		this.storeMapping = storeMapping;
 		// console.log('initialiseDB storeMapping: ', storeMapping);
@@ -44,7 +44,7 @@ export class DataService implements OnInit, OnDestroy {
 		);
 	};
 
-	
+
 
 	async doesDbExist() {
 		try {

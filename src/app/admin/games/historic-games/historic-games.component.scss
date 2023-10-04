@@ -1,0 +1,11 @@
+@import '../../../../styles.scss';
+@import url('../../../../table-styles.scss');
+
+.delete mat-icon{
+	transition: opactiy 200ms ease-out;
+
+	&:hover {
+
+	}
+	
+}

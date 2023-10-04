@@ -9,6 +9,12 @@ import { GameSettingsComponent } from './game-settings/game-settings.component';
 import { AccountSettingsComponent } from './account-settings/account-settings.component';
 import { GamesComponent } from './games/games.component';
 
+// dev
+import { PairsTableComponent } from './games/pairs-table/pairs-table.component';
+import { CurrentGameComponent } from './games/current-game/current-game.component';
+import { HistoricGamesComponent } from './games/historic-games/historic-games.component';
+import { PlayerDatabaseComponent } from './games/database-landing/player-database/player-database.component';
+
 const routes: Routes = [
 	{
 		path: '',

@@ -1,0 +1,70 @@
+[
+  {
+    "$": {
+      "type": "loc",
+      "n": "1",
+      "adddate": "21/01/20"
+    },
+    "name": [
+      "Pinchos"
+    ],
+    "lastplay": [
+      {
+        "$": {
+          "date": ""
+        }
+      }
+    ]
+  },
+  {
+    "$": {
+      "type": "loc",
+      "n": "2",
+      "adddate": "21/01/20"
+    },
+    "name": [
+      "Pizza Express"
+    ],
+    "lastplay": [
+      {
+        "$": {
+          "date": ""
+        }
+      }
+    ]
+  },
+  {
+    "$": {
+      "type": "loc",
+      "n": "3",
+      "adddate": "21/01/20"
+    },
+    "name": [
+      "Preto"
+    ],
+    "lastplay": [
+      {
+        "$": {
+          "date": ""
+        }
+      }
+    ]
+  },
+  {
+    "$": {
+      "type": "loc",
+      "n": "4",
+      "adddate": "21/01/20"
+    },
+    "name": [
+      "The Courtyard"
+    ],
+    "lastplay": [
+      {
+        "$": {
+          "date": ""
+        }
+      }
+    ]
+  }
+]

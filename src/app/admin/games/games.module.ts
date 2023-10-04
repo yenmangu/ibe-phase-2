@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
+import { ScrollingModule } from '@angular/cdk/scrolling';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 // Material
@@ -12,26 +12,39 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSelectModule } from '@angular/material/select';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSortModule } from '@angular/material/sort';
+import { MatPaginatorModule } from '@angular/material/paginator';
+
+// CDK
+import { CdkColumnDef } from '@angular/cdk/table';
+// Other UI Modules
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 
 // Clarity
-
 
 import { GamesRoutingModule } from './games-routing.module';
 import { GamesComponent } from './games.component';
 import { CurrentGameComponent } from './current-game/current-game.component';
 import { HistoricGamesComponent } from './historic-games/historic-games.component';
-import { PlayerDatabaseComponent } from './player-database/player-database.component';
+import { PlayerDatabaseComponent } from './database-landing/player-database/player-database.component';
 import { GameActionsComponent } from './current-game/game-actions/game-actions.component';
-import { GamePlayersComponent } from './current-game/game-players/game-players.component';
+import { GameSettingsComponent } from '../game-settings/game-settings.component';
 
 // Pipes
 
 import { KeysPipe } from 'src/app/shared/pipes/keys.pipe';
-
 import { DataService } from './services/data.service';
 import { MatchTablesComponent } from './match-tables/match-tables.component';
-import { TeamTablesComponent } from './team-tables/team-tables.component';
+import { GamePlayersComponent } from './current-game/game-players/game-players.component';
 import { PairsTableComponent } from './pairs-table/pairs-table.component';
+import { TeamsTableComponent } from './teams-table/teams-table.component';
+import { TeamsDatabaseComponent } from './database-landing/teams-database/teams-database.component';
+import { VenuesDatabaseComponent } from './database-landing/venues-database/venues-database.component';
+import { EventNamesDatabaseComponent } from './database-landing/event-names-database/event-names-database.component';
+import { DatabaseLandingComponent } from './database-landing/database-landing.component';
+
 @NgModule({
 	declarations: [
 		GamesComponent,
@@ -39,14 +52,21 @@ import { PairsTableComponent } from './pairs-table/pairs-table.component';
 		HistoricGamesComponent,
 		PlayerDatabaseComponent,
 		GameActionsComponent,
+		GameSettingsComponent,
 		GamePlayersComponent,
+		TeamsTableComponent,
 		MatchTablesComponent,
-		TeamTablesComponent,
 		PairsTableComponent,
-		KeysPipe
+		KeysPipe,
+		TeamsTableComponent,
+		TeamsDatabaseComponent,
+		VenuesDatabaseComponent,
+		EventNamesDatabaseComponent,
+		DatabaseLandingComponent
 	],
 	imports: [
 		CommonModule,
+		ScrollingModule,
 		GamesRoutingModule,
 		FormsModule,
 		ReactiveFormsModule,
@@ -59,9 +79,14 @@ import { PairsTableComponent } from './pairs-table/pairs-table.component';
 		MatCardModule,
 		MatDatepickerModule,
 		MatSelectModule,
+		MatProgressSpinnerModule,
+		MatIconModule,
+		MatSortModule,
+		MatPaginatorModule,
+		// Other UI
+		NgxMaterialTimepickerModule
 		// Clarity
-	
 	],
-	providers: [DataService]
+	providers: [DataService, CdkColumnDef]
 })
 export class GamesModule {}

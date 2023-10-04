@@ -1,0 +1,124 @@
+<div class="main container column">
+	<div class="container row head">
+		<div class="container row search">
+			<mat-form-field [ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }">
+				<mat-label>Type to search past events</mat-label>
+				<input
+					#input
+					matInput
+					(keyup)="applyFilter($event)" />
+			</mat-form-field>
+			<button
+				class="add-row"
+				mat-flat-button
+				color="accent">
+				+ Event
+			</button>
+		</div>
+		<button
+			mat-flat-button
+			color="primary"
+			class="save">
+			Save
+		</button>
+	</div>
+	<div class="table-wrapper">
+		<ng-container *ngIf="dataSource.data">
+			<table
+				[ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }"
+				class="mat-elevation-z8"
+				matSort
+				mat-table
+				[dataSource]="dataSource">
+				<!-- Number Column -->
+				<ng-container matColumnDef="number">
+					<th
+						mat-header-cell
+						*matHeaderCellDef
+						mat-sort-header="number">
+						#
+					</th>
+					<td
+						mat-cell
+						*matCellDef="let event">
+						{{ event.$?.n || '' }}
+					</td>
+				</ng-container>
+				<!-- event Column -->
+				<ng-container matColumnDef="event">
+					<th
+						mat-header-cell
+						*matHeaderCellDef
+						mat-sort-header="event">
+						event
+					</th>
+					<td
+						mat-cell
+						*matCellDef="let event">
+						{{ event?.name || '' }}
+					</td>
+				</ng-container>
+				<!-- Last Used Column -->
+				<ng-container matColumnDef="lastUsed">
+					<th
+						mat-header-cell
+						*matHeaderCellDef
+						mat-sort-header="lastUsed">
+						Last Used
+					</th>
+					<td
+						mat-cell
+						*matCellDef="let event">
+						{{ event?.lastplay[0]?.$?.date || '' }}
+					</td>
+				</ng-container>
+				<!-- Date Added Column -->
+				<ng-container matColumnDef="added">
+					<th
+						mat-header-cell
+						*matHeaderCellDef
+						mat-sort-header="added">
+						Date Added
+					</th>
+					<td
+						mat-cell
+						*matCellDef="let event">
+						{{ event?.$?.adddate || '' }}
+					</td>
+				</ng-container>
+				<!-- Delete Column -->
+				<ng-container matColumnDef="delete">
+					<th
+						mat-header-cell
+						*matHeaderCellDef
+						mat-sort-header="delete">
+						Delete
+					</th>
+					<td
+						class="delete"
+						mat-cell
+						*matCellDef="let event">
+						<mat-icon>delete</mat-icon>
+					</td>
+				</ng-container>
+				<tr
+					class="header-row"
+					mat-header-row
+					*matHeaderRowDef="displayedColumns"></tr>
+				<tr
+					mat-row
+					*matRowDef="let row; columns: displayedColumns"></tr>
+			</table>
+		</ng-container>
+		<mat-paginator
+			#paginator
+			class="mat-elevation-z8"
+			[pageSizeOptions]="[20, 40, 100, dataSource.data.length]"
+			showFirstLastButtons
+			aria-label="Select page of event names">
+		</mat-paginator>
+		<ng-container *ngIf="tabSelected && isLoading">
+			<mat-spinner></mat-spinner
+		></ng-container>
+	</div>
+</div>

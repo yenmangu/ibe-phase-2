@@ -1,0 +1,223 @@
+[
+  {
+    "$": {
+      "type": "team",
+      "n": "1",
+      "adddate": "14/04/19"
+    },
+    "name": [
+      "Chanel"
+    ],
+    "lastplay": [
+      {
+        "$": {
+          "date": "21/01/23"
+        }
+      }
+    ]
+  },
+  {
+    "$": {
+      "type": "team",
+      "n": "2",
+      "adddate": "14/04/19"
+    },
+    "name": [
+      "Goyard"
+    ],
+    "lastplay": [
+      {
+        "$": {
+          "date": "21/01/23"
+        }
+      }
+    ]
+  },
+  {
+    "$": {
+      "type": "team",
+      "n": "3",
+      "adddate": "14/04/19"
+    },
+    "name": [
+      "Louis Vuitton"
+    ],
+    "lastplay": [
+      {
+        "$": {
+          "date": "21/01/23"
+        }
+      }
+    ]
+  },
+  {
+    "$": {
+      "type": "team",
+      "n": "4",
+      "adddate": "14/04/19"
+    },
+    "name": [
+      "Prada"
+    ],
+    "lastplay": [
+      {
+        "$": {
+          "date": "21/01/23"
+        }
+      }
+    ]
+  },
+  {
+    "$": {
+      "type": "team",
+      "n": "5",
+      "adddate": "17/09/19"
+    },
+    "name": [
+      "Hurlingham"
+    ],
+    "lastplay": [
+      {
+        "$": {
+          "date": "21/01/23"
+        }
+      }
+    ]
+  },
+  {
+    "$": {
+      "type": "team",
+      "n": "6",
+      "adddate": "17/09/19"
+    },
+    "name": [
+      "RAC"
+    ],
+    "lastplay": [
+      {
+        "$": {
+          "date": "21/01/23"
+        }
+      }
+    ]
+  },
+  {
+    "$": {
+      "type": "team",
+      "n": "7",
+      "adddate": "07/10/22"
+    },
+    "name": [
+      "Gitte"
+    ],
+    "lastplay": [
+      {
+        "$": {
+          "date": "21/01/23"
+        }
+      }
+    ]
+  },
+  {
+    "$": {
+      "type": "team",
+      "n": "8",
+      "adddate": "07/10/22"
+    },
+    "name": [
+      "Grey DIamond"
+    ],
+    "lastplay": [
+      {
+        "$": {
+          "date": "21/01/23"
+        }
+      }
+    ]
+  },
+  {
+    "$": {
+      "type": "team",
+      "n": "9",
+      "adddate": "07/10/22"
+    },
+    "name": [
+      "Lucky"
+    ],
+    "lastplay": [
+      {
+        "$": {
+          "date": "21/01/23"
+        }
+      }
+    ]
+  },
+  {
+    "$": {
+      "type": "team",
+      "n": "10",
+      "adddate": "07/10/22"
+    },
+    "name": [
+      "Mushrooms"
+    ],
+    "lastplay": [
+      {
+        "$": {
+          "date": "21/01/23"
+        }
+      }
+    ]
+  },
+  {
+    "$": {
+      "type": "team",
+      "n": "11",
+      "adddate": "07/10/22"
+    },
+    "name": [
+      "Richardson"
+    ],
+    "lastplay": [
+      {
+        "$": {
+          "date": "21/01/23"
+        }
+      }
+    ]
+  },
+  {
+    "$": {
+      "type": "team",
+      "n": "12",
+      "adddate": "07/10/22"
+    },
+    "name": [
+      "Stephenson"
+    ],
+    "lastplay": [
+      {
+        "$": {
+          "date": "21/01/23"
+        }
+      }
+    ]
+  },
+  {
+    "$": {
+      "type": "team",
+      "n": "13",
+      "adddate": "07/10/22"
+    },
+    "name": [
+      "Walker"
+    ],
+    "lastplay": [
+      {
+        "$": {
+          "date": "21/01/23"
+        }
+      }
+    ]
+  }
+]

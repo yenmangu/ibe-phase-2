@@ -1,0 +1,631 @@
+[
+  {
+    "$": {
+      "type": "event",
+      "n": "2",
+      "adddate": "31/05/17"
+    },
+    "name": [
+      "Rac310517"
+    ],
+    "lastplay": [
+      {
+        "$": {
+          "date": ""
+        }
+      }
+    ]
+  },
+  {
+    "$": {
+      "type": "event",
+      "n": "3",
+      "adddate": "13/05/18"
+    },
+    "name": [
+      "Patsy"
+    ],
+    "lastplay": [
+      {
+        "$": {
+          "date": "07/06/23"
+        }
+      }
+    ]
+  },
+  {
+    "$": {
+      "type": "event",
+      "n": "4",
+      "adddate": "25/10/18"
+    },
+    "name": [
+      "Maxine"
+    ],
+    "lastplay": [
+      {
+        "$": {
+          "date": "07/06/23"
+        }
+      }
+    ]
+  },
+  {
+    "$": {
+      "type": "event",
+      "n": "5",
+      "adddate": "25/01/19"
+    },
+    "name": [
+      "Sandra"
+    ],
+    "lastplay": [
+      {
+        "$": {
+          "date": "07/06/23"
+        }
+      }
+    ]
+  },
+  {
+    "$": {
+      "type": "event",
+      "n": "6",
+      "adddate": "16/02/19"
+    },
+    "name": [
+      "Purley"
+    ],
+    "lastplay": [
+      {
+        "$": {
+          "date": "07/06/23"
+        }
+      }
+    ]
+  },
+  {
+    "$": {
+      "type": "event",
+      "n": "7",
+      "adddate": "05/03/19"
+    },
+    "name": [
+      "Charlotte"
+    ],
+    "lastplay": [
+      {
+        "$": {
+          "date": "07/06/23"
+        }
+      }
+    ]
+  },
+  {
+    "$": {
+      "type": "event",
+      "n": "8",
+      "adddate": "11/03/19"
+    },
+    "name": [
+      "Jackie"
+    ],
+    "lastplay": [
+      {
+        "$": {
+          "date": "07/06/23"
+        }
+      }
+    ]
+  },
+  {
+    "$": {
+      "type": "event",
+      "n": "9",
+      "adddate": "14/04/19"
+    },
+    "name": [
+      "Joanne"
+    ],
+    "lastplay": [
+      {
+        "$": {
+          "date": "07/06/23"
+        }
+      }
+    ]
+  },
+  {
+    "$": {
+      "type": "event",
+      "n": "10",
+      "adddate": "14/04/19"
+    },
+    "name": [
+      "Mytest"
+    ],
+    "lastplay": [
+      {
+        "$": {
+          "date": "07/06/23"
+        }
+      }
+    ]
+  },
+  {
+    "$": {
+      "type": "event",
+      "n": "11",
+      "adddate": "11/06/19"
+    },
+    "name": [
+      "Marcia"
+    ],
+    "lastplay": [
+      {
+        "$": {
+          "date": "07/06/23"
+        }
+      }
+    ]
+  },
+  {
+    "$": {
+      "type": "event",
+      "n": "12",
+      "adddate": "10/07/19"
+    },
+    "name": [
+      "Oxford and Cambridge July"
+    ],
+    "lastplay": [
+      {
+        "$": {
+          "date": "07/06/23"
+        }
+      }
+    ]
+  },
+  {
+    "$": {
+      "type": "event",
+      "n": "13",
+      "adddate": "28/08/19"
+    },
+    "name": [
+      "Vera"
+    ],
+    "lastplay": [
+      {
+        "$": {
+          "date": "07/06/23"
+        }
+      }
+    ]
+  },
+  {
+    "$": {
+      "type": "event",
+      "n": "14",
+      "adddate": "11/09/19"
+    },
+    "name": [
+      "Ox Cam September"
+    ],
+    "lastplay": [
+      {
+        "$": {
+          "date": "07/06/23"
+        }
+      }
+    ]
+  },
+  {
+    "$": {
+      "type": "event",
+      "n": "15",
+      "adddate": "17/09/19"
+    },
+    "name": [
+      "RAC V Hurlingham"
+    ],
+    "lastplay": [
+      {
+        "$": {
+          "date": "07/06/23"
+        }
+      }
+    ]
+  },
+  {
+    "$": {
+      "type": "event",
+      "n": "16",
+      "adddate": "14/10/19"
+    },
+    "name": [
+      "OxCam Sept Dinner Duplicate"
+    ],
+    "lastplay": [
+      {
+        "$": {
+          "date": "07/06/23"
+        }
+      }
+    ]
+  },
+  {
+    "$": {
+      "type": "event",
+      "n": "17",
+      "adddate": "13/11/19"
+    },
+    "name": [
+      "Ox Cam"
+    ],
+    "lastplay": [
+      {
+        "$": {
+          "date": "07/06/23"
+        }
+      }
+    ]
+  },
+  {
+    "$": {
+      "type": "event",
+      "n": "18",
+      "adddate": "14/11/19"
+    },
+    "name": [
+      "RAC Gentle"
+    ],
+    "lastplay": [
+      {
+        "$": {
+          "date": "07/06/23"
+        }
+      }
+    ]
+  },
+  {
+    "$": {
+      "type": "event",
+      "n": "19",
+      "adddate": "03/12/19"
+    },
+    "name": [
+      "Patsy Ros Stephanie"
+    ],
+    "lastplay": [
+      {
+        "$": {
+          "date": "07/06/23"
+        }
+      }
+    ]
+  },
+  {
+    "$": {
+      "type": "event",
+      "n": "20",
+      "adddate": "09/12/19"
+    },
+    "name": [
+      "Stephanie Arlette Patsy"
+    ],
+    "lastplay": [
+      {
+        "$": {
+          "date": "07/06/23"
+        }
+      }
+    ]
+  },
+  {
+    "$": {
+      "type": "event",
+      "n": "21",
+      "adddate": "21/01/20"
+    },
+    "name": [
+      "Cathe Bridge Chelmsford"
+    ],
+    "lastplay": [
+      {
+        "$": {
+          "date": "07/06/23"
+        }
+      }
+    ]
+  },
+  {
+    "$": {
+      "type": "event",
+      "n": "22",
+      "adddate": "31/01/20"
+    },
+    "name": [
+      "Sandra Bridge Day"
+    ],
+    "lastplay": [
+      {
+        "$": {
+          "date": "07/06/23"
+        }
+      }
+    ]
+  },
+  {
+    "$": {
+      "type": "event",
+      "n": "23",
+      "adddate": "15/02/20"
+    },
+    "name": [
+      "Purley Championship Pairs"
+    ],
+    "lastplay": [
+      {
+        "$": {
+          "date": "07/06/23"
+        }
+      }
+    ]
+  },
+  {
+    "$": {
+      "type": "event",
+      "n": "24",
+      "adddate": "27/02/20"
+    },
+    "name": [
+      "Maxine bridge and lunch day"
+    ],
+    "lastplay": [
+      {
+        "$": {
+          "date": "07/06/23"
+        }
+      }
+    ]
+  },
+  {
+    "$": {
+      "type": "event",
+      "n": "25",
+      "adddate": "10/03/20"
+    },
+    "name": [
+      "Sandra Granditer"
+    ],
+    "lastplay": [
+      {
+        "$": {
+          "date": "07/06/23"
+        }
+      }
+    ]
+  },
+  {
+    "$": {
+      "type": "event",
+      "n": "26",
+      "adddate": "20/04/20"
+    },
+    "name": [
+      "Reform Monday Bridge Duplicate"
+    ],
+    "lastplay": [
+      {
+        "$": {
+          "date": "07/06/23"
+        }
+      }
+    ]
+  },
+  {
+    "$": {
+      "type": "event",
+      "n": "27",
+      "adddate": "21/04/20"
+    },
+    "name": [
+      "Dutch Club Online"
+    ],
+    "lastplay": [
+      {
+        "$": {
+          "date": "07/06/23"
+        }
+      }
+    ]
+  },
+  {
+    "$": {
+      "type": "event",
+      "n": "28",
+      "adddate": "21/01/22"
+    },
+    "name": [
+      "Caroline Bridge Day"
+    ],
+    "lastplay": [
+      {
+        "$": {
+          "date": "07/06/23"
+        }
+      }
+    ]
+  },
+  {
+    "$": {
+      "type": "event",
+      "n": "29",
+      "adddate": "31/03/22"
+    },
+    "name": [
+      "Gerber Pairs"
+    ],
+    "lastplay": [
+      {
+        "$": {
+          "date": "07/06/23"
+        }
+      }
+    ]
+  },
+  {
+    "$": {
+      "type": "event",
+      "n": "30",
+      "adddate": "22/06/22"
+    },
+    "name": [
+      "test1"
+    ],
+    "lastplay": [
+      {
+        "$": {
+          "date": "07/06/23"
+        }
+      }
+    ]
+  },
+  {
+    "$": {
+      "type": "event",
+      "n": "31",
+      "adddate": "30/07/22"
+    },
+    "name": [
+      "James Jones 2022"
+    ],
+    "lastplay": [
+      {
+        "$": {
+          "date": "07/06/23"
+        }
+      }
+    ]
+  },
+  {
+    "$": {
+      "type": "event",
+      "n": "32",
+      "adddate": "08/08/22"
+    },
+    "name": [
+      "Ellie Leviton Trophy"
+    ],
+    "lastplay": [
+      {
+        "$": {
+          "date": "07/06/23"
+        }
+      }
+    ]
+  },
+  {
+    "$": {
+      "type": "event",
+      "n": "33",
+      "adddate": "07/10/22"
+    },
+    "name": [
+      "Brunel Trophy 2022"
+    ],
+    "lastplay": [
+      {
+        "$": {
+          "date": "07/06/23"
+        }
+      }
+    ]
+  },
+  {
+    "$": {
+      "type": "event",
+      "n": "34",
+      "adddate": "08/10/22"
+    },
+    "name": [
+      "Brunel Trophy 2022 Session 1"
+    ],
+    "lastplay": [
+      {
+        "$": {
+          "date": "07/06/23"
+        }
+      }
+    ]
+  },
+  {
+    "$": {
+      "type": "event",
+      "n": "35",
+      "adddate": "15/10/22"
+    },
+    "name": [
+      "Test"
+    ],
+    "lastplay": [
+      {
+        "$": {
+          "date": "07/06/23"
+        }
+      }
+    ]
+  },
+  {
+    "$": {
+      "type": "event",
+      "n": "36",
+      "adddate": "15/10/22"
+    },
+    "name": [
+      "Purley Swiss Pairs"
+    ],
+    "lastplay": [
+      {
+        "$": {
+          "date": "07/06/23"
+        }
+      }
+    ]
+  },
+  {
+    "$": {
+      "type": "event",
+      "n": "37",
+      "adddate": "21/01/23"
+    },
+    "name": [
+      "Pairs hand"
+    ],
+    "lastplay": [
+      {
+        "$": {
+          "date": "07/06/23"
+        }
+      }
+    ]
+  },
+  {
+    "$": {
+      "type": "event",
+      "n": "38",
+      "adddate": "09/02/23"
+    },
+    "name": [
+      "Great test sim"
+    ],
+    "lastplay": [
+      {
+        "$": {
+          "date": "07/06/23"
+        }
+      }
+    ]
+  }
+]

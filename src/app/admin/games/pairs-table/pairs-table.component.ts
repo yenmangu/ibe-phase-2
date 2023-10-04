@@ -5,8 +5,8 @@ import {
 	OnDestroy,
 	Input,
 	Output,
-	AfterViewInit,
-	ChangeDetectionStrategy
+	AfterViewInit
+	// ChangeDetectionStrategy
 } from '@angular/core';
 import {
 	FormBuilder,
@@ -24,11 +24,12 @@ import { TablesService } from '../services/tables.service';
 @Component({
 	selector: 'app-pairs-table',
 	templateUrl: './pairs-table.component.html',
-	styleUrls: ['./pairs-table.component.scss'],
-	changeDetection: ChangeDetectionStrategy.Default
+	styleUrls: ['./pairs-table.component.scss']
+	// changeDetection: ChangeDetectionStrategy.Default
 })
 export class PairsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 	@Input() initialTableData: any;
+	@Input() loadingStatus: boolean = true;
 	@Output() formValuesChanged = new EventEmitter<any>();
 	tableConfig: any;
 	tableConfigOption: string[];
@@ -39,6 +40,8 @@ export class PairsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 	pairsForm: FormGroup;
 	columns: string[] = ['north', 'n/s', 'south', 'east', 'e/w', 'west'];
 	tableNumbers: string[];
+	isLoading$: true;
+
 	private tableConfigSubscription: Subscription;
 	private destroy$ = new Subject<void>();
 	private fromDataTableData: any = {};
@@ -56,7 +59,7 @@ export class PairsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 			.subscribe({
 				next: matchType => {
 					this.matchType = matchType;
-					console.log('confirming: ', this.matchType);
+					// console.log('confirming: ', this.matchType);
 				}
 			});
 
@@ -65,8 +68,9 @@ export class PairsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 			this.tableConfig = config;
 			this.tableConfigOption = Object.keys(config);
 
-			console.log('pairs-table config: ', this.tableConfig);
+			// console.log('pairs-table config: ', this.tableConfig);
 		});
+		this.isLoading$ = true;
 	}
 
 	ngOnInit(): void {
@@ -75,20 +79,14 @@ export class PairsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 		this.fromDataTableData = this.initialTableData.tables;
 		this.pairsForm = this.createNewPairsForm();
 		// console.log('pairs form controls: ', this.pairsForm.controls);
-		console.log(this.fromDataTableData);
+		// console.log(this.fromDataTableData);
 		if (this.pairsForm) {
-			console.log('pairs form exists', this.pairsForm.value);
+			// console.log('pairs form exists', this.pairsForm.value);
 		} else {
 			console.log('no form');
 		}
 	}
-	ngAfterViewInit(): void {
-		// console.log('pairs form controls: ',this.pairsForm.controls);
-		// for (const tableNumber of this.getTableNumbers()) {
-		//   const tableFormGroup = this.pairsForm?.get('_' + tableNumber);
-		//   console.log('Table Number:', tableNumber, 'Exists:', !!tableFormGroup);
-		// }
-	}
+	ngAfterViewInit(): void {}
 	private createNewPairsForm(): FormGroup {
 		const pairsFormControls = {};
 
@@ -124,7 +122,9 @@ export class PairsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 			'ns_abbrev',
 			'ew_abbrev',
 			'boardCol',
-			'timesLunch'
+			'timings-from',
+			'timings-to',
+			'lunch'
 		];
 		if (namesArray) {
 			for (const field of initialArray) {
@@ -176,12 +176,9 @@ export class PairsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 		return this.pairsForm.get(tableNumber.toString()) as FormGroup;
 	}
 	getTableNumbers() {
-		// const numbers = Object.keys(this.pairsForm.controls);
-		// console.log('numbers', numbers);
 		return Object.keys(this.pairsForm.controls);
 	}
 	getTableControlName(tableNumber: string, fieldName: string): FormControl<any> {
-		// Assuming you have a consistent naming convention, like 'tableNumber_fieldName'
 		return this.pairsForm.get(
 			`_${tableNumber.toString()}.${fieldName}`
 		) as FormControl<any>;
@@ -193,6 +190,14 @@ export class PairsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	onSubmit() {
 		console.log(this.pairsForm.value);
+	}
+
+	getPairsFormData() {
+		if (this.pairsForm.valid) {
+			const formData = this.pairsForm.value;
+			return formData;
+		}
+		return null;
 	}
 
 	ngOnDestroy(): void {

@@ -42,5 +42,10 @@ export const dialogData: DialogModel[] = [
 		dialogName: 'loginRegisterDialog',
 		width: '400px',
 		data: {}
+	},
+	{
+		dialogName: 'genericDialog',
+		width: '400px',
+		data: {}
 	}
 ];

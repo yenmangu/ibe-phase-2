@@ -7,10 +7,11 @@ import { Observable, BehaviorSubject } from 'rxjs';
 export class SharedDataService {
 	private gameCodeSubject = new BehaviorSubject<string>('');
 	private emailSubject = new BehaviorSubject<string>('');
+	private TabChangeSubject = new BehaviorSubject<number>(undefined);
 
 	email$: Observable<string> = this.emailSubject.asObservable();
 	gameCode$: Observable<string> = this.gameCodeSubject.asObservable();
-
+	tabChange$: Observable<number> = this.TabChangeSubject.asObservable();
 	// Dev for updating match type
 
 	private selectedMatchTypeSubject = new BehaviorSubject<string>('');
@@ -52,5 +53,9 @@ export class SharedDataService {
 	public updateMatchType(type) {
 		// console.log('Shared data service updating match type: ', type);
 		this.selectedMatchTypeSubject.next(type);
+	}
+
+	public updateTabChange(tabIndex: number) {
+		this.TabChangeSubject.next(tabIndex);
 	}
 }

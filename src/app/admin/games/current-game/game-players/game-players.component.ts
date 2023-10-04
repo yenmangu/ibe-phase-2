@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 
 import { Subject, takeUntil, Subscription } from 'rxjs';
@@ -6,6 +6,9 @@ import { BreakpointService } from 'src/app/shared/services/breakpoint.service';
 import { EventDetailModel, EventDetails } from '../../data/event.options';
 import { SharedDataService } from 'src/app/shared/services/shared-data.service';
 import { TablesService } from '../../services/tables.service';
+import { SharedGameDataService } from '../../services/shared-game-data.service';
+import { PairsTableComponent } from '../../pairs-table/pairs-table.component';
+import { TeamsTableComponent } from '../../teams-table/teams-table.component';
 
 @Component({
 	selector: 'app-game-players',
@@ -13,12 +16,17 @@ import { TablesService } from '../../services/tables.service';
 	styleUrls: ['./game-players.component.scss']
 })
 export class GamePlayersComponent implements OnInit, OnDestroy {
-	@Input() initialTableData: any
+	@Input() eventName: string ;
+	@Input() initialTableData: any;
+	@Input() isLoading: boolean = true;
+	@ViewChild(PairsTableComponent) pairsForm: PairsTableComponent;
+	@ViewChild(TeamsTableComponent) teamsForm: TeamsTableComponent;
 	applyMagentaGreyTheme = true;
 	currentBreakpoint: string = '';
 	destroy$ = new Subject<void>();
 	eventDetails: EventDetailModel[] = EventDetails;
 	tableOption = 'none';
+	forwardDate: Date | null;
 
 	matchTypeSubscription: Subscription;
 	matchType: string = '';
@@ -35,13 +43,15 @@ export class GamePlayersComponent implements OnInit, OnDestroy {
 		timesLunch: false
 	};
 
-	pairsTableFormValues: any = {};
-	teamsTableFormValues: any = {};
+	pairsTableFormData: any = {};
+	teamsTableFormData: any = {};
+	tableFormData: any = {};
 
 	constructor(
 		private breakpointService: BreakpointService,
 		private sharedDataService: SharedDataService,
 		private tablesService: TablesService,
+		private sharedGameDataService: SharedGameDataService,
 		private fb: FormBuilder
 	) {
 		this.sharedDataService.selectedMatchType$
@@ -58,7 +68,7 @@ export class GamePlayersComponent implements OnInit, OnDestroy {
 			.subscribe(value => {
 				this.currentBreakpoint = value;
 			});
-			console.log('game-players initialTableData: ', this.initialTableData)
+		// console.log('game-players initialTableData: ', this.initialTableData);
 	}
 
 	onOptionSelected(selctedOption: string) {
@@ -67,15 +77,46 @@ export class GamePlayersComponent implements OnInit, OnDestroy {
 	}
 
 	onPairsTableValueChanged(formData: any) {
-		this.pairsTableFormValues = formData;
+		this.pairsTableFormData = formData;
 	}
 	onTeamTableValueChanged(formData: any) {
-		this.teamsTableFormValues = formData;
+		this.teamsTableFormData = formData;
 	}
 
-	onSaveClick() {
-		console.log('Form Data in parent Component: ', this.pairsTableFormValues);
+	captureFormData() {
+		let tableFormData: any = {};
+		let dateFormData: any | null = {};
+		let combinedFormData: any = {};
+		if (this.eventName !== undefined) {
+			combinedFormData.eventName = this.eventName;
+		}
+		if (this.matchType === 'pairs') {
+			tableFormData = this.pairsForm.getPairsFormData();
+		} else {
+			tableFormData = this.teamsForm.getTeamFormData();
+		}
+		combinedFormData.tableFormData = tableFormData;
+		if (this.forwardDate) {
+			const day = this.forwardDate.getDate();
+			const month = this.forwardDate.toLocaleDateString('default', {
+				month: 'short'
+			});
+			const year = this.forwardDate.getFullYear();
+			dateFormData = `${day} ${month} ${year}`;
+			combinedFormData.dateFormData = dateFormData;
+		}
+
+		console.log(
+			'Form Data in child Component: ',
+			tableFormData ? tableFormData : 'No Table Form Data'
+		);
+		console.log(
+			'Form Data in parent Component: ',
+			dateFormData ? dateFormData : 'No Date Form Data'
+		);
+		console.log('Combined Form Data: ', combinedFormData);
 	}
+
 	private updateTableConfig(selectedOption: string) {
 		for (const key in this.tablesConfig) {
 			if (this.tablesConfig.hasOwnProperty(key)) {

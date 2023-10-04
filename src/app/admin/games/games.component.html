@@ -1,17 +1,37 @@
-<mat-tab-group animationDuration="0ms">
+<mat-tab-group
+	animationDuration="0ms"
+	(selectedTabChange)="onTabChange($event)">
 	<mat-tab
 		class="tab"
 		label="Current Game">
-		<app-current-game></app-current-game>
+		<ng-template matTabContent>
+			<ng-container *ngTemplateOutlet="currentGameTab"></ng-container>
+		</ng-template>
 	</mat-tab>
 	<mat-tab
 		class="tab"
 		label="Historic Games">
-		<app-historic-games></app-historic-games>
+		<ng-template matTabContent>
+			<ng-container *ngTemplateOutlet="historicGamesTab"></ng-container>
+		</ng-template>
 	</mat-tab>
 	<mat-tab
 		class="tab"
-		label="Database">
-		<app-player-database></app-player-database>
+		label="Game Database">
+		<ng-template matTabContent>
+			<ng-container *ngTemplateOutlet="databaseLanding"></ng-container>
+		</ng-template>
 	</mat-tab>
 </mat-tab-group>
+
+<ng-template #currentGameTab>
+	<app-current-game></app-current-game>
+</ng-template>
+
+<ng-template #historicGamesTab>
+	<app-historic-games></app-historic-games>
+</ng-template>
+
+<ng-template #databaseLanding>
+	<app-database-landing></app-database-landing>
+</ng-template>

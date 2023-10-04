@@ -1,0 +1,50 @@
+<div class="main container column">
+	<mat-tab-group>
+		<mat-tab
+			class="players"
+			label="Players">
+			<ng-template matTabContent>
+				<ng-container *ngTemplateOutlet="playersDatabase"></ng-container>
+			</ng-template>
+		</mat-tab>
+		<mat-tab
+			class="teams"
+			label="Teams">
+			<ng-template matTabContent>
+				<ng-container *ngTemplateOutlet="teamsDatabase"></ng-container>
+			</ng-template>
+		</mat-tab>
+		<mat-tab
+			class="event-names"
+			label="Event Names">
+			<ng-template matTabContent>
+				<ng-container *ngTemplateOutlet="eventNamesDatabase"></ng-container>
+			</ng-template>
+		</mat-tab>
+		<mat-tab
+			class="Venues"
+			label="Venues">
+			<ng-template matTabContent>
+				<ng-container *ngTemplateOutlet="venuesDatabase"></ng-container>
+			</ng-template>
+		</mat-tab>
+	</mat-tab-group>
+</div>
+
+<!-- Template References -->
+<ng-template #playersDatabase>
+	<!-- Players Database Tab -->
+	<app-player-database  [playersArray]="playersArray"></app-player-database>
+</ng-template>
+<ng-template #teamsDatabase>
+	<!-- Teams Database Tab -->
+	<app-teams-database [teamsArray]="teamsArray"></app-teams-database>
+</ng-template>
+<ng-template #eventNamesDatabase>
+	<!-- Event Names Database Tab -->
+	<app-event-names-database [eventArray]="eventArray"></app-event-names-database>
+</ng-template>
+<ng-template #venuesDatabase>
+	<app-venues-database [venuesArray]="venuesArray"></app-venues-database>
+	<!-- Venues Database Tab -->
+</ng-template>

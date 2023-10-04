@@ -1,6 +1,7 @@
 import { Injectable, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef, MatDialogConfig } from '@angular/material/dialog';
 import { DialogComponent } from '../dialog/dialog.component';
+import { PlayerTableDialogComponent } from '../player-table-dialog/player-table-dialog.component';
 import { SharedDataService } from './shared-data.service';
 import { DialogModel } from '../models/dialog_model';
 import { dialogData } from '../data/dialogs';
@@ -76,6 +77,22 @@ export class DialogService implements OnInit {
 			return this.dialogRef;
 		}
 		return undefined;
+	}
+
+	// openTableEditDialog(dialogName: string, data: any): MatDialogRef<any> | undefined {
+	// 	const dialogConfig= this.dialogs.find(dialog => dialog.dialogName === dialogName)
+	// 	if (dialogConfig){
+	// 		dialogConfig.data
+	// 	}
+	// }
+
+	openTableEditDialog(data?: any): MatDialogRef<any> | undefined {
+		const matDialogConfig: MatDialogConfig = {
+			width: '400px',
+			data: { ...data }
+		};
+		this.dialogRef = this.dialog.open(PlayerTableDialogComponent, matDialogConfig);
+		return this.dialogRef;
 	}
 
 	closeDialog(): void {

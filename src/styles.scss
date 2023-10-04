@@ -53,7 +53,7 @@ $magenta-grey-theme: mat.define-light-theme(
 * {
 	--webkit-font-smoothing: subpixel-antialiased;
 	font-smooth: always;
-  box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 html,
@@ -106,6 +106,19 @@ mat-label {
 button#start_pdf,
 button.main-save {
 	height: 50px !important;
+}
+.mat-sort-header-container {
+	justify-content: center;
+	gap: 0.2rem;
+}
+
+.delete mat-icon {
+	display: grid;
+	place-content: center;
+	margin: auto;
+	svg {
+		height: 1.2rem !important;
+	}
 }
 
 // Mobile Global Styles

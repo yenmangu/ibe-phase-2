@@ -1,0 +1,48 @@
+:host {
+}
+
+.table-wrapper {
+	width: fit-content;
+	margin: auto;
+}
+
+tr.header-row {
+	margin-bottom: 0.6rem
+}
+th{
+	padding-bottom: 1rem
+}
+
+td {
+	padding: 0.2rem;
+	text-align: center;
+}
+
+tr.tables-row {
+	td.divider,
+	th.divider {
+		width: 2rem;
+		text-align: center;
+	}
+	td.split {
+		padding: 0.4rem
+	}
+	&:first-child {
+		margin-left: 0;
+	}
+
+	&:last-child {
+		margin-left: 0;
+	}
+
+	td.strat,
+	td.abbreviations,
+	td.adjust {
+		width: 80%;
+	}
+	input{
+		padding: 0.2rem;
+		text-align: center;
+	}
+}
+

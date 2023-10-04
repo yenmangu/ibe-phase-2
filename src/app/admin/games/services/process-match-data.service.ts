@@ -37,13 +37,16 @@ export class ProcessMatchDataService implements OnDestroy {
 				}
 			});
 
-		this.indexedDatabaseStatus.isInitialised().subscribe(intialised => {
+		this.indexedDatabaseStatus.isInitialised().pipe(
+
+		).subscribe(intialised => {
 			this.isDBInitialised = intialised;
 		});
 	}
 
 	async getData(storeName, key) {
 		try {
+			// console.log(` ${storeName}`)
 			await firstValueFrom(
 				this.indexedDatabaseStatus.isInitialised$.pipe(
 					filter(isInitialised => isInitialised),
@@ -51,6 +54,7 @@ export class ProcessMatchDataService implements OnDestroy {
 					take(1)
 				)
 			);
+
 			const data = await this.indexedDB.readFromDB(
 				[`${this.currentMatchType}-${storeName}`],
 				key
@@ -64,7 +68,6 @@ export class ProcessMatchDataService implements OnDestroy {
 
 	async getInitialTableData() {
 		try {
-			console.log('getInitialTableData invoked');
 			const result = await firstValueFrom(
 				this.indexedDatabaseStatus.isInitialised$.pipe(
 					filter(isInitialised => isInitialised),
@@ -139,7 +142,7 @@ export class ProcessMatchDataService implements OnDestroy {
 		}
 		dataObj.tables = tableArray;
 		dataObj.playerConfig = this.extractPairs(dataObj.players);
-		console.log(dataObj.playerConfig);
+		// console.log(dataObj.playerConfig);
 
 		const { north, south, east, west } = dataObj.playerConfig;
 		// this.extractPairs(dataObj)
@@ -187,7 +190,7 @@ export class ProcessMatchDataService implements OnDestroy {
 		for (let i =0; i<numPlayers; i++){
 			tables[i+1] = [north[i],south[i],east[i],west[i]]
 		}
-		
+
 		return tables
 	}
 
