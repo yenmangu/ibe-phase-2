@@ -13,6 +13,9 @@ import { environment } from 'src/environments/environment';
 import { DateTime } from 'luxon';
 import { TokenService } from './token.service';
 import { SharedDataService } from '../../shared/services/shared-data.service';
+import { HttpService } from 'src/app/shared/services/http.service';
+import { CheckSessionService } from './check-session.service';
+import { DataService } from 'src/app/admin/games/services/data.service';
 
 @Injectable({
 	providedIn: 'root'
@@ -31,7 +34,10 @@ export class AuthService {
 	constructor(
 		private http: HttpClient,
 		private tokenService: TokenService,
-		private sharedDataService: SharedDataService
+		private sharedDataService: SharedDataService,
+		private checkSessionService: CheckSessionService,
+		private httpService: HttpService,
+		private dataService: DataService
 	) {
 		const token = this.tokenService.getToken();
 		if (token) {
@@ -93,7 +99,9 @@ export class AuthService {
 						this.isAuthedSubject.next(true);
 						this.statusSubject.next('AUTHED');
 						this.responseJSONSubject.next(response.json);
-
+						localStorage.setItem('GAMECODE', username);
+						localStorage.setItem('DIR_KEY', password);
+						this.sharedDataService.isAuthedSubject.next(true);
 						console.log('User Authenticated');
 					}
 					if (response.status === 'ERRORNOUSER') {
@@ -124,7 +132,10 @@ export class AuthService {
 	}
 
 	logout(): void {
+		console.log('logout called');
 		this.tokenService.removeToken();
+		localStorage.clear();
+		this.dataService.deleteIndexedDBDatabase();
 		this.isAuthedSubject.next(false);
 	}
 }

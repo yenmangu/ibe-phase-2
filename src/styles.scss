@@ -138,8 +138,15 @@ mat-label {
 }
 
 button#start_pdf,
-button.main-save {
+button.main-save,
+button.register,
+button.login {
 	height: 50px !important;
+}
+
+.mdc-button.register,
+.mdc-button.login {
+	height: 5rem !important;
 }
 .mat-sort-header-container {
 	justify-content: center;

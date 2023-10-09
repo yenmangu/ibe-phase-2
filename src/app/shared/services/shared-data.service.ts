@@ -1,16 +1,20 @@
 import { Injectable } from '@angular/core';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject, Subject } from 'rxjs';
 
 @Injectable({
 	providedIn: 'root'
 })
 export class SharedDataService {
-	private gameCodeSubject = new BehaviorSubject<string>('');
+	public gameCodeSubject = new Subject<string>();
 	private emailSubject = new BehaviorSubject<string>('');
 	private TabChangeSubject = new BehaviorSubject<number>(undefined);
+	public isAuthedSubject = new Subject<any>();
+	public dirKeySubject = new Subject<string>();
 
+	isAuthed$: Observable<any> = this.isAuthedSubject.asObservable();
 	email$: Observable<string> = this.emailSubject.asObservable();
 	gameCode$: Observable<string> = this.gameCodeSubject.asObservable();
+	dirKey$: Observable<string> = this.dirKeySubject.asObservable();
 	tabChange$: Observable<number> = this.TabChangeSubject.asObservable();
 	// Dev for updating match type
 
@@ -34,13 +38,14 @@ export class SharedDataService {
 		}
 	}
 
-	public updateUserData(gameCode: string, email: string) {
+	public updateUserData(gameCode: string, email: string, dirKey: string) {
 		this.updateEmail(email);
 		this.updateGameCode(gameCode);
+		this.updateDirKey(dirKey);
 	}
 
-	private updateGameCode(gameCode: string) {
-		// console.log('shared data service updating game code: ', gameCode);
+	public updateGameCode(gameCode: string) {
+		console.log('shared data service updating game code: ', gameCode);
 		localStorage.setItem('game_code', gameCode);
 		this.gameCodeSubject.next(gameCode);
 	}
@@ -50,6 +55,12 @@ export class SharedDataService {
 		this.emailSubject.next(email);
 	}
 
+	public updateDirKey(dirKey: string) {
+		console.log('updating dirkey');
+		localStorage.setItem('DIRKEY', dirKey);
+		this.dirKeySubject.next(dirKey);
+	}
+
 	public updateMatchType(type) {
 		// console.log('Shared data service updating match type: ', type);
 		this.selectedMatchTypeSubject.next(type);
@@ -57,5 +68,19 @@ export class SharedDataService {
 
 	public updateTabChange(tabIndex: number) {
 		this.TabChangeSubject.next(tabIndex);
+	}
+
+	public async getUserData(): Promise<any> {
+		const data: { gameCode: string; dirKey: string } = {
+			gameCode: localStorage.getItem('GAMECODE') || '',
+			dirKey: localStorage.getItem('DIRKEY') || ''
+		};
+
+		if (data) {
+			this.updateGameCode(data.gameCode);
+			this.updateDirKey(data.dirKey);
+		}
+
+		console.log('data in getUserData: ', data);
 	}
 }

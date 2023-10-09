@@ -11,6 +11,9 @@ export class SharedGameDataService {
 	private tableLoadingSubject = new BehaviorSubject<boolean>(true);
 	tableLoading$ = this.tableLoadingSubject.asObservable();
 
+	private dataStoredSubject = new BehaviorSubject<boolean>(false);
+	dataStored$ = this.dataStoredSubject.asObservable();
+
 	constructor() {}
 
 	setTableConfigOption(option: string) {
@@ -21,5 +24,9 @@ export class SharedGameDataService {
 	setLoadingStatus(boolean: boolean) {
 		this.tableLoadingSubject.next(boolean);
 		// console.log(this.tableLoading$);
+	}
+
+	setDataStoredStatus(boolean: boolean) {
+		this.dataStoredSubject.next(boolean);
 	}
 }

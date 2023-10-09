@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { DialogService } from 'src/app/shared/services/dialog.service';
 import { AuthService } from '../services/auth.service';
 import { SharedDataService } from 'src/app/shared/services/shared-data.service';
+import { CheckSessionService } from '../services/check-session.service';
 @Component({
 	selector: 'app-login',
 	templateUrl: './login.component.html',
@@ -17,7 +18,8 @@ export class LoginComponent implements OnInit {
 		private router: Router,
 		private dialogService: DialogService,
 		private authService: AuthService,
-		private sharedDataService: SharedDataService
+		private sharedDataService: SharedDataService,
+		private checkSessionService: CheckSessionService
 	) {}
 
 	ngOnInit(): void {
@@ -28,6 +30,7 @@ export class LoginComponent implements OnInit {
 	}
 
 	onSubmit(): void {
+		const password = this.loginForm.get('key').value;
 		// const formData = { ...this.loginForm.value };
 		const formData = {
 			type: 'slot',
@@ -42,9 +45,11 @@ export class LoginComponent implements OnInit {
 				console.log('response from authService: ', response);
 				this.sharedDataService.updateUserData(
 					response.directorSlot,
-					response.directorEmail
+					response.directorEmail,
+					password
 				);
-				this.router.navigate(['/admin'])
+				this.sharedDataService.isAuthedSubject.next(true);
+				this.router.navigate(['/admin']);
 				this.dialogService.closeDialog();
 			}
 		});

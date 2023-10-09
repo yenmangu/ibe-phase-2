@@ -370,6 +370,9 @@ export class ProcessMatchDataService implements OnDestroy {
 		await this.indexedDB.writeToDB([updateObject]);
 	}
 
+	
+
+
 	ngOnDestroy(): void {
 		if (this.matchTypeSubscription) {
 			this.matchTypeSubscription.unsubscribe();

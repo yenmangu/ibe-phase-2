@@ -131,7 +131,7 @@ export class DataService implements OnInit, OnDestroy {
 			playerdb,
 			params,
 			xmlsettings,
-			slotname,
+			// slotname,
 			hrevtxt,
 			lock
 		} = data;
@@ -144,7 +144,7 @@ export class DataService implements OnInit, OnDestroy {
 			[`${this.matchType}-player_db`]: playerdb,
 			[`${this.matchType}-params`]: params,
 			[`${this.matchType}-xml_settings`]: xmlsettings,
-			[`${this.matchType}slot_name`]: slotname,
+			// [`${this.matchType}slot_name`]: slotname,
 			[`${this.matchType}-hrev_txt`]: hrevtxt,
 			[`${this.matchType}-lock`]: lock
 		};
@@ -153,6 +153,22 @@ export class DataService implements OnInit, OnDestroy {
 	}
 
 	getData(key) {}
+
+	deleteIndexedDBDatabase(): Promise<void> {
+		return new Promise<void>((resolve, reject) => {
+			const deleteRequest = indexedDB.deleteDatabase(`${this.matchType}-${this.dbName}`);
+
+			deleteRequest.onsuccess = () => {
+				console.log(`IndexedDB database '${this.dbName}' deleted successfully`);
+				resolve();
+			};
+
+			deleteRequest.onerror = () => {
+				console.error(`Error deleting IndexedDB database '${this.dbName}'`);
+				reject(new Error(`Failed to delete IndexedDB database '${this.dbName}'`));
+			};
+		});
+	}
 
 	ngOnDestroy(): void {
 		if (this.subscription) {

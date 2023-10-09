@@ -11,13 +11,16 @@ import { HttpService } from 'src/app/shared/services/http.service';
 })
 export class CurrentEventService implements OnInit {
 	apiUrl = environment.API_URL;
-	private handDataSubject = new BehaviorSubject<any[]>([])
-	public handData$ = this.handDataSubject.asObservable()
+	private handDataSubject = new BehaviorSubject<any[]>([]);
+	public handData$ = this.handDataSubject.asObservable();
+	private gameDataSubject = new BehaviorSubject<any[]>([]);
+	public gameData$ = this.gameDataSubject.asObservable();
 
 	constructor(
 		private http: HttpClient,
 		private sharedDataService: SharedDataService,
-		private processCurrentMatch: ProcessCurrentMatchService
+		private processCurrentMatch: ProcessCurrentMatchService,
+		private httpService: HttpService
 	) {
 		const headers = new HttpHeaders({
 			Accept: 'application/json'
@@ -31,9 +34,9 @@ export class CurrentEventService implements OnInit {
 	}
 
 	private getDummyXmlData(matchType): Observable<any> {
-		console.log(
-			`private getDummyData to ${this.apiUrl}/dev/dummy_xml?filename=${matchType} called`
-		);
+		// console.log(
+		// 	`private getDummyData to ${this.apiUrl}/dev/dummy_xml?filename=${matchType} called`
+		// );
 		return this.http
 			.get<any>(`${this.apiUrl}/dev/dummy_xml?filename=${matchType}`)
 			.pipe(
@@ -47,6 +50,22 @@ export class CurrentEventService implements OnInit {
 			);
 	}
 
+	public getLiveData(gameCode: string, dirKey: string): Observable<any> {
+		try {
+			return this.httpService.fetchData(gameCode, dirKey).pipe(
+				tap(data => {
+					console.log('data in getLiveData tap: ', data);
+				}),
+				catchError(err => {
+					console.error('Error in getLiveData: ', err);
+					throw err;
+				})
+			);
+		} catch (err) {
+			throw err;
+		}
+	}
+
 	private async processHandData(selectedMatchType): Promise<any> {
 		try {
 			if (!selectedMatchType) {
@@ -56,8 +75,7 @@ export class CurrentEventService implements OnInit {
 				selectedMatchType
 			);
 			if (handData) {
-
-				console.log('hand data: ', handData.value)
+				console.log('hand data: ', handData.value);
 
 				return handData;
 			} else {
@@ -68,5 +86,3 @@ export class CurrentEventService implements OnInit {
 		}
 	}
 }
-
-
