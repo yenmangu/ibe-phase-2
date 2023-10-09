@@ -61,7 +61,7 @@ export class HistoricGamesDatabaseService implements OnDestroy {
 			const data = await this.processMatchDataService.getData(objectStore, key);
 			if (data) {
 				// console.log(data, this.selectedMatchType, key, objectStore)
-				const accessedProperty = data[`${this.selectedMatchType}-${objectStore}`];
+				const accessedProperty = data[`${objectStore}`];
 				this.dataLoadingSubject.next(accessedProperty);
 
 				// this.dataLoadingSubject.complete();

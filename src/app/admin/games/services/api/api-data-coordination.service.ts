@@ -24,7 +24,7 @@ export class ApiDataCoordinationService {
 			} = data;
 			console.log('type', type);
 
-			const storeName = `${matchType}-${type}`;
+			const storeName = `${type}`;
 			await this.sendToHttp(undefined, matchType);
 		} catch (err) {
 			throw err;

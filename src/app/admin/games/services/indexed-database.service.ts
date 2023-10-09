@@ -16,8 +16,13 @@ export class IndexedDatabaseService {
 		dbName: string
 	): Promise<IDBPDatabase<unknown>> {
 		try {
-			const storeNames = Object.keys(storeMapping);
-			const playerDbStoreNames = Object.keys(playerDbStoreMapping);
+			let storeNames;
+			let playerDbStoreNames;
+			const databaseExist = localStorage.getItem('database');
+			if (databaseExist !== 'true') {
+				storeNames = Object.keys(storeMapping);
+				playerDbStoreNames = Object.keys(playerDbStoreMapping);
+			}
 			const maxVersion = 3;
 			console.log('initDatabase storemapping: ', storeNames);
 
@@ -144,7 +149,7 @@ export class IndexedDatabaseService {
 						console.log('no store');
 						return new Error('no store');
 					} else {
-						// console.log(store);
+						console.log(store);
 					}
 					for (const element of playerDbStoreMapping[name]) {
 						const key = element.$.n;
@@ -166,6 +171,7 @@ export class IndexedDatabaseService {
 			for (const storeName of storeNames) {
 				try {
 					const store = tx.objectStore(storeName);
+					console.log('storeMaping', storeMapping);
 					const keys = Object.keys(storeMapping[storeName]);
 					// console.log('keys for store', storeName, ': ', keys);
 
@@ -194,6 +200,7 @@ export class IndexedDatabaseService {
 
 			await Promise.all(promises);
 			await tx.done;
+			localStorage.setItem('database', 'true');
 			return storeMapping;
 		} catch (err) {
 			return Error('err', err);

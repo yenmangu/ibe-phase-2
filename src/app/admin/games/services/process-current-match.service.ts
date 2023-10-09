@@ -16,7 +16,7 @@ export class ProcessCurrentMatchService {
 			if (!selectedMatchType) {
 				throw new Error('No match type detected');
 			}
-			const storeName = `${selectedMatchType}-handanxs_data`;
+			const storeName = `handanxs_data`;
 			const key = 'handanx';
 			const handData = await this.indexedDatabaseService.getByKey(storeName, key);
 			if (handData) {

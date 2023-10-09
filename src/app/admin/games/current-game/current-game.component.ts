@@ -40,6 +40,7 @@ export class CurrentGameComponent implements OnInit, OnDestroy {
 		).subscribe({
 			next: async (json)=> {
 				if(json){
+					console.log('json in subscription: ', json)
 					await this.processData(json)
 				}
 			}

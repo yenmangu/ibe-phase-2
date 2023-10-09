@@ -37,26 +37,26 @@ export class DataService implements OnInit, OnDestroy {
 	public initialiseDB = async data => {
 		// console.log('accessing playerdb array test: ', data.playerdb.root[0].item);
 		// console.log('matchType :', this.matchType);
-		const storeMapping = this.mapData(data);
-		const playerDbStoreMapping = this.getPlayerDbStoreMapping(data);
-		this.storeMapping = storeMapping;
+		let storeMapping;
+		let playerDbStoreMapping;
+		if (localStorage.getItem('database') !== 'true') {
+			storeMapping = this.mapData(data);
+			playerDbStoreMapping = this.getPlayerDbStoreMapping(data);
+			this.storeMapping = storeMapping;
+		}
 		this.playerDbStoreMapping = playerDbStoreMapping;
 		// console.log('initialiseDB storeMapping: ', storeMapping);
 		await this.indexedDB.initDatabase(
 			storeMapping,
 			playerDbStoreMapping,
-			`${this.matchType}-${this.dbName}`
+			this.dbName
 		);
-		console.log(
-			`database with name of ${this.matchType}-${this.dbName} initialised`
-		);
+		console.log(`database with name of ${this.dbName} initialised`);
 	};
 
 	async doesDbExist() {
 		try {
-			const exists = await this.indexedDB.doesDatabaseExist(
-				`${this.matchType}-${this.dbName}`
-			);
+			const exists = await this.indexedDB.doesDatabaseExist(`${this.dbName}`);
 			return exists;
 		} catch (err) {
 			console.error('Error checking db', err);
@@ -66,6 +66,7 @@ export class DataService implements OnInit, OnDestroy {
 
 	async storeData(data: any): Promise<boolean> {
 		try {
+			console.log('data in store data: ', data);
 			const playerDbStoreMapping = this.getPlayerDbStoreMapping(data);
 			const storeMapping = this.mapData(data); // Map the data
 			// console.log('storeData storeMapping ', storeMapping);
@@ -83,6 +84,7 @@ export class DataService implements OnInit, OnDestroy {
 	}
 
 	private getPlayerDbStoreMapping(data: any): any {
+		console.log('data in playerdb storemapping', data);
 		if (data && data.playerdb.root[0].item) {
 			console.log('process player db data being called');
 			const dataArray: any[] = data.playerdb.root[0].item;
@@ -110,10 +112,10 @@ export class DataService implements OnInit, OnDestroy {
 				}
 			});
 			const playerDbMapping = {
-				[`${this.matchType}-player`]: temp_playersArray,
-				[`${this.matchType}-team`]: temp_teamsArray,
-				[`${this.matchType}-event`]: temp_eventArray,
-				[`${this.matchType}-loc`]: temp_venuesArray
+				player: temp_playersArray,
+				team: temp_teamsArray,
+				event: temp_eventArray,
+				loc: temp_venuesArray
 			};
 
 			return playerDbMapping;
@@ -136,17 +138,21 @@ export class DataService implements OnInit, OnDestroy {
 			lock
 		} = data;
 
+		if (slotname) {
+			console.log('slotname: ', JSON.stringify(slotname, null, 2));
+		} else console.log('NO SLOTNAME');
+
 		const storeMapping = {
-			[`${this.matchType}-current_game_data`]: currentgamedata,
-			[`${this.matchType}-historic_game_data`]: hist,
-			[`${this.matchType}-hand_data`]: hands,
-			[`${this.matchType}-handanxs_data`]: handanxs,
-			[`${this.matchType}-player_db`]: playerdb,
-			[`${this.matchType}-params`]: params,
-			[`${this.matchType}-xml_settings`]: xmlsettings,
-			[`${this.matchType}slot_name`]: slotname,
-			[`${this.matchType}-hrev_txt`]: hrevtxt,
-			[`${this.matchType}-lock`]: lock
+			current_game_data: currentgamedata,
+			historic_game_data: hist,
+			hand_data: hands,
+			handanxs_data: handanxs,
+			player_db: playerdb,
+			params: params,
+			xml_settings: xmlsettings,
+			// slot_name: slotname,
+			hrev_txt: hrevtxt,
+			lock: lock
 		};
 
 		return storeMapping;

@@ -56,7 +56,7 @@ export class ProcessMatchDataService implements OnDestroy {
 				)
 			);
 			const data = await this.indexedDB.getAllDataFromStore(
-				`${this.currentMatchType}-${storeName}`
+				`${storeName}`
 			);
 			const extracted = data.map(item=> item.value)
 			return extracted;
@@ -77,7 +77,7 @@ export class ProcessMatchDataService implements OnDestroy {
 			);
 
 			const data = await this.indexedDB.readFromDB(
-				[`${this.currentMatchType}-${storeName}`],
+				storeName,
 				key
 			);
 			return data;
@@ -98,11 +98,11 @@ export class ProcessMatchDataService implements OnDestroy {
 			);
 			// console.log('isInitialised: ', result);
 			const movement = await this.indexedDB.readFromDB(
-				[`${this.currentMatchType}-current_game_data`],
+				['current_game_data'],
 				'movementtxt'
 			);
 			const people = await this.indexedDB.readFromDB(
-				[`${this.currentMatchType}-current_game_data`],
+				[`current_game_data`],
 				'namestxt'
 			);
 			const movementValue = this.destructureValue(movement, 'current_game_data');
@@ -351,7 +351,7 @@ export class ProcessMatchDataService implements OnDestroy {
 
 	private async getPlayerDataFromDB(): Promise<any> {
 		try {
-			const storeName = `${this.currentMatchType}-player_db`;
+			const storeName = `player_db`;
 			const existingData = await this.indexedDB.readFromDB([storeName], 'root');
 			return existingData;
 		} catch (err) {
@@ -363,7 +363,7 @@ export class ProcessMatchDataService implements OnDestroy {
 	private async buildUpdateObject(dataArray: any[]) {
 		// console.log('DataArray in update Object: ', JSON.stringify(dataArray, null, 2));
 		const updateObject = {
-			storeName: `${this.currentMatchType}-player_db`,
+			storeName: `player_db`,
 			key: 'root',
 			value: dataArray
 		};
