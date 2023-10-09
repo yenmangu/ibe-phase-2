@@ -8,26 +8,27 @@
 					matInput
 					(keyup)="applyFilter($event)" />
 			</mat-form-field>
-
 			<button
-			class="add-row"
-
+				*ngIf="dataSource.filter !== ''"
+				class="clear-filter"
 				mat-flat-button
-				color="accent">
+				color="accent"
+				(click)="clearFilter(input)">
+				Clear
+			</button>
+			<button
+				(click)="onTeamAdd()"
+				class="add-row team"
+				mat-flat-button
+				color="primary">
 				+ Team Name
 			</button>
 		</div>
-		<button
-			mat-flat-button
-			color="primary"
-			class="save">
-			Save
-		</button>
 	</div>
 	<div class="table-wrapper">
 		<ng-container *ngIf="dataSource.data">
 			<table
-			[ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }"
+				[ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }"
 				class="mat-elevation-z8"
 				matSort
 				mat-table
@@ -97,10 +98,12 @@
 						Delete
 					</th>
 					<td
-					class="delete"
+						class="delete"
 						mat-cell
 						*matCellDef="let team">
-						<mat-icon>delete</mat-icon>
+						<mat-icon (click)="onDelete(team); $event.stopPropagation()"
+							>delete</mat-icon
+						>
 					</td>
 				</ng-container>
 				<tr
@@ -108,9 +111,10 @@
 					mat-header-row
 					*matHeaderRowDef="displayedColumns"></tr>
 				<tr
+					(click)="onRowClick(row)"
 					mat-row
 					*matRowDef="let row; columns: displayedColumns"></tr>
-					<tr
+				<!-- <tr
 					mat-row
 					*matNoDataRow>
 					<td
@@ -118,16 +122,16 @@
 						colspan="4">
 						No games matching your search term "{{ input.value }}"
 					</td>
-				</tr>
+				</tr> -->
 			</table>
 		</ng-container>
 		<mat-paginator
-		#paginator
-		class="mat-elevation-z8"
-		[pageSizeOptions]="[20, 40, 100, dataSource.data.length]"
-		showFirstLastButtons
-		aria-label="Select page of teams">
-	</mat-paginator>
+			#paginator
+			class="mat-elevation-z8"
+			[pageSizeOptions]="[20, 40, 100, dataSource.data.length]"
+			showFirstLastButtons
+			aria-label="Select page of teams">
+		</mat-paginator>
 		<ng-container *ngIf="tabSelected && isLoading">
 			<mat-spinner></mat-spinner
 		></ng-container>

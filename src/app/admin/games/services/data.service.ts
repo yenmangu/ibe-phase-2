@@ -10,9 +10,13 @@ export class DataService implements OnInit, OnDestroy {
 	private dbName = 'ibe_game_data';
 	matchType: string = '';
 	private storeMapping = {};
+	private playerDbStoreMapping = {};
 	private subscription: Subscription;
 	public destroy$ = new Subject<void>();
-
+	playersArray = [];
+	teamsArray = [];
+	venuesArray = [];
+	eventArray = [];
 	constructor(
 		private indexedDB: IndexedDatabaseService,
 		private sharedDataService: SharedDataService
@@ -31,20 +35,22 @@ export class DataService implements OnInit, OnDestroy {
 	}
 
 	public initialiseDB = async data => {
+		// console.log('accessing playerdb array test: ', data.playerdb.root[0].item);
 		// console.log('matchType :', this.matchType);
 		const storeMapping = this.mapData(data);
+		const playerDbStoreMapping = this.getPlayerDbStoreMapping(data);
 		this.storeMapping = storeMapping;
+		this.playerDbStoreMapping = playerDbStoreMapping;
 		// console.log('initialiseDB storeMapping: ', storeMapping);
 		await this.indexedDB.initDatabase(
 			storeMapping,
+			playerDbStoreMapping,
 			`${this.matchType}-${this.dbName}`
 		);
 		console.log(
 			`database with name of ${this.matchType}-${this.dbName} initialised`
 		);
 	};
-
-
 
 	async doesDbExist() {
 		try {
@@ -60,11 +66,13 @@ export class DataService implements OnInit, OnDestroy {
 
 	async storeData(data: any): Promise<boolean> {
 		try {
+			const playerDbStoreMapping = this.getPlayerDbStoreMapping(data);
 			const storeMapping = this.mapData(data); // Map the data
 			// console.log('storeData storeMapping ', storeMapping);
 
 			const result = await this.indexedDB.initialiseWithGameData(
 				storeMapping,
+				playerDbStoreMapping,
 				this.dbName
 			);
 			return result;
@@ -74,9 +82,47 @@ export class DataService implements OnInit, OnDestroy {
 		}
 	}
 
+	private getPlayerDbStoreMapping(data: any): any {
+		if (data && data.playerdb.root[0].item) {
+			console.log('process player db data being called');
+			const dataArray: any[] = data.playerdb.root[0].item;
+			const temp_playersArray = [];
+			const temp_teamsArray = [];
+			const temp_venuesArray = [];
+			const temp_eventArray = [];
 
+			dataArray.forEach((item: any) => {
+				if (item.$.type) {
+					switch (item.$.type) {
+						case 'player':
+							temp_playersArray.push(item);
+							break;
+						case 'team':
+							temp_teamsArray.push(item);
+							break;
+						case 'loc':
+							temp_venuesArray.push(item);
+							break;
+						case 'event':
+							temp_eventArray.push(item);
+							break;
+					}
+				}
+			});
+			const playerDbMapping = {
+				[`${this.matchType}-player`]: temp_playersArray,
+				[`${this.matchType}-team`]: temp_teamsArray,
+				[`${this.matchType}-event`]: temp_eventArray,
+				[`${this.matchType}-loc`]: temp_venuesArray
+			};
+
+			return playerDbMapping;
+		}
+	}
 
 	private mapData(data) {
+		// const playerdbObject = this.processData(data);
+		// console.log('initial player object: ', playerdbObject);
 		const {
 			currentgamedata,
 			hist,

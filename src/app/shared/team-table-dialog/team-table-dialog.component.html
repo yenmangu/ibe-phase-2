@@ -1,1 +1,49 @@
-<p>team-table-dialog works!</p>
+<h2>{{ isEdit ? 'Edit ' : 'Add New ' }}Team</h2>
+<mat-form-field [ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }">
+	<mat-label [ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }"
+		>Name</mat-label
+	>
+	<input
+		matInput
+		[(ngModel)]="teamName" />
+</mat-form-field>
+<mat-form-field [ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }">
+	<mat-label [ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }"
+		>Last Play</mat-label
+	>
+	<input
+		[ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }"
+		[disabled]="!teamName"
+		matInput
+		[(ngModel)]="lastPlay[0].$.date"
+		type="text" />
+</mat-form-field>
+<mat-form-field [ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }">
+	<mat-label [ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }"
+		>Date added</mat-label
+	>
+	<input
+		[ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }"
+		[disabled]="!teamName"
+		matInput
+		[(ngModel)]="teamAdded"
+		type="text" />
+</mat-form-field>
+
+<div class="container row button-wrapper">
+	<button
+		[disabled]="!teamName"
+		(click)="onSave()"
+		mat-flat-button
+		color="primary"
+		class="save">
+		Save
+	</button>
+	<button
+		(click)="onCancel()"
+		mat-flat-button
+		color="alert"
+		class="cancel">
+		Cancel
+	</button>
+</div>

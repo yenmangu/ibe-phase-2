@@ -1,0 +1,66 @@
+<h4>Player database operations</h4>
+<mat-tab-group>
+	<!-- Update FROM BridgeWebs -->
+	<mat-tab label="Update from BridgeWebs">
+		<h2>Success</h2>
+
+		<mat-checkbox [(ngModel)]="includeContactChecked"
+			>Include contact info</mat-checkbox
+		>
+		<mat-checkbox [(ngModel)]="deletePlayersChecked"
+			>Delete players not found on BridgeWebs</mat-checkbox
+		>
+
+		<mat-form-field>
+			<mat-label>Acount</mat-label>
+			<input
+				[(ngModel)]="savedAccount"
+				#account
+				mat-Input
+				type="text" />
+		</mat-form-field>
+		<mat-form-field>
+			<mat-label>Password</mat-label>
+			<input
+				[(ngModel)]="savedPassword"
+				#password
+				mat-Input
+				type="text" />
+		</mat-form-field>
+	</mat-tab>
+
+
+	<!-- Update TO BridgeWebs -->
+	<mat-tab label="Update to BridgWebs">
+		<h1>WORKING</h1>
+		<mat-form-field>
+			<mat-label>Acount</mat-label>
+			<input
+				[(ngModel)]="savedAccount"
+				#account
+				mat-Input
+				type="text" />
+		</mat-form-field>
+		<mat-form-field>
+			<mat-label>Password</mat-label>
+			<input
+				[(ngModel)]="savedPassword"
+				#password
+				mat-Input
+				type="text" />
+		</mat-form-field>
+	</mat-tab>
+	<!-- Export FROM Disk -->
+	<mat-tab label="Import from disk">
+
+		<mat-form-field>
+			<mat-label>Select File</mat-label>
+			<input matInput type="file">
+		</mat-form-field>
+
+	</mat-tab>
+<!-- Export TO Disk -->
+	<mat-tab label="Export to disk"></mat-tab>
+<!-- Fill in ID Numbers -->
+	<mat-tab label="Fill in ID numbers"></mat-tab>
+</mat-tab-group>

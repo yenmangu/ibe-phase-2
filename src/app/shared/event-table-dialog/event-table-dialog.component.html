@@ -1,1 +1,76 @@
-<p>event-table-dialog works!</p>
+<h2>{{ isEdit ? 'Edit ' : 'Add New ' }}Event</h2>
+<mat-form-field [ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }">
+	<mat-label [ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }"
+		>Name</mat-label
+	>
+	<input
+		matInput
+		[(ngModel)]="eventName" />
+</mat-form-field>
+<mat-form-field [ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }">
+	<mat-label [ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }"
+		>Date added</mat-label
+	>
+	<input
+		[ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }"
+		[disabled]="!eventName"
+		matInput
+		[(ngModel)]="eventAdded"
+		type="text" />
+</mat-form-field>
+<div
+	class="play-wrapper container column"
+	*ngFor="let play of lastPlay; let i = index">
+	<mat-form-field
+		[ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }"
+		[ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }">
+		<mat-label [ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }"
+			>Play date</mat-label
+		>
+		<input
+			[disabled]="!eventName"
+			[ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }"
+			matInput
+			[(ngModel)]="lastPlay[i].$.date"
+			type="text" />
+	</mat-form-field>
+	<div class="button-wrapper add-remove container row">
+		<button
+			[disabled]="!eventName"
+			id="lastplay_add"
+			*ngIf="shouldShow(i)"
+			class="last-play add"
+			mat-flat-button
+			color="accent"
+			(click)="addlastPlay()">
+			+
+		</button>
+		<button
+			[disabled]="!eventName"
+			id="lastplay_remove"
+			class="last-play remove"
+			*ngIf="i !== 0"
+			mat-flat-button
+			color="warn"
+			(click)="removeLastPlay()">
+			-
+		</button>
+	</div>
+</div>
+<div class="container row button-wrapper">
+	<button
+		[disabled]="!eventName"
+		(click)="onSave()"
+		mat-flat-button
+		color="primary"
+		class="save">
+		Save
+	</button>
+	<button
+		(click)="onCancel()"
+		mat-flat-button
+		color="alert"
+		class="cancel">
+		Cancel
+	</button>
+</div>

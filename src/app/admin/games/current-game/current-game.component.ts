@@ -6,6 +6,7 @@ import { DataService } from '../services/data.service';
 import { SharedDataService } from 'src/app/shared/services/shared-data.service';
 import { ProcessMatchDataService } from '../services/process-match-data.service';
 import { SharedGameDataService } from '../services/shared-game-data.service';
+import { AuthService } from 'src/app/auth/services/auth.service';
 
 @Component({
 	selector: 'app-current-game',
@@ -21,6 +22,7 @@ export class CurrentGameComponent implements OnInit, OnDestroy {
 	currentMatchType: string = '';
 	eventName: string = '';
 	private matchTypeSubscription: Subscription | undefined;
+	private responseSubscription: Subscription
 	private destroy$ = new Subject<void>();
 	constructor(
 		private breakpointService: BreakpointService,
@@ -28,9 +30,20 @@ export class CurrentGameComponent implements OnInit, OnDestroy {
 		private dataService: DataService,
 		private sharedDataService: SharedDataService,
 		private processMatchDataService: ProcessMatchDataService,
-		private sharedGameDataService: SharedGameDataService
+		private sharedGameDataService: SharedGameDataService,
+		private authService: AuthService
 	) {}
 	async ngOnInit(): Promise<void> {
+
+		// this.responseSubscription = this.authService.responseJSON$.pipe(
+
+		// ).subscribe({
+		// 	next: async (json)=> {
+		// 		if(json){
+		// 			await this.processData(json)
+		// 		}
+		// 	}
+		// })
 		this.matchTypeSubscription = this.sharedDataService.selectedMatchType$
 			.pipe(
 				switchMap(matchType => {
@@ -113,7 +126,7 @@ export class CurrentGameComponent implements OnInit, OnDestroy {
 	}
 
 	private async processData(data) {
-		console.log('processData() called');
+		console.log('processData() called with data: ', data);
 		await this.dataService.initialiseDB(data);
 		await this.storeInitialData(data);
 	}

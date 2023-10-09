@@ -16,6 +16,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 // CDK
 import { CdkColumnDef } from '@angular/cdk/table';
@@ -44,6 +45,9 @@ import { TeamsDatabaseComponent } from './database-landing/teams-database/teams-
 import { VenuesDatabaseComponent } from './database-landing/venues-database/venues-database.component';
 import { EventNamesDatabaseComponent } from './database-landing/event-names-database/event-names-database.component';
 import { DatabaseLandingComponent } from './database-landing/database-landing.component';
+import { AdvancedOptionsDialogComponent } from './database-landing/advanced-options-dialog/advanced-options-dialog.component';
+import { HandPaginationComponent } from './current-game/hand-pagination/hand-pagination.component';
+import { HandDisplayComponent } from './current-game/hand-display/hand-display.component';
 
 @NgModule({
 	declarations: [
@@ -62,7 +66,10 @@ import { DatabaseLandingComponent } from './database-landing/database-landing.co
 		TeamsDatabaseComponent,
 		VenuesDatabaseComponent,
 		EventNamesDatabaseComponent,
-		DatabaseLandingComponent
+		DatabaseLandingComponent,
+		AdvancedOptionsDialogComponent,
+  HandPaginationComponent,
+  HandDisplayComponent
 	],
 	imports: [
 		CommonModule,
@@ -83,6 +90,7 @@ import { DatabaseLandingComponent } from './database-landing/database-landing.co
 		MatIconModule,
 		MatSortModule,
 		MatPaginatorModule,
+		MatCheckboxModule,
 		// Other UI
 		NgxMaterialTimepickerModule
 		// Clarity

@@ -1,0 +1,26 @@
+/* Apply spacing between cells */
+.hand-table {
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 0.4rem;
+  text-align: center;
+}
+
+/* Add a border under the header row */
+thead tr {
+  border-bottom: 2px solid #333;
+}
+
+/* Add a border on the right side of the first column */
+th:first-child, td:first-child {
+  border-right: 2px solid #333;
+}
+
+/* Customize header row with custom SVG icons */
+th {
+  background-color: #333; /* Header background color */
+  color: white;
+  height: 2.5rem; 
+}

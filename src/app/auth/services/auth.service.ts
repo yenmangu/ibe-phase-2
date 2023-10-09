@@ -19,7 +19,9 @@ import { SharedDataService } from '../../shared/services/shared-data.service';
 })
 export class AuthService {
 	private isAuthedSubject = new BehaviorSubject<boolean>(false);
-	private statusSubject = new BehaviorSubject<any>('')
+	private statusSubject = new BehaviorSubject<any>('');
+	private responseJSONSubject = new BehaviorSubject<any>({});
+	responseJSON$ = this.responseJSONSubject.asObservable();
 
 	private _authed: boolean = false;
 	private userExist: boolean = false;
@@ -47,7 +49,7 @@ export class AuthService {
 		return this.isAuthedSubject.asObservable();
 	}
 	public get statusSubject$(): Observable<any> {
-		return this.statusSubject.asObservable()
+		return this.statusSubject.asObservable();
 	}
 
 	setAuthenticationStatus(isAuthenticated: boolean) {
@@ -89,18 +91,19 @@ export class AuthService {
 					}
 					if (response.status === 'LOGGEDIN') {
 						this.isAuthedSubject.next(true);
-						this.statusSubject.next('AUTHED')
+						this.statusSubject.next('AUTHED');
+						this.responseJSONSubject.next(response.json);
+
 						console.log('User Authenticated');
 					}
 					if (response.status === 'ERRORNOUSER') {
 						this.isAuthedSubject.next(false);
-						this.statusSubject.next('NO_USER')
+						this.statusSubject.next('NO_USER');
 						console.log('No User Found');
-
 					}
 					if (response.status === 'ERRORPASS') {
 						this.isAuthedSubject.next(false);
-						this.statusSubject.next('INCORRECT_PASS')
+						this.statusSubject.next('INCORRECT_PASS');
 						console.log('Incorrect Password');
 					}
 				}),
@@ -120,9 +123,8 @@ export class AuthService {
 		);
 	}
 
-	logout(): void{
+	logout(): void {
 		this.tokenService.removeToken();
 		this.isAuthedSubject.next(false);
-
 	}
 }
