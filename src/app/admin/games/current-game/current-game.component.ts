@@ -35,51 +35,51 @@ export class CurrentGameComponent implements OnInit, OnDestroy {
 	) {}
 	async ngOnInit(): Promise<void> {
 
-		// this.responseSubscription = this.authService.responseJSON$.pipe(
+		this.responseSubscription = this.authService.responseJSON$.pipe(
 
-		// ).subscribe({
-		// 	next: async (json)=> {
-		// 		if(json){
-		// 			await this.processData(json)
-		// 		}
-		// 	}
-		// })
-		this.matchTypeSubscription = this.sharedDataService.selectedMatchType$
-			.pipe(
-				switchMap(matchType => {
-					this.currentMatchType = matchType;
-					console.log('matchTpeSubscription in current-game: ', matchType);
-					return this.handleMatchTypeChange();
-				})
-			)
-			.subscribe({
-				next: async data => {
-					if (!data) {
-						console.log('No data from http');
-						this.isLoading = true;
-						await this.processMatchDataService
-							.getInitialTableData()
-							.then(result => {
-								// console.log('Initial Table Data: ', result);
-								this.initialTableData = result;
-							});
-					} else {
-						await this.processMatchDataService
-							.getInitialTableData()
-							.then(result => {
-								this.initialTableData = result;
-								this.sharedGameDataService.setLoadingStatus(false);
-								this.sharedGameDataService.tableLoading$.subscribe(status => {
-									this.isLoading = status;
-								});
-								// console.log('current-game initial table data: ',this.initialTableData)
-							})
-							.finally(() => {
-								this.isLoading = false;
-							});
-					}
+		).subscribe({
+			next: async (json)=> {
+				if(json){
+					await this.processData(json)
 				}
-			});
+			}
+		})
+		// this.matchTypeSubscription = this.sharedDataService.selectedMatchType$
+		// 	.pipe(
+		// 		switchMap(matchType => {
+		// 			this.currentMatchType = matchType;
+		// 			console.log('matchTpeSubscription in current-game: ', matchType);
+		// 			return this.handleMatchTypeChange();
+		// 		})
+		// 	)
+		// 	.subscribe({
+		// 		next: async data => {
+		// 			if (!data) {
+		// 				console.log('No data from http');
+		// 				this.isLoading = true;
+		// 				await this.processMatchDataService
+		// 					.getInitialTableData()
+		// 					.then(result => {
+		// 						// console.log('Initial Table Data: ', result);
+		// 						this.initialTableData = result;
+		// 					});
+		// 			} else {
+		// 				await this.processMatchDataService
+		// 					.getInitialTableData()
+		// 					.then(result => {
+		// 						this.initialTableData = result;
+		// 						this.sharedGameDataService.setLoadingStatus(false);
+		// 						this.sharedGameDataService.tableLoading$.subscribe(status => {
+		// 							this.isLoading = status;
+		// 						});
+		// 						// console.log('current-game initial table data: ',this.initialTableData)
+		// 					})
+		// 					.finally(() => {
+		// 						this.isLoading = false;
+		// 					});
+		// 			}
+		// 		}
+		// 	});
 		this.breakpointService.currentBreakpoint$
 			.pipe(takeUntil(this.destroy$))
 			.subscribe(value => {
