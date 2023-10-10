@@ -74,7 +74,7 @@ export class PairsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 	}
 
 	ngOnInit(): void {
-		// console.log('tables: ', this.initialTableData.tables);
+		console.log('tables: ', this.initialTableData.tables);
 		this.tableNumbers = Object.keys(this.initialTableData.tables);
 		this.fromDataTableData = this.initialTableData.tables;
 		this.pairsForm = this.createNewPairsForm();

@@ -62,7 +62,7 @@ export class SharedDataService {
 	}
 
 	public updateMatchType(type) {
-		// console.log('Shared data service updating match type: ', type);
+		console.log('Shared data service updating match type: ', type);
 		this.selectedMatchTypeSubject.next(type);
 	}
 

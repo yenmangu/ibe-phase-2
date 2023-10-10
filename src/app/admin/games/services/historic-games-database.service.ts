@@ -33,16 +33,10 @@ export class HistoricGamesDatabaseService implements OnDestroy {
 		private apiData: ApiDataCoordinationService
 	) {
 		console.log('historic games & database service init');
-		this.matchTypeSubscription = this.sharedDataService.selectedMatchType$
-			.pipe(takeUntil(this.destroy$))
-			.subscribe(data => {
-				this.selectedMatchType = data;
-			});
+
 		this.indexedDatabaseStatus.isInitialised().subscribe(initialised => {
 			this.isDBInitialised = initialised;
 		});
-
-		console.log('Selected match type: ', this.selectedMatchType);
 	}
 
 	async fetchHistoricData(objectStore: string): Promise<any> {
@@ -61,7 +55,7 @@ export class HistoricGamesDatabaseService implements OnDestroy {
 			const data = await this.processMatchDataService.getData(objectStore, key);
 			if (data) {
 				// console.log(data, this.selectedMatchType, key, objectStore)
-				const accessedProperty = data[`${this.selectedMatchType}-${objectStore}`];
+				const accessedProperty = data[`${objectStore}`];
 				this.dataLoadingSubject.next(accessedProperty);
 
 				// this.dataLoadingSubject.complete();

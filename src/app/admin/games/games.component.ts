@@ -4,7 +4,7 @@ import { SharedDataService } from 'src/app/shared/services/shared-data.service';
 import { IndexedDatabaseStatusService } from 'src/app/shared/services/indexed-database-status.service';
 import { SharedGameDataService } from './services/shared-game-data.service';
 import { BehaviorSubject, Subscription } from 'rxjs';
-
+import { ProcessCurrentMatchService } from './services/process-current-match.service';
 @Component({
 	selector: 'app-games',
 	templateUrl: './games.component.html',
@@ -19,17 +19,37 @@ export class GamesComponent implements OnInit, OnDestroy {
 	constructor(
 		private sharedDataService: SharedDataService,
 		private indexedDBStatus: IndexedDatabaseStatusService,
-		private sharedGamesDataService: SharedGameDataService
+		private sharedGamesDataService: SharedGameDataService,
+		private processCurrentMatchService: ProcessCurrentMatchService
 	) {}
 
 	async ngOnInit(): Promise<void> {
 		this.databaseStatusSubscription = this.indexedDBStatus.isInitialised$.subscribe(
-			isInit => {
+			async isInit => {
 				if (isInit) {
 					console.log('Database status subscription: Initialised: ', isInit);
+					await this.getMatchType().then(matchType => {
+						if (matchType) {
+							this.sharedDataService.updateMatchType(matchType);
+						}
+					});
 				}
 			}
 		);
+	}
+
+	private async getMatchType(): Promise<any> {
+		try {
+			const settingsTxt = await this.processCurrentMatchService.getSettingsTxt();
+			if (settingsTxt) {
+				const matchType = this.processCurrentMatchService.getMatchType(settingsTxt);
+				console.log('match type in games component: ', matchType);
+				return matchType;
+			}
+		} catch (err) {
+			console.error('Error retrieving match type: ', err);
+			return err;
+		}
 	}
 
 	onTabChange(event: MatTabChangeEvent): void {

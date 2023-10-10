@@ -6,18 +6,22 @@ import { BreakpointService } from 'src/app/shared/services/breakpoint.service';
 import { EventDetailModel, EventDetails } from '../../data/event.options';
 import { SharedDataService } from 'src/app/shared/services/shared-data.service';
 import { TablesService } from '../../services/tables.service';
+import { CurrentGamesDatabaseService } from '../../services/current-games-database.service';
+import { IndexedDatabaseStatusService } from 'src/app/shared/services/indexed-database-status.service';
 import { SharedGameDataService } from '../../services/shared-game-data.service';
 import { PairsTableComponent } from '../../pairs-table/pairs-table.component';
 import { TeamsTableComponent } from '../../teams-table/teams-table.component';
-
+import { DataService } from '../../services/data.service';
+import { ProcessMatchDataService } from '../../services/process-match-data.service';
+import { CurrentEventService } from '../../services/current-event.service';
 @Component({
 	selector: 'app-game-players',
 	templateUrl: './game-players.component.html',
 	styleUrls: ['./game-players.component.scss']
 })
 export class GamePlayersComponent implements OnInit, OnDestroy {
-	@Input() eventName: string ;
-	@Input() initialTableData: any;
+	@Input() eventName: string;
+	@Input() initialTableData: any = undefined
 	@Input() isLoading: boolean = true;
 	@ViewChild(PairsTableComponent) pairsForm: PairsTableComponent;
 	@ViewChild(TeamsTableComponent) teamsForm: TeamsTableComponent;
@@ -52,7 +56,12 @@ export class GamePlayersComponent implements OnInit, OnDestroy {
 		private sharedDataService: SharedDataService,
 		private tablesService: TablesService,
 		private sharedGameDataService: SharedGameDataService,
-		private fb: FormBuilder
+		private fb: FormBuilder,
+		private currentEventService: CurrentEventService,
+		private dataService: DataService,
+		private processMatchDataService: ProcessMatchDataService,
+		private indexedDatabaseStatus: IndexedDatabaseStatusService,
+		private currentGamesDatabaseService: CurrentGamesDatabaseService
 	) {
 		this.sharedDataService.selectedMatchType$
 			.pipe(takeUntil(this.destroy$))
@@ -63,6 +72,8 @@ export class GamePlayersComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnInit(): void {
+		console.log('players-table component init with: ', this.initialTableData);
+
 		this.breakpointService.currentBreakpoint$
 			.pipe(takeUntil(this.destroy$))
 			.subscribe(value => {

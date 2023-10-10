@@ -17,9 +17,7 @@ export class AdminComponent implements OnInit, OnDestroy {
 	private isAuthedSubscription: Subscription = new Subscription();
 	private gameCodeSubscription: Subscription = new Subscription();
 	private dirKeySubscription: Subscription = new Subscription();
-	private matchTypeSubscription: Subscription = new Subscription();
 
-	private matchType: string;
 	gameCode: string;
 	dirKey: string;
 	sessionValid: boolean;
@@ -77,24 +75,11 @@ export class AdminComponent implements OnInit, OnDestroy {
 				this.currentEventService.getLiveData(this.gameCode, this.dirKey)
 			);
 
-			const matchType = this.processCurrentMatch.getMatchType(data);
-			if (matchType) {
-				this.sharedDataService.updateMatchType(matchType);
+			if (data) {
+				await this.processData(data);
+			} else {
+				throw new Error('No match type from subscription');
 			}
-
-			this.matchTypeSubscription =
-				this.sharedDataService.selectedMatchType$.subscribe(
-					async currentMatchType => {
-						if (currentMatchType) {
-							this.matchType = currentMatchType;
-							if (data) {
-								await this.processData(data);
-							}
-						} else {
-							throw new Error('No match type from subscription');
-						}
-					}
-				);
 		} catch (err) {
 			console.error('error fetching initial data: ', err);
 		}
@@ -103,7 +88,10 @@ export class AdminComponent implements OnInit, OnDestroy {
 	private async processData(data: any) {
 		await this.dataService.initialiseDB(data);
 		const success = await this.storeInitialData(data);
+		console.log(success)
 		if (success) {
+			console.log('process data success');
+
 			this.sharedGameDataService.setDataStoredStatus(true);
 		} else {
 			this.sharedGameDataService.setDataStoredStatus(false);
@@ -118,8 +106,11 @@ export class AdminComponent implements OnInit, OnDestroy {
 			const dbResponse = await this.dataService.storeData(data);
 			if (!dbResponse) {
 				throw new Error('Error calling data service');
+			} else {
+				console.log('db response: ', dbResponse)
 			}
 			this.sharedGameDataService.setLoadingStatus(true);
+			return dbResponse
 		} catch (error) {
 			throw error;
 		}
@@ -129,6 +120,5 @@ export class AdminComponent implements OnInit, OnDestroy {
 		this.dirKeySubscription.unsubscribe();
 		this.gameCodeSubscription.unsubscribe();
 		this.isAuthedSubscription.unsubscribe();
-		this.matchTypeSubscription.unsubscribe();
 	}
 }

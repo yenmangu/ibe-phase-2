@@ -30,10 +30,12 @@
 	</div>
 </div>
 <div class="container row table">
-	<app-pairs-table
-		*ngIf="initialTableData"
-		[initialTableData]="initialTableData"
-		[loadingStatus]="isLoading"></app-pairs-table>
+	<ng-container *ngIf="initialTableData">
+		<app-pairs-table
+			*ngIf="initialTableData"
+			[initialTableData]="initialTableData"
+			[loadingStatus]="isLoading"></app-pairs-table>
+	</ng-container>
 	<!-- <app-match-tables [initialTableData]="initialTableData"
 		(formValuesChanged)="(onTeamTableValueChanged)"></app-match-tables> -->
 </div>

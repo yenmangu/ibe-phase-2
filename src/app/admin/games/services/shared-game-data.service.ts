@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 
 @Injectable({
 	providedIn: 'root'
@@ -11,7 +11,7 @@ export class SharedGameDataService {
 	private tableLoadingSubject = new BehaviorSubject<boolean>(true);
 	tableLoading$ = this.tableLoadingSubject.asObservable();
 
-	private dataStoredSubject = new BehaviorSubject<boolean>(false);
+	private dataStoredSubject = new Subject<boolean>();
 	dataStored$ = this.dataStoredSubject.asObservable();
 
 	constructor() {}
@@ -26,7 +26,8 @@ export class SharedGameDataService {
 		// console.log(this.tableLoading$);
 	}
 
-	setDataStoredStatus(boolean: boolean) {
-		this.dataStoredSubject.next(boolean);
+	setDataStoredStatus(value: boolean) {
+		this.dataStoredSubject.next(value);
+		console.log('data stored: ', value)
 	}
 }
