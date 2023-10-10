@@ -13,9 +13,11 @@ export class SharedDataService {
 
 	isAuthed$: Observable<any> = this.isAuthedSubject.asObservable();
 	email$: Observable<string> = this.emailSubject.asObservable();
+
 	gameCode$: Observable<string> = this.gameCodeSubject.asObservable();
 	dirKey$: Observable<string> = this.dirKeySubject.asObservable();
 	tabChange$: Observable<number> = this.TabChangeSubject.asObservable();
+	dirKey$: Observable<string> = this.dirKeySubject.asObservable();
 	// Dev for updating match type
 
 	private selectedMatchTypeSubject = new BehaviorSubject<string>('');
@@ -41,7 +43,6 @@ export class SharedDataService {
 	public updateUserData(gameCode: string, email: string, dirKey: string) {
 		this.updateEmail(email);
 		this.updateGameCode(gameCode);
-		this.updateDirKey(dirKey);
 	}
 
 	public updateGameCode(gameCode: string) {

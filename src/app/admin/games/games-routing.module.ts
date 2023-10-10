@@ -14,7 +14,7 @@ const routes: Routes = [
 			{ path: 'current-game', component: CurrentGameComponent },
 			{ path: 'historic-games', component: HistoricGamesComponent },
 			{ path: 'player-database', component: PlayerDatabaseComponent },
-			{ path: '', pathMatch: 'full', redirectTo: 'current-game' }
+			// { path: '', pathMatch: 'full', redirectTo: 'current-game' }
 		]
 	}
 ];

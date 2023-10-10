@@ -32,6 +32,8 @@ export class LoginComponent implements OnInit {
 	onSubmit(): void {
 		const password = this.loginForm.get('key').value;
 		// const formData = { ...this.loginForm.value };
+		const gameCode = this.loginForm.get('gameCode').value;
+		const dirKey = this.loginForm.get('key').value;
 		const formData = {
 			type: 'slot',
 			username: this.loginForm.get('gameCode').value,

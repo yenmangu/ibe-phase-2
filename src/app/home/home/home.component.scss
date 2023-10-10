@@ -14,3 +14,8 @@ button {
 	width: 8em;
 	max-width: 100px;
 }
+
+#register.mdc-button,
+#login.mdc-button {
+	height: 5rem;
+}

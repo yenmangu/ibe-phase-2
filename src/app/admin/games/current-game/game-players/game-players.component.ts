@@ -82,6 +82,21 @@ export class GamePlayersComponent implements OnInit, OnDestroy {
 		// console.log('game-players initialTableData: ', this.initialTableData);
 	}
 
+	fetchInitialTableData(): void {
+		this.currentGamesDatabase
+			.fetchAndProcessGameData()
+			.pipe(takeUntil(this.destroy$))
+			.subscribe({
+				next: data => {
+					console.log('initialTableData: ', data);
+					this.initialTableData = data;
+				},
+				error: err => {
+					console.error('Error fetching current game data: ', err);
+				}
+			});
+	}
+
 	onOptionSelected(selctedOption: string) {
 		this.tableOption = selctedOption;
 		this.tablesService.updateTableConfig(selctedOption);

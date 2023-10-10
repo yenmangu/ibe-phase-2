@@ -11,7 +11,12 @@ import {
 	lastValueFrom,
 	filter,
 	first,
-	tap
+	tap,
+	from,
+	Observable,
+	switchMap,
+	catchError,
+	throwError
 } from 'rxjs';
 import { IndexedDatabaseStatusService } from 'src/app/shared/services/indexed-database-status.service';
 import { Player } from 'src/app/shared/data/interfaces/player-data';
@@ -146,7 +151,6 @@ export class ProcessMatchDataService implements OnDestroy {
 				peopleValue
 			);
 			return currentGameConfig;
-			// console.log('Current Game Config: ', currentGameConfig);
 		} catch (err) {
 			console.error('Error getting current movememnet data', err);
 			return null;
@@ -392,7 +396,7 @@ export class ProcessMatchDataService implements OnDestroy {
 	private async buildUpdateObject(dataArray: any[]) {
 		// console.log('DataArray in update Object: ', JSON.stringify(dataArray, null, 2));
 		const updateObject = {
-			storeName: `player_db`,
+			storeName: `${this.currentMatchType}-player_db`,
 			key: 'root',
 			value: dataArray
 		};

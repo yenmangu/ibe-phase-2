@@ -4,7 +4,7 @@ import { IndexedDatabaseStatusService } from 'src/app/shared/services/indexed-da
 @Injectable({
 	providedIn: 'root'
 })
-export class ProcessCurrentMatchService {
+export class ProcessHandsService {
 	constructor(
 		private indexedDatabaseService: IndexedDatabaseService,
 		private indexedDatabaseStatus: IndexedDatabaseStatusService
@@ -48,7 +48,7 @@ export class ProcessCurrentMatchService {
 			if (!selectedMatchType) {
 				throw new Error('No match type detected');
 			}
-			const storeName = `${selectedMatchType}-handanxs_data`;
+			const storeName = `handanxs_data`;
 			const key = 'handanx';
 			const handData = await this.indexedDatabaseService.getByKey(storeName, key);
 			if (handData) {

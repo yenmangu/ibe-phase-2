@@ -1,9 +1,16 @@
 import { Injectable, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { BehaviorSubject, Observable, catchError, map, tap } from 'rxjs';
+import {
+	BehaviorSubject,
+	Observable,
+	catchError,
+	map,
+	tap,
+	throwError
+} from 'rxjs';
 import { SharedDataService } from 'src/app/shared/services/shared-data.service';
-import { ProcessCurrentMatchService } from './process-current-match.service';
+import { ProcessHandsService } from './process-hands.service';
 import { HttpService } from 'src/app/shared/services/http.service';
 
 @Injectable({
@@ -18,6 +25,7 @@ export class CurrentEventService implements OnInit {
 
 	constructor(
 		private http: HttpClient,
+		private httpService: HttpService,
 		private sharedDataService: SharedDataService,
 		private processCurrentMatch: ProcessCurrentMatchService,
 		private httpService: HttpService

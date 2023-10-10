@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, OnInit } from '@angular/core';
 import { CheckSessionService } from '../auth/services/check-session.service';
 import { CurrentEventService } from './games/services/current-event.service';
 import { Subscription, combineLatest, lastValueFrom } from 'rxjs';
@@ -7,6 +7,8 @@ import { AuthService } from '../auth/services/auth.service';
 import { DataService } from './games/services/data.service';
 import { SharedGameDataService } from './games/services/shared-game-data.service';
 import { ProcessCurrentMatchService } from './games/services/process-current-match.service';
+import { SharedDataService } from '../shared/services/shared-data.service';
+import { Subscription } from 'rxjs';
 
 @Component({
 	selector: 'app-admin',
@@ -120,5 +122,21 @@ export class AdminComponent implements OnInit, OnDestroy {
 		this.dirKeySubscription.unsubscribe();
 		this.gameCodeSubscription.unsubscribe();
 		this.isAuthedSubscription.unsubscribe();
+	}
+	ngOnInit(): void {
+		console.log('admin init');
+
+		// Check if gameCode observable is empty and update it from local storage if needed
+		// Subscribe to the game code observable
+		this.sharedDataService.getGameCode().subscribe(gameCode => {
+			this.gameCode = gameCode || localStorage.getItem('GAME_CODE') || '';
+		});
+
+		// Subscribe to the dir key observable
+		this.sharedDataService.getDirKey().subscribe(dirKey => {
+			this.dirKey = dirKey || localStorage.getItem('DIR_KEY') || '';
+		});
+
+		// Other initialization logic for the AdminComponent
 	}
 }

@@ -1,7 +1,22 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { SharedDataService } from 'src/app/shared/services/shared-data.service';
-import { IndexedDatabaseStatusService } from 'src/app/shared/services/indexed-database-status.service';
+import { CurrentEventService } from './services/current-event.service';
+import { DataService } from './services/data.service';
+import { SharedGameDataService } from './services/shared-game-data.service';
+import { ProcessMatchDataService } from './services/process-match-data.service';
+import {
+	Subject,
+	Subscription,
+	combineLatest,
+	takeUntil,
+	switchMap,
+	pipe,
+	tap,
+	of,
+	Observable,
+	catchError
+} from 'rxjs';import { IndexedDatabaseStatusService } from 'src/app/shared/services/indexed-database-status.service';
 import { SharedGameDataService } from './services/shared-game-data.service';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { ProcessCurrentMatchService } from './services/process-current-match.service';
@@ -63,5 +78,8 @@ export class GamesComponent implements OnInit, OnDestroy {
 
 		// You can use these values as needed in your component logic
 	}
-	ngOnDestroy(): void {}
+	ngOnDestroy(): void {
+		this.destroy$.next();
+		this.destroy$.complete();
+	}
 }

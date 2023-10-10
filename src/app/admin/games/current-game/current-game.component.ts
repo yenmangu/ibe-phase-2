@@ -15,7 +15,8 @@ import { ProcessMatchDataService } from '../services/process-match-data.service'
 import { SharedGameDataService } from '../services/shared-game-data.service';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { IndexedDatabaseStatusService } from 'src/app/shared/services/indexed-database-status.service';
-import { CurrentGamesDatabaseService } from '../services/current-games-database.service';
+import { CurrentGamesDatabaseService } from '../services/current-games-database.service';import { NgxMaterialTimepickerHoursFace } from 'ngx-material-timepicker/src/app/material-timepicker/components/timepicker-hours-face/ngx-material-timepicker-hours-face';
+
 @Component({
 	selector: 'app-current-game',
 	templateUrl: './current-game.component.html',
