@@ -7,12 +7,10 @@ import {
 	ViewChild,
 	Input,
 	Output,
-	EventEmitter,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef
+	EventEmitter
 } from '@angular/core';
-import { Subscription, Subject } from 'rxjs';
-import { MatTable, MatTableDataSource } from '@angular/material/table';
+import { Subscription } from 'rxjs';
+import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { HistoricGamesDatabaseService } from '../../services/historic-games-database.service';
@@ -20,7 +18,6 @@ import { SharedDataService } from 'src/app/shared/services/shared-data.service';
 import { Player } from '../../../../shared/data/interfaces/player-data';
 import { EmitDataDirective } from 'src/app/shared/directives/emit-data.directive'; // import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { DialogService } from 'src/app/shared/services/dialog.service';
-import { DialogRef } from '@angular/cdk/dialog';
 
 @Component({
 	selector: 'app-player-database',
@@ -30,19 +27,15 @@ import { DialogRef } from '@angular/cdk/dialog';
 export class PlayerDatabaseComponent
 	implements OnInit, AfterViewInit, DoCheck, OnDestroy
 {
-	@ViewChild(MatTable) table: MatTable<any>;
+	@Input() playersArray: Player[] = [];
 	@ViewChild(MatPaginator) paginator: MatPaginator;
 	@ViewChild(MatSort) sort: MatSort;
+	@Output() dataUpdated = new EventEmitter<any>();
+	// @ViewChild('sortConfigTable', { static: false }) sortConfigTable: MatSort;
 
-	storeName: 'player';
-	private playerDataSubject = new Subject<Player[]>();
-	playerData$ = this.playerDataSubject.asObservable();
-
-	private dataSubscription: Subscription;
-	applyIbescoreTheme = true;
 	applyMagentaGreyTheme = true;
+	playerDatabase: any = {};
 
-	playerArray: Player[] = [];
 	pageEvent: PageEvent;
 	pageIndex: number;
 	pageSize: number;
@@ -57,95 +50,103 @@ export class PlayerDatabaseComponent
 		'n',
 		'name',
 		'email',
-		'telephone',
+		'phone',
 		'id',
-		'lastplay',
 		'adddate',
 		'delete'
 	];
 	sortedData: any[];
 	dataSource = new MatTableDataSource<any>();
-	// dataSource = new MatTableDataSource<any>();
 	tabChangeSubscription = new Subscription();
 	tabSelected: boolean = false;
 	selectedRowData: Player | undefined;
-	updatedDataSubscription: Subscription;
-	searchTerm: string;
-	lasUpdatedData: any;
+
 	constructor(
-		private historicDatabaseService: HistoricGamesDatabaseService,
+		private playerDatabaseService: HistoricGamesDatabaseService,
 		private sharedDataService: SharedDataService,
-		private dialogService: DialogService,
-		private changeDetectorRef: ChangeDetectorRef
+		private dialogService: DialogService
 	) {}
 
 	ngOnInit(): void {
 		this.isLoading = true;
-		console.log('child component init');
-		this.emitInitial();
-		this.playerData$.subscribe(data => {
-			this.playerArray = data;
-			console.log(this.playerArray);
-			this.initDataSource();
-			this.isLoading = false;
-		});
-		this.fetchInitialData();
+		this.playerDatabaseSubscription =
+			this.playerDatabaseService.dataLoading$.subscribe(data => {
+				if (data) {
+					console.log('player db subscription data: ', data);
+					this.playerDatabase = data.value[0];
+					// console.log('Player database games component data: ', this.playerDatabase);
+					const dataArray = this.playerDatabase.item;
+					this.dataSource = new MatTableDataSource(dataArray);
+					this.dataSource.paginator = this.paginator;
+
+					setTimeout(() => {
+						if (this.sort) {
+							this.dataSource.sort = this.sort;
+						}
+					});
+
+					this.isLoading = false;
+				}
+			});
+		this.tabChangeSubscription = this.sharedDataService.tabChange$.subscribe(
+			data => {
+				if (data === 2) {
+					this.tabSelected = true;
+				}
+			}
+		);
 	}
 
 	ngAfterViewInit(): void {
-		if (this.table) {
-			this.table.updateStickyHeaderRowStyles();
-		}
-		if (this.paginator && this.sort) {
+		this.loadDatabaseData();
+		if (this.paginator) {
 			this.dataSource.paginator = this.paginator;
-			this.dataSource.sort = this.sort;
+			this.dataSource.paginator.firstPage();
 		}
-		this.updatedDataSubscription = this.historicDatabaseService
-			.getDataUpdated$()
-			.subscribe({
-				next: value => {
-					if (value) {
-						this.refresh();
-						this.changeDetectorRef.detectChanges();
-						this.table.renderRows();
-					}
-				}
-			});
+
+		// Initial loading
+		this.totalPages = Math.ceil(this.dataSource.data.length / this.itemsPerPage);
 	}
 
-	async fetchInitialData() {
+	ngDoCheck(): void {
+		this.checkIsLoading();
+	}
+
+	async loadDatabaseData(): Promise<void> {
+		if (!this.paginator) {
+			await new Promise(resolve => setTimeout(resolve, 100));
+		}
 		try {
-			console.log(this.storeName);
-			const playerData = await this.historicDatabaseService.fetchHistoricData(
-				'player'
-			);
-			this.playerDataSubject.next(playerData);
+			await this.playerDatabaseService.fetchMainData('player_db', 'root');
 		} catch (err) {
-			console.error('Error fetching initial: ', err);
+			console.error('Error fetching data in playerDB component: ', err);
 		}
 	}
 
-	private initDataSource(): void {
-		// console.log('init dataSource invoked with: ', this.playersArray);
-		this.dataSource.data = this.playerArray;
-		// console.log('new datasource: ', this.dataSource.data);
-	}
-
-	private refresh() {
-		this.fetchInitialData();
-		console.log('updated data source: ', this.playerArray);
-		this.dataSource.data = this.playerArray;
-		if (this.paginator && this.sort) {
-			this.dataSource.paginator = this.paginator;
-			this.dataSource.sort = this.sort;
+	sortData(sort: Sort) {
+		const data = this.dataSource.data.slice();
+		if (!sort.active || sort.direction === '') {
+			this.sortedData = data;
+			return;
 		}
-		this.table.renderRows();
-		this.changeDetectorRef.detectChanges();
+		this.sortedData = data.sort((a, b) => {
+			const isAsc = sort.direction === 'asc';
+			switch (sort.active) {
+				case 'number':
+					return this.compare(a.number, b.number, isAsc);
+				case 'playerName':
+					return this.compare(a.playerName, b.playerName, isAsc);
+				case 'email':
+					return this.compare(a.email, b.email, isAsc);
+				case 'addDate':
+					return this.compare(a.addDate, b.addDate, isAsc);
+				default:
+					return 0;
+			}
+		});
 	}
-
-	private emitInitial() {
-		const storeName = 'players';
-		console.log('child component emitting: ', storeName);
+	private compare(a: number | string, b: number | string, isAsc: boolean) {
+		return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
 	}
 
 	getIds(IdArray): string[] {
@@ -160,87 +161,44 @@ export class PlayerDatabaseComponent
 		}
 	}
 
-	onPlayerAdd(): void {
-		const searchTerm = this.searchTerm ? this.searchTerm : '';
-		this.openTableEditDialogWithCallback(undefined, searchTerm);
-		console.log('searchTerm: ', searchTerm);
-	}
-
-	onRowClick(rowData: Player): void {
-		this.selectedRowData = rowData;
-		this.openTableEditDialogWithCallback(rowData, undefined);
-	}
-
-	private openTableEditDialogWithCallback(
-		data?: Player,
-		searchTerm?: string
-	): void {
-		const dialogRef = this.dialogService.openTableEditDialog(
-			'player',
-			data ? data : undefined,
-			searchTerm ? searchTerm : undefined
-		);
-
-		dialogRef.afterClosed().subscribe({
-			next: result => {
-				if (result) {
-					console.log('dialog call back data: ', result);
-					this.handleDataUpdate(result);
-					this.table.renderRows();
-				}
-			}
-		});
-	}
-
-	private async handleDataUpdate(data) {
-		try {
-			console.log('data to update: ', data);
-			if (data) {
-				await this.historicDatabaseService.updateByType('player', data);
-
-				this.refresh();
-			}
-		} catch (err) {
-			console.error('error updating', err);
-		}
-	}
-
-	private isDataEqual(existingData: any, newData: any): boolean {
-		return JSON.stringify(existingData) === JSON.stringify(newData);
-	}
-
 	applyFilter(event: Event) {
 		console.log('search term: ', event);
 		const filterValue = (event.target as HTMLInputElement).value;
-		console.log('filter: ', this.dataSource.filter);
 		this.dataSource.filter = filterValue.trim().toLowerCase();
-		this.searchTerm = filterValue.trim().toLowerCase();
 	}
 
-	ngDoCheck(): void {}
-
-	onDelete(row) {
-		this.delete(row);
-	}
-	clearFilter(input: HTMLInputElement): void {
-		this.dataSource.filter = '';
-		input.value = '';
-		this.searchTerm = undefined;
-	}
-
-	private async delete(data) {
-		try {
-			if (!data) {
-				throw new Error('No data in private delete function in component');
-			}
-			await this.historicDatabaseService.deleteRow(data);
-			this.refresh();
-		} catch (err) {
-			console.error('error deleting: ', err);
+	checkIsLoading() {
+		if (this.tabSelected && this.dataSource.data.length < 1) {
+			this.isLoading = true;
 		}
 	}
+	onRowClick(rowData: Player): void {
+		this.selectedRowData = rowData;
+		console.log('selected row data: ', rowData)
+		this.dialogService.openTableEditDialog(rowData);
+	}
+
+	onPlayerAdd(): void {
+		this.dialogService.openTableEditDialog();
+	}
+
+
+	onNameClick(player: any): void {
+		alert(`player ${player.name}`);
+	}
+
+	deleteRow(player: any): void {
+		alert(`player ${player?.name} delete clicked`);
+	}
+
+	onSave() {}
+
+	private sendToParent(data: any) {
+		this.dataUpdated.emit(data);
+	}
+
 	ngOnDestroy(): void {
-		// this.dataSubscription.unsubscribe();
-		this.updatedDataSubscription.unsubscribe();
+		// this.playerDatabaseService.dataLoadingSubject.complete();
+		this.playerDatabaseSubscription.unsubscribe();
 	}
 }

@@ -1,14 +1,11 @@
 @import url('../../../../../table-styles.scss');
+
 .main {
-	gap: 0;
+	width: 100%;
+	padding: 2rem;
+	gap: 2rem;
 }
-
-.table-wrapper {
-	margin-top: 1rem;
-	overflow-y: auto;
-	height: 400px;
-}
-
-.options {
-	margin-top: 2rem;
+.head,
+.search {
+	gap: 2rem;
 }

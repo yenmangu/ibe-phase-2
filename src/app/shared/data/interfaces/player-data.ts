@@ -5,8 +5,8 @@ export interface Player {
 		adddate: string;
 	};
 	name: string[];
-	email?: string[];
-	telephone?: string[];
+	email: string[];
+	telephone: string[];
 	id?: {
 		$: {
 			type: string;
@@ -24,65 +24,3 @@ export interface Player {
 		};
 	}[];
 }
-
-// // Example
-
-// {
-// 	"$": {
-// 			"type": "player",
-// 			"n": "3074",
-// 			"adddate": "20/04/20"
-// 	},
-// 	"name": [
-// 			"\n          Hilary Hugh Jones\n        "
-// 	],
-// 	"id": [
-// 			{
-// 					"$": {
-// 							"type": "BBO",
-// 							"code": "semley1"
-// 					}
-// 			}
-// 	],
-// 	"lastplay": [
-// 			{
-// 					"$": {
-// 							"date": "10/03/20"
-// 					}
-// 			}
-// 	],
-// 	"pp": [
-// 			{
-// 					"$": {
-// 							"n": "3073"
-// 					}
-// 			}
-// 	]
-// },
-
-// //  Multiple ID Codes
-
-// {
-// 	"$": {
-// 		"type": "player",
-// 		"n": "3022",
-// 		"adddate": "20/04/20"
-// 	},
-// 	"name": [
-// 		"\n          Kiki Greenwood\n        "
-// 	],
-// 	"id": [
-// 		{
-// 			"$": {
-// 				"type": "BBO",
-// 				"code": "kgwood"
-// 			}
-// 		},
-// 		{
-// 			"$": {
-// 				"type": "EBU",
-// 				"code": "00466210"
-// 			}
-// 		}
-// 	]
-// },

@@ -14,7 +14,6 @@ import {
 	tap
 } from 'rxjs';
 import { IndexedDatabaseStatusService } from 'src/app/shared/services/indexed-database-status.service';
-import { Player } from 'src/app/shared/data/interfaces/player-data';
 
 @Injectable({
 	providedIn: 'root'
@@ -38,31 +37,11 @@ export class ProcessMatchDataService implements OnDestroy {
 				}
 			});
 
-		this.indexedDatabaseStatus
-			.isInitialised()
-			.pipe()
-			.subscribe(intialised => {
-				this.isDBInitialised = intialised;
-			});
-	}
+		this.indexedDatabaseStatus.isInitialised().pipe(
 
-	async getAllStoreData(storeName: string) {
-		try {
-			await firstValueFrom(
-				this.indexedDatabaseStatus.isInitialised$.pipe(
-					filter(isInitialised => isInitialised),
-					first(),
-					take(1)
-				)
-			);
-			const data = await this.indexedDB.getAllDataFromStore(
-				`${this.currentMatchType}-${storeName}`
-			);
-			const extracted = data.map(item=> item.value)
-			return extracted;
-		} catch (err) {
-			throw err;
-		}
+		).subscribe(intialised => {
+			this.isDBInitialised = intialised;
+		});
 	}
 
 	async getData(storeName, key) {
@@ -114,7 +93,7 @@ export class ProcessMatchDataService implements OnDestroy {
 				movementValue,
 				peopleValue
 			);
-			return currentGameConfig;
+			return currentGameConfig
 			// console.log('Current Game Config: ', currentGameConfig);
 		} catch (err) {
 			console.error('Error getting current movememnet data', err);
@@ -176,7 +155,7 @@ export class ProcessMatchDataService implements OnDestroy {
 			}
 		};
 
-		currentGame.tables = this.createTablesOject(north, south, east, west);
+		currentGame.tables = this.createTablesOject(north,south,east,west)
 		// console.log('currentGame: ', currentGame);
 		// console.log('tableArray: ', tableArray);
 
@@ -205,19 +184,14 @@ export class ProcessMatchDataService implements OnDestroy {
 		return players;
 	}
 
-	private createTablesOject(north, east, south, west) {
-		const tables = {};
-		const numPlayers = Math.min(
-			north.length,
-			south.length,
-			east.length,
-			west.length
-		);
-		for (let i = 0; i < numPlayers; i++) {
-			tables[i + 1] = [north[i], south[i], east[i], west[i]];
+	private createTablesOject(north,east,south,west){
+		const tables ={}
+		const numPlayers = Math.min(north.length, south.length, east.length, west.length)
+		for (let i =0; i<numPlayers; i++){
+			tables[i+1] = [north[i],south[i],east[i],west[i]]
 		}
 
-		return tables;
+		return tables
 	}
 
 	async getNames() {
@@ -278,96 +252,6 @@ export class ProcessMatchDataService implements OnDestroy {
 
 		// console.log('procesNamesText namesArray: ', namesArray);
 		return namesArray;
-	}
-
-	// Update And Write Operations
-
-	async updateValue(receivedData): Promise<any> {
-		try {
-			console.log(
-				'data received in process match data updateValue(): ',
-				receivedData
-			);
-			const { isNew, data } = receivedData;
-			if (!data) {
-				throw new Error('no data provided for updateValue()');
-			}
-			const storeName = `${this.currentMatchType}-${data.$.type}`;
-			let key = undefined;
-			if (!isNew) {
-				console.log('Not new');
-				key = data.$.n;
-				console.log('store name: ', storeName, ' key: ', key);
-
-				const existingValue: any = await this.indexedDB.getByKey(storeName, key);
-				if (existingValue) {
-					console.log('wholeObject from db: ', existingValue);
-					const { value } = existingValue;
-					console.log('existing value, updating instead');
-					console.log('existing value: ', value);
-					let newValue = { ...value };
-					newValue = data;
-					console.log('updated value: ', newValue);
-					await this.indexedDB.update(storeName, key, newValue);
-				} else {
-					throw new Error(
-						'error updating, could not find data with specified key: ',
-						key
-					);
-				}
-			} else {
-				console.log('isNew = true, adding new data', 'isNew: ', isNew);
-				const existingDatabaseEntries = await this.indexedDB.getAllDataFromStore(
-					storeName
-				);
-				const newIndex = (existingDatabaseEntries.length + 2).toString();
-				console.log('new index (n-value): ', newIndex);
-				data.$.n = newIndex;
-				const newKey = newIndex;
-				console.log('new entry for database: ', data);
-				await this.indexedDB.add(storeName, newKey, data);
-			}
-		} catch (err) {
-			throw err;
-		}
-	}
-
-	async deleteByKey ( data): Promise<any>{
-		try {
-			if(!data){
-				throw new Error('No data in process match data deleteByKey()')
-			}
-			const type = data.$.type
-			const storeName = `${this.currentMatchType}-${type}`
-			const key = data.$.n
-			console.log(`storenName: ${storeName} and key: ${key}`)
-			await this.indexedDB.delete(storeName,key)
-		} catch (err) {
-			throw err
-		}
-	}
-
-	private async updateEntry(newData): Promise<any> {}
-
-	private async getPlayerDataFromDB(): Promise<any> {
-		try {
-			const storeName = `${this.currentMatchType}-player_db`;
-			const existingData = await this.indexedDB.readFromDB([storeName], 'root');
-			return existingData;
-		} catch (err) {
-			throw err;
-		}
-		// Implement logic to retrieve data of a specific type from the database
-	}
-
-	private async buildUpdateObject(dataArray: any[]) {
-		// console.log('DataArray in update Object: ', JSON.stringify(dataArray, null, 2));
-		const updateObject = {
-			storeName: `${this.currentMatchType}-player_db`,
-			key: 'root',
-			value: dataArray
-		};
-		await this.indexedDB.writeToDB([updateObject]);
 	}
 
 	ngOnDestroy(): void {

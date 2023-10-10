@@ -31,42 +31,16 @@ $ibescore-theme: mat.define-light-theme(
 		)
 	)
 );
-/*
-$new-theme: mat.define-light-theme(
-	(
-		color: (
-			primary: $ibe-primary,
-			accent: $ibe-accent,
-			indigo_dye: $ibe-indigo,
-			tertiary: $ibe-tertiary,
-			warn: $ibe-warn,
-			alert: $ibe-alert
-		)
-	)
-);
-*/
+
 $magenta-grey-theme: mat.define-light-theme(
 	(
 		color: (
 			primary: $magenta-primary,
-			accent: $grey-accent,
-			warn: $ibe-primary,
-			alert: $ibe-warn
+			accent: $grey-accent
 		)
 	)
 );
-/*
-$custom-colors: mat.define-light-theme(
-	(
-		color: (
-			primary: $ibe-primary,
-			accent: $grey-accent,
-			warn: $ibe-accent,
-			alert: $ibe-warn
-		)
-	)
-);
-*/
+
 @include mat.all-component-themes($ibescore-theme);
 
 // Custom Component Themes
@@ -74,15 +48,7 @@ $custom-colors: mat.define-light-theme(
 .grey-magenta-theme {
 	@include mat.all-component-colors($magenta-grey-theme);
 }
-/*
-.ibescore-theme {
-	@include mat.all-component-colors($new-theme);
-}
 
-.green-grey-theme {
-	@include mat.all-component-colors($custom-colors);
-}
-*/
 /* You can add global styles to this file, and also import other style files */
 * {
 	--webkit-font-smoothing: subpixel-antialiased;
