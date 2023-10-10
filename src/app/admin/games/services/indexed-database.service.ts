@@ -338,4 +338,21 @@ export class IndexedDatabaseService {
 			throw err;
 		}
 	}
+
+	deleteIndexedDBDatabase(databaseName: string): Promise<void> {
+		return new Promise<void>((resolve, reject) => {
+
+			const deleteRequest = indexedDB.deleteDatabase(databaseName);
+
+			deleteRequest.onsuccess = () => {
+				console.log(`IndexedDB database '${databaseName}' deleted successfully`);
+				resolve();
+			};
+
+			deleteRequest.onerror = () => {
+				console.error(`Error deleting IndexedDB database '${databaseName}'`);
+				reject(new Error(`Failed to delete IndexedDB database '${databaseName}'`));
+			};
+		});
+	}
 }

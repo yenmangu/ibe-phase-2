@@ -10,6 +10,7 @@ import { SharedGameDataService } from '../../services/shared-game-data.service';
 import { PairsTableComponent } from '../../pairs-table/pairs-table.component';
 import { TeamsTableComponent } from '../../teams-table/teams-table.component';
 import { CurrentGamesDatabaseServiceService } from '../../services/current-games-database-service.service';
+import { flattenAndSortAnimations } from '@cds/core/internal';
 
 @Component({
 	selector: 'app-game-players',
@@ -84,9 +85,11 @@ export class GamePlayersComponent implements OnInit, OnDestroy {
 				next: data => {
 					console.log('initialTableData: ', data);
 					this.initialTableData = data;
+					this.isLoading = false;
 				},
 				error: err => {
 					console.error('Error fetching current game data: ', err);
+					this.isLoading = false;
 				}
 			});
 	}

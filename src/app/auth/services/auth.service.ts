@@ -13,6 +13,7 @@ import { environment } from 'src/environments/environment';
 import { DateTime } from 'luxon';
 import { TokenService } from './token.service';
 import { SharedDataService } from '../../shared/services/shared-data.service';
+import { DataService } from 'src/app/admin/games/services/data.service';
 
 @Injectable({
 	providedIn: 'root'
@@ -31,7 +32,8 @@ export class AuthService {
 	constructor(
 		private http: HttpClient,
 		private tokenService: TokenService,
-		private sharedDataService: SharedDataService
+		private sharedDataService: SharedDataService,
+		private dataService: DataService
 	) {
 		const token = this.tokenService.getToken();
 		if (token) {
@@ -124,7 +126,9 @@ export class AuthService {
 	}
 
 	logout(): void {
+		this.dataService.deleteIndexedDBDatabase();
 		this.tokenService.removeToken();
+
 		this.isAuthedSubject.next(false);
 	}
 }

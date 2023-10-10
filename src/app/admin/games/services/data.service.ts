@@ -148,6 +148,22 @@ export class DataService implements OnInit, OnDestroy {
 
 	getData(key) {}
 
+	deleteIndexedDBDatabase(): Promise<void> {
+		return new Promise<void>((resolve, reject) => {
+			const deleteRequest = indexedDB.deleteDatabase(`${this.dbName}`);
+
+			deleteRequest.onsuccess = () => {
+				console.log(`IndexedDB database '${this.dbName}' deleted successfully`);
+				resolve();
+			};
+
+			deleteRequest.onerror = () => {
+				console.error(`Error deleting IndexedDB database '${this.dbName}'`);
+				reject(new Error(`Failed to delete IndexedDB database '${this.dbName}'`));
+			};
+		});
+	}
+
 	ngOnDestroy(): void {
 		if (this.subscription) {
 			this.subscription.unsubscribe();
