@@ -1,3 +1,3 @@
-<ng-container *ngIf="gameCode && dirKey">
+<ng-container *ngIf="authService.isAuthedSubject$ | async">
 	<app-navigation></app-navigation>
 </ng-container>

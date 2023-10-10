@@ -2,7 +2,6 @@
 	color="accent"
 	class="toolbar">
 	<ng-container *ngIf="authService.isAuthedSubject$ | async">
-		
 		<button
 			mat-mini-fab
 			(click)="toggleSidenav()">
@@ -21,12 +20,10 @@
 			(click)="forgotPassword()">
 			Forgot Password
 		</button>
-		<div
-			*ngIf="authService.isAuthedSubject$ | async"
-			class="user-data container">
-			<span class="gamecode">{{ sharedDataService.gameCode$ | async }}</span>
-			<span class="email">{{ sharedDataService.email$ | async }}</span>
-		</div>
+		<ng-container *ngIf="authService.isAuthedSubject$ | async">
+			<app-user-details></app-user-details>
+		</ng-container>
+
 		<button
 			mat-flat-button
 			color="warn"

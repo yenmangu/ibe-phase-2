@@ -61,3 +61,7 @@ export class LoginComponent implements OnInit {
 		return this.dialogService.openDialog('registrationSuccess');
 	}
 }
+
+// this.sharedDataService.emailSubject.next(response.directorEmail);
+// this.sharedDataService.gameCodeSubject.next(gameCode);
+// this.sharedDataService.dirKeySubject.next(dirKey);

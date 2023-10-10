@@ -10,21 +10,21 @@ import { AuthService } from 'src/app/auth/services/auth.service';
 	templateUrl: './home.component.html',
 	styleUrls: ['./home.component.scss']
 })
-export class HomeComponent implements OnInit{
-	isAuthenticated: boolean = false
+export class HomeComponent implements OnInit {
+	isAuthenticated: boolean = false;
 	constructor(
 		private authService: AuthService,
 		private dialogService: DialogService
 	) {}
 
-ngOnInit(): void {
-	this.authService.isAuthedSubject$.subscribe((authStatus)=> {
-		this.isAuthenticated = authStatus
-	})
-}
+	ngOnInit(): void {
+		this.authService.isAuthedSubject$.subscribe(authStatus => {
+			this.isAuthenticated = authStatus;
+		});
+	}
 
 	isLoggedIn(): boolean {
-		return this.isAuthenticated
+		return this.isAuthenticated;
 	}
 
 	// openDialog(type: string) : void {}
@@ -34,7 +34,6 @@ ngOnInit(): void {
 		if (type === 'login') {
 			// login
 			dialogRef.componentInstance.data = {
-
 				message: 'Please Log In Below',
 				gameCode: '',
 				loginForm: LoginComponent
@@ -49,7 +48,7 @@ ngOnInit(): void {
 				registerForm: RegisterComponent
 			};
 			dialogRef.afterClosed().subscribe(result => {
-				console.log(result);
+				console.log('dialog result: ', result);
 			});
 		}
 	}

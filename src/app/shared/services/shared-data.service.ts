@@ -1,5 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Observable, BehaviorSubject, Subject } from 'rxjs';
+import {
+	Observable,
+	BehaviorSubject,
+	Subject,
+	combineLatest,
+	startWith
+} from 'rxjs';
 
 @Injectable({
 	providedIn: 'root'
@@ -13,11 +19,13 @@ export class SharedDataService {
 
 	isAuthed$: Observable<any> = this.isAuthedSubject.asObservable();
 	email$: Observable<string> = this.emailSubject.asObservable();
-
 	gameCode$: Observable<string> = this.gameCodeSubject.asObservable();
 	dirKey$: Observable<string> = this.dirKeySubject.asObservable();
 	tabChange$: Observable<number> = this.TabChangeSubject.asObservable();
 	dirKey$: Observable<string> = this.dirKeySubject.asObservable();
+
+	public userDataReadySubject = new BehaviorSubject<boolean>(false);
+	userDataReady$: Observable<boolean> = this.userDataReadySubject.asObservable();
 	// Dev for updating match type
 
 	private selectedMatchTypeSubject = new BehaviorSubject<string>('');
@@ -50,9 +58,9 @@ export class SharedDataService {
 		localStorage.setItem('game_code', gameCode);
 		this.gameCodeSubject.next(gameCode);
 	}
-	private updateEmail(email: string) {
+	public updateEmail(email: string) {
 		// console.log('shared data service updating email: ', email);
-		localStorage.setItem('user_email', email);
+		localStorage.setItem('EMAIL', email);
 		this.emailSubject.next(email);
 	}
 
@@ -71,17 +79,25 @@ export class SharedDataService {
 		this.TabChangeSubject.next(tabIndex);
 	}
 
-	public async getUserData(): Promise<any> {
-		const data: { gameCode: string; dirKey: string } = {
-			gameCode: localStorage.getItem('GAMECODE') || '',
-			dirKey: localStorage.getItem('DIRKEY') || ''
-		};
+	public getGameCode(): Observable<string> {
+		return this.gameCodeSubject.asObservable();
+	}
+	public getDirKey(): Observable<string> {
+		return this.dirKeySubject.asObservable();
+	}
 
-		if (data) {
-			this.updateGameCode(data.gameCode);
-			this.updateDirKey(data.dirKey);
-		}
+	public clearAll(): void {
+		localStorage.clear();
+		this.gameCodeSubject.next('');
+		this.dirKeySubject.next('');
+		this.emailSubject.next('');
+		this.TabChangeSubject.next(undefined);
+		this.selectedMatchTypeSubject.next('');
 
-		console.log('data in getUserData: ', data);
+		this.gameCodeSubject.complete();
+		this.dirKeySubject.complete();
+		this.emailSubject.complete();
+		this.TabChangeSubject.complete();
+		this.selectedMatchTypeSubject.complete();
 	}
 }

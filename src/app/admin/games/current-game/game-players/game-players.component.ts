@@ -88,8 +88,12 @@ export class GamePlayersComponent implements OnInit, OnDestroy {
 			.pipe(takeUntil(this.destroy$))
 			.subscribe({
 				next: data => {
-					console.log('initialTableData: ', data);
-					this.initialTableData = data;
+					if (data) {
+						console.log('initialTableData: ', data);
+						this.initialTableData = data;
+					} else {
+						this.initialTableData = [];
+					}
 					this.isLoading = false;
 				},
 				error: err => {

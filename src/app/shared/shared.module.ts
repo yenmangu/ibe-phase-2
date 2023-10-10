@@ -14,6 +14,7 @@ import { PlayerTableDialogComponent } from './player-table-dialog/player-table-d
 import { TeamTableDialogComponent } from './team-table-dialog/team-table-dialog.component';
 import { EventTableDialogComponent } from './event-table-dialog/event-table-dialog.component';
 import { VenueTableDialogComponent } from './venue-table-dialog/venue-table-dialog.component';
+import { UserDetailsComponent } from './header/user-details/user-details.component';
 
 // Modules
 
@@ -26,7 +27,8 @@ import { VenueTableDialogComponent } from './venue-table-dialog/venue-table-dial
   PlayerTableDialogComponent,
   TeamTableDialogComponent,
   EventTableDialogComponent,
-  VenueTableDialogComponent
+  VenueTableDialogComponent,
+  UserDetailsComponent
 	],
 	imports: [CommonModule, MaterialModule, FormsModule],
 	exports: [HeaderComponent, FooterComponent]

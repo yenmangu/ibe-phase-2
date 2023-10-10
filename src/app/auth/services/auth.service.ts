@@ -7,7 +7,8 @@ import {
 	switchMap,
 	tap,
 	map,
-	catchError
+	catchError,
+	Subject
 } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { DateTime } from 'luxon';
@@ -16,6 +17,7 @@ import { SharedDataService } from '../../shared/services/shared-data.service';
 import { HttpService } from 'src/app/shared/services/http.service';
 import { CheckSessionService } from './check-session.service';
 import { DataService } from 'src/app/admin/games/services/data.service';
+import { UserDetailsService } from 'src/app/shared/services/user-details.service';
 
 @Injectable({
 	providedIn: 'root'
@@ -25,6 +27,8 @@ export class AuthService {
 	private statusSubject = new BehaviorSubject<any>('');
 	private responseJSONSubject = new BehaviorSubject<any>({});
 	responseJSON$ = this.responseJSONSubject.asObservable();
+	destroy$ = new Subject<void>();
+	destroySubject = this.destroy$.asObservable();
 
 	private _authed: boolean = false;
 	private userExist: boolean = false;
@@ -137,5 +141,9 @@ export class AuthService {
 		localStorage.clear();
 		this.dataService.deleteIndexedDBDatabase();
 		this.isAuthedSubject.next(false);
+		this.userDetailsService.updateLoggedIn(false);
+		localStorage.clear();
+		// this.isAuthedSubject.complete()
+		console.log('User logged out successfully');
 	}
 }
