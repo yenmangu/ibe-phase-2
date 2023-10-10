@@ -341,7 +341,7 @@ export class IndexedDatabaseService {
 
 	deleteIndexedDBDatabase(databaseName: string): Promise<void> {
 		return new Promise<void>((resolve, reject) => {
-			
+
 			const deleteRequest = indexedDB.deleteDatabase(databaseName);
 
 			deleteRequest.onsuccess = () => {

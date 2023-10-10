@@ -90,9 +90,11 @@ export class GamePlayersComponent implements OnInit, OnDestroy {
 				next: data => {
 					console.log('initialTableData: ', data);
 					this.initialTableData = data;
+					this.isLoading = false;
 				},
 				error: err => {
 					console.error('Error fetching current game data: ', err);
+					this.isLoading = false;
 				}
 			});
 	}

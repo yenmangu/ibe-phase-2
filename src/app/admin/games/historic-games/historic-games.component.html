@@ -8,6 +8,11 @@
 				(keyup)="applyFilter($event)" />
 		</mat-form-field>
 	</div>
+	<div
+		class="spinner"
+		*ngIf="isLoading">
+		<mat-spinner></mat-spinner>
+	</div>
 	<ng-container *ngIf="dataSource">
 		<table
 			[ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }"
@@ -68,9 +73,7 @@
 					class="delete"
 					mat-cell
 					*matCellDef="let game">
-					<mat-icon
-
-						(click)="(onDeleteClicked)">delete</mat-icon>
+					<mat-icon (click)="(onDeleteClicked)">delete</mat-icon>
 				</td>
 				<tr
 					class="header-row"
@@ -91,11 +94,13 @@
 			</ng-container>
 		</table>
 	</ng-container>
-	<mat-paginator
-		#paginator
-		class="mat-elevation-z8"
-		[pageSizeOptions]="[20, 40, 100, dataSource.data.length]"
-		showFirstLastButtons
-		aria-label="Select page of historic games">
-	</mat-paginator>
+	<ng-container *ngIf="dataSource">
+		<mat-paginator
+			#paginator
+			class="mat-elevation-z8"
+			[pageSizeOptions]="[20, 40, 100, dataSource.data.length]"
+			showFirstLastButtons
+			aria-label="Select page of historic games">
+		</mat-paginator>
+	</ng-container>
 </div>

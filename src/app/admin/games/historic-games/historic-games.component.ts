@@ -1,16 +1,23 @@
-import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
+import {
+	Component,
+	OnInit,
+	AfterViewInit,
+	ViewChild,
+	OnDestroy
+} from '@angular/core';
 import { HistoricGamesDatabaseService } from '../services/historic-games-database.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription, takeUntil } from 'rxjs';
 import { IconRegistryService } from 'src/app/shared/services/icon-registry.service';
+import { IndexedDatabaseStatusService } from 'src/app/shared/services/indexed-database-status.service';
 
 @Component({
 	selector: 'app-historic-games',
 	templateUrl: './historic-games.component.html',
 	styleUrls: ['./historic-games.component.scss']
 })
-export class HistoricGamesComponent implements OnInit, AfterViewInit {
+export class HistoricGamesComponent implements OnInit, AfterViewInit, OnDestroy {
 	@ViewChild(MatPaginator) paginator: MatPaginator;
 	applyMagentaGreyTheme: boolean = true;
 	currentPage = 1;
@@ -21,20 +28,37 @@ export class HistoricGamesComponent implements OnInit, AfterViewInit {
 	displayedColumns: any[] = ['number', 'name', 'date', 'delete'];
 	searchTerm: string = '';
 	databaseSubscription = new Subscription();
+	isLoading: boolean = true;
+	isDBInit: boolean = false;
+	IDBStatusSubscription = new Subscription();
 
-	constructor(private historicGamesService: HistoricGamesDatabaseService) {}
+	private destroy$ = new Subject<void>();
+
+	constructor(
+		private historicGamesService: HistoricGamesDatabaseService,
+		private IDBStatus: IndexedDatabaseStatusService
+	) {}
 
 	ngOnInit(): void {
-		this.databaseSubscription = this.historicGamesService.dataLoading$.subscribe(
-			data => {
-				if (data) {
-					console.log('data: ', data);
-					this.dataSource = new MatTableDataSource(data.value);
-					this.dataSource.paginator = this.paginator
+		console.log('historic games component init');
+		this.IDBStatusSubscription = this.IDBStatus.isInitialised$
+			.pipe(takeUntil(this.destroy$))
+			.subscribe(init => {
+				this.isDBInit = init;
+			});
+		if (this.isDBInit) {
+			this.databaseSubscription = this.historicGamesService.dataLoading$.subscribe(
+				data => {
+					if (data) {
+						console.log('data: ', data);
+						this.dataSource = new MatTableDataSource(data.value);
+						this.dataSource.paginator = this.paginator;
+						this.isLoading = false;
+					}
+					console.log('historic games component: ', this.dataSource);
 				}
-				console.log('historic games component: ', this.dataSource);
-			}
-		);
+			);
+		}
 		this.fetchData();
 	}
 
@@ -45,6 +69,7 @@ export class HistoricGamesComponent implements OnInit, AfterViewInit {
 	}
 
 	private async fetchData() {
+		console.log('historic game component fetch data called');
 		try {
 			await this.historicGamesService.fetchMainData(
 				'historic_game_data',
@@ -78,6 +103,13 @@ export class HistoricGamesComponent implements OnInit, AfterViewInit {
 
 	onDeleteClicked(game: any) {
 		// alert(`Game ID ${}`)
+	}
+
+	ngOnDestroy(): void {
+		this.IDBStatusSubscription.unsubscribe();
+		this.databaseSubscription.unsubscribe();
+		this.destroy$.next();
+		this.destroy$.complete();
 	}
 }
 

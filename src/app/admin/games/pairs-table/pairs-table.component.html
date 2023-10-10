@@ -1,9 +1,4 @@
 <div class="main">
-	<div
-		*ngIf="loadingStatus === true"
-		class="is-loading">
-		<mat-spinner></mat-spinner>
-	</div>
 	<form
 		[formGroup]="pairsForm"
 		(ngSubmit)="onSubmit()">
