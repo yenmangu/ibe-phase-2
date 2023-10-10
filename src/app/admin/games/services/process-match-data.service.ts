@@ -272,6 +272,7 @@ export class ProcessMatchDataService implements OnDestroy {
 	}
 
 	private destructureValue(object, string) {
+		console.log('attempting to destructure: ', object)
 		if (object && object[`${string}`] && object[`${string}`].value) {
 			// Destructure the 'value' property
 			const { value } = object[`${string}`];

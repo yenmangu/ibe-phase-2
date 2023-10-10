@@ -25,12 +25,6 @@ const routes: Routes = [
 		redirectTo: '/admin'
 	},
 
-	// {
-	// 	path: 'dashboard',
-	// 	loadChildren: () =>
-	// 		import('./admin/dashboard/dashboard.module').then(m => m.DashboardModule),
-	// 	canActivate: [AuthGuard]
-	// }
 ];
 
 @NgModule({

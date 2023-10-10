@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { DialogService } from 'src/app/shared/services/dialog.service';
 import { AuthService } from '../services/auth.service';
 import { SharedDataService } from 'src/app/shared/services/shared-data.service';
+import { UserDetailsService } from 'src/app/shared/services/user-details.service';
 @Component({
 	selector: 'app-login',
 	templateUrl: './login.component.html',
@@ -17,7 +18,8 @@ export class LoginComponent implements OnInit {
 		private router: Router,
 		private dialogService: DialogService,
 		private authService: AuthService,
-		private sharedDataService: SharedDataService
+		private sharedDataService: SharedDataService,
+		private userDetailsService: UserDetailsService
 	) {}
 
 	ngOnInit(): void {
@@ -44,10 +46,17 @@ export class LoginComponent implements OnInit {
 				console.log('response from authService: ', response);
 				this.sharedDataService.updateUserData(
 					response.directorSlot,
+					dirKey,
 					response.directorEmail
 				);
-				this.sharedDataService.updateGameCode(gameCode);
-				this.sharedDataService.updateDirKey(dirKey);
+				this.userDetailsService.updateEmail(response.directorEmail);
+				this.userDetailsService.updateGameCode(gameCode);
+				this.userDetailsService.updateDirectorKey(dirKey);
+				this.userDetailsService.updateLoggedIn(true);
+				localStorage.setItem('LOGGED_IN', 'true')
+				localStorage.setItem('GAME_CODE', gameCode);
+				localStorage.setItem('DIR_KEY', dirKey);
+				localStorage.setItem('EMAIL', response.directorEmail);
 				this.router.navigate(['/admin']);
 				this.dialogService.closeDialog();
 			}
@@ -58,3 +67,7 @@ export class LoginComponent implements OnInit {
 		return this.dialogService.openDialog('registrationSuccess');
 	}
 }
+
+// this.sharedDataService.emailSubject.next(response.directorEmail);
+// this.sharedDataService.gameCodeSubject.next(gameCode);
+// this.sharedDataService.dirKeySubject.next(dirKey);

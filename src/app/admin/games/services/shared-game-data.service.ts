@@ -6,10 +6,9 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class SharedGameDataService {
 	private tableConfigOptionSubject = new BehaviorSubject<string>('default');
-	tableConfigOption$ = this.tableConfigOptionSubject.asObservable();
-
 	private tableLoadingSubject = new BehaviorSubject<boolean>(true);
 	tableLoading$ = this.tableLoadingSubject.asObservable();
+	tableConfigOption$ = this.tableConfigOptionSubject.asObservable();
 
 	constructor() {}
 
