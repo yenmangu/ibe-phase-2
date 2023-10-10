@@ -11,7 +11,12 @@ import {
 	lastValueFrom,
 	filter,
 	first,
-	tap
+	tap,
+	from,
+	Observable,
+	switchMap,
+	catchError,
+	throwError
 } from 'rxjs';
 import { IndexedDatabaseStatusService } from 'src/app/shared/services/indexed-database-status.service';
 import { Player } from 'src/app/shared/data/interfaces/player-data';
@@ -55,10 +60,8 @@ export class ProcessMatchDataService implements OnDestroy {
 					take(1)
 				)
 			);
-			const data = await this.indexedDB.getAllDataFromStore(
-				`${this.currentMatchType}-${storeName}`
-			);
-			const extracted = data.map(item=> item.value)
+			const data = await this.indexedDB.getAllDataFromStore(`${storeName}`);
+			const extracted = data.map(item => item.value);
 			return extracted;
 		} catch (err) {
 			throw err;
@@ -76,50 +79,85 @@ export class ProcessMatchDataService implements OnDestroy {
 				)
 			);
 
-			const data = await this.indexedDB.readFromDB(
-				[`${this.currentMatchType}-${storeName}`],
-				key
-			);
+			const data = await this.indexedDB.readFromDB([`${storeName}`], key);
 			return data;
 		} catch (err) {
 			console.error('Error getting data: ', err);
 			throw err;
 		}
 	}
+	getInitialTableData(): Observable<any> {
+		return from(
+			this.indexedDatabaseStatus.isInitialised$.pipe(
+				filter(isInitialised => isInitialised),
+				first(),
+				take(1)
+			)
+		).pipe(
+			switchMap(() => this.fetchAndProcessCurrentGameData()),
+			catchError(err => {
+				console.error('Error getting current movement data', err);
+				return throwError(() => err);
+			})
+		);
+	}
 
-	async getInitialTableData() {
+	private async fetchAndProcessCurrentGameData() {
 		try {
-			const result = await firstValueFrom(
-				this.indexedDatabaseStatus.isInitialised$.pipe(
-					filter(isInitialised => isInitialised),
-					first(),
-					take(1)
-				)
-			);
-			// console.log('isInitialised: ', result);
 			const movement = await this.indexedDB.readFromDB(
-				[`${this.currentMatchType}-current_game_data`],
+				[`current_game_data`],
 				'movementtxt'
 			);
 			const people = await this.indexedDB.readFromDB(
-				[`${this.currentMatchType}-current_game_data`],
+				[`current_game_data`],
 				'namestxt'
 			);
 			const movementValue = this.destructureValue(movement, 'current_game_data');
-			// console.log('movementtxt: ', movementValue);
-
 			const peopleValue = this.destructureValue(people, 'current_game_data');
-			// console.log('peopleValue: ', peopleValue);
 			const currentGameConfig = this.buildCurrentGameObject(
 				movementValue,
 				peopleValue
 			);
 			return currentGameConfig;
-			// console.log('Current Game Config: ', currentGameConfig);
 		} catch (err) {
-			console.error('Error getting current movememnet data', err);
+			console.error('Error getting current movement data', err);
+			throw err;
 		}
 	}
+
+	// async getInitialTableData() {
+	// 	try {
+	// 		const result = await firstValueFrom(
+	// 			this.indexedDatabaseStatus.isInitialised$.pipe(
+	// 				filter(isInitialised => isInitialised),
+	// 				first(),
+	// 				take(1)
+	// 			)
+	// 		);
+	// 		// console.log('isInitialised: ', result);
+	// 		const movement = await this.indexedDB.readFromDB(
+	// 			[`current_game_data`],
+	// 			'movementtxt'
+	// 		);
+	// 		const people = await this.indexedDB.readFromDB(
+	// 			[`current_game_data`],
+	// 			'namestxt'
+	// 		);
+	// 		const movementValue = this.destructureValue(movement, 'current_game_data');
+	// 		// console.log('movementtxt: ', movementValue);
+
+	// 		const peopleValue = this.destructureValue(people, 'current_game_data');
+	// 		// console.log('peopleValue: ', peopleValue);
+	// 		const currentGameConfig = this.buildCurrentGameObject(
+	// 			movementValue,
+	// 			peopleValue
+	// 		);
+	// 		return currentGameConfig;
+	// 		// console.log('Current Game Config: ', currentGameConfig);
+	// 	} catch (err) {
+	// 		console.error('Error getting current movememnet data', err);
+	// 	}
+	// }
 	private splitUnevenArray(array) {
 		const half = Math.floor(array.length / 2);
 
@@ -234,13 +272,9 @@ export class ProcessMatchDataService implements OnDestroy {
 	}
 
 	private destructureValue(object, string) {
-		if (
-			object &&
-			object[`${this.currentMatchType}-${string}`] &&
-			object[`${this.currentMatchType}-${string}`].value
-		) {
+		if (object && object[`${string}`] && object[`${string}`].value) {
 			// Destructure the 'value' property
-			const { value } = object[`${this.currentMatchType}-${string}`];
+			const { value } = object[`${string}`];
 			return value;
 		} else {
 			// Handle the case where the data is missing or doesn't have the expected structure
@@ -292,7 +326,7 @@ export class ProcessMatchDataService implements OnDestroy {
 			if (!data) {
 				throw new Error('no data provided for updateValue()');
 			}
-			const storeName = `${this.currentMatchType}-${data.$.type}`;
+			const storeName = `${data.$.type}`;
 			let key = undefined;
 			if (!isNew) {
 				console.log('Not new');
@@ -332,18 +366,18 @@ export class ProcessMatchDataService implements OnDestroy {
 		}
 	}
 
-	async deleteByKey ( data): Promise<any>{
+	async deleteByKey(data): Promise<any> {
 		try {
-			if(!data){
-				throw new Error('No data in process match data deleteByKey()')
+			if (!data) {
+				throw new Error('No data in process match data deleteByKey()');
 			}
-			const type = data.$.type
-			const storeName = `${this.currentMatchType}-${type}`
-			const key = data.$.n
-			console.log(`storenName: ${storeName} and key: ${key}`)
-			await this.indexedDB.delete(storeName,key)
+			const type = data.$.type;
+			const storeName = `${type}`;
+			const key = data.$.n;
+			console.log(`storenName: ${storeName} and key: ${key}`);
+			await this.indexedDB.delete(storeName, key);
 		} catch (err) {
-			throw err
+			throw err;
 		}
 	}
 
@@ -351,7 +385,7 @@ export class ProcessMatchDataService implements OnDestroy {
 
 	private async getPlayerDataFromDB(): Promise<any> {
 		try {
-			const storeName = `${this.currentMatchType}-player_db`;
+			const storeName = `player_db`;
 			const existingData = await this.indexedDB.readFromDB([storeName], 'root');
 			return existingData;
 		} catch (err) {
@@ -363,7 +397,7 @@ export class ProcessMatchDataService implements OnDestroy {
 	private async buildUpdateObject(dataArray: any[]) {
 		// console.log('DataArray in update Object: ', JSON.stringify(dataArray, null, 2));
 		const updateObject = {
-			storeName: `${this.currentMatchType}-player_db`,
+			storeName: `player_db`,
 			key: 'root',
 			value: dataArray
 		};

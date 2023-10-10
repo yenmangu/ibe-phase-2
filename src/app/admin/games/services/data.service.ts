@@ -45,18 +45,14 @@ export class DataService implements OnInit, OnDestroy {
 		await this.indexedDB.initDatabase(
 			storeMapping,
 			playerDbStoreMapping,
-			`${this.matchType}-${this.dbName}`
+			`${this.dbName}`
 		);
-		console.log(
-			`database with name of ${this.matchType}-${this.dbName} initialised`
-		);
+		console.log(`database with name of ${this.dbName} initialised`);
 	};
 
 	async doesDbExist() {
 		try {
-			const exists = await this.indexedDB.doesDatabaseExist(
-				`${this.matchType}-${this.dbName}`
-			);
+			const exists = await this.indexedDB.doesDatabaseExist(`${this.dbName}`);
 			return exists;
 		} catch (err) {
 			console.error('Error checking db', err);
@@ -110,10 +106,10 @@ export class DataService implements OnInit, OnDestroy {
 				}
 			});
 			const playerDbMapping = {
-				[`${this.matchType}-player`]: temp_playersArray,
-				[`${this.matchType}-team`]: temp_teamsArray,
-				[`${this.matchType}-event`]: temp_eventArray,
-				[`${this.matchType}-loc`]: temp_venuesArray
+				[`player`]: temp_playersArray,
+				[`team`]: temp_teamsArray,
+				[`event`]: temp_eventArray,
+				[`loc`]: temp_venuesArray
 			};
 
 			return playerDbMapping;
@@ -131,22 +127,20 @@ export class DataService implements OnInit, OnDestroy {
 			playerdb,
 			params,
 			xmlsettings,
-			slotname,
 			hrevtxt,
 			lock
 		} = data;
 
 		const storeMapping = {
-			[`${this.matchType}-current_game_data`]: currentgamedata,
-			[`${this.matchType}-historic_game_data`]: hist,
-			[`${this.matchType}-hand_data`]: hands,
-			[`${this.matchType}-handanxs_data`]: handanxs,
-			[`${this.matchType}-player_db`]: playerdb,
-			[`${this.matchType}-params`]: params,
-			[`${this.matchType}-xml_settings`]: xmlsettings,
-			[`${this.matchType}slot_name`]: slotname,
-			[`${this.matchType}-hrev_txt`]: hrevtxt,
-			[`${this.matchType}-lock`]: lock
+			[`current_game_data`]: currentgamedata,
+			[`historic_game_data`]: hist,
+			[`hand_data`]: hands,
+			[`handanxs_data`]: handanxs,
+			[`player_db`]: playerdb,
+			[`params`]: params,
+			[`xml_settings`]: xmlsettings,
+			[`hrev_txt`]: hrevtxt,
+			[`lock`]: lock
 		};
 
 		return storeMapping;

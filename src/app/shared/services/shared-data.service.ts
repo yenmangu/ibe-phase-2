@@ -1,17 +1,23 @@
 import { Injectable } from '@angular/core';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject, Subject } from 'rxjs';
 
 @Injectable({
 	providedIn: 'root'
 })
 export class SharedDataService {
-	private gameCodeSubject = new BehaviorSubject<string>('');
+	private gameCodeSubject = new BehaviorSubject<string>(
+		localStorage.getItem('GAME_CODE') || ''
+	);
 	private emailSubject = new BehaviorSubject<string>('');
 	private TabChangeSubject = new BehaviorSubject<number>(undefined);
-
+	private dirKeySubject = new BehaviorSubject<string>(
+		localStorage.getItem('DIR_KEY') || ''
+	);
 	email$: Observable<string> = this.emailSubject.asObservable();
+
 	gameCode$: Observable<string> = this.gameCodeSubject.asObservable();
 	tabChange$: Observable<number> = this.TabChangeSubject.asObservable();
+	dirKey$: Observable<string> = this.dirKeySubject.asObservable();
 	// Dev for updating match type
 
 	private selectedMatchTypeSubject = new BehaviorSubject<string>('');
@@ -38,10 +44,14 @@ export class SharedDataService {
 		this.updateEmail(email);
 		this.updateGameCode(gameCode);
 	}
+	public updateDirKey(dirKey: string) {
+		localStorage.setItem('DIR_KEY', dirKey);
+		this.dirKeySubject.next(dirKey);
+	}
 
-	private updateGameCode(gameCode: string) {
+	public updateGameCode(gameCode: string) {
 		// console.log('shared data service updating game code: ', gameCode);
-		localStorage.setItem('game_code', gameCode);
+		localStorage.setItem('GAME_CODE', gameCode);
 		this.gameCodeSubject.next(gameCode);
 	}
 	private updateEmail(email: string) {
@@ -57,5 +67,12 @@ export class SharedDataService {
 
 	public updateTabChange(tabIndex: number) {
 		this.TabChangeSubject.next(tabIndex);
+	}
+
+	public getGameCode(): Observable<string> {
+		return this.gameCodeSubject.asObservable();
+	}
+	public getDirKey(): Observable<string> {
+		return this.dirKeySubject.asObservable();
 	}
 }

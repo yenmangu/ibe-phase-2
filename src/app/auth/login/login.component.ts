@@ -29,6 +29,8 @@ export class LoginComponent implements OnInit {
 
 	onSubmit(): void {
 		// const formData = { ...this.loginForm.value };
+		const gameCode = this.loginForm.get('gameCode').value;
+		const dirKey = this.loginForm.get('key').value;
 		const formData = {
 			type: 'slot',
 			username: this.loginForm.get('gameCode').value,
@@ -44,7 +46,9 @@ export class LoginComponent implements OnInit {
 					response.directorSlot,
 					response.directorEmail
 				);
-				this.router.navigate(['/admin'])
+				this.sharedDataService.updateGameCode(gameCode);
+				this.sharedDataService.updateDirKey(dirKey);
+				this.router.navigate(['/admin']);
 				this.dialogService.closeDialog();
 			}
 		});

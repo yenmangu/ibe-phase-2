@@ -9,6 +9,7 @@ import { TablesService } from '../../services/tables.service';
 import { SharedGameDataService } from '../../services/shared-game-data.service';
 import { PairsTableComponent } from '../../pairs-table/pairs-table.component';
 import { TeamsTableComponent } from '../../teams-table/teams-table.component';
+import { CurrentGamesDatabaseServiceService } from '../../services/current-games-database-service.service';
 
 @Component({
 	selector: 'app-game-players',
@@ -16,7 +17,7 @@ import { TeamsTableComponent } from '../../teams-table/teams-table.component';
 	styleUrls: ['./game-players.component.scss']
 })
 export class GamePlayersComponent implements OnInit, OnDestroy {
-	@Input() eventName: string ;
+	@Input() eventName: string;
 	@Input() initialTableData: any;
 	@Input() isLoading: boolean = true;
 	@ViewChild(PairsTableComponent) pairsForm: PairsTableComponent;
@@ -52,7 +53,8 @@ export class GamePlayersComponent implements OnInit, OnDestroy {
 		private sharedDataService: SharedDataService,
 		private tablesService: TablesService,
 		private sharedGameDataService: SharedGameDataService,
-		private fb: FormBuilder
+		private fb: FormBuilder,
+		private currentGamesDatabase: CurrentGamesDatabaseServiceService
 	) {
 		this.sharedDataService.selectedMatchType$
 			.pipe(takeUntil(this.destroy$))
@@ -63,12 +65,30 @@ export class GamePlayersComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnInit(): void {
+		console.log('app-game-players init');
+
+		this.fetchInitialTableData();
 		this.breakpointService.currentBreakpoint$
 			.pipe(takeUntil(this.destroy$))
 			.subscribe(value => {
 				this.currentBreakpoint = value;
 			});
 		// console.log('game-players initialTableData: ', this.initialTableData);
+	}
+
+	fetchInitialTableData(): void {
+		this.currentGamesDatabase
+			.fetchAndProcessGameData()
+			.pipe(takeUntil(this.destroy$))
+			.subscribe({
+				next: data => {
+					console.log('initialTableData: ', data);
+					this.initialTableData = data;
+				},
+				error: err => {
+					console.error('Error fetching current game data: ', err);
+				}
+			});
 	}
 
 	onOptionSelected(selctedOption: string) {
