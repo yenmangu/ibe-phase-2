@@ -5,6 +5,7 @@ import { CurrentEventService } from './services/current-event.service';
 import { DataService } from './services/data.service';
 import { SharedGameDataService } from './services/shared-game-data.service';
 import { ProcessMatchDataService } from './services/process-match-data.service';
+import { UserDetailsService } from 'src/app/shared/services/user-details.service';
 import {
 	Subject,
 	Subscription,

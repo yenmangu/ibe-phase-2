@@ -25,7 +25,7 @@ import { SharedModule } from '../shared/shared.module';
 	],
 	exports: [LoginComponent, RegisterComponent, ForgotPasswordComponent],
 	providers: [
-		{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+		{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
 	]
 })
 export class AuthModule {}

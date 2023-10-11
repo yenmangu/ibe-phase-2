@@ -64,7 +64,7 @@ export class GamePlayersComponent implements OnInit, OnDestroy {
 		private currentGamesDatabaseService: CurrentGamesDatabaseService
 	) {
 		this.sharedDataService.selectedMatchType$
-			.pipe(takeUntil(this.destroy$))
+			.pipe(takeUntil(this.destroy$),tag('selected match type'))
 			.subscribe(value => {
 				this.matchType = value;
 				// console.log('gamePlayers confirming: ', this.matchType)
@@ -85,7 +85,7 @@ export class GamePlayersComponent implements OnInit, OnDestroy {
 	fetchInitialTableData(): void {
 		this.currentGamesDatabase
 			.fetchAndProcessGameData()
-			.pipe(takeUntil(this.destroy$))
+			.pipe(takeUntil(this.destroy$) ,tag('currentGame fetchProcessData'))
 			.subscribe({
 				next: data => {
 					if (data) {

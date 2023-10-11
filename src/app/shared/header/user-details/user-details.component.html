@@ -1,6 +1,10 @@
 <div class="container row details">
 	<ng-container *ngIf="authService.isAuthedSubject$ | async">
-		<span class="gamecode">{{ sharedDataService.gameCode$ | async }}</span>
-		<span class="email">{{ sharedDataService.email$ | async }}</span>
+		<!-- <p>test</p> -->
+		<!-- <span class="gamecode">{{ userDetailsService.gameCodeSubject | async }}</span> -->
+		<span class="gamecode">{{ gameCode }}</span>
+
+		<!-- <span class="email">{{ userDetailsService.emailSubject | async }}</span> -->
+		<span class="email">{{ email }}</span>
 	</ng-container>
 </div>

@@ -126,8 +126,8 @@ export class AdminComponent implements OnInit, OnDestroy {
 	}
 	ngOnInit(): void {
 		console.log('admin init');
-		this.gameCode$ = this.sharedDataService.gameCode$;
-		this.dirKey$ = this.sharedDataService.dirKey$;
+		// this.gameCode$ = this.sharedDataService.gameCode$;
+		// this.dirKey$ = this.sharedDataService.dirKey$;
 		this.gameCodeSubscription = this.gameCode$.pipe(take(1)).subscribe(gameCode => {
 			console.log('Game Code: ', gameCode);
 		});

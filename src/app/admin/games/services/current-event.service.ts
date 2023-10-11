@@ -12,7 +12,7 @@ import {
 import { SharedDataService } from 'src/app/shared/services/shared-data.service';
 import { ProcessHandsService } from './process-hands.service';
 import { HttpService } from 'src/app/shared/services/http.service';
-
+import { UserDetailsService } from 'src/app/shared/services/user-details.service';
 @Injectable({
 	providedIn: 'root'
 })
