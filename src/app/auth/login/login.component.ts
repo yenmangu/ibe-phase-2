@@ -44,11 +44,11 @@ export class LoginComponent implements OnInit {
 		this.authService.login(formData).subscribe({
 			next: response => {
 				console.log('response from authService: ', response);
-				this.sharedDataService.updateUserData(
-					response.directorSlot,
-					dirKey,
-					response.directorEmail
-				);
+				// this.sharedDataService.updateUserData(
+				// 	response.directorSlot,
+				// 	dirKey,
+				// 	response.directorEmail
+				// );
 				this.userDetailsService.updateEmail(response.directorEmail);
 				this.userDetailsService.updateGameCode(gameCode);
 				this.userDetailsService.updateDirectorKey(dirKey);

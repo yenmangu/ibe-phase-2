@@ -18,7 +18,7 @@ import { UserDetailsService } from '../services/user-details.service';
 	selector: 'app-header',
 	templateUrl: './header.component.html',
 	styleUrls: ['./header.component.scss'],
-	changeDetection: ChangeDetectionStrategy.Default
+	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 	isAuthenticated: boolean = false;
@@ -43,6 +43,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 
 	ngOnInit(): void {
 		this.userDetailsService.updateFromLocalStorage();
+		this.cdr.detectChanges();
 	}
 
 	ngAfterViewInit(): void {}
@@ -59,8 +60,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 	logout(): void {
 		this.authService.logout();
 		this.userLoggedOut = true;
-		this.cdr.detectChanges();
 		this.userDetailsService.loggedInSubject.next(false);
+		this.cdr.detectChanges();
 		this.router.navigate(['/home']);
 	}
 

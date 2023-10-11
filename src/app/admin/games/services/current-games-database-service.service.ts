@@ -13,6 +13,9 @@ import {
 import { ProcessHandsService } from './process-hands.service';
 import { ProcessMatchDataService } from './process-match-data.service';
 import { IndexedDatabaseStatusService } from 'src/app/shared/services/indexed-database-status.service';
+import { tag } from 'rxjs-spy/operators';
+tag
+
 @Injectable({
 	providedIn: 'root'
 })
@@ -56,7 +59,7 @@ export class CurrentGamesDatabaseServiceService {
 	fetchAndProcessGameData(): Observable<any> {
     console.log('fetch and process data invoked');
 
-		return this.processMatchData.getInitialTableData().pipe(
+		return this.processMatchData.getInitialTableData().pipe(tag('getInitial'),
 			catchError(error => {
 				console.error('Error fetching and processing game data', error);
 				return throwError(() => error);

@@ -5,6 +5,7 @@ import { CurrentEventService } from './services/current-event.service';
 import { DataService } from './services/data.service';
 import { SharedGameDataService } from './services/shared-game-data.service';
 import { ProcessMatchDataService } from './services/process-match-data.service';
+import { UserDetailsService } from 'src/app/shared/services/user-details.service';
 import {
 	Subject,
 	Subscription,
@@ -37,7 +38,8 @@ export class GamesComponent implements OnInit, OnDestroy {
 		private currentEventService: CurrentEventService,
 		private dataService: DataService,
 		private processMatchData: ProcessMatchDataService,
-		private sharedGameData: SharedGameDataService
+		private sharedGameData: SharedGameDataService,
+		private userDetailsService: UserDetailsService
 	) {}
 
 	ngOnInit(): void {
@@ -50,8 +52,8 @@ export class GamesComponent implements OnInit, OnDestroy {
 		console.log('subscribe to gamecode and dirkey');
 
 		combineLatest([
-			this.sharedDataService.gameCode$,
-			this.sharedDataService.dirKey$
+			this.userDetailsService.gameCode$,
+			this.userDetailsService.directorKey$
 		])
 			.pipe(
 				takeUntil(this.destroy$),

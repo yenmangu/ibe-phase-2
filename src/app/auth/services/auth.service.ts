@@ -133,7 +133,7 @@ export class AuthService {
 	logout(): void {
 		this.dataService.deleteIndexedDBDatabase();
 		// this.sharedDataService.clearAll();`
-		this.userDetailsService.clearAllSubjects();
+		// this.userDetailsService.clearAllSubjects();
 		this.tokenService.removeToken();
 		this.isAuthedSubject.next(false);
 		this.userDetailsService.updateLoggedIn(false);

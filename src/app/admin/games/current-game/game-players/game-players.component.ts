@@ -10,7 +10,7 @@ import { SharedGameDataService } from '../../services/shared-game-data.service';
 import { PairsTableComponent } from '../../pairs-table/pairs-table.component';
 import { TeamsTableComponent } from '../../teams-table/teams-table.component';
 import { CurrentGamesDatabaseServiceService } from '../../services/current-games-database-service.service';
-import { flattenAndSortAnimations } from '@cds/core/internal';
+import { tag } from 'rxjs-spy/operators';
 
 @Component({
 	selector: 'app-game-players',
@@ -58,7 +58,7 @@ export class GamePlayersComponent implements OnInit, OnDestroy {
 		private currentGamesDatabase: CurrentGamesDatabaseServiceService
 	) {
 		this.sharedDataService.selectedMatchType$
-			.pipe(takeUntil(this.destroy$))
+			.pipe(takeUntil(this.destroy$),tag('selected match type'))
 			.subscribe(value => {
 				this.matchType = value;
 				// console.log('gamePlayers confirming: ', this.matchType)
@@ -80,7 +80,7 @@ export class GamePlayersComponent implements OnInit, OnDestroy {
 	fetchInitialTableData(): void {
 		this.currentGamesDatabase
 			.fetchAndProcessGameData()
-			.pipe(takeUntil(this.destroy$))
+			.pipe(takeUntil(this.destroy$) ,tag('currentGame fetchProcessData'))
 			.subscribe({
 				next: data => {
 					if (data) {
