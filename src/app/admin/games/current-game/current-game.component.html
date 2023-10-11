@@ -24,9 +24,11 @@
 			[attr.mat-align-tabs]="shouldAlignTabsToStart() ? 'start' : 'center'"
 			mat-align-tabs="start">
 			<mat-tab label="Names">
-				<app-game-players
-					[eventName]="eventName"
-					[isLoading]="isLoading"></app-game-players>
+				<ng-container *ngIf="IDB_DataStatus">
+					<app-game-players
+						[eventName]="eventName"
+						[isLoading]="isLoading"></app-game-players>
+				</ng-container>
 			</mat-tab>
 			<mat-tab label="Game Actions">
 				<app-game-actions></app-game-actions>

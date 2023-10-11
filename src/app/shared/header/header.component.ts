@@ -13,12 +13,12 @@ import { SharedDataService } from '../services/shared-data.service';
 import { SidenavService } from '../services/sidenav.service';
 import { Subject, Subscription, startWith, takeUntil } from 'rxjs';
 import { UserDetailsService } from '../services/user-details.service';
+import { IndexedDatabaseStatusService } from '../services/indexed-database-status.service';
 
 @Component({
 	selector: 'app-header',
 	templateUrl: './header.component.html',
-	styleUrls: ['./header.component.scss'],
-	changeDetection: ChangeDetectionStrategy.OnPush
+	styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 	isAuthenticated: boolean = false;
@@ -38,7 +38,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 		public sharedDataService: SharedDataService,
 		private sidenavService: SidenavService,
 		public userDetailsService: UserDetailsService,
-		private cdr: ChangeDetectorRef
+		private cdr: ChangeDetectorRef,
+		private IDBStatus: IndexedDatabaseStatusService
 	) {}
 
 	ngOnInit(): void {
@@ -58,6 +59,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 	}
 
 	logout(): void {
+		this.IDBStatus.resetProgress();
 		this.authService.logout();
 		this.userLoggedOut = true;
 		this.userDetailsService.loggedInSubject.next(false);

@@ -45,9 +45,9 @@ export class SharedDataService {
 			if (gameCodeVal && dirKeyVal && emailVal) {
 				this.userDataReadySubject.next(true);
 				console.log('user data ready');
-			// } else {
-			// 	console.log('user data NOT ready');
-			// }
+				// } else {
+				// 	console.log('user data NOT ready');
+				// }
 			}
 		});
 
@@ -85,6 +85,10 @@ export class SharedDataService {
 	}
 	public getDirKey(): Observable<string> {
 		return this.dirKeySubject.asObservable();
+	}
+
+	setLocalStorageItem(key: string, value: any): void {
+		localStorage.setItem(key, value);
 	}
 
 	public clearAll(): void {

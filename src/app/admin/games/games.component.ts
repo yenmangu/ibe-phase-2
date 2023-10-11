@@ -1,11 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material/tabs';
-import { SharedDataService } from 'src/app/shared/services/shared-data.service';
-import { CurrentEventService } from './services/current-event.service';
-import { DataService } from './services/data.service';
-import { SharedGameDataService } from './services/shared-game-data.service';
-import { ProcessMatchDataService } from './services/process-match-data.service';
-import { UserDetailsService } from 'src/app/shared/services/user-details.service';
+
 import {
 	Subject,
 	Subscription,
@@ -18,6 +13,16 @@ import {
 	Observable,
 	catchError
 } from 'rxjs';
+import { MatProgressBar } from '@angular/material/progress-bar';
+
+import { SharedDataService } from 'src/app/shared/services/shared-data.service';
+import { CurrentEventService } from './services/current-event.service';
+import { DataService } from './services/data.service';
+import { SharedGameDataService } from './services/shared-game-data.service';
+import { ProcessMatchDataService } from './services/process-match-data.service';
+import { UserDetailsService } from 'src/app/shared/services/user-details.service';
+import { IndexedDatabaseStatusService } from 'src/app/shared/services/indexed-database-status.service';
+import { tag } from 'rxjs-spy/cjs/operators';
 
 @Component({
 	selector: 'app-games',
@@ -30,6 +35,9 @@ export class GamesComponent implements OnInit, OnDestroy {
 
 	gameCode: string;
 	dirKey: string;
+	dbInit: boolean = false;
+	progress = 0;
+	private progressSubscription: Subscription;
 
 	private destroy$ = new Subject<void>();
 
@@ -39,13 +47,23 @@ export class GamesComponent implements OnInit, OnDestroy {
 		private dataService: DataService,
 		private processMatchData: ProcessMatchDataService,
 		private sharedGameData: SharedGameDataService,
-		private userDetailsService: UserDetailsService
+		private userDetailsService: UserDetailsService,
+		private IDBStatusService: IndexedDatabaseStatusService
 	) {}
 
 	ngOnInit(): void {
 		console.log('games component init');
 
 		this.subscribeToGameCodeAndDirKey();
+		this.progressSubscription = this.IDBStatusService.dataProgress$
+			.pipe(tag('db-progress'))
+			.subscribe(value => {
+				this.progress = value;
+			});
+
+		this.IDBStatusService.isInitialised$.pipe(tag('db-init')).subscribe(isInit => {
+			this.dbInit = isInit;
+		});
 	}
 
 	private subscribeToGameCodeAndDirKey(): void {
@@ -101,23 +119,32 @@ export class GamesComponent implements OnInit, OnDestroy {
 
 	private async processData(data) {
 		console.log('processData() called with data: ', data);
-		await this.dataService.initialiseDB(data);
-		await this.storeInitialData(data);
+		try {
+			await this.dataService.initialiseDB(data);
+			console.log('Database initialisation complete');
+			await this.storeInitialData(data);
+			console.log('Store initial data complete');
+		} catch (err) {
+			console.error('Error during data processing: ', err);
+		}
 	}
 
 	async storeInitialData(data) {
-		try {
-			if (!data) {
-				throw new Error('Error calling server');
+		return new Promise<void>(async (resolve, reject) => {
+			try {
+				if (!data) {
+					throw new Error('Error calling server');
+				}
+				const dbResponse = await this.dataService.storeData(data);
+				if (!dbResponse) {
+					throw new Error('Error calling data service');
+				}
+				this.sharedGameData.setLoadingStatus(false);
+				resolve()
+			} catch (err) {
+				reject(`Error performing high level requestAndStore(): ${err}`);
 			}
-			const dbResponse = await this.dataService.storeData(data);
-			if (!dbResponse) {
-				throw new Error('Error calling data service');
-			}
-			this.sharedGameData.setLoadingStatus(false);
-		} catch (err) {
-			console.error('Error performing high level requestAndStore(): ', err);
-		}
+		});
 	}
 
 	onTabChange(event: MatTabChangeEvent): void {
@@ -134,5 +161,8 @@ export class GamesComponent implements OnInit, OnDestroy {
 	ngOnDestroy(): void {
 		this.destroy$.next();
 		this.destroy$.complete();
+		if (this.progressSubscription) {
+			this.progressSubscription.unsubscribe();
+		}
 	}
 }

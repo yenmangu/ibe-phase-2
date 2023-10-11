@@ -19,12 +19,8 @@
 		"downlevelIteration": true,
 		"experimentalDecorators": true,
 		"strictPropertyInitialization": false,
-    "moduleResolution": "node",
-    "paths": {
-      "rxjs-spy-config": [
-        "dist/rxjs-spy-config"
-      ]
-    },
+		"moduleResolution": "node",
+		"paths": { "rxjs-spy/*": ["node_modules/rxjs-spy/*"] },
 		"importHelpers": true,
 		"target": "ES2022",
 		"module": "ES2022",

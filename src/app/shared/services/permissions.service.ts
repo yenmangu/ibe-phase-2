@@ -9,12 +9,17 @@ import {
 } from '@angular/router';
 import { Observable, catchError, of, switchMap, take } from 'rxjs';
 import { AuthService } from 'src/app/auth/services/auth.service';
+import { IndexedDatabaseStatusService } from './indexed-database-status.service';
 
 @Injectable({
 	providedIn: 'root'
 })
 class PermissionsService {
-	constructor(private router: Router, private authService: AuthService) {}
+	constructor(
+		private router: Router,
+		private authService: AuthService,
+		private IDBStatus: IndexedDatabaseStatusService
+	) {}
 
 	canActivate(
 		next: ActivatedRouteSnapshot,
@@ -41,6 +46,7 @@ class PermissionsService {
 				} else if (url === '/home') {
 					this.router.navigate(['/admin']);
 					console.log('home denied to authed. redirecting to /admin');
+					this.IDBStatus.resetProgress();
 					return of(false);
 				} else {
 					return of(true);

@@ -5,6 +5,7 @@ import { DialogService } from 'src/app/shared/services/dialog.service';
 import { AuthService } from '../services/auth.service';
 import { SharedDataService } from 'src/app/shared/services/shared-data.service';
 import { UserDetailsService } from 'src/app/shared/services/user-details.service';
+import { IndexedDatabaseStatusService } from 'src/app/shared/services/indexed-database-status.service';
 @Component({
 	selector: 'app-login',
 	templateUrl: './login.component.html',
@@ -19,7 +20,8 @@ export class LoginComponent implements OnInit {
 		private dialogService: DialogService,
 		private authService: AuthService,
 		private sharedDataService: SharedDataService,
-		private userDetailsService: UserDetailsService
+		private userDetailsService: UserDetailsService,
+		private IDBStatus: IndexedDatabaseStatusService
 	) {}
 
 	ngOnInit(): void {
@@ -53,10 +55,11 @@ export class LoginComponent implements OnInit {
 				this.userDetailsService.updateGameCode(gameCode);
 				this.userDetailsService.updateDirectorKey(dirKey);
 				this.userDetailsService.updateLoggedIn(true);
-				localStorage.setItem('LOGGED_IN', 'true')
+				localStorage.setItem('LOGGED_IN', 'true');
 				localStorage.setItem('GAME_CODE', gameCode);
 				localStorage.setItem('DIR_KEY', dirKey);
 				localStorage.setItem('EMAIL', response.directorEmail);
+				this.IDBStatus.resetProgress();
 				this.router.navigate(['/admin']);
 				this.dialogService.closeDialog();
 			}

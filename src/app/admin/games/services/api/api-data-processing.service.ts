@@ -7,17 +7,17 @@ import { IndexedDatabaseService } from '../indexed-database.service';
 export class ApiDataProcessingService {
 	constructor(private indexedDatabaseService: IndexedDatabaseService) {}
 
-	async processData(selectedMatchType): Promise<any> {
+	async processData(): Promise<any> {
 		try {
-			if (!selectedMatchType) {
-				throw new Error('No store name provided to "processData" ');
-			}
-			console.log(
-				'selected match type in api data processing: ',
-				selectedMatchType
-			);
+			// if (!selectedMatchType) {
+			// 	throw new Error('No store name provided to "processData" ');
+			// }
+			// console.log(
+			// 	'selected match type in api data processing: ',
+			// 	selectedMatchType
+			// );
 			// const playerData = await this.retrieveDataByStore(selectedMatchType);
-			const allPlayerDb = await this.retrieveAllPlayerDb(selectedMatchType);
+			const allPlayerDb = await this.retrieveAllPlayerDb();
 
 			if (!allPlayerDb) {
 				throw new Error('No data retrieved by helper function in "processData"');
@@ -50,12 +50,12 @@ export class ApiDataProcessingService {
 		}
 	}
 
-	private async retrieveAllPlayerDb(selectedMatchType): Promise<any> {
+	private async retrieveAllPlayerDb(): Promise<any> {
 		try {
-			const playerStore = `${selectedMatchType}-player`;
-			const teamStore = `${selectedMatchType}-team`;
-			const venueStore = `${selectedMatchType}-loc`;
-			const eventStore = `${selectedMatchType}-event`;
+			const playerStore = `player`;
+			const teamStore = `team`;
+			const venueStore = `loc`;
+			const eventStore = `event`;
 
 			const playerData = await this.indexedDatabaseService.getAllDataFromStore(
 				playerStore

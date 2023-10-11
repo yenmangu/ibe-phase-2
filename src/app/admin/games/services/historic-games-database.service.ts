@@ -41,8 +41,6 @@ export class HistoricGamesDatabaseService implements OnDestroy {
 		this.indexedDatabaseStatus.isInitialised().subscribe(initialised => {
 			this.isDBInitialised = initialised;
 		});
-
-		console.log('Selected match type: ', this.selectedMatchType);
 	}
 
 	async fetchHistoricData(objectStore: string): Promise<any> {
@@ -78,7 +76,7 @@ export class HistoricGamesDatabaseService implements OnDestroy {
 			console.log('historic games db service data and type: ', newData, type);
 			const success = await this.processMatchDataService.updateValue(newData);
 			// console.log('new data from updateByType: ', JSON.stringify(newData, null, 2));
-			this.apiData.invokeAPICoordination(this.selectedMatchType, undefined, newData.data);
+			this.apiData.invokeAPICoordination(undefined, newData.data);
 			this.dataUpdated$.next(newData.data);
 			if (success) {
 				return success;

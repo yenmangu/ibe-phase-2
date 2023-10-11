@@ -2,6 +2,7 @@ import { Injectable, OnDestroy, OnInit } from '@angular/core';
 import { IndexedDatabaseService } from './indexed-database.service';
 import { SharedDataService } from 'src/app/shared/services/shared-data.service';
 import { Subject, Subscription, firstValueFrom, takeUntil } from 'rxjs';
+import { IndexedDatabaseStatusService } from 'src/app/shared/services/indexed-database-status.service';
 
 @Injectable({
 	providedIn: 'root'
@@ -19,7 +20,8 @@ export class DataService implements OnInit, OnDestroy {
 	eventArray = [];
 	constructor(
 		private indexedDB: IndexedDatabaseService,
-		private sharedDataService: SharedDataService
+		private sharedDataService: SharedDataService,
+		private IDBStatusService: IndexedDatabaseStatusService
 	) {
 		// console.log('Data Service initialised');
 		this.subscription = this.sharedDataService.selectedMatchType$.subscribe(
@@ -35,19 +37,27 @@ export class DataService implements OnInit, OnDestroy {
 	}
 
 	public initialiseDB = async data => {
-		// console.log('accessing playerdb array test: ', data.playerdb.root[0].item);
-		// console.log('matchType :', this.matchType);
-		const storeMapping = this.mapData(data);
-		const playerDbStoreMapping = this.getPlayerDbStoreMapping(data);
-		this.storeMapping = storeMapping;
-		this.playerDbStoreMapping = playerDbStoreMapping;
-		// console.log('initialiseDB storeMapping: ', storeMapping);
-		await this.indexedDB.initDatabase(
-			storeMapping,
-			playerDbStoreMapping,
-			`${this.dbName}`
-		);
-		console.log(`database with name of ${this.dbName} initialised`);
+		return new Promise<void>(async (resolve, reject) => {
+			try {
+				// console.log('accessing playerdb array test: ', data.playerdb.root[0].item);
+				// console.log('matchType :', this.matchType);
+				const storeMapping = this.mapData(data);
+				const playerDbStoreMapping = this.getPlayerDbStoreMapping(data);
+				this.storeMapping = storeMapping;
+				this.playerDbStoreMapping = playerDbStoreMapping;
+				// console.log('initialiseDB storeMapping: ', storeMapping);
+				await this.indexedDB.initDatabase(
+					storeMapping,
+					playerDbStoreMapping,
+					`${this.dbName}`
+				);
+				console.log(`database with name of ${this.dbName} initialised`);
+
+				resolve();
+			} catch (err) {
+				reject(err);
+			}
+		});
 	};
 
 	async doesDbExist() {
@@ -60,17 +70,32 @@ export class DataService implements OnInit, OnDestroy {
 		}
 	}
 
+	private calculateTotalStores(data: any): number {
+		const playerDbStoreMapping = this.getPlayerDbStoreMapping(data);
+		const storeMapping = this.mapData(data);
+		const playerDBStoreCount = Object.keys(playerDbStoreMapping).length;
+		const storeCount = Object.keys(storeMapping).length;
+		return playerDBStoreCount + storeCount;
+	}
+
 	async storeData(data: any): Promise<boolean> {
 		try {
+			const totalStores = this.calculateTotalStores(data);
 			const playerDbStoreMapping = this.getPlayerDbStoreMapping(data);
-			const storeMapping = this.mapData(data); // Map the data
-			// console.log('storeData storeMapping ', storeMapping);
+			const storeMapping = this.mapData(data);
+
+			this.IDBStatusService.setProgress(totalStores, 0);
+			console.log('total stores to process: ', totalStores);
 
 			const result = await this.indexedDB.initialiseWithGameData(
 				storeMapping,
 				playerDbStoreMapping,
-				this.dbName
+				this.dbName,
+				totalStores
 			);
+			this.IDBStatusService.dataFinishedLoadingSubject.next(true);
+			this.saveStoreNames(storeMapping, playerDbStoreMapping);
+
 			return result;
 		} catch (err) {
 			console.error('Error in NewEntryPoint', err);
@@ -80,7 +105,7 @@ export class DataService implements OnInit, OnDestroy {
 
 	private getPlayerDbStoreMapping(data: any): any {
 		if (data && data.playerdb.root[0].item) {
-			console.log('process player db data being called');
+			console.log('storing player db data');
 			const dataArray: any[] = data.playerdb.root[0].item;
 			const temp_playersArray = [];
 			const temp_teamsArray = [];
@@ -111,6 +136,7 @@ export class DataService implements OnInit, OnDestroy {
 				[`event`]: temp_eventArray,
 				[`loc`]: temp_venuesArray
 			};
+			console.log('playerDB Store mapping complete');
 
 			return playerDbMapping;
 		}
@@ -143,10 +169,24 @@ export class DataService implements OnInit, OnDestroy {
 			[`lock`]: lock
 		};
 
+		// console.log('logging hand and hrev');
+		// console.log('hand: ', storeMapping.hand_data);
+		// console.log('hrev: ', storeMapping.hrev_txt);
+		console.log('lock: ', storeMapping.lock);
+		// console.log('store mapping complete');
+
 		return storeMapping;
 	}
 
-	getData(key) {}
+	saveStoreNames(
+		storeMapping: Record<string, any>,
+		playerDbStoreMapping: Record<string, any>
+	): void {
+		const stores = Object.keys(storeMapping);
+		const playerStores = Object.keys(playerDbStoreMapping);
+		const combined = stores.concat(playerStores);
+		localStorage.setItem('STORE_NAMES', JSON.stringify(combined));
+	}
 
 	deleteIndexedDBDatabase(): Promise<void> {
 		return new Promise<void>((resolve, reject) => {
