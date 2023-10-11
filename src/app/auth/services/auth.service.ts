@@ -145,5 +145,6 @@ export class AuthService {
 		localStorage.clear();
 		// this.isAuthedSubject.complete()
 		console.log('User logged out successfully');
+		location.reload();
 	}
 }

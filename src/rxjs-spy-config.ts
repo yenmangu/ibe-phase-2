@@ -1,7 +1,6 @@
+import { create } from 'rxjs-spy';
+import { tag } from 'rxjs-spy/operators';
 
-import {create} from 'rxjs-spy';
-import { tag } from 'rxjs-spy/cjs/operators';
+const spy = create();
 
-const spy = create()
-
-spy.log()
+spy.log();

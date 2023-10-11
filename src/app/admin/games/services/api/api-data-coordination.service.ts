@@ -13,29 +13,29 @@ export class ApiDataCoordinationService {
 	) {}
 
 	public async invokeAPICoordination(
-		matchType: string,
+
 		storeName?: string,
 		data?: any
 	): Promise<any> {
 		try {
-			console.log(JSON.stringify(data, null, 2), 'matchType: ', matchType);
+
 			const {
 				$: { type }
 			} = data;
 			console.log('type', type);
 
-			const storeName = `${matchType}-${type}`;
-			await this.sendToHttp(undefined, matchType);
+			const storeName = `${type}`;
+			await this.sendToHttp(undefined);
 		} catch (err) {
 			throw err;
 		}
 	}
 
-	private async sendToHttp(storeName: string, selectedMatchType: string): Promise<any> {
+	private async sendToHttp(storeName: string): Promise<any> {
 		try {
 			console.log('storeName in sendToHttp: ', storeName);
 
-			const processedData = await this.apiDataProcessing.processData(selectedMatchType);
+			const processedData = await this.apiDataProcessing.processData();
 			if (!processedData) {
 				throw new Error('No data returned from apiDataProcessing');
 			}

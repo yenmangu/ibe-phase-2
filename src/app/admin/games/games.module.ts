@@ -17,6 +17,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 // CDK
 import { CdkColumnDef } from '@angular/cdk/table';
@@ -91,6 +92,7 @@ import { HandDisplayComponent } from './current-game/hand-display/hand-display.c
 		MatSortModule,
 		MatPaginatorModule,
 		MatCheckboxModule,
+		MatProgressBarModule,
 		// Other UI
 		NgxMaterialTimepickerModule
 		// Clarity

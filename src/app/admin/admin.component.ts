@@ -1,15 +1,8 @@
-import { Component, OnDestroy, OnInit, OnInit } from '@angular/core';
-import { CheckSessionService } from '../auth/services/check-session.service';
-import { CurrentEventService } from './games/services/current-event.service';
-import { Subscription, combineLatest, lastValueFrom } from 'rxjs';
-import { SharedDataService } from '../shared/services/shared-data.service';
-import { AuthService } from '../auth/services/auth.service';
-import { DataService } from './games/services/data.service';
-import { SharedGameDataService } from './games/services/shared-game-data.service';
-import { ProcessCurrentMatchService } from './games/services/process-current-match.service';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { SharedDataService } from '../shared/services/shared-data.service';
 import { AuthService } from '../auth/services/auth.service';
 import { Observable, Subscription, take } from 'rxjs';
+import { IndexedDatabaseStatusService } from '../shared/services/indexed-database-status.service';
 
 @Component({
 	selector: 'app-admin',
@@ -126,15 +119,17 @@ export class AdminComponent implements OnInit, OnDestroy {
 	}
 	ngOnInit(): void {
 		console.log('admin init');
-		// this.gameCode$ = this.sharedDataService.gameCode$;
-		// this.dirKey$ = this.sharedDataService.dirKey$;
+		this.gameCode$ = this.userDetailsService.gameCode$;
+		this.directorKey$ = this.userDetailsService.directorKey$;
 		this.gameCodeSubscription = this.gameCode$.pipe(take(1)).subscribe(gameCode => {
 			console.log('Game Code: ', gameCode);
 		});
 
-		this.dirKeySubscription = this.dirKey$.pipe(take(1)).subscribe(dirKey => {
+		this.dirKeySubscription = this.directorKey$.pipe(take(1)).subscribe(dirKey => {
 			console.log('Dir Key: ', dirKey);
 		});
+
+		this.IDBStatus.resetProgress();
 	}
 	ngOnDestroy(): void {
 		this.gameCodeSubscription.unsubscribe();

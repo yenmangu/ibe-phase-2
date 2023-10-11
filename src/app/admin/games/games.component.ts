@@ -1,11 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material/tabs';
-import { SharedDataService } from 'src/app/shared/services/shared-data.service';
-import { CurrentEventService } from './services/current-event.service';
-import { DataService } from './services/data.service';
-import { SharedGameDataService } from './services/shared-game-data.service';
-import { ProcessMatchDataService } from './services/process-match-data.service';
-import { UserDetailsService } from 'src/app/shared/services/user-details.service';
+
 import {
 	Subject,
 	Subscription,
@@ -82,5 +77,8 @@ export class GamesComponent implements OnInit, OnDestroy {
 	ngOnDestroy(): void {
 		this.destroy$.next();
 		this.destroy$.complete();
+		if (this.progressSubscription) {
+			this.progressSubscription.unsubscribe();
+		}
 	}
 }

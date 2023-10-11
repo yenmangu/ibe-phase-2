@@ -86,6 +86,10 @@ export class SharedDataService {
 		return this.dirKeySubject.asObservable();
 	}
 
+	setLocalStorageItem(key: string, value: any): void {
+		localStorage.setItem(key, value);
+	}
+
 	public clearAll(): void {
 		localStorage.clear();
 		this.gameCodeSubject.next('');

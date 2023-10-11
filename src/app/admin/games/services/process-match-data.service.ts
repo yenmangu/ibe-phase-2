@@ -20,7 +20,7 @@ import {
 } from 'rxjs';
 import { IndexedDatabaseStatusService } from 'src/app/shared/services/indexed-database-status.service';
 import { Player } from 'src/app/shared/data/interfaces/player-data';
-
+import { tag } from 'rxjs-spy/cjs/operators';
 @Injectable({
 	providedIn: 'root'
 })
@@ -45,7 +45,7 @@ export class ProcessMatchDataService implements OnDestroy {
 
 		this.indexedDatabaseStatus
 			.isInitialised()
-			.pipe()
+			.pipe(tag(''))
 			.subscribe(intialised => {
 				this.isDBInitialised = intialised;
 			});
@@ -130,6 +130,7 @@ export class ProcessMatchDataService implements OnDestroy {
 				[`current_game_data`],
 				'movementtxt'
 			);
+			console.log('movement initial: ', movement);
 			const people = await this.indexedDB.readFromDB(
 				[`current_game_data`],
 				'namestxt'
@@ -213,8 +214,10 @@ export class ProcessMatchDataService implements OnDestroy {
 			}
 		};
 
+		console.log('data obj: ', dataObj);
+
 		currentGame.tables = this.createTablesOject(north, south, east, west);
-		// console.log('currentGame: ', currentGame);
+		console.log('currentGame: ', currentGame);
 		// console.log('tableArray: ', tableArray);
 
 		return currentGame;
@@ -271,7 +274,7 @@ export class ProcessMatchDataService implements OnDestroy {
 	}
 
 	private destructureValue(object, string) {
-		console.log('attempting to destructure: ', object)
+		console.log('attempting to destructure: ', object);
 		if (object && object[`${string}`] && object[`${string}`].value) {
 			// Destructure the 'value' property
 			const { value } = object[`${string}`];

@@ -4,6 +4,7 @@ import { LoginComponent } from 'src/app/auth/login/login.component';
 import { RegisterComponent } from 'src/app/auth/register/register.component';
 import { DialogService } from 'src/app/shared/services/dialog.service';
 import { AuthService } from 'src/app/auth/services/auth.service';
+import { IndexedDatabaseStatusService } from 'src/app/shared/services/indexed-database-status.service';
 
 @Component({
 	selector: 'app-home',
@@ -14,7 +15,8 @@ export class HomeComponent implements OnInit {
 	isAuthenticated: boolean = false;
 	constructor(
 		private authService: AuthService,
-		private dialogService: DialogService
+		private dialogService: DialogService,
+		private IDBStatus: IndexedDatabaseStatusService
 	) {}
 
 	ngOnInit(): void {
