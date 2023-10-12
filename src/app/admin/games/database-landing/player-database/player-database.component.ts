@@ -34,7 +34,7 @@ export class PlayerDatabaseComponent
 	@ViewChild(MatPaginator) paginator: MatPaginator;
 	@ViewChild(MatSort) sort: MatSort;
 
-	storeName: 'player';
+	private storeName: string = 'player';
 	private playerDataSubject = new Subject<Player[]>();
 	playerData$ = this.playerDataSubject.asObservable();
 

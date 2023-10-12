@@ -53,7 +53,7 @@ export class DatabaseLandingComponent implements OnInit, OnDestroy {
 			}
 		});
 
-		this.loadDatabaseData();
+		// this.loadDatabaseData();
 
 		this.dataUpdateSubscription = this.historicDatabaseService
 			.getDataUpdated$()

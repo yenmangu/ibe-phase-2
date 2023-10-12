@@ -18,27 +18,30 @@ export class VenueTableDialogComponent {
 	venueAdded: string;
 	lastPlay: { $: { date: string } }[];
 	venueObject: Venue = {
-		$: {
-			type: 'loc',
-			n: null,
-			adddate: new Date().toLocaleDateString('en-GB', {
-				day: '2-digit',
-				month: '2-digit',
-				year: '2-digit'
-			})
-		},
-		name: [],
-		lastplay: [
-			{
-				$: {
-					date: new Date().toLocaleDateString('en-GB', {
-						day: '2-digit',
-						month: '2-digit',
-						year: '2-digit'
-					})
+		key: '',
+		value: {
+			$: {
+				type: 'loc',
+				n: null,
+				adddate: new Date().toLocaleDateString('en-GB', {
+					day: '2-digit',
+					month: '2-digit',
+					year: '2-digit'
+				})
+			},
+			name: [],
+			lastplay: [
+				{
+					$: {
+						date: new Date().toLocaleDateString('en-GB', {
+							day: '2-digit',
+							month: '2-digit',
+							year: '2-digit'
+						})
+					}
 				}
-			}
-		]
+			]
+		}
 	};
 
 	constructor(
@@ -52,10 +55,10 @@ export class VenueTableDialogComponent {
 			this.existingRowData = this.data.existingRowData;
 			this.isEdit = true;
 			if (this.data && this.data.existingRowData) {
-				this.venueName = this.existingRowData.name[0] || '';
-				this.venueNumber = this.existingRowData.$?.n;
-				this.venueAdded = this.existingRowData.$?.adddate || '';
-				this.lastPlay = [...this.existingRowData.lastplay];
+				this.venueName = this.existingRowData.value.name[0] || '';
+				this.venueNumber = this.existingRowData.value.$?.n;
+				this.venueAdded = this.existingRowData.value.$?.adddate || '';
+				this.lastPlay = [...this.existingRowData.value.lastplay];
 				console.log('existing row data: ', this.existingRowData);
 			}
 		}
@@ -92,17 +95,17 @@ export class VenueTableDialogComponent {
 		const finalData = { isNew: true || false, data: undefined };
 		if (this.isEdit) {
 			finalData.isNew = false;
-			const updatedTeam = { ...this.data.existing };
-			updatedTeam.name = [this.venueName];
-			updatedTeam.$.n = this.venueNumber;
-			updatedTeam.$.adddate = this.venueAdded;
-			updatedTeam.lastPlay = this.lastPlay;
-			finalData.data = updatedTeam;
+			const updatedVenue: Venue = { ...this.data.existing };
+			updatedVenue.value.name = [this.venueName];
+			updatedVenue.value.$.n = this.venueNumber;
+			updatedVenue.value.$.adddate = this.venueAdded;
+			updatedVenue.value.lastplay = this.lastPlay;
+			finalData.data = updatedVenue;
 		} else {
 			finalData.isNew = true;
-			const newTeam = { ...this.venueObject };
-			newTeam.name = [this.venueName];
-			finalData.data = newTeam;
+			const newVenue = { ...this.venueObject };
+			newVenue.value.name = [this.venueName];
+			finalData.data = newVenue;
 		}
 		this.dialogRef.close(finalData);
 	}

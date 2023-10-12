@@ -49,9 +49,11 @@ export class HistoricGamesComponent implements OnInit, AfterViewInit, OnDestroy 
 		if (this.isDBInit) {
 			this.databaseSubscription = this.historicGamesService.dataLoading$.subscribe(
 				data => {
+					this.dataSource = new MatTableDataSource();
+
 					if (data) {
 						console.log('data: ', data);
-						this.dataSource = new MatTableDataSource(data.value);
+						this.dataSource.data = data.value
 						this.dataSource.paginator = this.paginator;
 						this.isLoading = false;
 					}else  {

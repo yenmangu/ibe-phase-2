@@ -1,15 +1,18 @@
 export interface EventInterface {
-	$: {
-		type: string;
-		n: string;
-		adddate: string;
-	};
-	name: string[];
-	lastplay?: {
+	key: string;
+	value: {
 		$: {
-			date: string;
+			type: string;
+			n: string;
+			adddate: string;
 		};
-	}[];
+		name: string[];
+		lastplay?: {
+			$: {
+				date: string;
+			};
+		}[];
+	};
 }
 
 // Example //

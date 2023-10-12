@@ -36,6 +36,34 @@ export class DataService implements OnInit, OnDestroy {
 		console.log('data service ngOnInit called');
 	}
 
+	public async checkDatabase(data): Promise<any> {
+		try {
+			const storeMapping = this.mapData(data);
+			const playerDbStoreMapping = this.getPlayerDbStoreMapping(data);
+
+			const expectedNames = [
+				...Object.keys(storeMapping),
+				...Object.keys(playerDbStoreMapping)
+			];
+
+			const exists = await this.indexedDB.doesDatabaseExist(
+				this.dbName,
+				expectedNames
+			);
+
+			if (exists) {
+				this.IDBStatusService.bypassProgress()
+
+				return true;
+			}
+			return false
+		} catch (error) {
+			throw new Error('error checking db');
+
+		}
+	}
+
+
 	public initialiseDB = async data => {
 		// console.log('accessing playerdb array test: ', data.playerdb.root[0].item);
 		// console.log('matchType :', this.matchType);
@@ -146,7 +174,7 @@ export class DataService implements OnInit, OnDestroy {
 			hist,
 			hands,
 			handanxs,
-			playerdb,
+			// playerdb,
 			params,
 			xmlsettings,
 			// slotname,
@@ -159,7 +187,7 @@ export class DataService implements OnInit, OnDestroy {
 			[`historic_game_data`]: hist,
 			[`hand_data`]: hands,
 			[`handanxs_data`]: handanxs,
-			[`player_db`]: playerdb,
+			// [`player_db`]: playerdb,
 			[`params`]: params,
 			[`xml_settings`]: xmlsettings,
 

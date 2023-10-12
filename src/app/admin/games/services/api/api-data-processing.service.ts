@@ -7,25 +7,24 @@ import { IndexedDatabaseService } from '../indexed-database.service';
 export class ApiDataProcessingService {
 	constructor(private indexedDatabaseService: IndexedDatabaseService) {}
 
-	async processData(): Promise<any> {
+	async processData(data): Promise<any> {
 		try {
-			// if (!selectedMatchType) {
-			// 	throw new Error('No store name provided to "processData" ');
+			const gameCode = localStorage.getItem('GAME_CODE');
+			const directorKey = localStorage.getItem('DIR_KEY');
+
+			data.game_code = gameCode;
+			data.director_key = directorKey;
+			console.log(data);
+
+			// const allPlayerDb = await this.retrieveAllPlayerDb();
+
+			// if (!allPlayerDb) {
+			// 	throw new Error('No data retrieved by helper function in "processData"');
 			// }
-			// console.log(
-			// 	'selected match type in api data processing: ',
-			// 	selectedMatchType
-			// );
-			// const playerData = await this.retrieveDataByStore(selectedMatchType);
-			const allPlayerDb = await this.retrieveAllPlayerDb();
 
-			if (!allPlayerDb) {
-				throw new Error('No data retrieved by helper function in "processData"');
-			}
-
-			console.log('dataToSend: ', allPlayerDb);
+			console.log('dataToSend: ', data);
 			// return;
-			return allPlayerDb;
+			return data;
 		} catch (err) {
 			throw err;
 		}
@@ -50,7 +49,7 @@ export class ApiDataProcessingService {
 		}
 	}
 
-	private async retrieveAllPlayerDb(): Promise<any> {
+	async retrieveAllPlayerDb(): Promise<any> {
 		try {
 			const playerStore = `player`;
 			const teamStore = `team`;
