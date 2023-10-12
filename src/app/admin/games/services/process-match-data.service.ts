@@ -126,7 +126,7 @@ export class ProcessMatchDataService implements OnDestroy {
 			}
 
 			const gameObject = this.buildCurrentGameObject(movementValues, nameValues);
-			console.log(gameObject)
+			console.log(gameObject);
 			return gameObject;
 		} catch (err) {
 			console.error('Error getting current game data: ', err);
@@ -168,7 +168,9 @@ export class ProcessMatchDataService implements OnDestroy {
 			console.log('peopleValue: ', peopleValue);
 			const currentGameConfig = this.buildCurrentGameObject(
 				movementValue,
-				peopleValue
+				peopleValue,
+				teamsValue,
+				sidesValue
 			);
 			return currentGameConfig;
 		} catch (err) {
@@ -202,7 +204,8 @@ export class ProcessMatchDataService implements OnDestroy {
 		}
 	}
 
-	private buildCurrentGameObject(movement, people) {
+	private buildCurrentGameObject(movement, people, teams, sides) {
+		console.log('teans: ', teams);
 		const cleanedMovement = this.processMovementText(movement);
 		const teamsOrPairs = this.processNamesText(people);
 		let dataObj: any = {};
@@ -238,8 +241,23 @@ export class ProcessMatchDataService implements OnDestroy {
 		currentGame.tables = this.createTablesOject(north, south, east, west);
 		console.log('currentGame: ', currentGame);
 		// console.log('tableArray: ', tableArray);
+		const index = currentGame.playerConfig.north.length;
+		teams.splice(index);
+
+		currentGame.teams = teams;
+		currentGame.isTeams = true;
+
+		const extractedSides = this.extractSides(sides);
+		if (extractedSides.length !== 0) {
+			currentGame.sides = extractedSides;
+			currentGame.isSides = true;
+		}
 
 		return currentGame;
+	}
+
+	private extractSides(sides) {
+		return sides.filter(item => !item.match(/^Side \d+$/));
 	}
 
 	private extractPairs(players) {
@@ -305,6 +323,13 @@ export class ProcessMatchDataService implements OnDestroy {
 		}
 	}
 
+	private destructureAndSplitTeams(data) {
+		const {
+			current_game_data: { value }
+		} = data;
+		const split = value[0].split('\n');
+		return split;
+	}
 	private processMovementText(data) {
 		const movementText = data[0];
 		const splitLines = movementText
