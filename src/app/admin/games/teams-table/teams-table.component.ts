@@ -1,5 +1,13 @@
-import { Component, EventEmitter, Output } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import {
+	Component,
+	EventEmitter,
+	Output,
+	OnInit,
+	OnDestroy,
+	AfterViewInit
+} from '@angular/core';
+
+import { FormGroup, FormBuilder } from '@angular/forms';
 
 @Component({
 	selector: 'app-teams-table',
