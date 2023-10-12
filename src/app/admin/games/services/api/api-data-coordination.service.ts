@@ -12,34 +12,22 @@ export class ApiDataCoordinationService {
 		private httpService: HttpService
 	) {}
 
-	public async invokeAPICoordination(
-
-		storeName?: string,
-		data?: any
-	): Promise<any> {
+	public async invokeAPICoordination(data: any): Promise<any> {
 		try {
-
-			const {
-				$: { type }
-			} = data;
-			console.log('type', type);
-
-			const storeName = `${type}`;
-			await this.sendToHttp(undefined);
+			await this.sendToHttp(data);
 		} catch (err) {
 			throw err;
 		}
 	}
 
-	private async sendToHttp(storeName: string): Promise<any> {
+	private async sendToHttp(data): Promise<any> {
 		try {
-			console.log('storeName in sendToHttp: ', storeName);
 
-			const processedData = await this.apiDataProcessing.processData();
+			const processedData = await this.apiDataProcessing.processData(data);
 			if (!processedData) {
 				throw new Error('No data returned from apiDataProcessing');
 			}
-      // Debug
+			// Debug
 			// console.log(
 			// 	'data from processData: ',
 			// 	JSON.stringify(processedData, null, 2)

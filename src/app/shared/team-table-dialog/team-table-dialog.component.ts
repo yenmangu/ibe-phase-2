@@ -18,27 +18,30 @@ export class TeamTableDialogComponent implements OnInit {
 	lastPlay: { $: { date: string } }[];
 
 	teamObject: Team = {
-		$: {
-			type: 'team',
-			n: null,
-			adddate: new Date().toLocaleDateString('en-GB', {
-				day: '2-digit',
-				month: '2-digit',
-				year: '2-digit'
-			})
-		},
-		name: [],
-		lastplay: [
-			{
-				$: {
-					date: new Date().toLocaleDateString('en-GB', {
-						day: '2-digit',
-						month: '2-digit',
-						year: '2-digit'
-					})
+		key: '',
+		value: {
+			$: {
+				type: 'team',
+				n: null,
+				adddate: new Date().toLocaleDateString('en-GB', {
+					day: '2-digit',
+					month: '2-digit',
+					year: '2-digit'
+				})
+			},
+			name: [],
+			lastplay: [
+				{
+					$: {
+						date: new Date().toLocaleDateString('en-GB', {
+							day: '2-digit',
+							month: '2-digit',
+							year: '2-digit'
+						})
+					}
 				}
-			}
-		]
+			]
+		}
 	};
 
 	constructor(
@@ -52,9 +55,9 @@ export class TeamTableDialogComponent implements OnInit {
 		if (this.data && this.data.existingRowData) {
 			this.existingRowData = { ...this.data.existingRowData };
 			this.isEdit = true;
-			this.teamName = this.existingRowData.name[0] || '';
-			this.teamAdded = this.existingRowData.$?.adddate || '';
-			this.lastPlay = [...this.existingRowData.lastplay];
+			this.teamName = this.existingRowData.value.name[0] || '';
+			this.teamAdded = this.existingRowData.value.$?.adddate || '';
+			this.lastPlay = [...this.existingRowData.value.lastplay];
 			console.log(this.existingRowData);
 		}
 		if (this.data && this.data.searchTerm) {
@@ -84,16 +87,16 @@ export class TeamTableDialogComponent implements OnInit {
 		const finalData = { isNew: true || false, data: undefined };
 		if (this.isEdit) {
 			finalData.isNew = false;
-			const updatedTeam = { ...this.data.existing };
-			updatedTeam.name = [this.teamName];
-			updatedTeam.$.n = this.teamNumber;
-			updatedTeam.$.adddate = this.teamAdded;
-			updatedTeam.lastPlay = this.lastPlay;
+			const updatedTeam: Team = { ...this.data.existing };
+			updatedTeam.value.name = [this.teamName];
+			updatedTeam.value.$.n = this.teamNumber;
+			updatedTeam.value.$.adddate = this.teamAdded;
+			updatedTeam.value.lastplay = this.lastPlay;
 			finalData.data = updatedTeam;
 		} else {
 			finalData.isNew = true;
-			const newTeam = { ...this.teamObject };
-			newTeam.name = [this.teamName];
+			const newTeam: Team = { ...this.teamObject };
+			newTeam.value.name = [this.teamName];
 			finalData.data = newTeam;
 		}
 		console.log(JSON.stringify(finalData, null, 2));

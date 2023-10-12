@@ -55,15 +55,15 @@ export class GamesComponent implements OnInit, OnDestroy {
 		console.log('games component init');
 
 		this.subscribeToGameCodeAndDirKey();
+
+		this.IDBStatusService.isInitialised$.pipe(tag('db-init')).subscribe(isInit => {
+			this.dbInit = isInit;
+		});
 		this.progressSubscription = this.IDBStatusService.dataProgress$
 			.pipe(tag('db-progress'))
 			.subscribe(value => {
 				this.progress = value;
 			});
-
-		this.IDBStatusService.isInitialised$.pipe(tag('db-init')).subscribe(isInit => {
-			this.dbInit = isInit;
-		});
 	}
 
 	private subscribeToGameCodeAndDirKey(): void {
@@ -120,9 +120,14 @@ export class GamesComponent implements OnInit, OnDestroy {
 	private async processData(data) {
 		console.log('processData() called with data: ', data);
 		try {
-			await this.dataService.initialiseDB(data);
-			console.log('Database initialisation complete');
-			await this.storeInitialData(data);
+			const dbExists = await this.dataService.checkDatabase(data);
+			if (dbExists) {
+				console.log('db exists');
+				return;
+			} else {
+				await this.dataService.initialiseDB(data);
+				await this.storeInitialData(data);
+			}
 			console.log('Store initial data complete');
 		} catch (err) {
 			console.error('Error during data processing: ', err);
@@ -140,7 +145,7 @@ export class GamesComponent implements OnInit, OnDestroy {
 					throw new Error('Error calling data service');
 				}
 				this.sharedGameData.setLoadingStatus(false);
-				resolve()
+				resolve();
 			} catch (err) {
 				reject(`Error performing high level requestAndStore(): ${err}`);
 			}

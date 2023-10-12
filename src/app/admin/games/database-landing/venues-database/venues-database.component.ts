@@ -26,7 +26,7 @@ export class VenuesDatabaseComponent
 	@ViewChild(MatPaginator) paginator: MatPaginator;
 	@ViewChild(MatSort) sort: MatSort;
 	applyMagentaGreyTheme = true;
-	applyIbescoreTheme = true
+	applyIbescoreTheme = true;
 
 	venueArray: Venue[] = [];
 
@@ -56,9 +56,9 @@ export class VenuesDatabaseComponent
 			this.venueArray = data;
 			console.log('venue array: ', this.venueArray);
 			this.initDataSource();
-			this.isLoading = false
+			this.isLoading = false;
 		});
-		this.fetchInitialData()
+		this.fetchInitialData();
 	}
 
 	ngAfterViewInit(): void {
@@ -79,15 +79,20 @@ export class VenuesDatabaseComponent
 		this.searchTerm = filterValue.trim().toLowerCase();
 	}
 
-	async fetchInitialData() {
+	async fetchInitialData(): Promise<boolean> {
 		try {
 			console.log(this.storeName);
 			const venueData = await this.historicGamesDatabaseService.fetchHistoricData(
 				'loc'
 			);
-			this.venueDataSubject.next(venueData);
+			if (venueData) {
+				this.venueDataSubject.next(venueData);
+				return true;
+			}
+			return false;
 		} catch (err) {
 			console.error('Error fetching initial: ', err);
+			return false;
 		}
 	}
 
@@ -114,20 +119,23 @@ export class VenuesDatabaseComponent
 		this.delete(row);
 	}
 
-	
 	private initDataSource(): void {
 		this.dataSource.data = this.venueArray;
 	}
 
 	private refresh() {
-		this.fetchInitialData();
-		this.dataSource.data = this.venueArray;
-		if (this.paginator && this.sort) {
-			this.dataSource.paginator = this.paginator;
-			this.dataSource.sort = this.sort;
+		const result = this.fetchInitialData();
+		if (result) {
+			this.dataSource.data = this.venueArray;
+			if (this.paginator && this.sort) {
+				this.dataSource.paginator = this.paginator;
+				this.dataSource.sort = this.sort;
+			}
+			if (this.dataSource.data.length > 0) {
+				this.table.renderRows();
+			}
+			// this.changeDetectorRef.detectChanges();
 		}
-		this.table.renderRows();
-		this.changeDetectorRef.detectChanges();
 	}
 
 	private async delete(data) {

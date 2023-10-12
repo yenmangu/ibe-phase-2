@@ -20,6 +20,7 @@ import {
 } from 'rxjs';
 import { IndexedDatabaseStatusService } from 'src/app/shared/services/indexed-database-status.service';
 import { Player } from 'src/app/shared/data/interfaces/player-data';
+import { ApiDataProcessingService } from './api/api-data-processing.service';
 import { tag } from 'rxjs-spy/cjs/operators';
 @Injectable({
 	providedIn: 'root'
@@ -33,7 +34,8 @@ export class ProcessMatchDataService implements OnDestroy {
 	constructor(
 		private indexedDB: IndexedDatabaseService,
 		private sharedDataService: SharedDataService,
-		private indexedDatabaseStatus: IndexedDatabaseStatusService
+		private indexedDatabaseStatus: IndexedDatabaseStatusService,
+		private apiProcessing: ApiDataProcessingService
 	) {
 		this.matchTypeSubscription = this.sharedDataService.selectedMatchType$
 			.pipe(takeUntil(this.destroy$))
@@ -49,6 +51,22 @@ export class ProcessMatchDataService implements OnDestroy {
 			.subscribe(intialised => {
 				this.isDBInitialised = intialised;
 			});
+	}
+
+	async getHistoricData(storeName: string) {
+		try {
+			await firstValueFrom(
+				this.indexedDatabaseStatus.isInitialised$.pipe(
+					filter(isInitialised => isInitialised),
+					first(),
+					take(1)
+				)
+			);
+			const data = await this.indexedDB.getAllDataFromStore(storeName);
+			return data;
+		} catch (error) {
+			throw error;
+		}
 	}
 
 	async getAllStoreData(storeName: string) {
@@ -73,6 +91,7 @@ export class ProcessMatchDataService implements OnDestroy {
 			// console.log(` ${storeName}`)
 			await firstValueFrom(
 				this.indexedDatabaseStatus.isInitialised$.pipe(
+					tag('process-match-data is init sub'),
 					filter(isInitialised => isInitialised),
 					first(),
 					take(1)
@@ -130,39 +149,6 @@ export class ProcessMatchDataService implements OnDestroy {
 		}
 	}
 
-	// async getInitialTableData() {
-	// 	try {
-	// 		const result = await firstValueFrom(
-	// 			this.indexedDatabaseStatus.isInitialised$.pipe(
-	// 				filter(isInitialised => isInitialised),
-	// 				first(),
-	// 				take(1)
-	// 			)
-	// 		);
-	// 		// console.log('isInitialised: ', result);
-	// 		const movement = await this.indexedDB.readFromDB(
-	// 			[`current_game_data`],
-	// 			'movementtxt'
-	// 		);
-	// 		const people = await this.indexedDB.readFromDB(
-	// 			[`current_game_data`],
-	// 			'namestxt'
-	// 		);
-	// 		const movementValue = this.destructureValue(movement, 'current_game_data');
-	// 		// console.log('movementtxt: ', movementValue);
-
-	// 		const peopleValue = this.destructureValue(people, 'current_game_data');
-	// 		// console.log('peopleValue: ', peopleValue);
-	// 		const currentGameConfig = this.buildCurrentGameObject(
-	// 			movementValue,
-	// 			peopleValue
-	// 		);
-	// 		return currentGameConfig;
-	// 		// console.log('Current Game Config: ', currentGameConfig);
-	// 	} catch (err) {
-	// 		console.error('Error getting current movememnet data', err);
-	// 	}
-	// }
 	private splitUnevenArray(array) {
 		const half = Math.floor(array.length / 2);
 
@@ -338,22 +324,20 @@ export class ProcessMatchDataService implements OnDestroy {
 			if (!data) {
 				throw new Error('no data provided for updateValue()');
 			}
-			const storeName = `${data.$.type}`;
+			const storeName = `${data.value.$.type}`;
 			let key = undefined;
 			if (!isNew) {
 				console.log('Not new');
-				key = data.$.n;
+				key = data.key;
 				console.log('store name: ', storeName, ' key: ', key);
 
 				const existingValue: any = await this.indexedDB.getByKey(storeName, key);
 				if (existingValue) {
 					console.log('wholeObject from db: ', existingValue);
 					const { value } = existingValue;
-					console.log('existing value, updating instead');
-					console.log('existing value: ', value);
 					let newValue = { ...value };
-					newValue = data;
-					console.log('updated value: ', newValue);
+					newValue = data.value;
+
 					await this.indexedDB.update(storeName, key, newValue);
 				} else {
 					throw new Error(
@@ -363,16 +347,22 @@ export class ProcessMatchDataService implements OnDestroy {
 				}
 			} else {
 				console.log('isNew = true, adding new data', 'isNew: ', isNew);
-				const existingDatabaseEntries = await this.indexedDB.getAllDataFromStore(
+				const existingStoreEntries = await this.indexedDB.getAllDataFromStore(
 					storeName
 				);
-				const newIndex = (existingDatabaseEntries.length + 2).toString();
+				const items = await this.apiProcessing.retrieveAllPlayerDb();
+				const newIndex = (existingStoreEntries.length + 1).toString();
+
+				const newN = (items.length + 1).toString();
+				const newKey = `00${newIndex}`;
 				console.log('new index (n-value): ', newIndex);
-				data.$.n = newIndex;
-				const newKey = newIndex;
-				console.log('new entry for database: ', data);
-				await this.indexedDB.add(storeName, newKey, data);
+				data.value.$.n = newN;
+				const value = data.value;
+				// const newKey = newIndex
+				console.log('new entry for database: ', value);
+				await this.indexedDB.add(storeName, newKey, value);
 			}
+			return true;
 		} catch (err) {
 			throw err;
 		}
@@ -383,11 +373,15 @@ export class ProcessMatchDataService implements OnDestroy {
 			if (!data) {
 				throw new Error('No data in process match data deleteByKey()');
 			}
-			const type = data.$.type;
+			const type = data.value.$.type;
 			const storeName = `${type}`;
-			const key = data.$.n;
+			const key = data.key;
 			console.log(`storenName: ${storeName} and key: ${key}`);
-			await this.indexedDB.delete(storeName, key);
+			const success = await this.indexedDB.delete(storeName, key);
+			if (success) {
+				return true;
+			}
+			return false;
 		} catch (err) {
 			throw err;
 		}

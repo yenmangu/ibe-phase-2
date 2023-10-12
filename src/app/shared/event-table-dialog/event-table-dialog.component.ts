@@ -18,27 +18,30 @@ export class EventTableDialogComponent implements OnInit {
 	lastPlay: { $: { date: string } }[];
 
 	eventObject: EventInterface = {
-		$: {
-			type: 'event',
-			n: null,
-			adddate: new Date().toLocaleDateString('en-GB', {
-				day: '2-digit',
-				month: '2-digit',
-				year: '2-digit'
-			})
-		},
-		name: [],
-		lastplay: [
-			{
-				$: {
-					date: new Date().toLocaleDateString('en-GB', {
-						day: '2-digit',
-						month: '2-digit',
-						year: '2-digit'
-					})
+		key: '',
+		value: {
+			$: {
+				type: 'event',
+				n: null,
+				adddate: new Date().toLocaleDateString('en-GB', {
+					day: '2-digit',
+					month: '2-digit',
+					year: '2-digit'
+				})
+			},
+			name: [],
+			lastplay: [
+				{
+					$: {
+						date: new Date().toLocaleDateString('en-GB', {
+							day: '2-digit',
+							month: '2-digit',
+							year: '2-digit'
+						})
+					}
 				}
-			}
-		]
+			]
+		}
 	};
 	constructor(
 		public dialogRef: MatDialogRef<EventTableDialogComponent>,
@@ -52,10 +55,10 @@ export class EventTableDialogComponent implements OnInit {
 			this.existingRowData = this.data.existingRowData;
 			this.isEdit = true;
 			if (this.data && this.data.existingRowData) {
-				this.eventName = this.existingRowData.name[0] || '';
-				this.eventNumber = this.existingRowData.$?.n;
-				this.eventAdded = this.existingRowData.$?.adddate || '';
-				this.lastPlay = [...this.existingRowData.lastplay];
+				this.eventName = this.existingRowData.value.name[0] || '';
+				this.eventNumber = this.existingRowData.value.$?.n;
+				this.eventAdded = this.existingRowData.value.$?.adddate || '';
+				this.lastPlay = [...this.existingRowData.value.lastplay];
 				console.log('existing row data: ', this.existingRowData);
 			}
 		}
@@ -87,8 +90,6 @@ export class EventTableDialogComponent implements OnInit {
 
 		console.log(this.lastPlay.length);
 	}
-
-
 
 	addlastPlay() {
 		const newlastPlay = {
@@ -125,11 +126,11 @@ export class EventTableDialogComponent implements OnInit {
 		const finalData = { isNew: true || false, data: undefined };
 		if (this.isEdit) {
 			finalData.isNew = false;
-			const updatedEvent = { ...this.data.existingRowData };
-			updatedEvent.name = [this.eventName];
-			updatedEvent.$.n = this.eventNumber;
-			updatedEvent.$.adddate = this.eventAdded;
-			updatedEvent.lastPlay = this.lastPlay;
+			const updatedEvent: EventInterface = { ...this.data.existingRowData };
+			updatedEvent.value.name = [this.eventName];
+			updatedEvent.value.$.n = this.eventNumber;
+			updatedEvent.value.$.adddate = this.eventAdded;
+			updatedEvent.value.lastplay = this.lastPlay;
 			finalData.data = updatedEvent;
 			console.log('event to be updated with: ', JSON.stringify(finalData, null, 2));
 			// this.dialogRef.close(updatedEvent);
@@ -137,7 +138,7 @@ export class EventTableDialogComponent implements OnInit {
 			finalData.isNew = true;
 			const newEvent = { ...this.eventObject };
 			console.log('shallow copy of event: ', JSON.stringify(newEvent, null, 2));
-			newEvent.name = [this.eventName];
+			newEvent.value.name = [this.eventName];
 			finalData.data = newEvent;
 			console.log('new event created: ', JSON.stringify(finalData, null, 2));
 			// this.dialogRef.close();

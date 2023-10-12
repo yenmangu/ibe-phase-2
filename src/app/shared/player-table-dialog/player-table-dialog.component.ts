@@ -24,16 +24,19 @@ export class PlayerTableDialogComponent implements OnInit, AfterViewInit {
 	lastPlay: string[];
 
 	playerObject: Player = {
-		$: {
-			type: 'player',
-			n: null,
-			adddate: new Date().toLocaleDateString('en-GB', {
-				day: '2-digit',
-				month: '2-digit',
-				year: '2-digit'
-			})
-		},
-		name: []
+		key: '',
+		value: {
+			$: {
+				type: 'player',
+				n: null,
+				adddate: new Date().toLocaleDateString('en-GB', {
+					day: '2-digit',
+					month: '2-digit',
+					year: '2-digit'
+				})
+			},
+			name: []
+		}
 	};
 
 	constructor(
@@ -50,12 +53,12 @@ export class PlayerTableDialogComponent implements OnInit, AfterViewInit {
 			this.isEdit = true;
 			existingRowData = { ...this.data.existingRowData };
 			console.log('testing shallow copy', existingRowData);
-			this.playerNumber = existingRowData.$?.n;
-			this.playerName = existingRowData.name[0] || '';
-			this.playerEmail = existingRowData?.email || '';
-			this.playerTelephone = existingRowData?.telephone || '';
-			this.lastPlay = existingRowData?.lastplay[0].date || '';
-			this.dateAdded = existingRowData.$?.adddate || '';
+			this.playerNumber = existingRowData.value.$?.n;
+			this.playerName = existingRowData.value.name[0] || '';
+			this.playerEmail = existingRowData?.value?.email || undefined;
+			this.playerTelephone = existingRowData?.value?.telephone || undefined;
+			this.lastPlay = existingRowData?.value?.lastplay[0].date || '';
+			this.dateAdded = existingRowData.value?.$?.adddate || '';
 
 			if (existingRowData.id) {
 				this.ebuChecked = this.isEbuChecked(existingRowData.id);
@@ -103,13 +106,13 @@ export class PlayerTableDialogComponent implements OnInit, AfterViewInit {
 		if (this.isEdit) {
 			finalData.isNew = false;
 			const updatedPlayer = { ...this.data.existingRowData };
-			updatedPlayer.name = [this.playerName];
-			updatedPlayer.email = [this.playerEmail];
-			updatedPlayer.telephone = [this.playerTelephone];
+			updatedPlayer.value.name = [this.playerName];
+			updatedPlayer.value.email = [this.playerEmail];
+			updatedPlayer.value.telephone = [this.playerTelephone];
 			console.log('seeing how the data looks: ', updatedPlayer);
 			if (this.ebuChecked && this.ebuId) {
-				updatedPlayer.id = [];
-				updatedPlayer.id.push({
+				updatedPlayer.value.id = [];
+				updatedPlayer.value.id.push({
 					$: {
 						type: 'EBU',
 						code: this.ebuId
@@ -117,7 +120,7 @@ export class PlayerTableDialogComponent implements OnInit, AfterViewInit {
 				});
 			}
 			if (this.bboChecked && this.bboId) {
-				updatedPlayer.id.push({
+				updatedPlayer.value.id.push({
 					$: {
 						type: 'BBO',
 						code: this.bboId
@@ -132,17 +135,17 @@ export class PlayerTableDialogComponent implements OnInit, AfterViewInit {
 			finalData.isNew = true;
 			const newPlayer = { ...this.playerObject };
 			console.log(JSON.stringify(newPlayer, null, 2));
-			newPlayer.$.n = this.playerNumber;
-			newPlayer.name = [this.playerName];
+			newPlayer.value.$.n = this.playerNumber;
+			newPlayer.value.name = [this.playerName];
 			if (this.playerEmail) {
-				newPlayer.email = [this.playerEmail];
+				newPlayer.value.email = [this.playerEmail];
 			}
 			if (this.playerTelephone) {
-				newPlayer.telephone = [this.playerTelephone];
+				newPlayer.value.telephone = [this.playerTelephone];
 			}
 			if (this.ebuChecked && this.ebuId) {
-				newPlayer.id = [];
-				newPlayer.id.push({
+				newPlayer.value.id = [];
+				newPlayer.value.id.push({
 					$: {
 						type: 'EBU',
 						code: this.ebuId
@@ -150,7 +153,7 @@ export class PlayerTableDialogComponent implements OnInit, AfterViewInit {
 				});
 			}
 			if (this.bboChecked && this.bboId) {
-				newPlayer.id.push({
+				newPlayer.value.id.push({
 					$: {
 						type: 'BBO',
 						code: this.bboId
