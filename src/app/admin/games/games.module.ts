@@ -50,6 +50,7 @@ import { AdvancedOptionsDialogComponent } from './database-landing/advanced-opti
 import { HandPaginationComponent } from './current-game/hand-pagination/hand-pagination.component';
 import { HandDisplayComponent } from './current-game/hand-display/hand-display.component';
 
+
 @NgModule({
 	declarations: [
 		GamesComponent,
@@ -70,7 +71,8 @@ import { HandDisplayComponent } from './current-game/hand-display/hand-display.c
 		DatabaseLandingComponent,
 		AdvancedOptionsDialogComponent,
   HandPaginationComponent,
-  HandDisplayComponent
+  HandDisplayComponent,
+
 	],
 	imports: [
 		CommonModule,

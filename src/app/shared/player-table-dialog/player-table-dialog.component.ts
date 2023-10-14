@@ -14,10 +14,10 @@ export class PlayerTableDialogComponent implements OnInit, AfterViewInit {
 	newPlayer: Player;
 	ebuChecked: boolean = false;
 	bboChecked: boolean = false;
-	playerName: string;
-	playerEmail: string;
-	playerTelephone: string;
-	playerNumber: string | null;
+	playerName: string='';
+	playerEmail: string= '';
+	playerTelephone: string = '';
+	playerNumber: string | null = '';
 	ebuId: string;
 	bboId: string;
 	dateAdded: string;
@@ -48,23 +48,25 @@ export class PlayerTableDialogComponent implements OnInit, AfterViewInit {
 
 	ngOnInit(): void {
 		let existingRowData;
-		console.log('player-table-dialog OnInit');
+		// console.log('player-table-dialog OnInit', existingRowData);
 		if (this.data && this.data.existingRowData) {
 			this.isEdit = true;
 			existingRowData = { ...this.data.existingRowData };
 			console.log('testing shallow copy', existingRowData);
 			this.playerNumber = existingRowData.value.$?.n;
-			this.playerName = existingRowData.value.name[0] || '';
+			this.playerName = existingRowData.value.name || '';
 			this.playerEmail = existingRowData?.value?.email || undefined;
 			this.playerTelephone = existingRowData?.value?.telephone || undefined;
-			this.lastPlay = existingRowData?.value?.lastplay[0].date || '';
 			this.dateAdded = existingRowData.value?.$?.adddate || '';
+			if (existingRowData.lastplay) {
+				this.lastPlay = existingRowData?.value?.lastplay[0]?.date || '';
+			}
 
-			if (existingRowData.id) {
-				this.ebuChecked = this.isEbuChecked(existingRowData.id);
-				this.bboChecked = this.isBboChecked(existingRowData.id);
-				this.ebuId = this.getEbuId(existingRowData.id);
-				this.bboId = this.getBboId(existingRowData.id);
+			if (existingRowData.value.id) {
+				this.ebuChecked = this.isEbuChecked(existingRowData.value.id);
+				this.bboChecked = this.isBboChecked(existingRowData.value.id);
+				this.ebuId = this.getEbuId(existingRowData.value.id);
+				this.bboId = this.getBboId(existingRowData.value.id);
 			}
 		}
 
@@ -106,9 +108,9 @@ export class PlayerTableDialogComponent implements OnInit, AfterViewInit {
 		if (this.isEdit) {
 			finalData.isNew = false;
 			const updatedPlayer = { ...this.data.existingRowData };
-			updatedPlayer.value.name = [this.playerName];
-			updatedPlayer.value.email = [this.playerEmail];
-			updatedPlayer.value.telephone = [this.playerTelephone];
+			updatedPlayer.value.name = this.playerName;
+			updatedPlayer.value.email = this.playerEmail;
+			updatedPlayer.value.telephone = this.playerTelephone;
 			console.log('seeing how the data looks: ', updatedPlayer);
 			if (this.ebuChecked && this.ebuId) {
 				updatedPlayer.value.id = [];

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, firstValueFrom, lastValueFrom, tap } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { HttpService } from 'src/app/shared/services/http.service';
 import { ApiDataProcessingService } from './api-data-processing.service';
 
@@ -12,38 +12,35 @@ export class ApiDataCoordinationService {
 		private httpService: HttpService
 	) {}
 
-	public async invokeAPICoordination(data: any): Promise<any> {
-		try {
-			await this.sendToHttp(data);
-		} catch (err) {
-			throw err;
+	public invokeAPICoordination(
+		data: any,
+		game_code?: string,
+		dir_key?: string
+	): Observable<any> {
+		console.log('api coordination invoked');
+
+		if (game_code === undefined && dir_key === undefined) {
+			return this.sendToHttp(data);
+		} else {
+			if (data.settings) {
+				return this.postSettings(dir_key, game_code, data);
+			}
+			if (data.table_config) {
+				return this.postCurrent(dir_key, game_code, data);
+			}
 		}
+		return of(null);
 	}
 
-	private async sendToHttp(data): Promise<any> {
-		try {
+	private postSettings(dir_key, game_code, data): Observable<any> {
+		return this.httpService.postSettings(data, game_code, dir_key);
+	}
 
-			const processedData = await this.apiDataProcessing.processData(data);
-			if (!processedData) {
-				throw new Error('No data returned from apiDataProcessing');
-			}
-			// Debug
-			// console.log(
-			// 	'data from processData: ',
-			// 	JSON.stringify(processedData, null, 2)
-			// );
-			// return;
-			const response = await firstValueFrom(
-				await this.httpService.postData(processedData).pipe(
-					tap(response => {
-						console.log(response);
-					})
-				)
-			);
-			console.log(response);
-			return response;
-		} catch (err) {
-			throw err;
-		}
+	private postCurrent(dir_key, game_code, data): Observable<any> {
+		return this.httpService.postCurrent(data, game_code, dir_key);
+	}
+
+	private sendToHttp(data): Observable<any> {
+		return this.httpService.postData(data);
 	}
 }

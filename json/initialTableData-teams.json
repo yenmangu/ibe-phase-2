@@ -1,0 +1,329 @@
+
+{
+  "playerConfig": {
+    "north": [
+      "John Smith",
+      "Benjamin Netenyahu",
+      "Stephen King",
+      "Michele Potel",
+      "Nicole",
+      "Ben Stokes"
+    ],
+    "south": [
+      "Andy Warholl",
+      "Tony Blair",
+      "Steve Foster",
+      "Stephen Potel",
+      "Diana",
+      "Johnny Cash"
+    ],
+    "east": [
+      "Abe Lincoln",
+      "Borris Johnson",
+      "Michael davis",
+      "Greg James",
+      "Sue Chinn",
+      "Lianne Hythe"
+    ],
+    "west": [
+      "Margret Thatcher",
+      "John hammond",
+      "Stephen Potel",
+      "Wilson",
+      "Margaret MacNeill",
+      "Geoffrey Lane"
+    ]
+  },
+  "tables": {
+    "1": [
+      "John Smith",
+      "Abe Lincoln",
+      "Andy Warholl",
+      "Margret Thatcher"
+    ],
+    "2": [
+      "Benjamin Netenyahu",
+      "Borris Johnson",
+      "Tony Blair",
+      "John hammond"
+    ],
+    "3": [
+      "Stephen King",
+      "Michael davis",
+      "Steve Foster",
+      "Stephen Potel"
+    ],
+    "4": [
+      "Michele Potel",
+      "Greg James",
+      "Stephen Potel",
+      "Wilson"
+    ],
+    "5": [
+      "Nicole",
+      "Sue Chinn",
+      "Diana",
+      "Margaret MacNeill"
+    ],
+    "6": [
+      "Ben Stokes",
+      "Lianne Hythe",
+      "Johnny Cash",
+      "Geoffrey Lane"
+    ]
+  },
+  "teamConfig": {
+    "Germany": {
+      "index": 0,
+      "tables": [
+        "John Smith",
+        "Abe Lincoln",
+        "Andy Warholl",
+        "Margret Thatcher"
+      ]
+    },
+    "UK": {
+      "index": 1,
+      "tables": [
+        "Benjamin Netenyahu",
+        "Borris Johnson",
+        "Tony Blair",
+        "John hammond"
+      ]
+    },
+    "Russia": {
+      "index": 2,
+      "tables": [
+        "Stephen King",
+        "Michael davis",
+        "Steve Foster",
+        "Stephen Potel"
+      ]
+    },
+    "China": {
+      "index": 3,
+      "tables": [
+        "Michele Potel",
+        "Greg James",
+        "Stephen Potel",
+        "Wilson"
+      ]
+    },
+    "Australia": {
+      "index": 4,
+      "tables": [
+        "Nicole",
+        "Sue Chinn",
+        "Diana",
+        "Margaret MacNeill"
+      ]
+    },
+    "Palestine": {
+      "index": 5,
+      "tables": [
+        "Ben Stokes",
+        "Lianne Hythe",
+        "Johnny Cash",
+        "Geoffrey Lane"
+      ]
+    }
+  },
+  "teams": [
+    "Germany",
+    "UK",
+    "Russia",
+    "China",
+    "Australia",
+    "Palestine"
+  ],
+  "isTeams": true,
+  "sides": [
+    "red",
+    "blue"
+  ],
+  "isSides": true,
+  "matchType": {
+    "teams": true
+  },
+  "sidesOf": "12",
+  "sideTeamMap": {
+    "1": [
+      "Germany",
+      "UK",
+      "Russia"
+    ],
+    "2": [
+      "China",
+      "Australia",
+      "Palestine"
+    ]
+  }
+}
+
+initialTableData:  {
+  "playerConfig": {
+    "north": [
+      "John Smith",
+      "Benjamin Netenyahu",
+      "Stephen King",
+      "Michele Potel",
+      "Nicole",
+      "Ben Stokes"
+    ],
+    "south": [
+      "Andy Warholl",
+      "Tony Blair",
+      "Steve Foster",
+      "Stephen Potel",
+      "Diana",
+      "Johnny Cash"
+    ],
+    "east": [
+      "Abe Lincoln",
+      "Borris Johnson",
+      "Michael davis",
+      "Greg James",
+      "Sue Chinn",
+      "Lianne Hythe"
+    ],
+    "west": [
+      "Margret Thatcher",
+      "John hammond",
+      "Stephen Potel",
+      "Wilson",
+      "Margaret MacNeill",
+      "Geoffrey Lane"
+    ]
+  },
+  "tables": {
+    "1": [
+      "John Smith",
+      "Abe Lincoln",
+      "Andy Warholl",
+      "Margret Thatcher"
+    ],
+    "2": [
+      "Benjamin Netenyahu",
+      "Borris Johnson",
+      "Tony Blair",
+      "John hammond"
+    ],
+    "3": [
+      "Stephen King",
+      "Michael davis",
+      "Steve Foster",
+      "Stephen Potel"
+    ],
+    "4": [
+      "Michele Potel",
+      "Greg James",
+      "Stephen Potel",
+      "Wilson"
+    ],
+    "5": [
+      "Nicole",
+      "Sue Chinn",
+      "Diana",
+      "Margaret MacNeill"
+    ],
+    "6": [
+      "Ben Stokes",
+      "Lianne Hythe",
+      "Johnny Cash",
+      "Geoffrey Lane"
+    ]
+  },
+  "teamConfig": {
+    "0": {
+      "teamName": "USA",
+      "tables": [
+        "John Smith",
+        "Abe Lincoln",
+        "Andy Warholl",
+        "Margret Thatcher"
+      ]
+    },
+    "1": {
+      "teamName": "Germany",
+      "tables": [
+        "Benjamin Netenyahu",
+        "Borris Johnson",
+        "Tony Blair",
+        "John hammond"
+      ]
+    },
+    "2": {
+      "teamName": "China",
+      "tables": [
+        "Stephen King",
+        "Michael davis",
+        "Steve Foster",
+        "Stephen Potel"
+      ]
+    },
+    "3": {
+      "teamName": "Russia",
+      "tables": [
+        "Michele Potel",
+        "Greg James",
+        "Stephen Potel",
+        "Wilson"
+      ]
+    },
+    "4": {
+      "teamName": "Australia",
+      "tables": [
+        "Nicole",
+        "Sue Chinn",
+        "Diana",
+        "Margaret MacNeill"
+      ]
+    },
+    "5": {
+      "teamName": "Palestine",
+      "tables": [
+        "Ben Stokes",
+        "Lianne Hythe",
+        "Johnny Cash",
+        "Geoffrey Lane"
+      ]
+    }
+  },
+  "teams": [
+    "USA",
+    "Germany",
+    "China",
+    "Russia",
+    "Australia",
+    "Palestine"
+  ],
+  "isTeams": true,
+  "matchType": {
+    "teams": true
+  },
+  "sidesOf": "12",
+  "sideTeamMap": {
+    "1": {
+      "name": "red",
+      "teams": [
+        "USA",
+        "Germany",
+        "China"
+      ]
+    },
+    "2": {
+      "name": "blue",
+      "teams": [
+        "Russia",
+        "Australia",
+        "Palestine"
+      ]
+    },
+    "totalSides": 2
+  },
+  "sides": [
+    "red",
+    "blue"
+  ],
+  "isSides": true
+}

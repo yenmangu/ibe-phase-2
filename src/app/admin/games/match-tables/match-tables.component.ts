@@ -13,7 +13,8 @@ import * as data from '../dev/temp_table.json';
 import { SharedGameDataService } from '../services/shared-game-data.service';
 import { SharedDataService } from 'src/app/shared/services/shared-data.service';
 import { CurrentEventService } from '../services/current-event.service';
-import { ProcessMatchDataService } from '../services/process-match-data.service';
+import { FetchCurrentDataService } from '../services/fetch-current-data.service';
+import { ProcessCurrentDataService } from '../services/process-current-data.service';
 
 @Component({
 	selector: 'app-match-tables',
@@ -131,7 +132,7 @@ export class MatchTablesComponent implements OnInit, OnDestroy {
 		private breakpointService: BreakpointService,
 		private sharedGamedataService: SharedGameDataService,
 		private sharedDataService: SharedDataService,
-		private processMatchData: ProcessMatchDataService
+		private processCurrentData: ProcessCurrentDataService
 	) {
 		this.tableConfigSubscription =
 			this.sharedGamedataService.tableConfigOption$.subscribe(selectedOption => {
@@ -167,14 +168,14 @@ export class MatchTablesComponent implements OnInit, OnDestroy {
 		// }
 
 		console.log('match tables initial table data: ', this.initialTableData);
-		// this.processMatchData.getNames()
+		// this.processCurrentData.getNames()
 	}
 
 	getEntries(table: any): string[] {
 		return [table.n, table.s, table.e, table.w];
 	}
 	getTableKeys(tableObj: any): string[] {
-	
+
 		return Object.keys(tableObj);
 	}
 	getRoundKeys(roundConfig: any): string[] {

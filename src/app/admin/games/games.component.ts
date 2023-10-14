@@ -19,10 +19,11 @@ import { SharedDataService } from 'src/app/shared/services/shared-data.service';
 import { CurrentEventService } from './services/current-event.service';
 import { DataService } from './services/data.service';
 import { SharedGameDataService } from './services/shared-game-data.service';
-import { ProcessMatchDataService } from './services/process-match-data.service';
+import { FetchCurrentDataService } from './services/fetch-current-data.service';
 import { UserDetailsService } from 'src/app/shared/services/user-details.service';
 import { IndexedDatabaseStatusService } from 'src/app/shared/services/indexed-database-status.service';
 import { tag } from 'rxjs-spy/cjs/operators';
+import { ProcessCurrentDataService } from './services/process-current-data.service';
 
 @Component({
 	selector: 'app-games',
@@ -45,7 +46,7 @@ export class GamesComponent implements OnInit, OnDestroy {
 		private sharedDataService: SharedDataService,
 		private currentEventService: CurrentEventService,
 		private dataService: DataService,
-		private processMatchData: ProcessMatchDataService,
+		private processCurrentData: ProcessCurrentDataService,
 		private sharedGameData: SharedGameDataService,
 		private userDetailsService: UserDetailsService,
 		private IDBStatusService: IndexedDatabaseStatusService

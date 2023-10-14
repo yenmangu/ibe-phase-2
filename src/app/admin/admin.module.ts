@@ -11,22 +11,27 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatTableModule } from '@angular/material/table';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSortModule } from '@angular/material/sort';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 //  Custom
 import { NavigationComponent } from './navigation/navigation.component';
 import { AdminComponent } from './admin.component';
 import { DashboardModule } from './dashboard/dashboard.module';
-import { GameSetupComponent } from './game-setup/game-setup.component';
 import { GameActionsComponent } from './game-actions/game-actions.component';
 import { AccountSettingsComponent } from './account-settings/account-settings.component';
 import { GamesModule } from './games/games.module';
+import { GameSetupComponent } from './game-setup/game-setup.component';
+import { BoardsScoringComponent } from './game-setup/boards-scoring/boards-scoring.component';
 
 @NgModule({
 	declarations: [
 		NavigationComponent,
 		AdminComponent,
-		GameSetupComponent,
 		GameActionsComponent,
-		AccountSettingsComponent
+		AccountSettingsComponent,
+		GameSetupComponent,
+		BoardsScoringComponent
 	],
 	imports: [
 		CommonModule,
@@ -40,6 +45,10 @@ import { GamesModule } from './games/games.module';
 		MatTableModule,
 		MatRadioModule,
 		MatSortModule,
+		MatFormFieldModule,
+		MatCheckboxModule,
+		MatSelectModule,
+
 		// Custom
 		DashboardModule,
 		GamesModule

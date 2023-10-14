@@ -19,8 +19,9 @@ import { Subject, Subscription, takeUntil } from 'rxjs';
 import { BreakpointService } from 'src/app/shared/services/breakpoint.service';
 import { SharedDataService } from 'src/app/shared/services/shared-data.service';
 import { SharedGameDataService } from '../services/shared-game-data.service';
-import { ProcessMatchDataService } from '../services/process-match-data.service';
+import { FetchCurrentDataService } from '../services/fetch-current-data.service';
 import { TablesService } from '../services/tables.service';
+import { ProcessCurrentDataService } from '../services/process-current-data.service';
 @Component({
 	selector: 'app-pairs-table',
 	templateUrl: './pairs-table.component.html',
@@ -40,7 +41,7 @@ export class PairsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 	pairsForm: FormGroup;
 	columns: string[] = ['north', 'n/s', 'south', 'east', 'e/w', 'west'];
 	tableNumbers: string[];
-	isLoading$: true;
+	isLoading$: boolean = true;
 
 	private tableConfigSubscription: Subscription;
 	private destroy$ = new Subject<void>();
@@ -51,7 +52,7 @@ export class PairsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 		private breakpointService: BreakpointService,
 		private sharedGamedataService: SharedGameDataService,
 		private sharedDataService: SharedDataService,
-		private processMatchData: ProcessMatchDataService,
+		private processCurrentData: ProcessCurrentDataService,
 		private tablesService: TablesService
 	) {
 		this.matchTypeSubscription = this.sharedDataService.selectedMatchType$
@@ -100,6 +101,7 @@ export class PairsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 
 		return (this.pairsForm = this.fb.group(pairsFormControls));
 	}
+
 	private createTableControls(
 		table: any,
 		tableNumber: string
@@ -137,7 +139,6 @@ export class PairsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 				tableControls[field] = [null];
 			}
 		}
-
 		return tableControls;
 	}
 
@@ -185,11 +186,15 @@ export class PairsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 	}
 
 	getConditionalControl(tableNumber: string, conditional): FormControl {
-		return this.pairsForm.get(`_${tableNumber}.${conditional}`) as FormControl;
+		return this.pairsForm.get(`_${tableNumber.toString()}.${conditional}`) as FormControl;
 	}
 
 	onSubmit() {
 		console.log(this.pairsForm.value);
+		if(this.pairsForm.valid){
+			
+		}
+
 	}
 
 	getPairsFormData() {

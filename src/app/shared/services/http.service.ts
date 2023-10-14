@@ -11,7 +11,7 @@ export class HttpService {
 	constructor(private http: HttpClient) {}
 
 	postData(data): Observable<any> {
-		return this.http.post<any>(`${this.apiUrl}/database`, data).pipe(
+		return this.http.post<any>(`${this.apiUrl}/player_database`, data).pipe(
 			tap(response => {
 				console.log(response);
 			}),
@@ -20,6 +20,36 @@ export class HttpService {
 			})
 		);
 	}
+
+	postCurrent(data, gamecode, dir_key): Observable<any> {
+		console.log('post current invoked');
+		
+		const body = {
+			dir_key: dir_key,
+			game_code: gamecode,
+			data
+		};
+		return this.http.post<any>(`${this.apiUrl}/current_game/table_config`, body);
+	}
+
+	postSettings(data, gamecode, dir_key): Observable<any> {
+		const body = {
+			dir_key: dir_key,
+			game_code: gamecode,
+			data
+		};
+		return this.http.post<any>(`${this.apiUrl}/current_game/base_settings`, body);
+	}
+
+	postHistoric(data, gamecode, dir_key): Observable<any> {
+		const body = {
+			dir_key: dir_key,
+			game_code: gamecode,
+			data
+		};
+		return this.http.post<any>(`${this.apiUrl}/historic_games`, body);
+	}
+
 	fetchData(gamecode, dir_key): Observable<any> {
 		const params = new HttpParams()
 			.set('game_code', gamecode)
