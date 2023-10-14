@@ -1,7 +1,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { IndexedDatabaseService } from './indexed-database.service';
 import { DataService } from './data.service';
-import { SharedDataService } from 'src/app/shared/services/shared-data.service';
+import { SharedDataService } from '../../../shared/services/shared-data.service';
 import {
 	Subject,
 	Subscription,
@@ -18,14 +18,14 @@ import {
 	catchError,
 	throwError
 } from 'rxjs';
-import { IndexedDatabaseStatusService } from 'src/app/shared/services/indexed-database-status.service';
-import { Player } from 'src/app/shared/data/interfaces/player-data';
+import { IndexedDatabaseStatusService } from '../../../shared/services/indexed-database-status.service';
+import { Player } from '../../../shared/data/interfaces/player-data';
 import { ApiDataProcessingService } from './api/api-data-processing.service';
 import { tag } from 'rxjs-spy/cjs/operators';
 @Injectable({
 	providedIn: 'root'
 })
-export class ProcessMatchDataService implements OnDestroy {
+export class FetchCurrentDataService implements OnDestroy {
 	matchTypeSubscription: Subscription;
 	currentMatchType: string = '';
 	isDBInitialised = false;

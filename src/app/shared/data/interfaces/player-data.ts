@@ -6,9 +6,9 @@ export interface Player {
 			n: string;
 			adddate: string;
 		};
-		name: string[];
-		email?: string[];
-		telephone?: string[];
+		name: string[] | string;
+		email?: string[] | string;
+		telephone?: string[] | string;
 		id?: {
 			$: {
 				type: string;

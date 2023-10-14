@@ -8,7 +8,7 @@ import {
 } from 'rxjs';
 import { SharedDataService } from 'src/app/shared/services/shared-data.service';
 import { IndexedDatabaseStatusService } from 'src/app/shared/services/indexed-database-status.service';
-import { ProcessMatchDataService } from './process-match-data.service';
+import { FetchCurrentDataService } from './fetch-current-data.service';
 import { IndexedDatabaseService } from './indexed-database.service';
 import { ApiDataCoordinationService } from './api/api-data-coordination.service';
 
@@ -29,7 +29,7 @@ export class HistoricGamesDatabaseService implements OnDestroy {
 	constructor(
 		private sharedDataService: SharedDataService,
 		private indexedDatabaseStatus: IndexedDatabaseStatusService,
-		private processMatchDataService: ProcessMatchDataService,
+		private processMatchDataService: FetchCurrentDataService,
 		private apiData: ApiDataCoordinationService
 	) {
 		console.log('historic games & database service init');

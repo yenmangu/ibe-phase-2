@@ -11,10 +11,11 @@ import {
 	catchError
 } from 'rxjs';
 import { ProcessHandsService } from './process-hands.service';
-import { ProcessMatchDataService } from './process-match-data.service';
+import { FetchCurrentDataService } from './fetch-current-data.service';
+import { ProcessCurrentDataService } from './process-current-data.service';
 import { IndexedDatabaseStatusService } from 'src/app/shared/services/indexed-database-status.service';
 import { tag } from 'rxjs-spy/operators';
-tag
+tag;
 
 @Injectable({
 	providedIn: 'root'
@@ -32,8 +33,9 @@ export class CurrentGamesDatabaseServiceService {
 
 	constructor(
 		private processHands: ProcessHandsService,
-		private processMatchData: ProcessMatchDataService,
-		private iDBStatus: IndexedDatabaseStatusService
+		private fetchMatchData: FetchCurrentDataService,
+		private iDBStatus: IndexedDatabaseStatusService,
+		private processCurrentDataService: ProcessCurrentDataService
 	) {
 		this.iDBStatus.isInitialised$
 			.pipe(takeUntil(this.destroy$))
@@ -43,11 +45,10 @@ export class CurrentGamesDatabaseServiceService {
 	}
 
 	async fetchCurrentData(objectStore: string, key: string): Promise<any> {
-
 		try {
-    console.log('fetch current data invoked');
+			console.log('fetch current data invoked');
 			await this.waitForDBInitialization();
-			const data = await this.processMatchData.getData(objectStore, key);
+			const data = await this.fetchMatchData.getData(objectStore, key);
 			this.currentGameLoadingSubject.next(data);
 			return data;
 		} catch (err) {
@@ -57,26 +58,16 @@ export class CurrentGamesDatabaseServiceService {
 	}
 
 	fetchAndProcessGameData(): Observable<any> {
-    console.log('fetch and process data invoked');
+		console.log('fetch and process data invoked');
 
-		return this.processMatchData.getInitialTableData().pipe(tag('getInitial'),
+		return this.processCurrentDataService.getInitialTableData().pipe(
+			tag('getInitial'),
 			catchError(error => {
 				console.error('Error fetching and processing game data', error);
 				return throwError(() => error);
 			})
 		);
 	}
-
-	// async fetchCurrentData(objectStore: string, key: string): Promise<any> {
-	// 	try {
-	// 		await this.waitForDBInitialization();
-	// 		const data = await this.processMatchData.getData(objectStore, key);
-	// 		this.currentGameLoadingSubject.next(data);
-	// 		return data;
-	// 	} catch (err) {
-	// 		this.currentGameLoadingSubject.next(err);
-	// 	}
-	// }
 
 	private async waitForDBInitialization() {
 		if (!this.isDbInitialised) {
