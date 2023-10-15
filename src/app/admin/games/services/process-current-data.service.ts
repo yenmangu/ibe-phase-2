@@ -183,7 +183,8 @@ export class ProcessCurrentDataService {
 		const sideTeamMap = this.assignSideIndices(
 			currentGame.sidesOf,
 			currentGame.teams,
-			extractedSides
+			extractedSides,
+			tableNumbers
 		);
 		currentGame.sideTeamMap = sideTeamMap;
 		const { totalSides } = sideTeamMap;
@@ -200,7 +201,7 @@ export class ProcessCurrentDataService {
 		return sides.slice(0, totalSides);
 	}
 
-	private assignSideIndices(sidesOf, teams, extractedSides) {
+	private assignSideIndices(sidesOf, teams, extractedSides, tableNumbers) {
 		const playersPerSide = sidesOf / 4;
 		const sideTeamMap: any = {
 			totalSides: extractedSides.length
@@ -211,8 +212,11 @@ export class ProcessCurrentDataService {
 				teams: []
 			};
 		});
-		for (let i = 0; i < teams.length; i++) {
+
+		console.log('teams: ', teams);
+		for (let i = 0; i < tableNumbers.length; i++) {
 			const sideIndex = Math.floor(i / playersPerSide);
+
 			sideTeamMap[sideIndex + 1].teams.push(teams[i]);
 		}
 		return sideTeamMap;
@@ -286,7 +290,12 @@ export class ProcessCurrentDataService {
 			current_game_data: { value }
 		} = data;
 		const split = value[0].split('\n');
-		return split;
+		let trimmed = [];
+		split.forEach(e => {
+			const trimmedValue = e.trim();
+			trimmed.push(trimmedValue);
+		});
+		return trimmed;
 	}
 	private processMovementText(data) {
 		const movementText = data[0];
