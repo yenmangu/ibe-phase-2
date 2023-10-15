@@ -214,8 +214,8 @@
 			<table *ngIf="tableConfig.timesLunch">
 				<tr>
 					<th>Table Number</th>
-					<th>Timings To</th>
 					<th>Timings From</th>
+					<th>Timings To</th>
 					<th>Lunch</th>
 				</tr>
 				<ng-container *ngFor="let tableNumber of getTableNumbers(); let i = index">
@@ -224,18 +224,20 @@
 						[formGroupName]="tableNumber.toString()">
 						<td class="table-no">{{ i + 1 }}</td>
 						<td
-							*ngFor="let column of ['timings-from']"
+							*ngFor="let column of ['time_from']"
 							class="timings">
 							<!-- <input [formControlName]="column" /> -->
 							<ngx-timepicker-field
+								[controlOnly]="true"
 								[formControlName]="column"
 								#pickerFrom></ngx-timepicker-field>
 						</td>
 						<td
-							*ngFor="let column of ['timings-to']"
+							*ngFor="let column of ['time_to']"
 							class="timings">
 							<!-- <input [formControlName]="column" /> -->
 							<ngx-timepicker-field
+								[controlOnly]="true"
 								[formControlName]="column"
 								#pickerTo></ngx-timepicker-field>
 						</td>

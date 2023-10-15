@@ -136,23 +136,21 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 		let tableFormData: any = {};
 		let dateFormData: any | null = {};
 		let combinedFormData: any = {};
+		let values;
 		if (this.eventName !== undefined) {
 			combinedFormData.eventName = this.eventName;
 		}
 		if (this.matchType === 'pairs') {
-			const values = this.pairsForm.getPairsFormData();
-			console.log('values: ', values);
-
-			console.log(
-				'pairs form data: ',
-				JSON.stringify(tableFormData.value, null, 2)
-			);
+			values = this.pairsForm.getPairsFormData();
+			console.log('pairs form values: ', JSON.stringify(values, null, 2));
 		} else {
-			const values = this.teamsForm.getTeamFormData();
+			values = this.teamsForm.getTeamFormData();
 			console.log('team form values: ', JSON.stringify(values, null, 2));
 		}
 
-		combinedFormData.tableFormData = tableFormData.value;
+		combinedFormData.tableFormData = values;
+		console.log('table form data: ', tableFormData);
+		console.log('combined form data: ', combinedFormData);
 		if (this.forwardDate) {
 			const day = this.forwardDate.getDate();
 			const month = this.forwardDate.toLocaleDateString('default', {

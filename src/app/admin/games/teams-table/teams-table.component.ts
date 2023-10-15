@@ -85,6 +85,7 @@ export class TeamsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 		}
 		this.originalFormValues = this.teamsForm.value;
 		this.teamsForm.valueChanges.subscribe(changedValues => {
+			console.log('changed value: ', changedValues)
 			this.changedFields = {};
 			for (const key in changedValues) {
 				if (changedValues.hasOwnProperty(key)) {
@@ -137,7 +138,6 @@ export class TeamsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 			'venues',
 			'ns_stratification',
 			'ew_stratification',
-			'ns_sitters',
 			'ew_sitters',
 			'ns_adjustments',
 			'ew_adjustments',
@@ -148,8 +148,8 @@ export class TeamsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 			'ns_abbrev',
 			'ew_abbrev',
 			'boardCol',
-			'timings-from',
-			'timings-to',
+			'time_from',
+			'time_to',
 			'lunch'
 		];
 		if (namesArray) {
