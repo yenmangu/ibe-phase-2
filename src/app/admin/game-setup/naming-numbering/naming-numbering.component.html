@@ -1,0 +1,38 @@
+<div class="container column" formControlName="namingNumberingForm">
+	<div class="container row">
+		<mat-form-field>
+			<mat-label>Mitchell EW Numbers:</mat-label>
+			<mat-select>
+				<mat-option
+					*ngFor="let option of mitchellEwConfig"
+					[value]="option.value"
+					>{{ option.display }}</mat-option
+				>
+			</mat-select>
+		</mat-form-field>
+	</div>
+	<div class="container row">
+		<mat-form-field>
+			<mat-label>Table naming for sections:</mat-label>
+			<mat-select>
+				<mat-option *ngFor="let option of tableNamingConfig" [value]="option.value">{{option.display}}</mat-option>
+			</mat-select>
+		</mat-form-field>
+	</div>
+	<div class="container row">
+		<mat-form-field>
+			<mat-label>Shorten player names to:</mat-label>
+			<mat-select>
+				<mat-option *ngFor="let option of shortenPlayerNames" [value]="option.value">{{option.display}}</mat-option>
+			</mat-select>
+		</mat-form-field>
+	</div>
+	<div class="container row">
+		<mat-form-field>
+			<mat-label>Table naming for sections</mat-label>
+			<mat-select>
+				<mat-option *ngFor="let option of defaultNameStyle" [value]="option.value">{{option.display}}</mat-option>
+			</mat-select>
+		</mat-form-field>
+	</div>
+</div>

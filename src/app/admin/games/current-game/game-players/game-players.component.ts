@@ -82,6 +82,7 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 	ngOnInit(): void {
 		console.log('app-game-players init');
 
+		this.isLoading = true
 		this.fetchInitialTableData();
 		this.breakpointService.currentBreakpoint$
 			.pipe(takeUntil(this.destroy$))
@@ -94,6 +95,7 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 	ngAfterViewInit(): void {}
 
 	fetchInitialTableData(): void {
+		this.isLoading = true
 		this.currentGamesDatabase
 			.fetchAndProcessGameData()
 			.pipe(takeUntil(this.destroy$), tag('currentGame fetchProcessData'))
@@ -118,6 +120,10 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 					this.isLoading = false;
 				}
 			});
+	}
+
+	refresh(): void {
+		this.fetchInitialTableData();
 	}
 
 	onOptionSelected(selctedOption: string) {

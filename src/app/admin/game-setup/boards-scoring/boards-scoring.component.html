@@ -1,17 +1,47 @@
-<div class="grid-container">
-	<div class="grid-item header">
-		<div class="label type"></div>
-		<div class="checkbox default"></div>
-		<div class="dropdown duration"></div>
-		<div class="dropdown method"></div>
-	</div>
-	<div class="grid-item pairs">
-		<div class="label type">Pairs</div>
-		<div class="checkbox default">
-			<mat-checkbox></mat-checkbox>
+<form [formGroup]="scoringConfigForm">
+	<div class="grid-container">
+		<div class="grid-row">
+			<div class="grid-item header">Event Type</div>
+			<div class="grid-item header">Default</div>
+			<div class="grid-item header">Preferred Duration</div>
+			<div class="grid-item header">Scoring Method</div>
+			<!-- <div class="grid-row item"> -->
 		</div>
-		<div class="dropdown duration"></div>
-		<div class="dropdown method"></div>
-	</div>
+		<div
+			*ngFor="let control of scoringDataArray.controls; let i = index"
+			class="grid-row">
+			<!-- <div
+				class="form-wrapper"
+				[formGroupName]="i"> -->
+			<div class="grid-item label">
+				<span>{{ scoringData[i].eventType }}</span>
+			</div>
 
-</div>
+			<mat-checkbox
+				class="grid-item checkbox"
+				[formControl]="getControl(i, 'defaultSelected') | formControl">
+			</mat-checkbox>
+
+			<mat-form-field class="grid-item">
+				<mat-select
+					[formControl]="getControl(i, 'preferredDuration') | formControl">
+					<mat-option
+						*ngFor="let option of scoringData[i].preferredDuration"
+						[value]="option.value"
+						>{{ option.display }}</mat-option
+					>
+				</mat-select>
+			</mat-form-field>
+
+			<mat-form-field class="grid-item dropdown">
+				<mat-select [formControl]="getControl(i, 'scoringMethods') | formControl">
+					<mat-option
+						*ngFor="let method of scoringData[i].scoringMethods"
+						[value]="method.value"
+						>{{ method.display }}</mat-option
+					>
+				</mat-select>
+			</mat-form-field>
+		</div>
+	</div>
+</form>

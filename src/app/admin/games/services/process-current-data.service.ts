@@ -134,7 +134,11 @@ export class ProcessCurrentDataService {
 
 	private buildCurrentGameObject(movement, people, teams, sides, matchTypeObject) {
 		const cleanedMovement = this.processMovementText(movement);
-		const teamsOrPairs = this.processNamesText(people);
+		console.log('cleaned movement: ', cleanedMovement);
+		const numOfTables = cleanedMovement[1][1];
+		console.log('num of tables: ', numOfTables);
+
+		const teamsOrPairs = this.processNamesText(people, numOfTables);
 		let dataObj: any = {};
 		dataObj.rounds = cleanedMovement[1][4];
 		dataObj.players = this.splitUnevenArray(teamsOrPairs);
@@ -259,18 +263,18 @@ export class ProcessCurrentDataService {
 		return tables;
 	}
 
-	async getNames() {
-		try {
-			const storeName = 'current_game_data';
-			const namestext = await this.getData(storeName, 'namestxt');
-			// console.log('namestxt: ', namestext);
-			const nameArray = this.processNamesText(namestext);
-			// console.log('NameArray from getNames(): ', nameArray);
-			return nameArray;
-		} catch (err) {
-			throw err;
-		}
-	}
+	// async getNames() {
+	// 	try {
+	// 		const storeName = 'current_game_data';
+	// 		const namestext = await this.getData(storeName, 'namestxt');
+	// 		// console.log('namestxt: ', namestext);
+	// 		const nameArray = this.processNamesText(namestext);
+	// 		// console.log('NameArray from getNames(): ', nameArray);
+	// 		return nameArray;
+	// 	} catch (err) {
+	// 		throw err;
+	// 	}
+	// }
 
 	private destructureValue(object, string) {
 		console.log('attempting to destructure: ', object);
@@ -305,21 +309,24 @@ export class ProcessCurrentDataService {
 			.map(line => line.trim())
 			.map(line => line.split(','));
 
-		// console.log('splitLines: ', splitLines);
+		console.log('splitLines: ', splitLines);
 		return splitLines;
 		// return splitLines
 	}
 
-	private processNamesText(value) {
+	private processNamesText(value,numOfTables) {
 		let namesArray = [];
+		const namesInPlay = numOfTables * 2
 
 		const lines = value[0]
 			.split('\n')
 			.filter(line => line.trim() !== '')
 			.map(line => line.trim());
-		// const cleanedLines = lines.slice(1).map(line => line.trim());
+		const cleanedLines = lines.slice(1).map(line => line.trim());
+		console.log('cleaned lines: ', cleanedLines);
+
 		const tapHereIndex = lines.findIndex(line => line.includes('Tap here'));
-		namesArray = tapHereIndex !== -1 ? lines.slice(0, tapHereIndex) : lines;
+		namesArray = namesInPlay !== -1 ? lines.slice(0, namesInPlay) : lines;
 		// console.log('After tapHereIndex: ', namesArray);
 		// namesArray = value[0].split('\n').filter(name => name.trim()!== '').map(line=> line.trim(''))
 		namesArray = namesArray.map(item => item.split(' & '));

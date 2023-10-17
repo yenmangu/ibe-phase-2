@@ -1,21 +1,18 @@
 import { BoardsScoringInterface } from '../boards-scoring';
 
-
-
 // Scoring methods
-const mp = {value: 'mp', display: 'Match Points'}
-const ximp = {value: 'ximp', display: 'Cross IMPs'}
-const ag = {value: 'ag', display: 'Aggregate'}
-const bimp = {value: 'bimp', display: 'Butler IMPs'}
-const imp = {value: 'imp', display: 'IMPs'}
-const vpimp = {value: 'vpimp', display: 'IMPs ⇀ VPs'}
-const mzp = {value: 'mzp', display: 'Point-a-board: -1 0 1'}
-const ozt = {value: 'ozt', display: 'Point-a-board: 0 1 3'}
-const pch = {value: 'pch', display: 'Pachabo'}
-const ati = {value: 'ati', display: 'Add then IMP'}
-const tol = {value: 'tol', display: 'Tollemache'}
-const vpmp = {value: 'vpmp', display: 'Match Points ⇀ VPs'}
-
+const mp = { value: 'mp', display: 'Match Points' };
+const ximp = { value: 'ximp', display: 'Cross IMPs' };
+const ag = { value: 'ag', display: 'Aggregate' };
+const bimp = { value: 'bimp', display: 'Butler IMPs' };
+const imp = { value: 'imp', display: 'IMPs' };
+const vpimp = { value: 'vpimp', display: 'IMPs ⇀ VPs' };
+const mzp = { value: 'mzp', display: 'Point-a-board: -1 0 1' };
+const ozt = { value: 'ozt', display: 'Point-a-board: 0 1 3' };
+const pch = { value: 'pch', display: 'Pachabo' };
+const ati = { value: 'ati', display: 'Add then IMP' };
+const tol = { value: 'tol', display: 'Tollemache' };
+const vpmp = { value: 'vpmp', display: 'Match Points ⇀ VPs' };
 
 const normalDuration: any[] = [
 	{ value: '8x12', display: '8-12 Boards' },
@@ -55,78 +52,49 @@ export const boardsScoringData: BoardsScoringInterface[] = [
 	{
 		eventType: 'Pairs',
 		defaultSelected: false,
-		preferedDuration: normalDuration,
-		scoringMethods: [
-			{ value: 'matchPoints', display: 'Match points' },
-			{ value: 'crossIMP', display: "Cross IMP's" },
-			{ value: 'aggregate', display: 'Aggregate' },
-			{ value: 'butlerIMP', display: "Butler IMP's" }
-		]
+		preferredDuration: normalDuration,
+		scoringMethods: [mp, ximp, ag, bimp]
 	},
 	{
 		eventType: 'Teams of four',
 		defaultSelected: false,
-		preferedDuration: normalDuration,
-		scoringMethods: [
-			{ value: 'IMP', display: 'Match points' },
-			{ value: 'crossIMP', display: "Cross IMP's" },
-			{ value: 'aggregate', display: 'Aggregate' },
-			{ value: 'butlerIMP', display: "Butler IMP's" }
-		]
+		preferredDuration: normalDuration,
+		scoringMethods: [imp, vpimp, ag, mzp, ozt, pch]
 	},
 	{
 		eventType: 'Teams of 8',
 		defaultSelected: false,
-		preferedDuration: normalDuration,
-		scoringMethods: [
-			{ value: 'matchPoints', display: 'Match points' },
-			{ value: 'crossIMP', display: "Cross IMP's" },
-			{ value: 'aggregate', display: 'Aggregate' },
-			{ value: 'butlerIMP', display: "Butler IMP's" }
-		]
+		preferredDuration: normalDuration,
+		scoringMethods: [imp, ag, mzp, ozt, tol, ati]
+	},
+	{
+		eventType: 'Teams of 12',
+		defaultSelected: false,
+		preferredDuration: normalDuration,
+		scoringMethods: [imp, ag, mzp, ozt, tol, ati]
 	},
 	{
 		eventType: 'Teams of 16',
 		defaultSelected: false,
-		preferedDuration: normalDuration,
-		scoringMethods: [
-			{ value: 'matchPoints', display: 'Match points' },
-			{ value: 'crossIMP', display: "Cross IMP's" },
-			{ value: 'aggregate', display: 'Aggregate' },
-			{ value: 'butlerIMP', display: "Butler IMP's" }
-		]
+		preferredDuration: normalDuration,
+		scoringMethods: [imp, ag, mzp, ozt, tol, ati]
 	},
 	{
 		eventType: 'Individual',
 		defaultSelected: false,
-		preferedDuration: normalDuration,
-		scoringMethods: [
-			{ value: 'matchPoints', display: 'Match points' },
-			{ value: 'crossIMP', display: "Cross IMP's" },
-			{ value: 'aggregate', display: 'Aggregate' },
-			{ value: 'butlerIMP', display: "Butler IMP's" }
-		]
+		preferredDuration: normalDuration,
+		scoringMethods: [ximp, ag, bimp]
 	},
 	{
 		eventType: 'Swiss Pairs',
 		defaultSelected: false,
-		preferedDuration: swissDuration,
-		scoringMethods: [
-			{ value: 'matchPoints', display: 'Match points' },
-			{ value: 'crossIMP', display: "Cross IMP's" },
-			{ value: 'aggregate', display: 'Aggregate' },
-			{ value: 'butlerIMP', display: "Butler IMP's" }
-		]
+		preferredDuration: swissDuration,
+		scoringMethods: [mp, vpmp, ximp, ag, bimp]
 	},
 	{
 		eventType: 'Swiss Teams',
 		defaultSelected: false,
-		preferedDuration: swissDuration,
-		scoringMethods: [
-			{ value: 'matchPoints', display: 'Match points' },
-			{ value: 'crossIMP', display: "Cross IMP's" },
-			{ value: 'aggregate', display: 'Aggregate' },
-			{ value: 'butlerIMP', display: "Butler IMP's" }
-		]
+		preferredDuration: swissDuration,
+		scoringMethods: [imp, vpimp, ag, ozt, mzp, pch]
 	}
 ];
