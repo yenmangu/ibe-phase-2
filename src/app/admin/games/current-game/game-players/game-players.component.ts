@@ -4,8 +4,7 @@ import {
 	OnDestroy,
 	OnInit,
 	AfterViewInit,
-	ViewChild,
-	ChangeDetectorRef
+	ViewChild
 } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 
@@ -20,6 +19,8 @@ import { TeamsTableComponent } from '../../teams-table/teams-table.component';
 import { CurrentGamesDatabaseServiceService } from '../../services/current-games-database-service.service';
 import { tag } from 'rxjs-spy/operators';
 import { ApiDataCoordinationService } from '../../services/api/api-data-coordination.service';
+import { UserDetailsService } from 'src/app/shared/services/user-details.service';
+import { CurrentEventService } from '../../services/current-event.service';
 import { DataService } from '../../services/data.service';
 @Component({
 	selector: 'app-game-players',
@@ -38,6 +39,8 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 	eventDetails: EventDetailModel[] = EventDetails;
 	tableOption = 'none';
 	forwardDate: Date | null;
+	gameCode: string = '';
+	dirKey: string = '';
 
 	matchTypeSubscription: Subscription;
 	matchType: string = '';
@@ -72,7 +75,8 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 		private fb: FormBuilder,
 		private currentGamesDatabase: CurrentGamesDatabaseServiceService,
 		private apiCoordination: ApiDataCoordinationService,
-		private cdr: ChangeDetectorRef,
+		private userDetailService: UserDetailsService,
+		private currentEventService: CurrentEventService,
 		private dataService: DataService
 	) {
 		this.compositeForm = this.fb.group({
@@ -91,13 +95,20 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 			.subscribe(value => {
 				this.currentBreakpoint = value;
 			});
+
+		this.userDetailService.gameCode$.subscribe(code => {
+			this.gameCode = code;
+		});
+		this.userDetailService.directorKey$.subscribe(key => {
+			this.dirKey = key;
+		});
+
 		// console.log('game-players initialTableData: ', this.initialTableData);
 	}
 
 	ngAfterViewInit(): void {}
 
 	fetchInitialTableData(): void {
-		this.isLoading = true;
 		this.currentGamesDatabase
 			.fetchAndProcessGameData()
 			.pipe(takeUntil(this.destroy$), tag('currentGame fetchProcessData'))
@@ -106,7 +117,6 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 					if (data) {
 						// console.log('initialTableData: ', JSON.stringify(data, null, 2));
 						this.initialTableData = data;
-						this.cdr.detectChanges();
 						const { matchType } = data;
 						matchType.pairs
 							? (this.matchType = 'pairs')
@@ -125,29 +135,7 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 			});
 	}
 
-	refresh() {
-		this.refreshDB()
-			.then(() => {
-				this.isLoading = true;
-				this.fetchInitialTableData();
-				this.cdr.detectChanges();
-			})
-			.catch(error => {
-				console.error(error);
-			})
-			.finally(() => {
-				this.isLoading = false;
-			});
-	}
 
-	private async refreshDB(): Promise<void> {
-		try {
-			// this.isLoading = true;
-			await this.dataService.deleteIndexedDBDatabase()
-		} catch (error) {
-			throw error('error refreshing', error.message);
-		}
-	}
 
 	onOptionSelected(selctedOption: string) {
 		this.tableOption = selctedOption;
