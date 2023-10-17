@@ -4,7 +4,8 @@ import {
 	OnDestroy,
 	OnInit,
 	AfterViewInit,
-	ViewChild
+	ViewChild,
+	ChangeDetectorRef
 } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 
@@ -19,8 +20,7 @@ import { TeamsTableComponent } from '../../teams-table/teams-table.component';
 import { CurrentGamesDatabaseServiceService } from '../../services/current-games-database-service.service';
 import { tag } from 'rxjs-spy/operators';
 import { ApiDataCoordinationService } from '../../services/api/api-data-coordination.service';
-import { convertStringPropValuePairsToTuple } from '@cds/core/internal';
-
+import { DataService } from '../../services/data.service';
 @Component({
 	selector: 'app-game-players',
 	templateUrl: './game-players.component.html',
@@ -71,7 +71,9 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 		private sharedGameDataService: SharedGameDataService,
 		private fb: FormBuilder,
 		private currentGamesDatabase: CurrentGamesDatabaseServiceService,
-		private apiCoordination: ApiDataCoordinationService
+		private apiCoordination: ApiDataCoordinationService,
+		private cdr: ChangeDetectorRef,
+		private dataService: DataService
 	) {
 		this.compositeForm = this.fb.group({
 			pairsForm: this.fb.group({}),
@@ -82,7 +84,7 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 	ngOnInit(): void {
 		console.log('app-game-players init');
 
-		this.isLoading = true
+		this.isLoading = true;
 		this.fetchInitialTableData();
 		this.breakpointService.currentBreakpoint$
 			.pipe(takeUntil(this.destroy$))
@@ -95,7 +97,7 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 	ngAfterViewInit(): void {}
 
 	fetchInitialTableData(): void {
-		this.isLoading = true
+		this.isLoading = true;
 		this.currentGamesDatabase
 			.fetchAndProcessGameData()
 			.pipe(takeUntil(this.destroy$), tag('currentGame fetchProcessData'))
@@ -104,6 +106,7 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 					if (data) {
 						// console.log('initialTableData: ', JSON.stringify(data, null, 2));
 						this.initialTableData = data;
+						this.cdr.detectChanges();
 						const { matchType } = data;
 						matchType.pairs
 							? (this.matchType = 'pairs')
@@ -122,8 +125,28 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 			});
 	}
 
-	refresh(): void {
-		this.fetchInitialTableData();
+	refresh() {
+		this.refreshDB()
+			.then(() => {
+				this.isLoading = true;
+				this.fetchInitialTableData();
+				this.cdr.detectChanges();
+			})
+			.catch(error => {
+				console.error(error);
+			})
+			.finally(() => {
+				this.isLoading = false;
+			});
+	}
+
+	private async refreshDB(): Promise<void> {
+		try {
+			// this.isLoading = true;
+			await this.dataService.deleteIndexedDBDatabase()
+		} catch (error) {
+			throw error('error refreshing', error.message);
+		}
 	}
 
 	onOptionSelected(selctedOption: string) {

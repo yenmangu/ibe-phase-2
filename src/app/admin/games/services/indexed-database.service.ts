@@ -403,18 +403,32 @@ export class IndexedDatabaseService {
 		}
 	}
 
-	deleteIndexedDBDatabase(databaseName: string): Promise<void> {
+	async deleteIndexedDBDatabase(databaseName: string): Promise<void> {
 		return new Promise<void>((resolve, reject) => {
-			const deleteRequest = indexedDB.deleteDatabase(databaseName);
+			console.log('low level delete promise made: deleting database', databaseName);
 
-			deleteRequest.onsuccess = () => {
-				console.log(`IndexedDB database '${databaseName}' deleted successfully`);
-				resolve();
-			};
+			const request = indexedDB.open(databaseName);
+			request.onsuccess = event => {
+				const db = request.result;
+				db.close();
+				const deleteRequest = indexedDB.deleteDatabase(databaseName);
 
-			deleteRequest.onerror = () => {
-				console.error(`Error deleting IndexedDB database '${databaseName}'`);
-				reject(new Error(`Failed to delete IndexedDB database '${databaseName}'`));
+				deleteRequest.onsuccess = () => {
+					console.log(
+						`Promise resolved, IndexedDB database '${databaseName}' deleted successfully`
+					);
+					resolve();
+				};
+
+				deleteRequest.onerror = () => {
+					console.error(`Error deleting IndexedDB database '${databaseName}'`);
+					reject(
+						new Error(`Failed to delete IndexedDB database '${databaseName}'`)
+					);
+				};
+				request.onerror = event => {
+					reject(new Error(`Failed to open IndexedDB database '${databaseName}'`));
+				};
 			};
 		});
 	}
