@@ -52,45 +52,43 @@ export class DataService implements OnInit, OnDestroy {
 			);
 
 			if (exists) {
-				this.IDBStatusService.bypassProgress();
+				this.IDBStatusService.bypassProgress()
 
 				return true;
 			}
-			return false;
+			return false
 		} catch (error) {
 			throw new Error('error checking db');
+
 		}
 	}
+
 
 	public initialiseDB = async data => {
-		// console.log('accessing playerdb array test: ', data.playerdb.root[0].item);
-		// console.log('matchType :', this.matchType);
-		const storeMapping = this.mapData(data);
-		const playerDbStoreMapping = this.getPlayerDbStoreMapping(data);
-		this.storeMapping = storeMapping;
-		this.playerDbStoreMapping = playerDbStoreMapping;
-		// console.log('initialiseDB storeMapping: ', storeMapping);
-		await this.indexedDB.initDatabase(
-			storeMapping,
-			playerDbStoreMapping,
-			`${this.dbName}`
-		);
-		console.log(
-			`database with name of ${this.dbName} initialised`
-		);
+		return new Promise<void>(async (resolve, reject) => {
+			try {
+				// console.log('accessing playerdb array test: ', data.playerdb.root[0].item);
+				// console.log('matchType :', this.matchType);
+				const storeMapping = this.mapData(data);
+				const playerDbStoreMapping = this.getPlayerDbStoreMapping(data);
+				this.storeMapping = storeMapping;
+				this.playerDbStoreMapping = playerDbStoreMapping;
+				// console.log('initialiseDB storeMapping: ', storeMapping);
+				await this.indexedDB.initDatabase(
+					storeMapping,
+					playerDbStoreMapping,
+					`${this.dbName}`
+				);
+				console.log(`database with name of ${this.dbName} initialised`);
+
+				resolve();
+			} catch (err) {
+				reject(err);
+			}
+		});
 	};
 
-	async doesDbExist() {
-		try {
-			const exists = await this.indexedDB.doesDatabaseExist(
-				`${this.dbName}`
-			);
-			return exists;
-		} catch (err) {
-			console.error('Error checking db', err);
-			return false;
-		}
-	}
+
 
 	private calculateTotalStores(data: any): number {
 		const playerDbStoreMapping = this.getPlayerDbStoreMapping(data);
@@ -212,29 +210,20 @@ export class DataService implements OnInit, OnDestroy {
 		localStorage.setItem('STORE_NAMES', JSON.stringify(combined));
 	}
 
-	// deleteIndexedDBDatabase(): Promise<void> {
-	// 	return new Promise<void>((resolve, reject) => {
-	// 		const deleteRequest = indexedDB.deleteDatabase(`${this.dbName}`);
+	deleteIndexedDBDatabase(): Promise<void> {
+		return new Promise<void>((resolve, reject) => {
+			const deleteRequest = indexedDB.deleteDatabase(`${this.dbName}`);
 
-	// 		deleteRequest.onsuccess = () => {
-	// 			console.log(`IndexedDB database '${this.dbName}' deleted successfully`);
-	// 			resolve();
-	// 		};
+			deleteRequest.onsuccess = () => {
+				console.log(`IndexedDB database '${this.dbName}' deleted successfully`);
+				resolve();
+			};
 
-	// 		deleteRequest.onerror = () => {
-	// 			console.error(`Error deleting IndexedDB database '${this.dbName}'`);
-	// 			reject(new Error(`Failed to delete IndexedDB database '${this.dbName}'`));
-	// 		};
-	// 	});
-	// }
-
-	async deleteIndexedDBDatabase(): Promise<void> {
-		try {
-			console.log('data service delete db called');
-			await this.indexedDB.deleteIndexedDBDatabase(this.dbName);
-		} catch (error) {
-			throw error;
-		}
+			deleteRequest.onerror = () => {
+				console.error(`Error deleting IndexedDB database '${this.dbName}'`);
+				reject(new Error(`Failed to delete IndexedDB database '${this.dbName}'`));
+			};
+		});
 	}
 
 	ngOnDestroy(): void {

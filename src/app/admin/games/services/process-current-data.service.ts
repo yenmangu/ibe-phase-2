@@ -82,7 +82,7 @@ export class ProcessCurrentDataService {
 
 			const sides = await this.indexedDB.readFromDB([store], 'sidenamestxt');
 			const settingsText = await this.indexedDB.readFromDB([store], 'settingstxt');
-			console.log(settingsText);
+			// console.log(settingsText);
 			console.log('people initial: ', people);
 			const movementValue = this.destructureValue(movement, 'current_game_data');
 			const peopleValue = this.destructureValue(people, 'current_game_data');

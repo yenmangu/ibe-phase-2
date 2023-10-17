@@ -14,6 +14,7 @@ import { SidenavService } from '../services/sidenav.service';
 import { Subject, Subscription, startWith, takeUntil } from 'rxjs';
 import { UserDetailsService } from '../services/user-details.service';
 import { IndexedDatabaseStatusService } from '../services/indexed-database-status.service';
+import { SharedGameDataService } from 'src/app/admin/games/services/shared-game-data.service';
 
 @Component({
 	selector: 'app-header',
@@ -39,7 +40,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 		private sidenavService: SidenavService,
 		public userDetailsService: UserDetailsService,
 		private cdr: ChangeDetectorRef,
-		private IDBStatus: IndexedDatabaseStatusService
+		private IDBStatus: IndexedDatabaseStatusService,
+		private sharedGameDataService: SharedGameDataService
 	) {}
 
 	ngOnInit(): void {
@@ -58,8 +60,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 		return this.isAuthenticated;
 	}
 
-	refresh():void {
-		
+	refreshDatabase(): void {
+		this.sharedGameDataService.triggerRefreshDatabase();
 	}
 
 	logout(): void {
@@ -74,7 +76,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 	forgotPassword(): void {
 		console.log('Forgot password clicked');
 	}
-
 
 	ngOnDestroy(): void {
 		this.sidenavSubscription.unsubscribe();

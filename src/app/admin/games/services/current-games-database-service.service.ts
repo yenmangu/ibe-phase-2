@@ -15,7 +15,6 @@ import { ProcessHandsService } from './process-hands.service';
 import { FetchCurrentDataService } from './fetch-current-data.service';
 import { ProcessCurrentDataService } from './process-current-data.service';
 import { IndexedDatabaseStatusService } from 'src/app/shared/services/indexed-database-status.service';
-
 import { tag } from 'rxjs-spy/operators';
 tag;
 
@@ -72,14 +71,8 @@ export class CurrentGamesDatabaseServiceService {
 		);
 	}
 
-	async refreshDatabase(): Promise<void> {
-		try {
-			console.log('service refresh db called');
-
-			await this.dataService.deleteIndexedDBDatabase();
-		} catch (error) {
-			throw error;
-		}
+	async refreshDatabase (){
+		this.dataService.deleteIndexedDBDatabase()
 	}
 
 	private async waitForDBInitialization() {
