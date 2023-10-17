@@ -49,6 +49,7 @@ import { DatabaseLandingComponent } from './database-landing/database-landing.co
 import { AdvancedOptionsDialogComponent } from './database-landing/advanced-options-dialog/advanced-options-dialog.component';
 import { HandPaginationComponent } from './current-game/hand-pagination/hand-pagination.component';
 import { HandDisplayComponent } from './current-game/hand-display/hand-display.component';
+import { PdfGenerationComponent } from './current-game/game-players/pdf-generation/pdf-generation.component';
 
 
 @NgModule({
@@ -72,6 +73,7 @@ import { HandDisplayComponent } from './current-game/hand-display/hand-display.c
 		AdvancedOptionsDialogComponent,
   HandPaginationComponent,
   HandDisplayComponent,
+  PdfGenerationComponent,
 
 	],
 	imports: [

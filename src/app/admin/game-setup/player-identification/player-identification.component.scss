@@ -1,0 +1,95 @@
+// :host {
+// 	display: flex;
+// 	flex-direction: column;
+// }
+
+// .grid-form {
+// 	display: grid;
+// 	grid-template-columns: repeat(4,1fr);
+// 	grid-gap: 1rem
+// }
+
+// .grid-container {
+// 	width: 100%;
+// 	display: grid;
+// 	grid-template-columns: repeat(4, 1fr);
+// 	grid-gap: 1rem
+// }
+
+// .grid-item{
+// 	text-align: center
+// }
+// .static-row {
+//   display: grid;
+//   grid-template-columns: 2fr 1fr 1fr 1fr;
+//   align-items: center;
+// }
+
+// .choices {
+//   display: grid;
+//   grid-template-columns: 2fr 1fr 1fr 1fr;
+//   grid-gap: 10px;
+// }
+
+// .choice-wrapper {
+//   display: grid;
+//   grid-template-columns: 2fr 1fr 1fr 1fr;
+//   grid-gap: 10px;
+//   align-items: center;
+// }
+
+// .top-level {
+//   grid-column: 1 / span 2;
+// }
+
+// .sub-level {
+//   grid-column: 3 / span 2;
+// }
+
+// button {
+//   grid-column: span 1;
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+// }
+
+// mat-checkbox {
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+// }
+
+// mat-form-field {
+//   width: 100%;
+// }
+
+.container {
+	max-width: 500px;
+
+	gap: 2rem;
+}
+
+.grid-row,
+.addiional-choices {
+	width: 100%;
+}
+.grid-row {
+	position: relative;
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	grid-gap: 1rem;
+}
+
+.grid-item.right {
+	position: absolute;
+	display: flex;
+	flex-direction: row;
+	gap: 2rem;
+	justify-content: space-between;
+	right: 0;
+	// width: 3rem;
+}
+
+.add {
+	width: 3rem;
+}

@@ -58,6 +58,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 		return this.isAuthenticated;
 	}
 
+	refresh():void {
+		
+	}
+
 	logout(): void {
 		this.IDBStatus.resetProgress();
 		this.authService.logout();
@@ -70,6 +74,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 	forgotPassword(): void {
 		console.log('Forgot password clicked');
 	}
+
 
 	ngOnDestroy(): void {
 		this.sidenavSubscription.unsubscribe();

@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { AdminRoutingModule } from './admin-routing.module';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 // Material
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
@@ -23,6 +23,10 @@ import { AccountSettingsComponent } from './account-settings/account-settings.co
 import { GamesModule } from './games/games.module';
 import { GameSetupComponent } from './game-setup/game-setup.component';
 import { BoardsScoringComponent } from './game-setup/boards-scoring/boards-scoring.component';
+import { FormControlPipe } from '../form-control.pipe';
+import { PlayerIdentificationComponent } from './game-setup/player-identification/player-identification.component';
+import { AppInterfaceComponent } from './game-setup/app-interface/app-interface.component';
+import { NamingNumberingComponent } from './game-setup/naming-numbering/naming-numbering.component';
 
 @NgModule({
 	declarations: [
@@ -31,12 +35,17 @@ import { BoardsScoringComponent } from './game-setup/boards-scoring/boards-scori
 		GameActionsComponent,
 		AccountSettingsComponent,
 		GameSetupComponent,
-		BoardsScoringComponent
+		BoardsScoringComponent,
+		PlayerIdentificationComponent,
+		FormControlPipe,
+		AppInterfaceComponent,
+		NamingNumberingComponent
 	],
 	imports: [
 		CommonModule,
 		AdminRoutingModule,
 		ReactiveFormsModule,
+		FormsModule,
 		// Material
 		MatSidenavModule,
 		MatButtonModule,

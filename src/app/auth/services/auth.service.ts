@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 import {
 	BehaviorSubject,
 	Observable,
@@ -37,6 +38,7 @@ export class AuthService {
 
 	constructor(
 		private http: HttpClient,
+		private router: Router,
 		private tokenService: TokenService,
 		private sharedDataService: SharedDataService,
 		private checkSessionService: CheckSessionService,
@@ -145,6 +147,7 @@ export class AuthService {
 		localStorage.clear();
 		// this.isAuthedSubject.complete()
 		console.log('User logged out successfully');
+		this.router.navigate(['/home']);
 		location.reload();
 	}
 }
