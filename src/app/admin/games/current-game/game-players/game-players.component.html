@@ -37,10 +37,21 @@
 </div>
 <div class="container row table">
 	<ng-container *ngIf="initialTableData">
+	<div
+		class="spinner"
+		*ngIf="isLoading">
+		<mat-spinner></mat-spinner>
+	</div>
+	<ng-container *ngIf="!isLoading && initialTableData && matchType === 'pairs'">
 		<app-pairs-table
 			*ngIf="initialTableData"
 			[initialTableData]="initialTableData"
 			[loadingStatus]="isLoading"></app-pairs-table>
+	</ng-container>
+	<ng-container *ngIf="!isLoading && initialTableData && matchType === 'teams'">
+		<app-teams-table
+			[initialTableData]="initialTableData"
+			[loadingStatus]="isLoading"></app-teams-table>
 	</ng-container>
 	<!-- <app-match-tables [initialTableData]="initialTableData"
 		(formValuesChanged)="(onTeamTableValueChanged)"></app-match-tables> -->

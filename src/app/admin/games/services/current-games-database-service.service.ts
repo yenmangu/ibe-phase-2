@@ -10,10 +10,12 @@ import {
 	throwError,
 	catchError
 } from 'rxjs';
+import { DataService } from './data.service';
 import { ProcessHandsService } from './process-hands.service';
 import { FetchCurrentDataService } from './fetch-current-data.service';
 import { ProcessCurrentDataService } from './process-current-data.service';
 import { IndexedDatabaseStatusService } from 'src/app/shared/services/indexed-database-status.service';
+
 import { tag } from 'rxjs-spy/operators';
 tag;
 
@@ -32,6 +34,7 @@ export class CurrentGamesDatabaseServiceService {
 	isDbInitialised: boolean = false;
 
 	constructor(
+		private dataService: DataService,
 		private processHands: ProcessHandsService,
 		private fetchMatchData: FetchCurrentDataService,
 		private iDBStatus: IndexedDatabaseStatusService,
@@ -67,6 +70,16 @@ export class CurrentGamesDatabaseServiceService {
 				return throwError(() => error);
 			})
 		);
+	}
+
+	async refreshDatabase(): Promise<void> {
+		try {
+			console.log('service refresh db called');
+
+			await this.dataService.deleteIndexedDBDatabase();
+		} catch (error) {
+			throw error;
+		}
 	}
 
 	private async waitForDBInitialization() {
