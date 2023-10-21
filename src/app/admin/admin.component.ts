@@ -2,8 +2,21 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { SharedDataService } from '../shared/services/shared-data.service';
 import { UserDetailsService } from '../shared/services/user-details.service';
 import { AuthService } from '../auth/services/auth.service';
-import { Observable, Subscription, take } from 'rxjs';
+import {
+	Observable,
+	Subject,
+	Subscription,
+	catchError,
+	combineLatest,
+	of,
+	switchMap,
+	take,
+	takeUntil
+} from 'rxjs';
 import { IndexedDatabaseStatusService } from '../shared/services/indexed-database-status.service';
+import { DataService } from './games/services/data.service';
+import { CurrentEventService } from './games/services/current-event.service';
+import { SharedGameDataService } from './games/services/shared-game-data.service';
 
 @Component({
 	selector: 'app-admin',
@@ -17,12 +30,17 @@ export class AdminComponent implements OnInit, OnDestroy {
 	gameCodeSubscription = new Subscription();
 	gameCode$: Observable<string>;
 	directorKey$: Observable<string>;
+	private destroy$ = new Subject<void>();
+	loadingStatus: number = 0;
 
 	constructor(
 		private sharedDataService: SharedDataService,
 		public authService: AuthService,
 		private userDetailsService: UserDetailsService,
-		private IDBStatus: IndexedDatabaseStatusService
+		private IDBStatus: IndexedDatabaseStatusService,
+		private dataService: DataService,
+		private currentEventService: CurrentEventService,
+		private sharedGameData: SharedGameDataService
 	) {
 		// console.log('admin loaded');
 	}
@@ -38,8 +56,100 @@ export class AdminComponent implements OnInit, OnDestroy {
 			console.log('Dir Key: ', dirKey);
 		});
 
+		this.subscribeToUserDetails();
+
 		this.IDBStatus.resetProgress();
+
+		this.IDBStatus.dataProgress$.subscribe(status => {
+			this.loadingStatus = status;
+		});
 	}
+
+	private subscribeToUserDetails(): void {
+		combineLatest([
+			this.userDetailsService.gameCode$,
+			this.userDetailsService.directorKey$
+		])
+			.pipe(
+				takeUntil(this.destroy$),
+				switchMap(([gamecode, dirkey]) => {
+					if (gamecode && dirkey) {
+						this.gameCode = gamecode;
+						this.dirKey = dirkey;
+						// const exists = this.checkDBExists
+
+						return this.fetchData(this.gameCode, this.dirKey);
+					} else {
+						console.error('no gamecode or dirkey');
+						return of('EMPTY');
+					}
+				}),
+				switchMap(data => {
+					if (data !== 'EMPTY') {
+						return this.processData(data);
+					} else {
+						return of(null);
+					}
+				})
+			)
+			.subscribe();
+	}
+
+	async checkDBExists(data) {
+		try {
+			const exists = await this.dataService.checkDatabase(data);
+			const dev_exists = await this.dataService.dev_checkDatabase()
+			if (dev_exists) {
+				return exists;
+			}
+		} catch (error) {
+			console.error('error checking database');
+		}
+	}
+
+	fetchData(gameCode: string, dirKey: string): Observable<any> {
+		return this.currentEventService.getLiveData(gameCode, dirKey).pipe(
+			catchError(error => {
+				console.error('error calling current event service', error);
+				return of(null);
+			})
+		);
+	}
+	private async processData(data) {
+		console.log('processData() called with data: ', data);
+		try {
+			const dbExists = await this.dataService.checkDatabase(data);
+			if (dbExists) {
+				console.log('db exists');
+				return;
+			} else {
+				await this.dataService.initialiseDB(data);
+				await this.storeInitialData(data);
+			}
+			console.log('Store initial data complete');
+		} catch (err) {
+			console.error('Error during data processing: ', err);
+		}
+	}
+
+	async storeInitialData(data) {
+		return new Promise<void>(async (resolve, reject) => {
+			try {
+				if (!data) {
+					throw new Error('Error calling server');
+				}
+				const dbResponse = await this.dataService.storeData(data);
+				if (!dbResponse) {
+					throw new Error('Error calling data service');
+				}
+				this.sharedGameData.setLoadingStatus(false);
+				resolve();
+			} catch (err) {
+				reject(`Error performing high level requestAndStore(): ${err}`);
+			}
+		});
+	}
+
 	ngOnDestroy(): void {
 		this.gameCodeSubscription.unsubscribe();
 		this.dirKeySubscription.unsubscribe();

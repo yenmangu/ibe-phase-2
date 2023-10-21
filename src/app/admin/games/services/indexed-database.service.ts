@@ -69,6 +69,8 @@ export class IndexedDatabaseService {
 		if (databaseNames.some(dbInfo => dbInfo.name === dbName)) {
 			this.db = await openDB(dbName);
 			const actual = Array.from(this.db.objectStoreNames);
+
+			
 			return expectedStores.every(expected => actual.includes(expected));
 		}
 		return false;

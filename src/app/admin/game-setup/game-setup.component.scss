@@ -1,10 +1,18 @@
 :host {
 	width: 100%;
-	overflow-y: hidden;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	overflow-y: auto;
 }
 .main {
 	padding: 2rem;
 	align-items: stretch;
+}
+
+.pin-column {
+	width: max-content;
+	gap: 0.4rem;
 }
 
 .gap-1 {

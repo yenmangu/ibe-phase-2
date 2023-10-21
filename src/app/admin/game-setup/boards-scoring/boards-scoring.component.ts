@@ -5,7 +5,8 @@ import {
 	FormArray,
 	Form,
 	FormControl,
-	AbstractControl
+	AbstractControl,
+	Validators
 } from '@angular/forms';
 import { BoardsScoringInterface } from '../../games/data/boards-scoring';
 import { boardsScoringData } from '../../games/data/data-store/boards-scoring-data';
@@ -24,11 +25,13 @@ export class BoardsScoringComponent implements OnInit {
 
 	constructor(private fb: FormBuilder) {
 		this.scoringConfigForm = this.fb.group({
-			scoringDataArray: this.fb.array([])
+			scoringDataArray: this.fb.array([]),
+			neuberg: null,
+			tables: null
 		});
 
-		boardsScoringData.forEach((item: BoardsScoringInterface) => {
-			this.addScoringDataItem(item);
+		boardsScoringData.forEach((item: BoardsScoringInterface, index: number) => {
+			this.addScoringDataItem(item, index);
 		});
 	}
 
@@ -37,8 +40,14 @@ export class BoardsScoringComponent implements OnInit {
 		console.log('form controls: ', this.scoringDataArray.controls);
 	}
 
-	scoringFormEmit(): void {
-		const data = this.scoringConfigForm.value;
+	getBoardsScoringValues(): void {
+		const data = {
+			formName: 'boardsScoring',
+			xmlElement: 'scosets',
+			formData: this.scoringConfigForm.value
+		};
+		console.log('scoring form: ', data);
+
 		this.boardScoringEmitter.emit(data);
 	}
 
@@ -50,14 +59,23 @@ export class BoardsScoringComponent implements OnInit {
 		return this.scoringConfigForm.get('scoringDataArray') as FormArray;
 	}
 
-	addScoringDataItem(data: BoardsScoringInterface): void {
-		this.scoringDataArray.push(
-			this.fb.group({
-				defaultSelected: new FormControl(data.defaultSelected),
-				preferredDuration: new FormControl(data.preferredDuration),
-				scoringMethods: new FormControl(data.scoringMethods)
-			})
-		);
+
+	addScoringDataItem(data: BoardsScoringInterface, index: number): void {
+		const newGroup = this.fb.group({
+			defaultSelected: new FormControl(false),
+			preferredDuration: new FormControl(data.preferredDuration[0].value),
+			scoringMethods: new FormControl(data.scoringMethods[0].value)
+		});
+		newGroup.get('defaultSelected').valueChanges.subscribe((value: boolean) => {
+			if (value) {
+				this.scoringDataArray.controls.forEach((control, i) => {
+					if (i !== index) {
+						control.get('defaultSelected')?.setValue(false);
+					}
+				});
+			}
+		});
+		this.scoringDataArray.push(newGroup);
 	}
 
 	get formControls() {

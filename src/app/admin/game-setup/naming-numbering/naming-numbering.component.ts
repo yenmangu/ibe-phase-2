@@ -1,12 +1,13 @@
 import { Component, Output, EventEmitter, OnInit } from '@angular/core';
 import { FormBuilder, FormArray, FormControl, FormGroup } from '@angular/forms';
+import { distinctUntilChanged } from 'rxjs';
 
 @Component({
 	selector: 'app-naming-numbering',
 	templateUrl: './naming-numbering.component.html',
 	styleUrls: ['./naming-numbering.component.scss']
 })
-export class NamingNumberingComponent {
+export class NamingNumberingComponent implements OnInit {
 	@Output() namingNumberingEmitter: EventEmitter<any> = new EventEmitter<any>();
 
 	mitchellEwConfig = [
@@ -16,7 +17,7 @@ export class NamingNumberingComponent {
 		{ display: 'Follow on from N/S', value: 'follow_ns' }
 	];
 	tableNamingConfig = [
-		{ display: '1A-8A, 1B-8B etc', value: '' },
+		{ display: '1A-8A, 1B-8B etc', value: 'a' },
 		{ display: 'Add at least ten per section, start from 1', value: 'from_1' },
 		{ display: 'Add at least ten per section, start from 11', value: 'from_11' },
 		{ display: 'Strictly sequntial', value: 'sequential' }
@@ -39,26 +40,31 @@ export class NamingNumberingComponent {
 		this.namingNumberingForm = new FormGroup(this.createFormControls());
 	}
 
+	ngOnInit(): void {
+		// this.namingNumberingForm.valueChanges
+		// 	.pipe(distinctUntilChanged())
+		// 	.subscribe();
+	}
+
 	createFormControls() {
 		const controls = {};
 
-		this.mitchellEwConfig.forEach(item => {
-			controls[item.display] = new FormControl(item.value);
-		});
-		this.tableNamingConfig.forEach(item => {
-			controls[item.display] = new FormControl(item.value);
-		});
-		this.shortenPlayerNames.forEach(item => {
-			controls[item.display] = new FormControl(item.value);
-		});
-		this.defaultNameStyle.forEach(item => {
-			controls[item.display] = new FormControl(item.value);
-		});
-		return controls;
+		return {
+			mitchellEWNumbers: new FormControl(this.mitchellEwConfig[0].value),
+			tableNaming: new FormControl(this.tableNamingConfig[0].value),
+			shortenPlayerNames: new FormControl(this.shortenPlayerNames[0].value),
+			defaultNameStyle: new FormControl(this.defaultNameStyle[0].value)
+		};
 	}
 
-	getFormValues(): void {
-		const data = this.namingNumberingForm.value;
+	getNamingNumberingValues(): void {
+		const data ={
+			formName: 'namingNumbering',
+			xmlElement:'namsets',
+			formData:this.namingNumberingForm.value
+		}
+		// const data = this.namingNumberingForm.value;
+		console.log('naming numbering values: ', this.namingNumberingForm.value);
 		this.namingNumberingEmitter.emit(data);
 	}
 }

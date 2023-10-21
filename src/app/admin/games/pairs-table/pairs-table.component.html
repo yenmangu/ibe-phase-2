@@ -4,213 +4,248 @@
 		(ngSubmit)="onSubmit()">
 		<div class="table-wrapper">
 			<table *ngIf="!tableConfig.timesLunch">
-				<tr class="header-row">
-					<th>Table Number</th>
-					<th
-						class="conditional"
-						*ngIf="tableConfig.venues">
-						Venues
-					</th>
-					<th
-						*ngIf="tableConfig.boardCol"
-						class="conditional empty">
-						Colours
-					</th>
-					<th class="north">North</th>
-					<th class="divider"></th>
-					<th class="south">South</th>
-					<th
-						*ngIf="tableConfig.stratification"
-						class="conditional empty">
-						Stratification
-					</th>
-					<th
-						*ngIf="tableConfig.sitters"
-						class="conditional empty sitters">
-						Sitters
-					</th>
-					<th
-						*ngIf="tableConfig.adjustments"
-						class="conditional empty">
-						Adjust
-					</th>
-					<th
-						*ngIf="tableConfig.handicaps"
-						class="conditional empty">
-						Handicap
-					</th>
-					<th
-						*ngIf="tableConfig.labels"
-						class="conditional empty">
-						Labels
-					</th>
-					<th
-						*ngIf="tableConfig.abbrev"
-						class="conditional empty">
-						Abbreviations
-					</th>
-					<th class="split divider"></th>
-					<th class="east">East</th>
-					<th class="divider"></th>
-					<th class="west">West</th>
-					<th
-						*ngIf="tableConfig.stratification"
-						class="conditional empty">
-						Stratification
-					</th>
-					<th
-						*ngIf="tableConfig.sitters"
-						class="conditional empty sitters">
-						Sitters
-					</th>
-					<th
-						*ngIf="tableConfig.adjustments"
-						class="conditional empty">
-						Adjust
-					</th>
-					<th
-						*ngIf="tableConfig.handicaps"
-						class="conditional empty">
-						Handicap
-					</th>
-					<th
-						*ngIf="tableConfig.labels"
-						class="conditional empty">
-						Labels
-					</th>
-					<th
-						*ngIf="tableConfig.abbrev"
-						class="conditional empty">
-						Abbreviations
-					</th>
-				</tr>
-				<ng-container *ngFor="let tableNumber of getTableNumbers(); let i = index">
-					<tr
-						class="tables-row"
-						*ngIf="pairsForm?.get(tableNumber.toString())"
-						[formGroupName]="tableNumber.toString()">
-						<td>{{ i + 1 }}</td>
-						<!-- Venues -->
-						<ng-container *ngIf="tableConfig.venues">
-							<td
+				<div class="header-flex">
+					<tr class="header-row">
+						<div class="north-south">
+							<th>Table Number</th>
+							<th
 								class="conditional"
-								*ngFor="let column of ['venues']">
-								<input [formControlName]="column" />
-							</td>
-						</ng-container>
-						<ng-container *ngIf="tableConfig.boardCol">
-							<td
-								class="conditional"
-								*ngFor="let column of ['boardCol']">
-								<input [formControlName]="column" />
-							</td>
-						</ng-container>
-						<td *ngFor="let column of ['north']">
-							<input [formControlName]="column" />
-						</td>
-						<td class="divider">&</td>
-						<td *ngFor="let column of ['south']">
-							<input [formControlName]="column" />
-						</td>
-						<ng-container *ngIf="tableConfig.stratification">
-							<td
-								class="conditional"
-								*ngFor="let column of ['ns_stratification']">
-								<input [formControlName]="column" />
-							</td>
-						</ng-container>
-						<ng-container *ngIf="tableConfig.sitters">
-							<td
-								class="conditional sitters"
-								*ngFor="let column of ['ns_sitters']">
-								<input
-									[formControlName]="column"
-									type="checkbox" />
-							</td>
-						</ng-container>
-						<ng-container *ngIf="tableConfig.adjustments">
-							<td
-								class="conditional"
-								*ngFor="let column of ['ns_adjustments']">
-								<input [formControlName]="column" />
-							</td>
-						</ng-container>
-						<ng-container *ngIf="tableConfig.handicaps">
-							<td
-								class="conditional"
-								*ngFor="let column of ['ns_handicaps']">
-								<input [formControlName]="column" />
-							</td>
-						</ng-container>
-						<ng-container *ngIf="tableConfig.labels">
-							<td
-								class="conditional"
-								*ngFor="let column of ['ns_labels']">
-								<input [formControlName]="column" />
-							</td>
-						</ng-container>
-						<ng-container *ngIf="tableConfig.abbrev">
-							<td
-								class="conditional"
-								*ngFor="let column of ['ns_abbrev']">
-								<input [formControlName]="column" />
-							</td>
-						</ng-container>
-						<td class="divider split"></td>
-						<td *ngFor="let column of ['east']">
-							<input [formControlName]="column" />
-						</td>
-						<td class="divider">&</td>
-						<td *ngFor="let column of ['west']">
-							<input [formControlName]="column" />
-						</td>
-						<ng-container *ngIf="tableConfig.stratification">
-							<td
-								class="conditional"
-								*ngFor="let column of ['ew_stratification']">
-								<input [formControlName]="column" />
-							</td>
-						</ng-container>
-						<ng-container *ngIf="tableConfig.sitters">
-							<td
-								class="conditional sitters"
-								*ngFor="let column of ['ew_sitters']">
-								<input
-									[formControlName]="column"
-									type="checkbox" />
-							</td>
-						</ng-container>
-						<ng-container *ngIf="tableConfig.adjustments">
-							<td
-								class="conditional"
-								*ngFor="let column of ['ew_adjustments']">
-								<input [formControlName]="column" />
-							</td>
-						</ng-container>
-						<ng-container *ngIf="tableConfig.handicaps">
-							<td
-								class="conditional"
-								*ngFor="let column of ['ew_handicaps']">
-								<input [formControlName]="column" />
-							</td>
-						</ng-container>
-						<ng-container *ngIf="tableConfig.labels">
-							<td
-								class="conditional"
-								*ngFor="let column of ['ew_labels']">
-								<input [formControlName]="column" />
-							</td>
-						</ng-container>
-						<ng-container *ngIf="tableConfig.abbrev">
-							<td
-								class="conditional"
-								*ngFor="let column of ['ew_abbrev']">
-								<input [formControlName]="column" />
-							</td>
-						</ng-container>
+								*ngIf="tableConfig.venues">
+								Venues
+							</th>
+							<th
+								*ngIf="tableConfig.boardCol"
+								class="conditional empty">
+								Colours
+							</th>
+							<th class="north">North</th>
+							<th class="divider"></th>
+							<th class="south">South</th>
+							<th
+								*ngIf="tableConfig.stratification"
+								class="conditional empty">
+								Stratification
+							</th>
+							<th
+								*ngIf="tableConfig.sitters"
+								class="conditional empty sitters">
+								Sitters
+							</th>
+							<th
+								*ngIf="tableConfig.adjustments"
+								class="conditional empty">
+								Adjust
+							</th>
+							<th
+								*ngIf="tableConfig.handicaps"
+								class="conditional empty">
+								Handicap
+							</th>
+							<th
+								*ngIf="tableConfig.labels"
+								class="conditional empty">
+								Labels
+							</th>
+							<th
+								*ngIf="tableConfig.abbrev"
+								class="conditional empty">
+								Abbreviations
+							</th>
+						</div>
+						<th class="split divider"></th>
+						<div class="east-west">
+							<th class="east">East</th>
+							<th class="divider"></th>
+							<th class="west">West</th>
+							<th
+								*ngIf="tableConfig.stratification"
+								class="conditional empty">
+								Stratification
+							</th>
+							<th
+								*ngIf="tableConfig.sitters"
+								class="conditional empty sitters">
+								Sitters
+							</th>
+							<th
+								*ngIf="tableConfig.adjustments"
+								class="conditional empty">
+								Adjust
+							</th>
+							<th
+								*ngIf="tableConfig.handicaps"
+								class="conditional empty">
+								Handicap
+							</th>
+							<th
+								*ngIf="tableConfig.labels"
+								class="conditional empty">
+								Labels
+							</th>
+							<th
+								*ngIf="tableConfig.abbrev"
+								class="conditional empty">
+								Abbreviations
+							</th>
+						</div>
 					</tr>
-				</ng-container>
+				</div>
+				<div class="flex">
+					<ng-container
+						*ngFor="let tableNumber of getTableNumbers(); let i = index">
+						<tr
+							class="tables-row"
+							*ngIf="pairsForm?.get(tableNumber.toString())"
+							[formGroupName]="tableNumber.toString()">
+							<div class="north-south">
+								<td>{{ i + 1 }}</td>
+								<!-- Venues -->
+								<ng-container *ngIf="tableConfig.venues">
+									<td
+										class="conditional"
+										*ngFor="let column of ['venues']">
+										<input [formControlName]="column" />
+									</td>
+								</ng-container>
+								<ng-container *ngIf="tableConfig.boardCol">
+									<td
+										class="conditional"
+										*ngFor="let column of ['boardCol']">
+										<input [formControlName]="column" />
+									</td>
+								</ng-container>
+								<td *ngFor="let column of ['north']">
+									<input [formControlName]="column" />
+								</td>
+								<td class="divider">&</td>
+								<td *ngFor="let column of ['south']">
+									<input [formControlName]="column" />
+								</td>
+								<ng-container *ngIf="tableConfig.stratification">
+									<td
+										class="conditional"
+										*ngFor="let column of ['ns_stratification']">
+										<input [formControlName]="column" />
+									</td>
+								</ng-container>
+								<ng-container *ngIf="tableConfig.sitters">
+									<td
+										class="conditional sitters"
+										*ngFor="let column of ['ns_sitters']">
+										<input
+											[formControlName]="column"
+											type="checkbox" />
+									</td>
+								</ng-container>
+								<ng-container *ngIf="tableConfig.adjustments">
+									<td
+										class="conditional"
+										*ngFor="let column of ['ns_adjustments']">
+										<input [formControlName]="column" />
+									</td>
+								</ng-container>
+								<ng-container *ngIf="tableConfig.handicaps">
+									<td
+										class="conditional"
+										*ngFor="let column of ['ns_handicaps']">
+										<input [formControlName]="column" />
+									</td>
+								</ng-container>
+								<ng-container *ngIf="tableConfig.labels">
+									<td
+										class="conditional"
+										*ngFor="let column of ['ns_labels']">
+										<input [formControlName]="column" />
+									</td>
+								</ng-container>
+								<ng-container *ngIf="tableConfig.abbrev">
+									<td
+										class="conditional"
+										*ngFor="let column of ['ns_abbrev']">
+										<input [formControlName]="column" />
+									</td>
+								</ng-container>
+							</div>
+							<td class="divider split"></td>
+							<div class="east-west">
+								<td *ngFor="let column of ['east']">
+									<input [formControlName]="column" />
+								</td>
+								<td class="divider">&</td>
+								<td *ngFor="let column of ['west']">
+									<input [formControlName]="column" />
+								</td>
+								<ng-container *ngIf="tableConfig.stratification">
+									<td
+										class="conditional"
+										*ngFor="let column of ['ew_stratification']">
+										<input [formControlName]="column" />
+									</td>
+								</ng-container>
+								<ng-container *ngIf="tableConfig.sitters">
+									<td
+										class="conditional sitters"
+										*ngFor="let column of ['ew_sitters']">
+										<input
+											[formControlName]="column"
+											type="checkbox" />
+									</td>
+								</ng-container>
+								<ng-container *ngIf="tableConfig.adjustments">
+									<td
+										class="conditional"
+										*ngFor="let column of ['ew_adjustments']">
+										<input [formControlName]="column" />
+									</td>
+								</ng-container>
+								<ng-container *ngIf="tableConfig.handicaps">
+									<td
+										class="conditional"
+										*ngFor="let column of ['ew_handicaps']">
+										<input [formControlName]="column" />
+									</td>
+								</ng-container>
+								<ng-container *ngIf="tableConfig.labels">
+									<td
+										class="conditional"
+										*ngFor="let column of ['ew_labels']">
+										<input [formControlName]="column" />
+									</td>
+								</ng-container>
+								<ng-container *ngIf="tableConfig.abbrev">
+									<td
+										class="conditional"
+										*ngFor="let column of ['ew_abbrev']">
+										<input [formControlName]="column" />
+									</td>
+								</ng-container>
+							</div>
+						</tr>
+					</ng-container>
+				</div>
 			</table>
+			<ng-container *ngIf="currentBreakpoint === 'handset'">
+				<div class="mobile-only">
+					<table>
+						<tr>
+							<th class="north">North</th>
+							<th class="South">South</th>
+						</tr>
+						<tr>
+							<tbody></tbody>
+						</tr>
+					</table>
+					<table>
+						<tr>
+							<th class="east">East</th>
+							<th class="west">West</th>
+						</tr>
+						<tr>
+							<tbody></tbody>
+						</tr>
+					</table>
+				</div>
+			</ng-container>
 			<table *ngIf="tableConfig.timesLunch">
 				<tr>
 					<th>Table Number</th>

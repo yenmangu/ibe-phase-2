@@ -10,8 +10,19 @@
 	</ng-container>
 
 	<span>IBEScore Companion</span>
+
+	<span class="spacer"></span>
+	<!-- <button
+		mat-flat-button
+		(click)=""
+		class="button-white">
+		Get Starting Lineup
+	</button> -->
+
 	<span class="spacer"></span>
 	<button
+		*ngIf="authService.isAuthedSubject$ | async"
+		class="button-white"
 		mat-flat-button
 		color="primary"
 		(click)="refreshDatabase()">

@@ -9,6 +9,7 @@
 
 <ng-container *ngIf="dbInit && progress === 100">
 	<mat-tab-group
+	[(selectedIndex)]="selectedTabIndex"
 		animationDuration="0ms"
 		(selectedTabChange)="onTabChange($event)">
 		<mat-tab
@@ -36,13 +37,14 @@
 </ng-container>
 
 <ng-template #currentGameTab>
-	<app-current-game></app-current-game>
+	<app-current-game *ngIf="selectedTabIndex === 0"></app-current-game>
 </ng-template>
 
 <ng-template #historicGamesTab>
-	<app-historic-games></app-historic-games>
+	<app-historic-games *ngIf="selectedTabIndex === 1"></app-historic-games>
 </ng-template>
 
 <ng-template #databaseLanding>
-	<app-database-landing></app-database-landing>
+	<app-database-landing *ngIf="selectedTabIndex === 2"></app-database-landing>
 </ng-template>
+

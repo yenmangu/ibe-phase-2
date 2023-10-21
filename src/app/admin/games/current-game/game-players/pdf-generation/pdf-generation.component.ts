@@ -1,12 +1,18 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-pdf-generation',
-  templateUrl: './pdf-generation.component.html',
-  styleUrls: ['./pdf-generation.component.scss']
+	selector: 'app-pdf-generation',
+	templateUrl: './pdf-generation.component.html',
+	styleUrls: ['./pdf-generation.component.scss']
 })
-export class PdfGenerationComponent {
+export class PdfGenerationComponent implements OnInit {
+	@Input() tableData: any;
 
-  @Input()tableData
+	formData: any = {};
 
+	constructuctor() {}
+
+	ngOnInit(): void {
+		console.log('data in display component: ', this.tableData);
+	}
 }

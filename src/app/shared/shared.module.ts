@@ -15,6 +15,7 @@ import { TeamTableDialogComponent } from './team-table-dialog/team-table-dialog.
 import { EventTableDialogComponent } from './event-table-dialog/event-table-dialog.component';
 import { VenueTableDialogComponent } from './venue-table-dialog/venue-table-dialog.component';
 import { UserDetailsComponent } from './header/user-details/user-details.component';
+import { StartingLineupComponent } from './starting-lineup/starting-lineup.component';
 
 // Modules
 
@@ -28,7 +29,8 @@ import { UserDetailsComponent } from './header/user-details/user-details.compone
   TeamTableDialogComponent,
   EventTableDialogComponent,
   VenueTableDialogComponent,
-  UserDetailsComponent
+  UserDetailsComponent,
+  StartingLineupComponent
 	],
 	imports: [CommonModule, MaterialModule, FormsModule],
 	exports: [HeaderComponent, FooterComponent]

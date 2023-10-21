@@ -1,3 +1,4 @@
+<h3>Player Identification</h3>
 <form
 	[formGroup]="internationalOrganisationForm"
 	class="container column">
@@ -35,7 +36,7 @@
 					<mat-label>Select Organisation</mat-label>
 					<mat-select
 						formControlName="selectedOrganisation"
-						(selectionChange)="onOrgChange($event.value)">
+						(selectionChange)="onOrgChange($event.value, i)">
 						<mat-option
 							*ngFor="let org of organisations"
 							[value]="org.value"
@@ -45,11 +46,11 @@
 				</mat-form-field>
 			</div>
 			<div
-				*ngIf="selectedOrganisations[i]"
+				*ngIf="selectedOrganisations[i] && getSubOrgsForChoice(i).length > 0"
 				class="sub-level grid-item">
 				<mat-form-field>
 					<mat-label> Select Sub-Organisation</mat-label>
-					<mat-select formControlName="selectedSubOrganisation">
+					<mat-select *ngIf="selectedOrganisations" formControlName="selectedSubOrganisation">
 						<mat-option
 							*ngFor="let subOrg of getSubOrgsForChoice(i)"
 							[value]="subOrg.value"

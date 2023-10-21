@@ -14,6 +14,8 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatInput, MatInputModule } from '@angular/material/input';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 //  Custom
 import { NavigationComponent } from './navigation/navigation.component';
 import { AdminComponent } from './admin.component';
@@ -57,6 +59,8 @@ import { NamingNumberingComponent } from './game-setup/naming-numbering/naming-n
 		MatFormFieldModule,
 		MatCheckboxModule,
 		MatSelectModule,
+		MatInputModule,
+		MatProgressBarModule,
 
 		// Custom
 		DashboardModule,

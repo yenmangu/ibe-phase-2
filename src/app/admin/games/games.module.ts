@@ -50,6 +50,7 @@ import { AdvancedOptionsDialogComponent } from './database-landing/advanced-opti
 import { HandPaginationComponent } from './current-game/hand-pagination/hand-pagination.component';
 import { HandDisplayComponent } from './current-game/hand-display/hand-display.component';
 import { PdfGenerationComponent } from './current-game/game-players/pdf-generation/pdf-generation.component';
+import { CreateGameComponent } from './current-game/game-players/create-game/create-game.component';
 
 
 @NgModule({
@@ -74,6 +75,7 @@ import { PdfGenerationComponent } from './current-game/game-players/pdf-generati
   HandPaginationComponent,
   HandDisplayComponent,
   PdfGenerationComponent,
+  CreateGameComponent,
 
 	],
 	imports: [

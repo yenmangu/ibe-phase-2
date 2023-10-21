@@ -39,6 +39,7 @@ export class GamesComponent implements OnInit, OnDestroy {
 	dbInit: boolean = false;
 	progress = 0;
 	private progressSubscription: Subscription;
+	selectedTabIndex = 0
 
 	private destroy$ = new Subject<void>();
 
@@ -66,6 +67,9 @@ export class GamesComponent implements OnInit, OnDestroy {
 				console.log('db progress: ', this.progress);
 				this.progress = value;
 			});
+	}
+	shouldAlignTabsToStart(){
+		return this.selectedTabIndex === 0
 	}
 
 	private subscribeToGameCodeAndDirKey(): void {

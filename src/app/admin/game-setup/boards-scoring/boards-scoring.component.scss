@@ -1,6 +1,6 @@
 :host {
 	padding: 2rem;
-	overflow-y: hidden;
+	// overflow-y: hidden;
 }
 form {
 	padding: 2rem 4rem;
@@ -8,7 +8,7 @@ form {
 }
 
 .grid-container {
-	overflow-y: hidden;
+	// overflow-y: hidden;
 }
 
 .grid-item.header {
@@ -38,4 +38,9 @@ form {
 .grid-item.dropdown {
 	display: flex;
 	justify-items: center;
+}
+
+.scoring {
+	width: max-content;
+	gap: 0.4 rem;
 }

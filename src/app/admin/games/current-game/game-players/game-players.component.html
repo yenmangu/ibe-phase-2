@@ -27,7 +27,6 @@
 				>
 			</mat-select>
 		</mat-form-field>
-	
 	</div>
 </div>
 <div class="container row table">
@@ -51,11 +50,18 @@
 </div>
 <div class="container row download">
 	<button
+		(click)="getPublicLink()"
 		id="start_pdf"
 		mat-flat-button
 		color="accent">
-		Get Start Positions PDF
+		Get Starting Lineup
 	</button>
+	<ng-container *ngIf="publicLink">
+		<div class="container column">
+			<h3>Share this link</h3>
+			{{ publicLink }}
+		</div>
+	</ng-container>
 
 	<mat-form-field
 		class="date-picker"
