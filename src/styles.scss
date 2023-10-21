@@ -14,23 +14,31 @@
 
 $ibe-primary: mat.define-palette($ibe-green-palette, 400, 300, 800);
 $ibe-accent: mat.define-palette($ibe-dark-violet, 600, 300, 600);
+$ibe-teal: mat.define-palette($ibe-teal-palette, 900, 900, 900);
 $ibe-indigo: mat.define-palette($ibe-indigo-dye-palette, 900, 700, 900);
 $ibe-tertiary: mat.define-palette($ibe-magenta-palette, 400, 300, 700);
 $ibe-warn: mat.define-palette($ibe-pumpkin-palette, 900, 800, 900);
 $ibe-alert: mat.define-palette($ibe-red-alert-palette, 900, 700, 900);
+$ibe-whitesmoke: mat.define-palette($ibe-whitesmoke-palette, 100, 100, 100);
 
 $ibescore-theme: mat.define-light-theme(
 	(
 		color: (
 			primary: $ibe-primary,
-			accent: $ibe-accent,
+			accent: $ibe-teal,
+			custom_accent: $ibe-teal,
 			indigo_dye: $ibe-indigo,
 			tertiary: $ibe-tertiary,
 			warn: $ibe-warn,
-			alert: $ibe-alert
+			alert: $ibe-alert,
+			white_color: $ibe-whitesmoke
 		)
 	)
 );
+
+@mixin apply-custom-theme {
+	@include mat.core-theme($ibescore-theme);
+}
 /*
 $new-theme: mat.define-light-theme(
 	(
@@ -100,6 +108,11 @@ body {
 	font-family: Roboto, 'Helvetica Neue', sans-serif;
 }
 
+.mat-mdc-unelevated-button.button-white:not(:disabled) {
+	background-color: whitesmoke !important;
+	color: #005e75 !important;
+	font-weight: 600;
+}
 .mat-drawer-content.content.shrink {
 	overflow-y: hidden;
 }

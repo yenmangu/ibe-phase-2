@@ -7,25 +7,18 @@ import {
 	ViewChild
 } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
-
+import { ActivatedRoute } from '@angular/router';
 import { Subject, takeUntil, Subscription, takeLast } from 'rxjs';
 import { BreakpointService } from 'src/app/shared/services/breakpoint.service';
 import { EventDetailModel, EventDetails } from '../../data/event.options';
-import { SharedDataService } from 'src/app/shared/services/shared-data.service';
 import { TablesService } from '../../services/tables.service';
-import { CurrentGamesDatabaseService } from '../../services/current-games-database.service';
-import { IndexedDatabaseStatusService } from 'src/app/shared/services/indexed-database-status.service';
-import { SharedGameDataService } from '../../services/shared-game-data.service';
 import { PairsTableComponent } from '../../pairs-table/pairs-table.component';
 import { TeamsTableComponent } from '../../teams-table/teams-table.component';
 import { CurrentGamesDatabaseServiceService } from '../../services/current-games-database-service.service';
 import { tag } from 'rxjs-spy/operators';
 import { ApiDataCoordinationService } from '../../services/api/api-data-coordination.service';
 import { UserDetailsService } from 'src/app/shared/services/user-details.service';
-import { CurrentEventService } from '../../services/current-event.service';
-import { DataService } from '../../services/data.service';
-import { ProcessMatchDataService } from '../../services/process-match-data.service';
-import { CurrentEventService } from '../../services/current-event.service';
+import { DomainService } from 'src/app/shared/services/domain.service';
 @Component({
 	selector: 'app-game-players',
 	templateUrl: './game-players.component.html',
@@ -45,6 +38,9 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 	forwardDate: Date | null;
 	gameCode: string = '';
 	dirKey: string = '';
+	routerLink: string;
+	publicLink: string;
+	origin: string;
 
 	matchTypeSubscription: Subscription;
 	matchType: string = '';
@@ -72,16 +68,14 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 	isIndividual: boolean = false;
 
 	constructor(
+		private route: ActivatedRoute,
 		private breakpointService: BreakpointService,
-		private sharedDataService: SharedDataService,
 		private tablesService: TablesService,
-		private sharedGameDataService: SharedGameDataService,
 		private fb: FormBuilder,
 		private currentGamesDatabase: CurrentGamesDatabaseServiceService,
 		private apiCoordination: ApiDataCoordinationService,
 		private userDetailService: UserDetailsService,
-		private currentEventService: CurrentEventService,
-		private dataService: DataService
+		private domainService: DomainService
 	) {
 		this.sharedDataService.selectedMatchType$
 			.pipe(takeUntil(this.destroy$), tag('selected match type'))
@@ -108,7 +102,7 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 		this.userDetailService.directorKey$.subscribe(key => {
 			this.dirKey = key;
 		});
-
+		this.origin = window.location.href;
 		// console.log('game-players initialTableData: ', this.initialTableData);
 	}
 
@@ -188,15 +182,15 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 		}
 		if (this.matchType === 'pairs') {
 			values = this.pairsForm.getPairsFormData();
-			console.log('pairs form values: ', JSON.stringify(values, null, 2));
+			// console.log('pairs form values: ', JSON.stringify(values, null, 2));
 		} else {
 			values = this.teamsForm.getTeamFormData();
-			console.log('team form values: ', JSON.stringify(values, null, 2));
+			// console.log('team form values: ', JSON.stringify(values, null, 2));
 		}
 
 		combinedFormData.tableFormData = values;
-		console.log('table form data: ', tableFormData);
-		console.log('combined form data: ', combinedFormData);
+		// console.log('table form data: ', tableFormData);
+		// console.log('combined form data: ', combinedFormData);
 		if (this.forwardDate) {
 			const day = this.forwardDate.getDate();
 			const month = this.forwardDate.toLocaleDateString('default', {
@@ -204,7 +198,7 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 			});
 			const year = this.forwardDate.getFullYear();
 			dateFormData = `${day} ${month} ${year}`;
-			console.log('date form data: ', dateFormData);
+			// console.log('date form data: ', dateFormData);
 
 			combinedFormData.dateFormData = dateFormData;
 		}
@@ -238,7 +232,61 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 				this.tablesConfig[key] = key === selectedOption;
 			}
 		}
-		console.log(this.tablesConfig);
+		// console.log(this.tablesConfig);
+	}
+
+	private generatePublicLink() {
+		const data: any = {};
+		data.gameCode = this.gameCode;
+
+		const {
+			playerConfig: { north, south, east, west },
+			tables
+		} = this.initialTableData;
+		// const tablesLength = Object.keys(tables).length
+		console.log(tables);
+
+		console.log(north, south, east, west);
+		const gameConfig: {
+			north: [];
+			south: [];
+			east: [];
+			west: [];
+			tables?: number;
+			sitters?: [];
+			tableConfig: any
+		} = {
+			north,
+			south,
+			east,
+			west,
+			tables: Object.keys(tables).length,
+			tableConfig: tables
+		};
+		console.log('gameConfig: ', gameConfig);
+		data.gameConfig = gameConfig;
+		console.log(data);
+
+		// const gameConfig =
+		this.apiCoordination.setPublicGame(data).subscribe({
+			next: data => {
+				const {
+					savedConfig: { game_id }
+				} = data;
+				const domain = this.domainService.domainSplitter(this.origin);
+				console.log('data response: ', data);
+
+				this.publicLink = `${domain}/starting-lineup?game_code=${this.gameCode}&game_id=${game_id}`;
+			},
+			error: error => {
+				console.error(error);
+				this.publicLink = 'Error';
+			}
+		});
+	}
+
+	getPublicLink(): void {
+		this.generatePublicLink();
 	}
 
 	ngOnDestroy(): void {

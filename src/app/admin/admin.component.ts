@@ -1,8 +1,21 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { SharedDataService } from '../shared/services/shared-data.service';
 import { AuthService } from '../auth/services/auth.service';
-import { Observable, Subscription, take } from 'rxjs';
+import {
+	Observable,
+	Subject,
+	Subscription,
+	catchError,
+	combineLatest,
+	of,
+	switchMap,
+	take,
+	takeUntil
+} from 'rxjs';
 import { IndexedDatabaseStatusService } from '../shared/services/indexed-database-status.service';
+import { DataService } from './games/services/data.service';
+import { CurrentEventService } from './games/services/current-event.service';
+import { SharedGameDataService } from './games/services/shared-game-data.service';
 
 @Component({
 	selector: 'app-admin',
@@ -10,112 +23,28 @@ import { IndexedDatabaseStatusService } from '../shared/services/indexed-databas
 	styleUrls: ['./admin.component.scss']
 })
 export class AdminComponent implements OnInit, OnDestroy {
-	private isAuthedSubscription: Subscription = new Subscription();
-	private gameCodeSubscription: Subscription = new Subscription();
-	private dirKeySubscription: Subscription = new Subscription();
-
-	gameCode: string;
-	dirKey: string;
-	sessionValid: boolean;
+	gameCode: string = '';
+	dirKey: string = '';
+	dirKeySubscription = new Subscription();
+	gameCodeSubscription = new Subscription();
+	gameCode$: Observable<string>;
+	directorKey$: Observable<string>;
+	private destroy$ = new Subject<void>();
+	loadingStatus: number = 0;
 
 	constructor(
 		private authService: AuthService,
 		private checkSessionService: CheckSessionService,
 		private currentEventService: CurrentEventService,
 		private sharedDataService: SharedDataService,
+		public authService: AuthService,
+		private userDetailsService: UserDetailsService,
+		private IDBStatus: IndexedDatabaseStatusService,
 		private dataService: DataService,
-		private sharedGameDataService: SharedGameDataService,
-		private processCurrentMatch: ProcessCurrentMatchService
-	) {}
-
-	async ngOnInit(): Promise<void> {
-		this.checkSessionService.checkSession();
-		this.isAuthedSubscription = this.checkSessionService.isValid$.subscribe({
-			next: valid => {
-				if (valid) {
-					this.sessionValid = true;
-				} else {
-					this.sessionValid = false;
-				}
-			},
-			error: err => {
-				console.error('error subscribing to is valid session.', err);
-			}
-		});
-		console.log('admin initialised');
-
-		combineLatest([
-			this.sharedDataService.gameCode$,
-			this.sharedDataService.dirKey$
-		]).subscribe(([gameCode, dirKey]) => {
-			console.log('game code: ', gameCode);
-			console.log('dirKey: ', dirKey);
-
-			if (gameCode && dirKey) {
-				this.gameCode = gameCode;
-				this.dirKey = dirKey;
-
-				console.log('fetchInitial called');
-				this.fetchInitial();
-			}
-		});
-	}
-
-	private async fetchInitial(): Promise<void> {
-		try {
-			if (!this.gameCode || !this.dirKey) {
-				throw new Error('No DirKey or Gamecode in function');
-			}
-
-			const data = await lastValueFrom(
-				this.currentEventService.getLiveData(this.gameCode, this.dirKey)
-			);
-
-			if (data) {
-				await this.processData(data);
-			} else {
-				throw new Error('No match type from subscription');
-			}
-		} catch (err) {
-			console.error('error fetching initial data: ', err);
-		}
-	}
-
-	private async processData(data: any) {
-		await this.dataService.initialiseDB(data);
-		const success = await this.storeInitialData(data);
-		console.log(success)
-		if (success) {
-			console.log('process data success');
-
-			this.sharedGameDataService.setDataStoredStatus(true);
-		} else {
-			this.sharedGameDataService.setDataStoredStatus(false);
-		}
-	}
-
-	async storeInitialData(data): Promise<any> {
-		try {
-			if (!data) {
-				throw new Error('no Data in store initial data function');
-			}
-			const dbResponse = await this.dataService.storeData(data);
-			if (!dbResponse) {
-				throw new Error('Error calling data service');
-			} else {
-				console.log('db response: ', dbResponse)
-			}
-			this.sharedGameDataService.setLoadingStatus(true);
-			return dbResponse
-		} catch (error) {
-			throw error;
-		}
-	}
-
-	ngOnDestroy(): void {
-		this.dirKeySubscription.unsubscribe();
-		this.gameCodeSubscription.unsubscribe();
-		this.isAuthedSubscription.unsubscribe();
+		private currentEventService: CurrentEventService,
+		private sharedGameData: SharedGameDataService
+	) {
+		// console.log('admin loaded');
 	}
 	ngOnInit(): void {
 		console.log('admin init');
@@ -129,8 +58,100 @@ export class AdminComponent implements OnInit, OnDestroy {
 			console.log('Dir Key: ', dirKey);
 		});
 
+		this.subscribeToUserDetails();
+
 		this.IDBStatus.resetProgress();
+
+		this.IDBStatus.dataProgress$.subscribe(status => {
+			this.loadingStatus = status;
+		});
 	}
+
+	private subscribeToUserDetails(): void {
+		combineLatest([
+			this.userDetailsService.gameCode$,
+			this.userDetailsService.directorKey$
+		])
+			.pipe(
+				takeUntil(this.destroy$),
+				switchMap(([gamecode, dirkey]) => {
+					if (gamecode && dirkey) {
+						this.gameCode = gamecode;
+						this.dirKey = dirkey;
+						// const exists = this.checkDBExists
+
+						return this.fetchData(this.gameCode, this.dirKey);
+					} else {
+						console.error('no gamecode or dirkey');
+						return of('EMPTY');
+					}
+				}),
+				switchMap(data => {
+					if (data !== 'EMPTY') {
+						return this.processData(data);
+					} else {
+						return of(null);
+					}
+				})
+			)
+			.subscribe();
+	}
+
+	async checkDBExists(data) {
+		try {
+			const exists = await this.dataService.checkDatabase(data);
+			const dev_exists = await this.dataService.dev_checkDatabase();
+			if (dev_exists) {
+				return exists;
+			}
+		} catch (error) {
+			console.error('error checking database');
+		}
+	}
+
+	fetchData(gameCode: string, dirKey: string): Observable<any> {
+		return this.currentEventService.getLiveData(gameCode, dirKey).pipe(
+			catchError(error => {
+				console.error('error calling current event service', error);
+				return of(null);
+			})
+		);
+	}
+	private async processData(data) {
+		console.log('processData() called with data: ', data);
+		try {
+			const dbExists = await this.dataService.checkDatabase(data);
+			if (dbExists) {
+				console.log('db exists');
+				return;
+			} else {
+				await this.dataService.initialiseDB(data);
+				await this.storeInitialData(data);
+			}
+			console.log('Store initial data complete');
+		} catch (err) {
+			console.error('Error during data processing: ', err);
+		}
+	}
+
+	async storeInitialData(data) {
+		return new Promise<void>(async (resolve, reject) => {
+			try {
+				if (!data) {
+					throw new Error('Error calling server');
+				}
+				const dbResponse = await this.dataService.storeData(data);
+				if (!dbResponse) {
+					throw new Error('Error calling data service');
+				}
+				this.sharedGameData.setLoadingStatus(false);
+				resolve();
+			} catch (err) {
+				reject(`Error performing high level requestAndStore(): ${err}`);
+			}
+		});
+	}
+
 	ngOnDestroy(): void {
 		this.gameCodeSubscription.unsubscribe();
 		this.dirKeySubscription.unsubscribe();

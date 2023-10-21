@@ -7,10 +7,10 @@
 }
 
 tr.header-row {
-	margin-bottom: 0.6rem
+	margin-bottom: 0.6rem;
 }
-th{
-	padding-bottom: 1rem
+th {
+	padding-bottom: 1rem;
 }
 
 td {
@@ -25,7 +25,7 @@ tr.tables-row {
 		text-align: center;
 	}
 	td.split {
-		padding: 0.4rem
+		padding: 0.4rem;
 	}
 	&:first-child {
 		margin-left: 0;
@@ -40,9 +40,15 @@ tr.tables-row {
 	td.adjust {
 		width: 80%;
 	}
-	input{
+	input {
 		padding: 0.2rem;
 		text-align: center;
 	}
 }
 
+@media screen and (max-width: 600px) {
+	.flex {
+		display: flex;
+		flex-direction: column;
+	}
+}

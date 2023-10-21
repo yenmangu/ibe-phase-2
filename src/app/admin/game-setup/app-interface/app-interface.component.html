@@ -1,18 +1,44 @@
 <h3>App Interface Settings</h3>
 <form [formGroup]="appInterfaceForm">
 	<div class="grid-container container column">
-		<div
-			class="grid-row players-see"
-			formArrayName="playersSee">
+		<div class="grid-row players-see">
 			<div class="row-label grid-item"><span>Players Can See</span></div>
-			<div
-				*ngFor="let configItem of playersSeeConfig; let i = index"
-				class="grid-item"
-				[formGroupName]="i">
-				<mat-checkbox [value]="configItem.value">{{
-					configItem.name
-				}}</mat-checkbox>
+			<div>
+				<mat-checkbox
+					formControlName="handDiagrams"
+					value="false"
+					>Hand Diagrams</mat-checkbox
+				>
 			</div>
+			<div>
+				<mat-checkbox
+					formControlName="ownResults"
+					value="false"
+					>Own Results</mat-checkbox
+				>
+			</div>
+			<div *ngIf="appInterfaceForm.get('ownResults').value === true">
+				<mat-checkbox
+					formControlName="othersResults"
+					value="false"
+					>Others' Results</mat-checkbox
+				>
+			</div>
+			<div>
+				<mat-checkbox
+					formControlName="rankings"
+					value="false"
+					>Rankings</mat-checkbox
+				>
+			</div>
+			<div>
+				<mat-checkbox
+					formControlName="adjustedScores"
+					value="false"
+					>Adjusted Scores</mat-checkbox
+				>
+			</div>
+			<!-- <div class="conditional" *ngIf="!appInterfaceForm.get('playersSee')at(1).get(control)"></div> -->
 		</div>
 		<div
 			class="grid-row players-change"
@@ -22,30 +48,36 @@
 				*ngFor="let configItem of playersChangeConfig; let i = index"
 				class="grid-item"
 				[formGroupName]="i">
-				<mat-checkbox [checked]="configItem.value">
+				<mat-checkbox
+					[formControlName]="'control' + i"
+					[checked]="configItem.value">
 					{{ configItem.name }}</mat-checkbox
 				>
 			</div>
 			<div class="spacer"></div>
 		</div>
-		<div class="grid-row players-input">
-			<div class="row-label grid-item"><span>PLayers Can Input</span></div>
+		<div
+			class="grid-row players-input"
+			formArrayName="playersInput">
+			<div class="row-label grid-item"><span>Players Can Input</span></div>
 			<div
 				*ngFor="let configItem of playersInputConfig; let i = index"
 				class="grid-item"
 				[formGroupName]="i">
 				<mat-form-field
 					><mat-label>{{ configItem.name }}</mat-label>
-					<mat-select>
-						<mat-option *ngFor="let value of configItem.values" [value]="value">{{
-							value
-						}}</mat-option>
+					<mat-select [formControlName]="'control' + i">
+						<mat-option
+							*ngFor="let value of configItem.values"
+							[value]="value"
+							>{{ value }}</mat-option
+						>
 					</mat-select></mat-form-field
 				>
 			</div>
 			<div class="spacer"></div>
 		</div>
-		<div class="grid-row results" >
+		<div class="grid-row results">
 			<mat-form-field>
 				<mat-label>Results Timeout</mat-label>
 				<mat-select formControlName="resultsTimeout">
@@ -64,7 +96,11 @@
 				*ngFor="let option of additonalConfig; let i = index"
 				class="column grid-item"
 				[formGroupName]="i">
-				<mat-checkbox [checked]="option.value">{{ option.name }}</mat-checkbox>
+				<mat-checkbox
+					[formControlName]="'control' + i"
+					[checked]="option.value"
+					>{{ option.name }}</mat-checkbox
+				>
 			</div>
 		</div>
 		<div
@@ -76,8 +112,16 @@
 				class="column grid-item"
 				[formGroupName]="i">
 				<span>{{ option.name }}</span>
-				<mat-checkbox [checked]="option.value"></mat-checkbox>
+				<mat-checkbox
+					[formControlName]="'control' + i"
+					[checked]="option.value"></mat-checkbox>
 			</div>
 		</div>
 	</div>
+	<button
+		mat-flat-button
+		(click)="getAppInterfaceValues()"
+		color="primary">
+		Save
+	</button>
 </form>

@@ -47,6 +47,8 @@ export class PairsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 	changedFields: { [key: string]: { previousValue: any; newValue: any } } = {};
 	tableNumbers: string[];
 
+	breakpoint: string = '';
+
 	private tableConfigSubscription: Subscription;
 	private destroy$ = new Subject<void>();
 	private fromDataTableData: any = {};
@@ -66,6 +68,10 @@ export class PairsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 			// console.log('pairs-table config: ', this.tableConfig);
 		});
 		this.isLoading$ = true;
+		this.breakpointService.currentBreakpoint$.subscribe(breakpoint => {
+			this.breakpoint = breakpoint;
+			console.log('breakpoint: ', this.breakpoint);
+		});
 	}
 
 	ngOnInit(): void {
@@ -210,7 +216,7 @@ export class PairsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 		if (this.pairsForm.valid) {
 			const formData = this.pairsForm.value;
 			console.log('pairs form component form data: ', formData);
-			
+
 			const changedFields = this.changedFields;
 			return { formData, changedFields };
 		}

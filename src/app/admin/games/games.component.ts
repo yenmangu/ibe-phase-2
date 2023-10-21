@@ -22,40 +22,128 @@ import { ProcessCurrentMatchService } from './services/process-current-match.ser
 	styleUrls: ['./games.component.scss']
 })
 export class GamesComponent implements OnInit, OnDestroy {
-	gameDataSubject: BehaviorSubject<any> = new BehaviorSubject<any>([]);
-	private gameData$ = this.gameDataSubject.asObservable();
+	gameCodeSubscription = new Subscription();
+	dirKeySubscription = new Subscription();
 
-	private databaseStatusSubscription: Subscription = new Subscription();
+	gameCode: string;
+	dirKey: string;
+	dbInit: boolean = false;
+	progress = 0;
+	private progressSubscription: Subscription;
+	selectedTabIndex = 0
+
+	private destroy$ = new Subject<void>();
 
 	constructor(
 		private sharedDataService: SharedDataService,
-		private indexedDBStatus: IndexedDatabaseStatusService,
-		private sharedGamesDataService: SharedGameDataService,
-		private processCurrentMatchService: ProcessCurrentMatchService
+		private currentEventService: CurrentEventService,
+		private dataService: DataService,
+		private processCurrentData: ProcessCurrentDataService,
+		private sharedGameData: SharedGameDataService,
+		private userDetailsService: UserDetailsService,
+		private IDBStatusService: IndexedDatabaseStatusService
 	) {}
 
-	async ngOnInit(): Promise<void> {
-		this.databaseStatusSubscription = this.indexedDBStatus.isInitialised$.subscribe(
-			async isInit => {
-				if (isInit) {
-					console.log('Database status subscription: Initialised: ', isInit);
-					await this.getMatchType().then(matchType => {
-						if (matchType) {
-							this.sharedDataService.updateMatchType(matchType);
-						}
-					});
-				}
-			}
+	ngOnInit(): void {
+		console.log('games component init');
+
+		this.subscribeToGameCodeAndDirKey();
+
+		this.IDBStatusService.isInitialised$.pipe(tag('db-init')).subscribe(isInit => {
+			this.dbInit = isInit;
+		});
+		this.progressSubscription = this.IDBStatusService.dataProgress$
+			.pipe(tag('db-progress'))
+			.subscribe(value => {
+				console.log('db progress: ', this.progress);
+				this.progress = value;
+			});
+	}
+	shouldAlignTabsToStart(){
+		return this.selectedTabIndex === 0
+	}
+
+	private subscribeToGameCodeAndDirKey(): void {
+		console.log('subscribe to gamecode and dirkey');
+
+		combineLatest([
+			this.userDetailsService.gameCode$,
+			this.userDetailsService.directorKey$
+		])
+			.pipe(
+				takeUntil(this.destroy$),
+				switchMap(([gameCode, dirKey]) => {
+					// Check if both gameCode and dirKey are populated
+					if (gameCode && dirKey) {
+						console.log('game code and dir key: ', gameCode, dirKey);
+						this.gameCode = gameCode;
+						this.dirKey = dirKey;
+						return this.fetchData(gameCode, dirKey);
+					} else {
+						console.log('no gamecode or dirkey');
+
+						console.error('no gamecode or dirkey provided');
+						return of('EMPTY');
+					}
+				}),
+				switchMap(data => {
+					if (data !== 'EMPTY') {
+						return this.processData(data);
+					} else {
+						return of(null);
+					}
+				})
+			)
+			.subscribe({
+				next: value => {},
+				error: err => {}
+			});
+
+		this.sharedGameData.triggerRefreshObservable
+			.pipe(
+				tag('refresh_db'),
+				switchMap(data => {
+					this.IDBStatusService.resetProgress();
+
+					console.log('database progress: ', this.progress);
+					return this.fetchData(this.gameCode, this.dirKey);
+				}),
+				switchMap(data => {
+					console.log('data from refresh: ', data);
+					if (data !== 'EMPTY') {
+						return this.processData(data);
+					} else {
+						return of(null);
+					}
+				})
+			)
+			.subscribe();
+	}
+	private callCurrentEventService(gameCode: string, dirKey: string) {
+		// Make the data fetch here using gameCode and dirKey
+		// Example:
+		return this.currentEventService.getLiveData(gameCode, dirKey);
+	}
+
+	private fetchData(gameCode: string, dirKey: string): Observable<any> {
+		return this.currentEventService.getLiveData(gameCode, dirKey).pipe(
+			catchError(error => {
+				console.error('error calling current event service: ', error);
+				return of(null);
+			})
 		);
 	}
 
-	private async getMatchType(): Promise<any> {
+	private async processData(data) {
+		console.log('processData() called with data: ', data);
 		try {
-			const settingsTxt = await this.processCurrentMatchService.getSettingsTxt();
-			if (settingsTxt) {
-				const matchType = this.processCurrentMatchService.getMatchType(settingsTxt);
-				console.log('match type in games component: ', matchType);
-				return matchType;
+			const dbExists = await this.dataService.checkDatabase(data);
+			if (dbExists) {
+				console.log('db exists');
+				return;
+			} else {
+				await this.dataService.initialiseDB(data);
+				await this.storeInitialData(data);
 			}
 		} catch (err) {
 			console.error('Error retrieving match type: ', err);

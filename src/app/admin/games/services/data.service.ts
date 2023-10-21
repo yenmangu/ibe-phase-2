@@ -36,6 +36,44 @@ export class DataService implements OnInit, OnDestroy {
 		console.log('data service ngOnInit called');
 	}
 
+
+
+	public async dev_checkDatabase(): Promise<any> {
+		try {
+
+			const newExpected = [
+				'current_game_data',
+				'event',
+				'hand_data',
+				'handanxs_data',
+				'historic_game_data',
+				'hrev_text',
+				'loc',
+				'lock',
+				'meta',
+				'params',
+				'player',
+				'team',
+				'xml_settings'
+			];
+
+			const exists = await this.indexedDB.doesDatabaseExist(
+				this.dbName,
+				newExpected
+			);
+
+			if (exists) {
+				console.log('database exists in dev mode... no need to refresh');
+
+				this.IDBStatusService.bypassProgress();
+
+				return true;
+			}
+			return false;
+		} catch (error) {
+			throw new Error('error checking db');
+		}
+	}
 	public async checkDatabase(data): Promise<any> {
 		try {
 			const storeMapping = this.mapData(data);
@@ -46,23 +84,39 @@ export class DataService implements OnInit, OnDestroy {
 				...Object.keys(playerDbStoreMapping)
 			];
 
+			const newExpected = [
+				'current_game_data',
+				'event',
+				'hand_data',
+				'handanxs_data',
+				'historic_game_data',
+				'hrev_text',
+				'loc',
+				'lock',
+				'meta',
+				'params',
+				'player',
+				'team',
+				'xml_settings'
+			];
+
 			const exists = await this.indexedDB.doesDatabaseExist(
 				this.dbName,
 				expectedNames
 			);
 
 			if (exists) {
-				this.IDBStatusService.bypassProgress()
+				console.log('database exists in dev mode... no need to refresh');
+
+				this.IDBStatusService.bypassProgress();
 
 				return true;
 			}
-			return false
+			return false;
 		} catch (error) {
 			throw new Error('error checking db');
-
 		}
 	}
-
 
 	public initialiseDB = async data => {
 		return new Promise<void>(async (resolve, reject) => {

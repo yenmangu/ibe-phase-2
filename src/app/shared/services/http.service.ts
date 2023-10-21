@@ -57,4 +57,16 @@ export class HttpService {
       .set('dir_key', dir_key);
 		return this.http.get(`${this.apiUrl}/database`,{params});
 	}
+
+	saveStartingLineup(gameCode, data): Observable<any> {
+		const params = new HttpParams().append('game_code', gameCode);
+		return this.http.post(`${this.apiUrl}/lineup/games`, data, { params });
+	}
+
+	getStartingLineup(gameCode, gameId): Observable<any> {
+		const params = new HttpParams()
+			.append('game_code', gameCode)
+			.append('game_id', gameId);
+		return this.http.get(`${this.apiUrl}/lineup/games`, { params });
+	}
 }

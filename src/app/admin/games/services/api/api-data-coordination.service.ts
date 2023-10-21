@@ -32,6 +32,10 @@ export class ApiDataCoordinationService {
 		return of(null);
 	}
 
+	public setbaseSettings (dir_key,game_code,data): Observable<any>{
+		return this.httpService.postSettings(data, game_code,dir_key)
+	}
+
 	private postSettings(dir_key, game_code, data): Observable<any> {
 		return this.httpService.postSettings(data, game_code, dir_key);
 	}
@@ -42,5 +46,17 @@ export class ApiDataCoordinationService {
 
 	private sendToHttp(data): Observable<any> {
 		return this.httpService.postData(data);
+	}
+
+	setPublicGame(data): Observable<any> {
+		const { gameCode, gameConfig } = data;
+		return this.httpService.saveStartingLineup(gameCode, gameConfig);
+	}
+
+	getPublicGame(data): Observable<any> {
+		console.log('get public game invoked');
+
+		const { gameCode, gameId } = data;
+		return this.httpService.getStartingLineup(gameCode, gameId);
 	}
 }

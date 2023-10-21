@@ -9,10 +9,14 @@
 					<mat-option value="current">These base settings</mat-option>
 				</mat-select>
 			</mat-form-field>
-			<button mat-flat-button (click)="save()" color="primary">Save</button>
+			<button
+				mat-flat-button
+				(click)="save()"
+				color="primary">
+				Save
+			</button>
 		</div>
-		<div class="container row bottom-row">
-		</div>
+		<div class="container row bottom-row"></div>
 		<mat-tab-group animationDuration="0s">
 			<!--  -->
 			<!-- How To Use Tab -->
@@ -24,22 +28,40 @@
 					<mat-checkbox formControlName="twoPageStartup"
 						>Two-Page startup</mat-checkbox
 					>
-					<mat-checkbox formControlName="tdEntersNames"
+					<mat-checkbox
+						*ngIf="twoPageStartup"
+						formControlName="tdEntersNames"
 						>TD enters names</mat-checkbox
 					>
-					<mat-checkbox formControlName="requireAllNames"
+					<mat-checkbox
+						*ngIf="twoPageStartup && !setupForm.get('tdEntersNames').value"
+						formControlName="requireAllNames"
 						>Require all names</mat-checkbox
 					>
-					<mat-checkbox formControlName="teamSignIn">Team sign-in</mat-checkbox>
-					<h3>Player Identification</h3>
-					<app-player-identification
-						(idFormEmitter)="onPlayerIdForm($event)" (idFormEmitter)="onChildForm($event)"></app-player-identification>
-					<div class="container row bottom-row"><button mat-flat-button color="primary">Save</button></div>
+					<mat-checkbox
+						*ngIf="twoPageStartup && !setupForm.get('tdEntersNames').value"
+						formControlName="teamSignIn"
+						>Team sign-in</mat-checkbox
+					>
+					<!-- To Be Re Added Once the player ID has been reworked server side -->
+					<!-- <app-player-identification
+						[hidden]="!twoPageStartup"
+						(idFormEmitter)="onPlayerIdForm($event)"
+						(idFormEmitter)="onChildForm($event)">
+					</app-player-identification> -->
+					<div class="container row bottom-row">
+						<button
+							(click)="save()"
+							mat-flat-button
+							color="primary">
+							Save
+						</button>
+					</div>
 				</div>
 			</mat-tab>
 			<!--  -->
-
 			<!-- Security Tab -->
+
 			<mat-tab label="Security">
 				<div class="container column">
 					<h3>Security</h3>
@@ -53,28 +75,79 @@
 					</mat-form-field>
 					<h3>PIN Code</h3>
 					<mat-checkbox formControlName="usePin">Use Pin</mat-checkbox>
+					<div
+						class="container column pin-column"
+						*ngIf="setupForm.get('usePin').value === true">
+						<mat-form-field>
+							<mat-label>Pin Length</mat-label>
+							<input
+								matInput
+								formControlName="pinLength"
+								min="1"
+								max="10"
+								type="number" />
+						</mat-form-field>
+
+						<mat-form-field>
+							<mat-label>Type</mat-label>
+							<mat-select formControlName="pinType">
+								<mat-option value="numeric">Numeric</mat-option>
+								<mat-option value="alphabetic">Alphabetic</mat-option>
+								<mat-option value="alphanumeric">Alphanumeric</mat-option>
+							</mat-select>
+						</mat-form-field>
+						<div *ngIf="setupForm.get('pinType').value !== 'numeric'">
+							<mat-form-field>
+								<mat-label>Case</mat-label>
+								<mat-select formControlName="pinCase">
+									<mat-option value="lower">Lowercase only</mat-option>
+									<mat-option value="upper">Uppercase only</mat-option>
+									<mat-option value="mixed"
+										>Both uppercase and lowercase</mat-option
+									>
+								</mat-select>
+							</mat-form-field>
+						</div>
+					</div>
 					<h3>Spectating</h3>
 					<mat-checkbox formControlName="spectateApp">App</mat-checkbox>
 					<mat-checkbox formControlName="spectateWebsite">Website</mat-checkbox>
 					<div class="container row bottom-row">
-						<button mat-flat-button (click)="save()" color="primary">Save</button>
+						<button
+							mat-flat-button
+							(click)="save()"
+							color="primary">
+							Save
+						</button>
 					</div>
 				</div>
 			</mat-tab>
+
 			<!--  -->
 			<!-- Movement/ Scoring Tab In Tab -->
+
 			<mat-tab label="Movement/ Scoring">
-				<app-boards-scoring (boardScoringEmitter)="onScoringForm($event)" (boardScoringEmitter)="onChildForm($event)" ></app-boards-scoring>
+				<app-boards-scoring
+					(boardScoringEmitter)="onScoringForm($event)"
+					(boardScoringEmitter)="onChildForm($event)"></app-boards-scoring>
 			</mat-tab>
+
 			<!--  -->
-			<!-- Player Sign In Tab -->
+			<!-- App Interface Tab -->
+
 			<mat-tab label="App Interface">
-				<app-app-interface (appInterfaceEmitter)="onAppInterfaceForm($event)" (appInterfaceEmitter)="onChildForm($event)"></app-app-interface>
+				<app-app-interface
+					(appInterfaceEmitter)="onAppInterfaceForm($event)"
+					(appInterfaceEmitter)="onChildForm($event)"></app-app-interface>
 			</mat-tab>
+
 			<!--  -->
-			<!-- Player Sign In Tab -->
+			<!-- Naming Numbering Tab -->
+
 			<mat-tab label="Naming Numbering">
-				<app-naming-numbering (namingNumberingEmitter)="onAppInterfaceForm" (namingNumberingEmitter)="onChildForm"></app-naming-numbering>
+				<app-naming-numbering
+					(namingNumberingEmitter)="onAppInterfaceForm($event)"
+					(namingNumberingEmitter)="onChildForm($event)"></app-naming-numbering>
 				<div class="container column"></div>
 			</mat-tab>
 		</mat-tab-group>

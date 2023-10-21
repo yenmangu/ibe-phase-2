@@ -1,0 +1,83 @@
+<div class="container column">
+	<h1 class="title">Starting Lineup</h1>
+
+	<div
+		*ngIf="startingLineupData && currentBreakpoint!=='handset'"
+		class="table-container">
+		<table>
+			<tr class="header row">
+				<th [ngClass]="currentBreakpoint">
+					Table <br />
+					{{ currentBreakpoint === 'handset' ? 'No.' : 'Number' }}
+				</th>
+				<th [ngClass]="currentBreakpoint">North</th>
+				<th [ngClass]="currentBreakpoint">South</th>
+				<th [ngClass]="currentBreakpoint">East</th>
+				<th [ngClass]="currentBreakpoint">West</th>
+			</tr>
+			<ng-container *ngFor="let table of north; let i = index">
+				<tr>
+					<td
+						[ngClass]="currentBreakpoint"
+						class="table-number">
+						{{ i + 1 }}
+					</td>
+					<td
+						[ngClass]="currentBreakpoint"
+						class="north">
+						{{ north[i] }}
+					</td>
+					<td
+						[ngClass]="currentBreakpoint"
+						class="north">
+						{{ south[i] }}
+					</td>
+					<td
+						[ngClass]="currentBreakpoint"
+						class="north">
+						{{ east[i] }}
+					</td>
+					<td
+						[ngClass]="currentBreakpoint"
+						class="north">
+						{{ west[i] }}
+					</td>
+				</tr>
+			</ng-container>
+		</table>
+	</div>
+
+		<ng-container *ngIf="currentBreakpoint === 'handset'">
+			<table>
+			<tr>
+				<th>Table No</th>
+					<th>North</th>
+					<th>South</th>
+
+				</tr>
+				<ng-container *ngFor="let table of north; let i = index">
+					<tr>
+						<td [ngClass]="currentBreakpoint">{{i +1}}</td>
+						<td [ngClass]="currentBreakpoint">{{north[i]}}</td>
+						<td [ngClass]="currentBreakpoint">{{south[i]}}</td>
+					</tr>
+				</ng-container>
+			</table>
+			<table>
+			<tr>
+				<th>Table No</th>
+					<th>East</th>
+					<th>West</th>
+				</tr>
+				<ng-container *ngFor="let table of north; let i = index">
+					<tr>
+						<td [ngClass]="currentBreakpoint">{{i +1}}</td>
+						<td [ngClass]="currentBreakpoint">{{east[i]}}</td>
+						<td [ngClass]="currentBreakpoint">{{west[i]}}</td>
+					</tr>
+				</ng-container>
+
+			</table>
+		</ng-container>
+
+</div>

@@ -8,6 +8,7 @@ import {
 } from '@angular/forms';
 import { Organisation } from '../../games/data/international-organisation';
 import { organisations } from '../../games/data/data-store/internatinal-organisations';
+import { SharedGameDataService } from '../../games/services/shared-game-data.service';
 @Component({
 	selector: 'app-player-identification',
 	templateUrl: './player-identification.component.html',
@@ -22,7 +23,10 @@ export class PlayerIdentificationComponent implements OnInit {
 
 	subOrgsCache: { [key: string]: Organisation[] } = {};
 
-	constructor(private fb: FormBuilder) {
+	constructor(
+		private fb: FormBuilder,
+		private sharedGameData: SharedGameDataService
+	) {
 		this.organisations = organisations;
 		this.internationalOrganisationForm = this.fb.group({
 			choices: this.fb.array([])
@@ -35,8 +39,8 @@ export class PlayerIdentificationComponent implements OnInit {
 
 		console.log('Selected org form: ', this.internationalOrganisationForm);
 		console.log('Selected choices: ', this.choices);
+		// console.log('child component twopagestartup value: ', this.twoPageStartupValue);
 	}
-
 
 	createStaticRow(): FormGroup {
 		return this.fb.group({
@@ -48,43 +52,63 @@ export class PlayerIdentificationComponent implements OnInit {
 		return this.choices.at(index) as FormGroup;
 	}
 
-	onOrgChange(orgValue: string): void {
-		console.log('onOrgChange invoked with index: ', orgValue);
-		const index = this.choices.controls.findIndex(
-			(control: any) => control.value.selectedOrganisation === orgValue
+	// onOrgChange(orgValue: string, index: number): void {
+	// 	console.log(
+	// 		'onOrgChange called with orgValue: ',
+	// 		orgValue,
+	// 		'and index: ',
+	// 		index
+	// 	);
+
+	// 	this.selectedOrganisations[index] = orgValue;
+	// 	const choiceFormGroup = this.getChoiceFormGroup(index);
+	// 	console.log('choice form group in OnOrgChange: ', choiceFormGroup)
+
+	// 	const organisation = this.organisations.find(org=>org.value===orgValue)
+
+	// 	if (choiceFormGroup.get('selectedSubOrganisation')) {
+	// 		if (organisation && organisation.subOrganisations) {
+	// 			// The selected organization has sub-organizations, add or enable the 'selectedSubOrganisation' control
+	// 			choiceFormGroup.get('selectedSubOrganisation').enable();
+	// 		} else {
+	// 			// The selected organization does not have sub-organizations, so disable and clear the 'selectedSubOrganisation' control
+	// 			choiceFormGroup.get('selectedSubOrganisation').disable();
+	// 			choiceFormGroup.get('selectedSubOrganisation').setValue(null);
+	// 		}
+
+	// 	}
+	// 	console.log('onOrgCVhange function ended')
+
+	// }
+
+	onOrgChange(orgValue: string, index: number): void {
+		console.log(
+			'onOrgChange called with orgValue: ',
+			orgValue,
+			'and index: ',
+			index
 		);
+
 		const choiceFormGroup = this.getChoiceFormGroup(index);
-		this.selectedOrganisations[index] = orgValue;
-		if (choiceFormGroup.get('setDefault').value) {
-			this.choices.controls.forEach((control, i) => {
-				if (i !== index) {
-					control.get('setDefault').setValue(false);
-				}
-			});
-		}
-		const selectedOrganisation = choiceFormGroup.get('selectedOrganisation').value;
+		console.log('choice form group in OnOrgChange: ', choiceFormGroup);
+
+		const organisation = this.organisations.find(org => org.value === orgValue);
+
 		if (choiceFormGroup.get('selectedSubOrganisation')) {
-			choiceFormGroup.removeControl('selectedSubOrganisation');
+			choiceFormGroup.removeControl('selctedSubOrganisation')
 		}
-		const organisation = this.organisations.find(
-			org => org.value === selectedOrganisation
-		);
-		if (organisation && organisation.subOrganisations) {
-			choiceFormGroup.addControl('selectedSubOrganisation', this.fb.control(null));
+		if(organisation && organisation.subOrganisations){
+			choiceFormGroup.get('selectedSubOrganisation').enable()
+			choiceFormGroup.addControl('selectedSubOrganisation',this.fb.control(null))
 		}
+		console.log('onOrgChange function ended');
 	}
 
 	selectedOrgHasSubOrgs(index: number): boolean {
-		console.log('selctedOrgHasSubOrg called');
+		// console.log('selctedOrgHasSubOrg called');
 		const selectedOrgControl = this.choices.at(index).get('selectedOrganisation');
-		// console.log('selectedOrgControl: ', selectedOrgControl.value);
 		const selectedOrg = selectedOrgControl.value as Organisation;
 		if (selectedOrg && selectedOrg.subOrganisations) {
-			console.log(
-				'found sub orgs for selected org: ',
-				selectedOrg,
-				selectedOrg.subOrganisations
-			);
 		}
 		return (
 			selectedOrg &&
@@ -94,25 +118,29 @@ export class PlayerIdentificationComponent implements OnInit {
 	}
 
 	getSubOrgs(orgValue: string): Organisation[] {
-		console.log('getSubOrgs invoked..');
-
+		console.log('getSubOrgs invoked.. with orgValue: ', orgValue);
 		const selectedOrg = this.organisations.find(org => org.value === orgValue);
+		console.log('selected org org: ', selectedOrg)
 		return selectedOrg ? selectedOrg.subOrganisations : [];
-
-		// const selectedOrgControl = this.choices.at(index).get('selectedOrganisation');
-		// const selectedOrg = selectedOrgControl.value as Organisation;
-		// console.log('selected org', selectedOrg);
-		// return selectedOrg ? selectedOrg.subOrganisations : [];
 	}
 
 	getSubOrgsForChoice(index: number): Organisation[] {
+		console.log('getSubOrgsForChoice called');
+
 		const selectedOrgControl = this.choices.at(index).get('selectedOrganisation');
-		const selectedOrg = selectedOrgControl.value;
-		console.log('selected org: ', selectedOrg);
-		if (selectedOrg && !this.subOrgsCache[selectedOrg]) {
-			this.subOrgsCache[selectedOrg] = this.getSubOrgs(selectedOrg);
+		// console.log('selectedOrgControl: ', selectedOrgControl);
+		if (selectedOrgControl) {
+			const selectedOrg = selectedOrgControl.value
+				? selectedOrgControl.value
+				: null;
+
+			if (!this.subOrgsCache[selectedOrg]) {
+				this.subOrgsCache[selectedOrg] = this.getSubOrgs(selectedOrg);
+			}
+			return this.subOrgsCache[selectedOrg] || [];
+		} else {
+			return [];
 		}
-		return this.subOrgsCache[selectedOrg] || [];
 	}
 
 	addSubOrgControl(index: number, subOrgs: Organisation[]): void {
@@ -132,8 +160,23 @@ export class PlayerIdentificationComponent implements OnInit {
 
 	addChoice(): void {
 		const choiceGroup = this.createChoiceFormGroup();
-		choiceGroup.patchValue({ orgValue: null });
+		console.log('choiceGroup as creeated by createChoiceFormGroup: ', choiceGroup);
+
+		// choiceGroup.patchValue({ orgValue: null });
 		this.choices.push(choiceGroup);
+		choiceGroup.get('selectedOrganisation').valueChanges.subscribe(selectedOrg => {
+			const hasSubOrgs = this.organisations.some(
+				org =>
+					org.value === selectedOrg &&
+					org.subOrganisations &&
+					org.subOrganisations.length > 0
+			);
+			if (hasSubOrgs) {
+				choiceGroup.get('selectedSubOrganisation').enable();
+			} else {
+				choiceGroup.get('selectedSubOrganisation').disable();
+			}
+		});
 	}
 
 	removeChoice(index: number): void {
@@ -167,10 +210,8 @@ export class PlayerIdentificationComponent implements OnInit {
 		return choiceGroup;
 	}
 
-
-  getFormValues():void {
-    const data = this.internationalOrganisationForm.value
-    this.idFormEmitter.emit(data)
-  }
-
+	getPlayerIdValues(): void {
+		const data = this.internationalOrganisationForm.value;
+		this.idFormEmitter.emit(data);
+	}
 }

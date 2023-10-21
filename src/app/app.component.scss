@@ -1,9 +1,10 @@
 :host {
 	height: 100vh;
+	display: block;
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
-	// overflow: hidden;
+	overflow: scroll;
 }
 app-home {
 	width: 100%;
