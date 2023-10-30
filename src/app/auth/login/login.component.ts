@@ -4,7 +4,8 @@ import { Router } from '@angular/router';
 import { DialogService } from 'src/app/shared/services/dialog.service';
 import { AuthService } from '../services/auth.service';
 import { SharedDataService } from 'src/app/shared/services/shared-data.service';
-import { CheckSessionService } from '../services/check-session.service';
+import { UserDetailsService } from 'src/app/shared/services/user-details.service';
+import { IndexedDatabaseStatusService } from 'src/app/shared/services/indexed-database-status.service';
 @Component({
 	selector: 'app-login',
 	templateUrl: './login.component.html',
@@ -19,7 +20,8 @@ export class LoginComponent implements OnInit {
 		private dialogService: DialogService,
 		private authService: AuthService,
 		private sharedDataService: SharedDataService,
-		private checkSessionService: CheckSessionService
+		private userDetailsService: UserDetailsService,
+		private IDBStatus: IndexedDatabaseStatusService
 	) {}
 
 	ngOnInit(): void {
@@ -30,7 +32,6 @@ export class LoginComponent implements OnInit {
 	}
 
 	onSubmit(): void {
-		const password = this.loginForm.get('key').value;
 		// const formData = { ...this.loginForm.value };
 		const gameCode = this.loginForm.get('gameCode').value;
 		const dirKey = this.loginForm.get('key').value;
@@ -45,12 +46,20 @@ export class LoginComponent implements OnInit {
 		this.authService.login(formData).subscribe({
 			next: response => {
 				console.log('response from authService: ', response);
-				this.sharedDataService.updateUserData(
-					response.directorSlot,
-					response.directorEmail,
-					password
-				);
-				this.sharedDataService.isAuthedSubject.next(true);
+				// this.sharedDataService.updateUserData(
+				// 	response.directorSlot,
+				// 	dirKey,
+				// 	response.directorEmail
+				// );
+				this.userDetailsService.updateEmail(response.directorEmail);
+				this.userDetailsService.updateGameCode(gameCode);
+				this.userDetailsService.updateDirectorKey(dirKey);
+				this.userDetailsService.updateLoggedIn(true);
+				localStorage.setItem('LOGGED_IN', 'true');
+				localStorage.setItem('GAME_CODE', gameCode);
+				localStorage.setItem('DIR_KEY', dirKey);
+				localStorage.setItem('EMAIL', response.directorEmail);
+				this.IDBStatus.resetProgress();
 				this.router.navigate(['/admin']);
 				this.dialogService.closeDialog();
 			}

@@ -105,67 +105,39 @@ export class FetchCurrentDataService implements OnDestroy {
 			throw err;
 		}
 	}
-
-	async getCurrentGame(): Promise<any> {
-		try {
-			const storeName = 'current_game_data';
-			const movementData = await this.indexedDB.readFromDB(
-				[storeName],
-				'movementtxt'
-			);
-
-			const namesData = await this.indexedDB.readFromDB([storeName], 'namestxt');
-
-			const movementValues = this.destructureValue(movementData, storeName);
-			if (movementValues.length < 1) {
-				throw new Error('No data in movementtxt');
-			}
-			const nameValues = this.destructureValue(namesData, storeName);
-			if (nameValues.length < 1) {
-				throw new Error('No data in namestxt');
-			}
-
-			const gameObject = this.buildCurrentGameObject(movementValues, nameValues);
-			console.log(gameObject);
-			return gameObject;
-		} catch (err) {
-			console.error('Error getting current game data: ', err);
-			return null;
-		}
+	getInitialTableData(): Observable<any> {
+		return from(
+			this.indexedDatabaseStatus.isInitialised$.pipe(
+				filter(isInitialised => isInitialised),
+				first(),
+				take(1)
+			)
+		).pipe(
+			switchMap(() => this.fetchAndProcessCurrentGameData()),
+			catchError(err => {
+				console.error('Error getting current movement data', err);
+				return throwError(() => err);
+			})
+		);
 	}
 
-	async getInitialTableData() {
-		console.log('initial table data called');
+	private async fetchAndProcessCurrentGameData() {
 		try {
-			const result = await firstValueFrom(
-				this.indexedDatabaseStatus.isInitialised$.pipe(
-					filter(isInitialised => isInitialised),
-					first(),
-					take(1)
-				)
-			);
-			// console.log('isInitialised: ', result);
-			const movement = await this.indexedDB.readFromDB(
-				[`current_game_data`],
-				'movementtxt'
-			);
-			console.log('movement initial: ', movement);
-			const people = await this.indexedDB.readFromDB(
-				[`current_game_data`],
-				'namestxt'
-			);
-			console.log(movement, people);
-			const movementValue = this.destructureValue(movement, 'current_game_data');
-			console.log('movementtxt: ', movementValue);
-			if (movementValue.length < 1) {
-				throw new Error('movementtxt empty');
-			}
+			const store = 'current_game_data';
+			const movement = await this.indexedDB.readFromDB([store], 'movementtxt');
+			const people = await this.indexedDB.readFromDB([store], 'namestxt');
+			const teams = await this.indexedDB.readFromDB([store], 'teamnamestxt');
+			const sides = await this.indexedDB.readFromDB([store], 'sidenamestxt');
+			const settingsText = await this.indexedDB.readFromDB([store], 'settingstxt');
 
+			console.log('people initial: ', people);
+			const movementValue = this.destructureValue(movement, 'current_game_data');
 			const peopleValue = this.destructureValue(people, 'current_game_data');
-			if (peopleValue.length < 1) {
-				throw new Error('');
-			}
-			console.log('peopleValue: ', peopleValue);
+			const teamsValue = this.destructureAndSplitTeams(teams);
+			const sidesValue = this.destructureAndSplitTeams(sides);
+			console.log('movement value: ', movementValue);
+			console.log('people value: ', peopleValue);
+
 			const currentGameConfig = this.buildCurrentGameObject(
 				movementValue,
 				peopleValue,
@@ -174,10 +146,11 @@ export class FetchCurrentDataService implements OnDestroy {
 			);
 			return currentGameConfig;
 		} catch (err) {
-			console.error('Error getting current movememnet data', err);
-			return null;
+			console.error('Error getting current movement data', err);
+			throw err;
 		}
 	}
+
 	private splitUnevenArray(array) {
 		const half = Math.floor(array.length / 2);
 
@@ -209,8 +182,11 @@ export class FetchCurrentDataService implements OnDestroy {
 		const cleanedMovement = this.processMovementText(movement);
 		const teamsOrPairs = this.processNamesText(people);
 		let dataObj: any = {};
-		console.log('cleanedMovement: ', cleanedMovement);
-		console.log(cleanedMovement[1][4]);
+		console.log('cleaned movement: ', cleanedMovement);
+		console.log('teams or pairs: ', teamsOrPairs);
+		// if(cleanedMovement.length < 1 || teamsOrPairs.length<1){}
+
+		// console.log(cleanedMovement[1][4]);
 		dataObj.rounds = cleanedMovement[1][4];
 		dataObj.players = this.splitUnevenArray(teamsOrPairs);
 		// console.log('players List: ', dataObj.players);
@@ -452,7 +428,7 @@ export class FetchCurrentDataService implements OnDestroy {
 	private async buildUpdateObject(dataArray: any[]) {
 		// console.log('DataArray in update Object: ', JSON.stringify(dataArray, null, 2));
 		const updateObject = {
-			storeName: `${this.currentMatchType}-player_db`,
+			storeName: `player_db`,
 			key: 'root',
 			value: dataArray
 		};

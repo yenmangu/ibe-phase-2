@@ -142,8 +142,6 @@ export class DataService implements OnInit, OnDestroy {
 		});
 	};
 
-
-
 	private calculateTotalStores(data: any): number {
 		const playerDbStoreMapping = this.getPlayerDbStoreMapping(data);
 		const storeMapping = this.mapData(data);
@@ -227,7 +225,6 @@ export class DataService implements OnInit, OnDestroy {
 			// playerdb,
 			params,
 			xmlsettings,
-			// slotname,
 			hrevtxt,
 			lock
 		} = data;
@@ -240,7 +237,6 @@ export class DataService implements OnInit, OnDestroy {
 			// [`player_db`]: playerdb,
 			[`params`]: params,
 			[`xml_settings`]: xmlsettings,
-
 			[`hrev_txt`]: hrevtxt,
 			[`lock`]: lock
 		};

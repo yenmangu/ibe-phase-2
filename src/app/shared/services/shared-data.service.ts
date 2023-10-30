@@ -11,16 +11,13 @@ import {
 	providedIn: 'root'
 })
 export class SharedDataService {
-	public gameCodeSubject = new Subject<string>();
-	private emailSubject = new BehaviorSubject<string>('');
-	private TabChangeSubject = new BehaviorSubject<number>(undefined);
-	public isAuthedSubject = new Subject<any>();
+	public gameCodeSubject = new BehaviorSubject<string>('');
+	public emailSubject = new BehaviorSubject<string>('');
 	public dirKeySubject = new Subject<string>();
+	public TabChangeSubject = new BehaviorSubject<number>(undefined);
 
-	isAuthed$: Observable<any> = this.isAuthedSubject.asObservable();
 	email$: Observable<string> = this.emailSubject.asObservable();
 	gameCode$: Observable<string> = this.gameCodeSubject.asObservable();
-	dirKey$: Observable<string> = this.dirKeySubject.asObservable();
 	tabChange$: Observable<number> = this.TabChangeSubject.asObservable();
 	dirKey$: Observable<string> = this.dirKeySubject.asObservable();
 
@@ -32,30 +29,40 @@ export class SharedDataService {
 	selectedMatchType$: Observable<string> =
 		this.selectedMatchTypeSubject.asObservable();
 
-	constructor() {
-		const gameCode = localStorage.getItem('game_code');
-		if (gameCode) {
-			this.updateGameCode(gameCode);
-		} else {
-			this.updateGameCode('No Game Code Found');
-		}
+	constructor() {}
 
-		const email = localStorage.getItem('user_email');
-		if (email) {
-			this.updateEmail(email);
-		} else {
-			this.updateEmail('No Email Found');
-		}
+	public updateUserData(gameCode: string, dirKey: string, email: string) {
+		console.log('setting user data: ', gameCode, dirKey, email);
+		this.gameCodeSubject.next(gameCode);
+		this.dirKeySubject.next(dirKey);
+		this.emailSubject.next(email);
+
+		combineLatest([
+			this.gameCode$.pipe(startWith(gameCode)),
+			this.email$.pipe(startWith(email)),
+			this.dirKey$.pipe(startWith(dirKey))
+		]).subscribe(([gameCodeVal, dirKeyVal, emailVal]) => {
+			if (gameCodeVal && dirKeyVal && emailVal) {
+				this.userDataReadySubject.next(true);
+				console.log('user data ready');
+				// } else {
+				// 	console.log('user data NOT ready');
+				// }
+			}
+		});
+
+		localStorage.setItem('GAME_CODE', gameCode);
+		localStorage.setItem('DIR_KEY', dirKey);
+		localStorage.setItem('EMAIL', email);
 	}
-
-	public updateUserData(gameCode: string, email: string, dirKey: string) {
-		this.updateEmail(email);
-		this.updateGameCode(gameCode);
+	public updateDirKey(dirKey: string) {
+		localStorage.setItem('DIR_KEY', dirKey);
+		this.dirKeySubject.next(dirKey);
 	}
 
 	public updateGameCode(gameCode: string) {
-		console.log('shared data service updating game code: ', gameCode);
-		localStorage.setItem('game_code', gameCode);
+		// console.log('shared data service updating game code: ', gameCode);
+		localStorage.setItem('GAME_CODE', gameCode);
 		this.gameCodeSubject.next(gameCode);
 	}
 	public updateEmail(email: string) {
@@ -64,14 +71,8 @@ export class SharedDataService {
 		this.emailSubject.next(email);
 	}
 
-	public updateDirKey(dirKey: string) {
-		console.log('updating dirkey');
-		localStorage.setItem('DIRKEY', dirKey);
-		this.dirKeySubject.next(dirKey);
-	}
-
 	public updateMatchType(type) {
-		console.log('Shared data service updating match type: ', type);
+		// console.log('Shared data service updating match type: ', type);
 		this.selectedMatchTypeSubject.next(type);
 	}
 

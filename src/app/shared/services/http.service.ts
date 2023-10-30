@@ -21,7 +21,6 @@ export class HttpService {
 		);
 	}
 
-
 	postCurrent(data, gamecode, dir_key): Observable<any> {
 		console.log('post current invoked');
 
@@ -53,9 +52,9 @@ export class HttpService {
 
 	fetchData(gamecode, dir_key): Observable<any> {
 		const params = new HttpParams()
-      .set('game_code', gamecode)
-      .set('dir_key', dir_key);
-		return this.http.get(`${this.apiUrl}/database`,{params});
+			.set('game_code', gamecode)
+			.set('dir_key', dir_key);
+		return this.http.get(`${this.apiUrl}/database`, { params });
 	}
 
 	saveStartingLineup(gameCode, data): Observable<any> {

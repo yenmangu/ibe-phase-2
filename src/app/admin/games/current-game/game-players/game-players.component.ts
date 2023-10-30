@@ -26,7 +26,7 @@ import { DomainService } from 'src/app/shared/services/domain.service';
 })
 export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 	@Input() eventName: string;
-	@Input() initialTableData: any = undefined;
+	@Input() initialTableData: any;
 	@Input() isLoading: boolean = true;
 	@ViewChild(PairsTableComponent) pairsForm: PairsTableComponent;
 	@ViewChild(TeamsTableComponent) teamsForm: TeamsTableComponent;
@@ -77,16 +77,14 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 		private userDetailService: UserDetailsService,
 		private domainService: DomainService
 	) {
-		this.sharedDataService.selectedMatchType$
-			.pipe(takeUntil(this.destroy$), tag('selected match type'))
-			.subscribe(value => {
-				this.matchType = value;
-				// console.log('gamePlayers confirming: ', this.matchType)
-			});
+		this.compositeForm = this.fb.group({
+			pairsForm: this.fb.group({}),
+			teamsForm: this.fb.group({})
+		});
 	}
 
 	ngOnInit(): void {
-		console.log('players-table component init with: ', this.initialTableData);
+		console.log('app-game-players init');
 
 		this.isLoading = true;
 		this.fetchInitialTableData();
@@ -133,31 +131,6 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 					this.isLoading = false;
 				}
 			});
-	}
-
-
-	refresh() {
-		this.refreshDB()
-			.then(() => {
-				this.isLoading = true;
-				this.fetchInitialTableData();
-				this.cdr.detectChanges();
-			})
-			.catch(error => {
-				console.error(error);
-			})
-			.finally(() => {
-				this.isLoading = false;
-			});
-	}
-
-	private async refreshDB(): Promise<void> {
-		try {
-			// this.isLoading = true;
-			await this.dataService.deleteIndexedDBDatabase();
-		} catch (error) {
-			throw error('error refreshing', error.message);
-		}
 	}
 
 	onOptionSelected(selctedOption: string) {

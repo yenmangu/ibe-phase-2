@@ -30,7 +30,6 @@
 	</div>
 </div>
 <div class="container row table">
-	<ng-container *ngIf="initialTableData">
 	<div
 		class="spinner"
 		*ngIf="isLoading">
@@ -38,7 +37,6 @@
 	</div>
 	<ng-container *ngIf="!isLoading && initialTableData && matchType === 'pairs'">
 		<app-pairs-table
-			*ngIf="initialTableData"
 			[initialTableData]="initialTableData"
 			[loadingStatus]="isLoading"></app-pairs-table>
 	</ng-container>

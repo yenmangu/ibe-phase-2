@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { SharedDataService } from '../shared/services/shared-data.service';
+import { UserDetailsService } from '../shared/services/user-details.service';
 import { AuthService } from '../auth/services/auth.service';
 import {
 	Observable,
@@ -33,9 +34,6 @@ export class AdminComponent implements OnInit, OnDestroy {
 	loadingStatus: number = 0;
 
 	constructor(
-		private authService: AuthService,
-		private checkSessionService: CheckSessionService,
-		private currentEventService: CurrentEventService,
 		private sharedDataService: SharedDataService,
 		public authService: AuthService,
 		private userDetailsService: UserDetailsService,
@@ -100,7 +98,7 @@ export class AdminComponent implements OnInit, OnDestroy {
 	async checkDBExists(data) {
 		try {
 			const exists = await this.dataService.checkDatabase(data);
-			const dev_exists = await this.dataService.dev_checkDatabase();
+			const dev_exists = await this.dataService.dev_checkDatabase()
 			if (dev_exists) {
 				return exists;
 			}
