@@ -9,7 +9,7 @@ import {
 	Output,
 	EventEmitter
 } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Subscription, Subject } from 'rxjs';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';

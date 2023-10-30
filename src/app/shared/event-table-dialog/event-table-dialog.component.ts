@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
-
+import { Component, OnInit, Input, Inject } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { EventInterface } from '../data/interfaces/event-data';
 @Component({
   selector: 'app-event-table-dialog',
   templateUrl: './event-table-dialog.component.html',

@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, Input, Inject } from '@angular/core';
+import { Team } from '../data/interfaces/team-data';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-team-table-dialog',
