@@ -1,6 +1,5 @@
 import {
 	Component,
-	Input,
 	OnInit,
 	DoCheck,
 	OnDestroy,
@@ -8,8 +7,13 @@ import {
 	AfterViewInit
 } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
-import { Subscription } from 'rxjs';
+import { MatTable, MatTableDataSource } from '@angular/material/table';
+import { Subscription, Subject } from 'rxjs';
+import { Venue } from 'src/app/shared/data/interfaces/venue-data';
+import { HistoricGamesDatabaseService } from '../../services/historic-games-database.service';
+import { DialogService } from 'src/app/shared/services/dialog.service';
+import { ChangeDetectorRef } from '@angular/core';
+import { MatSort } from '@angular/material/sort';
 @Component({
 	selector: 'app-venues-database',
 	templateUrl: './venues-database.component.html',
@@ -18,8 +22,9 @@ import { Subscription } from 'rxjs';
 export class VenuesDatabaseComponent
 	implements OnInit, AfterViewInit, DoCheck, OnDestroy
 {
-	@Input() venuesArray: any = [];
+	@ViewChild(MatTable) table: MatTable<Venue>;
 	@ViewChild(MatPaginator) paginator: MatPaginator;
+	@ViewChild(MatSort) sort: MatSort;
 	applyMagentaGreyTheme = true;
 	applyIbescoreTheme = true;
 
@@ -30,12 +35,20 @@ export class VenuesDatabaseComponent
 
 	storeName: 'loc';
 	isLoading: boolean = true;
+	updateDataSubscription = new Subscription();
 
 	dataSource = new MatTableDataSource<any>();
 	tabChangeSubscription = new Subscription();
 	tabSelected: boolean = false;
 	displayedColumns: string[] = ['number', 'venue', 'lastUsed', 'added', 'delete'];
+	selectedRowData: Venue | undefined;
 	searchTerm: string = '';
+
+	constructor(
+		private historicGamesDatabaseService: HistoricGamesDatabaseService,
+		private dialogService: DialogService,
+		private changeDetectorRef: ChangeDetectorRef
+	) {}
 
 	ngOnInit(): void {
 		this.isLoading = true;
@@ -66,15 +79,20 @@ export class VenuesDatabaseComponent
 		this.searchTerm = filterValue.trim().toLowerCase();
 	}
 
-	async fetchInitialData() {
+	async fetchInitialData(): Promise<boolean> {
 		try {
 			console.log(this.storeName);
 			const venueData = await this.historicGamesDatabaseService.fetchHistoricData(
 				'loc'
 			);
-			this.venueDataSubject.next(venueData);
+			if (venueData) {
+				this.venueDataSubject.next(venueData);
+				return true;
+			}
+			return false;
 		} catch (err) {
 			console.error('Error fetching initial: ', err);
+			return false;
 		}
 	}
 
@@ -101,20 +119,23 @@ export class VenuesDatabaseComponent
 		this.delete(row);
 	}
 
-
 	private initDataSource(): void {
 		this.dataSource.data = this.venueArray;
 	}
 
 	private refresh() {
-		this.fetchInitialData();
-		this.dataSource.data = this.venueArray;
-		if (this.paginator && this.sort) {
-			this.dataSource.paginator = this.paginator;
-			this.dataSource.sort = this.sort;
+		const result = this.fetchInitialData();
+		if (result) {
+			this.dataSource.data = this.venueArray;
+			if (this.paginator && this.sort) {
+				this.dataSource.paginator = this.paginator;
+				this.dataSource.sort = this.sort;
+			}
+			if (this.dataSource.data.length > 0) {
+				this.table.renderRows();
+			}
+			// this.changeDetectorRef.detectChanges();
 		}
-		this.table.renderRows();
-		this.changeDetectorRef.detectChanges();
 	}
 
 	private async delete(data) {
@@ -163,13 +184,6 @@ export class VenuesDatabaseComponent
 		if (this.tabSelected && this.dataSource.data.length < 1) {
 			this.isLoading = true;
 		}
-	}
-
-
-	applyFilter(event: Event) {
-		console.log('search term: ', event);
-		const filterValue = (event.target as HTMLInputElement).value;
-		this.dataSource.filter = filterValue.trim().toLowerCase();
 	}
 
 	ngOnDestroy(): void {}

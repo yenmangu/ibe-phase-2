@@ -3,7 +3,6 @@ import { IndexedDatabaseService } from './indexed-database.service';
 import { SharedDataService } from 'src/app/shared/services/shared-data.service';
 import { Subject, Subscription, firstValueFrom, takeUntil } from 'rxjs';
 import { IndexedDatabaseStatusService } from 'src/app/shared/services/indexed-database-status.service';
-import { IndexedDatabaseStatusService } from 'src/app/shared/services/indexed-database-status.service';
 
 @Injectable({
 	providedIn: 'root'
@@ -12,9 +11,13 @@ export class DataService implements OnInit, OnDestroy {
 	private dbName = 'ibe_game_data';
 	matchType: string = '';
 	private storeMapping = {};
+	private playerDbStoreMapping = {};
 	private subscription: Subscription;
 	public destroy$ = new Subject<void>();
-
+	playersArray = [];
+	teamsArray = [];
+	venuesArray = [];
+	eventArray = [];
 	constructor(
 		private indexedDB: IndexedDatabaseService,
 		private sharedDataService: SharedDataService,
@@ -33,8 +36,11 @@ export class DataService implements OnInit, OnDestroy {
 		console.log('data service ngOnInit called');
 	}
 
+
+
 	public async dev_checkDatabase(): Promise<any> {
 		try {
+
 			const newExpected = [
 				'current_game_data',
 				'event',
@@ -162,9 +168,6 @@ export class DataService implements OnInit, OnDestroy {
 			this.IDBStatusService.dataFinishedLoadingSubject.next(true);
 			this.saveStoreNames(storeMapping, playerDbStoreMapping);
 
-			this.IDBStatusService.dataFinishedLoadingSubject.next(true);
-			this.saveStoreNames(storeMapping, playerDbStoreMapping);
-
 			return result;
 		} catch (err) {
 			console.error('Error in NewEntryPoint', err);
@@ -212,6 +215,8 @@ export class DataService implements OnInit, OnDestroy {
 	}
 
 	private mapData(data) {
+		// const playerdbObject = this.processData(data);
+		// console.log('initial player object: ', playerdbObject);
 		const {
 			currentgamedata,
 			hist,

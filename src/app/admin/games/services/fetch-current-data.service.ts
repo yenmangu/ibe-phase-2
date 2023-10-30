@@ -2,7 +2,6 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { IndexedDatabaseService } from './indexed-database.service';
 import { DataService } from './data.service';
 import { SharedDataService } from '../../../shared/services/shared-data.service';
-import { SharedDataService } from '../../../shared/services/shared-data.service';
 import {
 	Subject,
 	Subscription,
@@ -18,12 +17,6 @@ import {
 	switchMap,
 	catchError,
 	throwError
-	tap,
-	from,
-	Observable,
-	switchMap,
-	catchError,
-	throwError
 } from 'rxjs';
 import { IndexedDatabaseStatusService } from '../../../shared/services/indexed-database-status.service';
 import { Player } from '../../../shared/data/interfaces/player-data';
@@ -33,7 +26,6 @@ import { tag } from 'rxjs-spy/cjs/operators';
 	providedIn: 'root'
 })
 export class FetchCurrentDataService implements OnDestroy {
-export class FetchCurrentDataService implements OnDestroy {
 	matchTypeSubscription: Subscription;
 	currentMatchType: string = '';
 	isDBInitialised = false;
@@ -42,8 +34,6 @@ export class FetchCurrentDataService implements OnDestroy {
 	constructor(
 		private indexedDB: IndexedDatabaseService,
 		private sharedDataService: SharedDataService,
-		private indexedDatabaseStatus: IndexedDatabaseStatusService,
-		private apiProcessing: ApiDataProcessingService
 		private indexedDatabaseStatus: IndexedDatabaseStatusService,
 		private apiProcessing: ApiDataProcessingService
 	) {
@@ -102,7 +92,6 @@ export class FetchCurrentDataService implements OnDestroy {
 			await firstValueFrom(
 				this.indexedDatabaseStatus.isInitialised$.pipe(
 					tag('process-match-data is init sub'),
-					tag('process-match-data is init sub'),
 					filter(isInitialised => isInitialised),
 					first(),
 					take(1)
@@ -159,11 +148,8 @@ export class FetchCurrentDataService implements OnDestroy {
 		} catch (err) {
 			console.error('Error getting current movement data', err);
 			throw err;
-			console.error('Error getting current movement data', err);
-			throw err;
 		}
 	}
-
 
 	private splitUnevenArray(array) {
 		const half = Math.floor(array.length / 2);
@@ -242,23 +228,8 @@ export class FetchCurrentDataService implements OnDestroy {
 			currentGame.sides = extractedSides;
 			currentGame.isSides = true;
 		}
-		const index = currentGame.playerConfig.north.length;
-		teams.splice(index);
-
-		currentGame.teams = teams;
-		currentGame.isTeams = true;
-
-		const extractedSides = this.extractSides(sides);
-		if (extractedSides.length !== 0) {
-			currentGame.sides = extractedSides;
-			currentGame.isSides = true;
-		}
 
 		return currentGame;
-	}
-
-	private extractSides(sides) {
-		return sides.filter(item => !item.match(/^Side \d+$/));
 	}
 
 	private extractSides(sides) {
@@ -287,14 +258,19 @@ export class FetchCurrentDataService implements OnDestroy {
 		return players;
 	}
 
-	private createTablesOject(north,east,south,west){
-		const tables ={}
-		const numPlayers = Math.min(north.length, south.length, east.length, west.length)
-		for (let i =0; i<numPlayers; i++){
-			tables[i+1] = [north[i],south[i],east[i],west[i]]
+	private createTablesOject(north, east, south, west) {
+		const tables = {};
+		const numPlayers = Math.min(
+			north.length,
+			south.length,
+			east.length,
+			west.length
+		);
+		for (let i = 0; i < numPlayers; i++) {
+			tables[i + 1] = [north[i], south[i], east[i], west[i]];
 		}
 
-		return tables
+		return tables;
 	}
 
 	async getNames() {

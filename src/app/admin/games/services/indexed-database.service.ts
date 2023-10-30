@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { openDB, IDBPDatabase, IDBPTransaction, StoreNames, DBSchema } from 'idb';
 import { Subject } from 'rxjs';
-import { Subject } from 'rxjs';
 import { IndexedDatabaseStatusService } from 'src/app/shared/services/indexed-database-status.service';
 
 @Injectable({
@@ -12,30 +11,26 @@ export class IndexedDatabaseService {
 
 	private exitSignal$ = new Subject<void>();
 
-	private exitSignal$ = new Subject<void>();
-
 	constructor(private indexedDatabaseStatus: IndexedDatabaseStatusService) {}
 
 	async initDatabase(
 		storeMapping: Record<string, any>,
+		playerDbStoreMapping: Record<string, any>,
 		dbName: string
 	): Promise<IDBPDatabase<unknown>> {
 		let dataInitialized = false; // Flag to track data initialisation
-		let dataInitialized = false; // Flag to track data initialisation
 		try {
 			const storeNames = Object.keys(storeMapping);
-			// console.log('initDatabase storemapping: ', storeNames);
+			const playerDbStoreNames = Object.keys(playerDbStoreMapping);
+			const maxVersion = 3;
+			console.log('initDatabase storemapping: ', storeNames);
 
-			this.db = await openDB(dbName, 2, {
+			this.db = await openDB(dbName, maxVersion, {
 				upgrade(db, oldVersion, newVersion, transaction) {
 					if (oldVersion < 1) {
 						console.log('old version less than 1');
 
-						console.log('old version less than 1');
-
 						if (!db.objectStoreNames.contains('meta')) {
-							console.log('db containr meta');
-
 							console.log('db containr meta');
 
 							db.createObjectStore('meta', { keyPath: 'id' });
@@ -47,14 +42,18 @@ export class IndexedDatabaseService {
 						// console.log('for..of storeName: ',storeName)
 						if (!db.objectStoreNames.contains(storeName)) {
 							db.createObjectStore(storeName, { keyPath: 'key' });
-							// console.log(storeName, 'created');
-						} else {
-							// console.log(storeNames, 'created, skipping store creation');
+							console.log(storeName, ': created');
+						}
+					}
+					for (const name of playerDbStoreNames) {
+						if (!db.objectStoreNames.contains(name)) {
+							db.createObjectStore(name, { keyPath: 'key' });
+							console.log(name, ': created');
 						}
 					}
 				}
 			});
-			// console.log('initDB finished');
+
 			this.indexedDatabaseStatus.setStatus(true);
 			console.log('database initialised successfully');
 
@@ -71,7 +70,7 @@ export class IndexedDatabaseService {
 			this.db = await openDB(dbName);
 			const actual = Array.from(this.db.objectStoreNames);
 
-
+			
 			return expectedStores.every(expected => actual.includes(expected));
 		}
 		return false;
@@ -102,6 +101,7 @@ export class IndexedDatabaseService {
 	): Promise<boolean> {
 		try {
 			const data = Object.keys(storeMapping);
+			const playerDbData = Object.keys(playerDbStoreMapping);
 			if (this.db === null) {
 				console.log('Database not init, initialising database');
 				this.db = await this.initDatabase(
@@ -280,7 +280,7 @@ export class IndexedDatabaseService {
 	public async getByKey(storeName: string, key: string) {
 		try {
 			if (!this.db) {
-				throw new Error('No database found');
+				throw new Error('no db');
 			}
 			const tx = this.db.transaction(storeName, 'readonly');
 			const store = tx.objectStore(storeName);

@@ -1,5 +1,11 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { BehaviorSubject, Subject, Subscription, takeUntil } from 'rxjs';
+import {
+	BehaviorSubject,
+	Subject,
+	Subscription,
+	takeUntil,
+	Observable
+} from 'rxjs';
 import { SharedDataService } from 'src/app/shared/services/shared-data.service';
 import { IndexedDatabaseStatusService } from 'src/app/shared/services/indexed-database-status.service';
 import { FetchCurrentDataService } from './fetch-current-data.service';
@@ -10,12 +16,14 @@ import { ApiDataCoordinationService } from './api/api-data-coordination.service'
 	providedIn: 'root'
 })
 export class HistoricGamesDatabaseService implements OnDestroy {
-
 	matchTypeSubscription: Subscription;
 	selectedMatchType: string = '';
 	isDBInitialised = false;
 	public dataLoadingSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 	dataLoading$ = this.dataLoadingSubject.asObservable();
+	private dataUpdated$ = new BehaviorSubject<any>(null);
+	private dataSubject$ = new Subject<any>();
+	fetchedData$: Observable<any> = this.dataSubject$.asObservable();
 	public destroy$: Subject<void> = new Subject<void>();
 
 	constructor(
@@ -52,11 +60,10 @@ export class HistoricGamesDatabaseService implements OnDestroy {
 			if (data) {
 				console.log(data, this.selectedMatchType, key, objectStore);
 				const accessedProperty = data[`${objectStore}`];
-				console.log(data, this.selectedMatchType, key, objectStore);
-				const accessedProperty = data[`${objectStore}`];
 				this.dataLoadingSubject.next(accessedProperty);
+
 				// this.dataLoadingSubject.complete();
-				// console.log(accessedProperty)
+				console.log('accessed prop: ', accessedProperty);
 				return accessedProperty;
 			}
 		} catch (err) {

@@ -1,11 +1,10 @@
-import { Component, OnInit, Input, Inject } from '@angular/core';
-import { Team } from '../data/interfaces/team-data';
+import { Component, Inject, Input, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-
+import { Team } from '../data/interfaces/team-data';
 @Component({
-  selector: 'app-team-table-dialog',
-  templateUrl: './team-table-dialog.component.html',
-  styleUrls: ['./team-table-dialog.component.scss']
+	selector: 'app-team-table-dialog',
+	templateUrl: './team-table-dialog.component.html',
+	styleUrls: ['./team-table-dialog.component.scss']
 })
 export class TeamTableDialogComponent implements OnInit {
 	@Input() existingRowData: Team;

@@ -34,5 +34,29 @@ export class IconRegistryService {
 				domain + svgUrlBase + 'x.svg'
 			)
 		);
+		this._matIconRegistry.addSvgIcon(
+			'spades-card',
+			this._domSanitizer.bypassSecurityTrustResourceUrl(
+				domain + svgUrlBase + 'spades.svg'
+			)
+		);
+		this._matIconRegistry.addSvgIcon(
+			'hearts-card',
+			this._domSanitizer.bypassSecurityTrustResourceUrl(
+				domain + svgUrlBase + 'hearts.svg'
+			)
+		);
+		this._matIconRegistry.addSvgIcon(
+			'clubs-card',
+			this._domSanitizer.bypassSecurityTrustResourceUrl(
+				domain + svgUrlBase + 'clubs.svg'
+			)
+		);
+		this._matIconRegistry.addSvgIcon(
+			'diamonds-card',
+			this._domSanitizer.bypassSecurityTrustResourceUrl(
+				domain + svgUrlBase + 'diamonds.svg'
+			)
+		);
 	}
 }
