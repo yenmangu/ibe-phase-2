@@ -23,11 +23,7 @@ import { UserDetailsService } from 'src/app/shared/services/user-details.service
 })
 export class AuthService {
 	private isAuthedSubject = new BehaviorSubject<boolean>(false);
-	private statusSubject = new BehaviorSubject<any>('');
-	private responseJSONSubject = new BehaviorSubject<any>({});
-	responseJSON$ = this.responseJSONSubject.asObservable();
-	destroy$ = new Subject<void>();
-	destroySubject = this.destroy$.asObservable();
+	private statusSubject = new BehaviorSubject<any>('')
 
 	private _authed: boolean = false;
 	private userExist: boolean = false;
@@ -58,7 +54,7 @@ export class AuthService {
 		return this.isAuthedSubject.asObservable();
 	}
 	public get statusSubject$(): Observable<any> {
-		return this.statusSubject.asObservable();
+		return this.statusSubject.asObservable()
 	}
 
 	setAuthenticationStatus(isAuthenticated: boolean) {
@@ -100,19 +96,18 @@ export class AuthService {
 					}
 					if (response.status === 'LOGGEDIN') {
 						this.isAuthedSubject.next(true);
-						this.statusSubject.next('AUTHED');
-						this.responseJSONSubject.next(response.json);
-
+						this.statusSubject.next('AUTHED')
 						console.log('User Authenticated');
 					}
 					if (response.status === 'ERRORNOUSER') {
 						this.isAuthedSubject.next(false);
-						this.statusSubject.next('NO_USER');
+						this.statusSubject.next('NO_USER')
 						console.log('No User Found');
+
 					}
 					if (response.status === 'ERRORPASS') {
 						this.isAuthedSubject.next(false);
-						this.statusSubject.next('INCORRECT_PASS');
+						this.statusSubject.next('INCORRECT_PASS')
 						console.log('Incorrect Password');
 					}
 				}),
@@ -132,17 +127,9 @@ export class AuthService {
 		);
 	}
 
-	logout(): void {
-		this.dataService.deleteIndexedDBDatabase();
-		// this.sharedDataService.clearAll();`
-		// this.userDetailsService.clearAllSubjects();
+	logout(): void{
 		this.tokenService.removeToken();
 		this.isAuthedSubject.next(false);
-		this.userDetailsService.updateLoggedIn(false);
-		localStorage.clear();
-		// this.isAuthedSubject.complete()
-		console.log('User logged out successfully');
-		this.router.navigate(['/home']);
-		location.reload();
+
 	}
 }

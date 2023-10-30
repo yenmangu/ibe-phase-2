@@ -9,27 +9,26 @@
 					(keyup)="applyFilter($event)" />
 			</mat-form-field>
 			<button
-				*ngIf="dataSource.filter !== ''"
-				class="clear-filter"
-				mat-flat-button
-				color="accent"
-				(click)="clearFilter(input)">
-				Clear
-			</button>
-			<button
-			[ngClass]="{'ibescore-theme': applyIbescoreTheme}"
 				class="add-row"
 				mat-flat-button
-				color="primary"
+				color="accent"
 				(click)="onPlayerAdd()">
 				+ Player
 			</button>
 		</div>
+		<button
+			mat-flat-button
+			color="primary"
+			(click)="onSave()"
+			class="save">
+			Save
+		</button>
 	</div>
+	Is Loading: {{ isLoading }}
 	<div class="table-wrapper">
 		<!-- <ng-container *ngIf="dataSource.data && dataSource.data.sort"> -->
 		<table
-			[hidden]="!dataSource.data && !table && dataSource.data.length < 1"
+			[hidden]="!dataSource.data && dataSource.data.sort"
 			[ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }"
 			class="mat-elevation-z8"
 			matSort
@@ -46,7 +45,7 @@
 				<td
 					mat-cell
 					*matCellDef="let player">
-					{{ player.value.$.n || '' }}
+					{{ player.$?.n || '' }}
 				</td>
 			</ng-container>
 
@@ -81,7 +80,7 @@
 			</ng-container>
 
 			<!-- Player Phone Column -->
-			<ng-container matColumnDef="telephone">
+			<ng-container matColumnDef="phone">
 				<th
 					mat-header-cell
 					*matHeaderCellDef>
@@ -90,7 +89,7 @@
 				<td
 					mat-cell
 					*matCellDef="let player">
-					{{ player?.value.telephone || '' }}
+					{{ player?.phone || '' }}
 				</td>
 			</ng-container>
 
@@ -104,21 +103,7 @@
 				<td
 					mat-cell
 					*matCellDef="let player">
-					{{ getIds(player?.value.id)?.join(', ') || '' }}
-				</td>
-			</ng-container>
-
-			<!-- Last Play Column -->
-			<ng-container matColumnDef="lastplay">
-				<th
-					mat-header-cell
-					*matHeaderCellDef>
-					Last Play
-				</th>
-				<td
-					mat-cell
-					*matCellDef="let player">
-					{{ player?.value?.lastplay ? player .value?.lastplay[0]?.$?.date : '' }}
+					{{ getIds(player?.id)?.join(',') || '' }}
 				</td>
 			</ng-container>
 
@@ -133,7 +118,7 @@
 				<td
 					mat-cell
 					*matCellDef="let player">
-					{{ player.value?.$.adddate || '' }}
+					{{ player.$?.adddate || '' }}
 				</td>
 			</ng-container>
 			<!--  Delete Column -->
@@ -147,42 +132,50 @@
 					class="delete"
 					mat-cell
 					*matCellDef="let player">
-					<mat-icon (click)="onDelete(player); $event.stopPropagation()">delete</mat-icon>
+					<mat-icon (click)="deleteRow(player)">delete</mat-icon>
 				</td>
 			</ng-container>
 
 			<tr
 				class="header-row"
 				mat-header-row
-				*matHeaderRowDef="displayedColumns; sticky: true"></tr>
+				*matHeaderRowDef="displayedColumns"></tr>
 			<tr
 				mat-row
 				*matRowDef="let row; columns: displayedColumns"
 				(click)="onRowClick(row)"></tr>
-			<!-- <tr
+			<tr
 				class="mat-row mat-no-data-row"
 				*matNoDataRow>
 				<td
 					class="mat-cell"
 					mat-cell
 					colspan="4">
-					No games matching your search term "{{ input }}"
+					No games matching your search term "{{ input.value }}"
 				</td>
-			</tr> -->
+			</tr>
 		</table>
 		<!-- </ng-container> -->
+		<mat-paginator
+			class="mat-elevation-z8"
+			#paginator
+			[pageIndex]="currentPage"
+			[pageSizeOptions]="[20, 40, 100, dataSource.data.length]"
+			showFirstLastButtons
+			aria-label="Select page of players">
+		</mat-paginator>
+
+		<ng-container *ngIf="tabSelected && isLoading">
+			<mat-spinner></mat-spinner
+		></ng-container>
 	</div>
-	<mat-paginator
-		class="mat-elevation-z8"
-		#paginator
-		[pageIndex]="0"
-		[pageSizeOptions]="[20, 40, 100, dataSource.data.length]"
-		showFirstLastButtons
-		aria-label="Select page of players">
-	</mat-paginator>
-
-	<ng-container *ngIf="tabSelected && isLoading">
-		<mat-spinner></mat-spinner
-	></ng-container>
-
+	<div
+		class="container row options"
+		style="gap: 2rem">
+		<button
+			mat-flat-button
+			color="accent">
+			Advanced
+		</button>
+	</div>
 </div>

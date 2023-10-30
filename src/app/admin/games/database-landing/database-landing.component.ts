@@ -1,139 +1,99 @@
-import { Component, OnDestroy, OnInit, ChangeDetectorRef } from '@angular/core';
-import { Subscription, Subject } from 'rxjs';
+import {
+	AfterViewInit,
+	Component,
+	DoCheck,
+	OnDestroy,
+	OnInit,
+	ViewChild
+} from '@angular/core';
+import { MatTableDataSource } from '@angular/material/table';
+import { Subscription } from 'rxjs';
+import { Sort } from '@angular/material/sort';
 import { HistoricGamesDatabaseService } from '../services/historic-games-database.service';
 import { SharedDataService } from 'src/app/shared/services/shared-data.service';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { BreakpointService } from 'src/app/shared/services/breakpoint.service';
-import { DialogService } from 'src/app/shared/services/dialog.service';
 
 @Component({
 	selector: 'app-database-landing',
 	templateUrl: './database-landing.component.html',
 	styleUrls: ['./database-landing.component.scss']
 })
-export class DatabaseLandingComponent implements OnInit, OnDestroy {
+export class DatabaseLandingComponent implements OnInit, AfterViewInit, OnDestroy {
 	currentBreakpointSubscription: Subscription;
-	applyMagentaGreyTheme = true;
 	currentBreakpoint = '';
 	gamesDatabase: any = {};
 	playersArray: any[] = [];
 	teamsArray: any[] = [];
 	venuesArray: any[] = [];
-	eventsArray: any[] = [];
+	eventArray: any[] = [];
 
-	dataArray: any[] = [];
-
-	playersReady = false;
-	teamsReady = false;
-	eventsReady = false;
-	venuesReady = false;
-
-	storeName: string = '';
-
-	tempDialogData: any = {};
 	searchTerm: string = '';
 	tabChangeSubscription = new Subscription();
 	tabSelected: boolean = false;
 	databaseSubscription: Subscription = new Subscription();
-	private dataUpdateSubscription: Subscription = new Subscription();
-	private dataSubscription: Subscription;
 	constructor(
-		private breakpointService: BreakpointService,
 		private historicDatabaseService: HistoricGamesDatabaseService,
-		private sharedDataService: SharedDataService,
-		private dialogService: DialogService,
-		private changeDetectorRef: ChangeDetectorRef
+		private sharedDataService: SharedDataService
 	) {}
 
 	ngOnInit(): void {
-		this.dataSubscription = this.historicDatabaseService.fetchedData$.subscribe({
-			next: data => {
-				// console.log('data from observable: ', data);
-				this.dataArray = data;
-				// console.log(this.dataArray);
-			}
-		});
+		this.databaseSubscription = this.historicDatabaseService.dataLoading$.subscribe(
+			data => {
+				if (data) this.gamesDatabase = data.value[0];
+				if (this.gamesDatabase && this.gamesDatabase.item) {
+					const dataArray: any[] = this.gamesDatabase.item;
+					// console.log('main data array', data.value[0].item);
 
-		// this.loadDatabaseData();
-
-		this.dataUpdateSubscription = this.historicDatabaseService
-			.getDataUpdated$()
-			.subscribe(data => {
-				if (data) {
+					dataArray.forEach((item: any) => {
+						if (item.$.type && item.$.type === 'player') {
+							this.playersArray.push(item);
+						}
+						if (item.$.type && item.$.type === 'team') {
+							this.teamsArray.push(item);
+						}
+						if (item.$.type && item.$.type === 'loc') {
+							this.venuesArray.push(item);
+						}
+						if (item.$.type && item.$.type === 'event') {
+							this.eventArray.push(item);
+						}
+					});
 				}
-			});
+				console.log('db landing player array: ', this.playersArray);
+				console.log('db landing team array: ', this.teamsArray);
+				console.log('db landing location array: ', this.venuesArray);
+				console.log('db landing event array: ', this.eventArray);
+			}
+		);
+		this.loadDatabaseData();
 	}
 
-	async loadDatabaseData(): Promise<any> {
+	ngDoCheck(): void {}
+
+	ngAfterViewInit(): void {
+		// this.loadDatabaseData();
+	}
+	ngAfterViewChecked(): void {}
+
+	async loadDatabaseData(): Promise<void> {
 		try {
-			console.log('loadDatabase called');
-			const dbData = await this.historicDatabaseService.fetchMainData(
-				'player_db',
-				'root'
+			await this.historicDatabaseService.fetchMainData(
+				'historic_game_data',
+				'histitem'
 			);
-			if (dbData) {
-				return dbData;
-			}
 		} catch (err) {
-			console.error('Error fetching data in db-landing component: ', err);
+			console.error('Error fetching data in eventNames component: ', err);
 		}
 	}
-
-	handleDataUpdate(event) {}
 
 	private compare(a: number | string, b: number | string, isAsc: boolean) {
 		return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
 	}
 
-	onFetchInitial(storeName: string) {
-		console.log('fetch intial received in the parent for store name: ', storeName);
-
-		if (storeName) {
-			this.updateProperty(storeName);
-		}
-		this.fetchInitialData(this.storeName);
+	onDataReceived(data: any) {
+		console.log('data receieved from child component: ', data);
 	}
 
-	async fetchInitialData(storeName: string) {
-		try {
-			await this.historicDatabaseService.fetchHistoricData(this.storeName);
-		} catch (err) {
-			console.error('Error fetching initial: ', err);
-		}
-	}
-
-	private updateProperty(storeName: string) {
-		switch (storeName) {
-			case 'players':
-				this.playersReady = true;
-				this.storeName = 'players';
-				break;
-			case 'teams':
-				this.teamsReady = true;
-				this.storeName = 'teams';
-				break;
-			case 'events':
-				this.eventsReady = true;
-				this.storeName = 'events';
-				break;
-			case 'venues':
-				this.venuesReady = true;
-				this.storeName = 'venues';
-				break;
-		}
-	}
-
-// To be implemented at a later date
-
-	// onClickOptions(){
-	// 	const dialogRef = this.dialogService.openDatabaseOptionsDialog(this.tempDialogData)
-	// 	dialogRef.afterClosed().subscribe({
-	// 		next: (data) => {
-	// 			console.log(data)
-	// 		}
-	// 	})
-	// }
-
-	ngOnDestroy(): void {
-		this.dataSubscription.unsubscribe();
-	}
+	ngOnDestroy(): void {}
 }

@@ -16,8 +16,6 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 // CDK
 import { CdkColumnDef } from '@angular/cdk/table';
@@ -46,12 +44,6 @@ import { TeamsDatabaseComponent } from './database-landing/teams-database/teams-
 import { VenuesDatabaseComponent } from './database-landing/venues-database/venues-database.component';
 import { EventNamesDatabaseComponent } from './database-landing/event-names-database/event-names-database.component';
 import { DatabaseLandingComponent } from './database-landing/database-landing.component';
-import { AdvancedOptionsDialogComponent } from './database-landing/advanced-options-dialog/advanced-options-dialog.component';
-import { HandPaginationComponent } from './current-game/hand-pagination/hand-pagination.component';
-import { HandDisplayComponent } from './current-game/hand-display/hand-display.component';
-import { PdfGenerationComponent } from './current-game/game-players/pdf-generation/pdf-generation.component';
-import { CreateGameComponent } from './current-game/game-players/create-game/create-game.component';
-
 
 @NgModule({
 	declarations: [
@@ -70,13 +62,7 @@ import { CreateGameComponent } from './current-game/game-players/create-game/cre
 		TeamsDatabaseComponent,
 		VenuesDatabaseComponent,
 		EventNamesDatabaseComponent,
-		DatabaseLandingComponent,
-		AdvancedOptionsDialogComponent,
-  HandPaginationComponent,
-  HandDisplayComponent,
-  PdfGenerationComponent,
-  CreateGameComponent,
-
+		DatabaseLandingComponent
 	],
 	imports: [
 		CommonModule,
@@ -97,8 +83,6 @@ import { CreateGameComponent } from './current-game/game-players/create-game/cre
 		MatIconModule,
 		MatSortModule,
 		MatPaginatorModule,
-		MatCheckboxModule,
-		MatProgressBarModule,
 		// Other UI
 		NgxMaterialTimepickerModule
 		// Clarity

@@ -18,10 +18,8 @@ import {
 	catchError,
 	throwError
 } from 'rxjs';
-import { IndexedDatabaseStatusService } from '../../../shared/services/indexed-database-status.service';
-import { Player } from '../../../shared/data/interfaces/player-data';
-import { ApiDataProcessingService } from './api/api-data-processing.service';
-import { tag } from 'rxjs-spy/cjs/operators';
+import { IndexedDatabaseStatusService } from 'src/app/shared/services/indexed-database-status.service';
+
 @Injectable({
 	providedIn: 'root'
 })
@@ -45,45 +43,11 @@ export class FetchCurrentDataService implements OnDestroy {
 				}
 			});
 
-		this.indexedDatabaseStatus
-			.isInitialised()
-			.pipe(tag(''))
-			.subscribe(intialised => {
-				this.isDBInitialised = intialised;
-			});
-	}
+		this.indexedDatabaseStatus.isInitialised().pipe(
 
-	async getHistoricData(storeName: string) {
-		try {
-			await firstValueFrom(
-				this.indexedDatabaseStatus.isInitialised$.pipe(
-					filter(isInitialised => isInitialised),
-					first(),
-					take(1)
-				)
-			);
-			const data = await this.indexedDB.getAllDataFromStore(storeName);
-			return data;
-		} catch (error) {
-			throw error;
-		}
-	}
-
-	async getAllStoreData(storeName: string) {
-		try {
-			await firstValueFrom(
-				this.indexedDatabaseStatus.isInitialised$.pipe(
-					filter(isInitialised => isInitialised),
-					first(),
-					take(1)
-				)
-			);
-			const data = await this.indexedDB.getAllDataFromStore(`${storeName}`);
-			const extracted = data.map(item => item.value);
-			return extracted;
-		} catch (err) {
-			throw err;
-		}
+		).subscribe(intialised => {
+			this.isDBInitialised = intialised;
+		});
 	}
 
 	async getData(storeName, key) {
@@ -144,7 +108,8 @@ export class FetchCurrentDataService implements OnDestroy {
 				teamsValue,
 				sidesValue
 			);
-			return currentGameConfig;
+			return currentGameConfig
+			// console.log('Current Game Config: ', currentGameConfig);
 		} catch (err) {
 			console.error('Error getting current movement data', err);
 			throw err;
@@ -212,10 +177,8 @@ export class FetchCurrentDataService implements OnDestroy {
 			}
 		};
 
-		console.log('data obj: ', dataObj);
-
-		currentGame.tables = this.createTablesOject(north, south, east, west);
-		console.log('currentGame: ', currentGame);
+		currentGame.tables = this.createTablesOject(north,south,east,west)
+		// console.log('currentGame: ', currentGame);
 		// console.log('tableArray: ', tableArray);
 		const index = currentGame.playerConfig.north.length;
 		teams.splice(index);
@@ -258,19 +221,14 @@ export class FetchCurrentDataService implements OnDestroy {
 		return players;
 	}
 
-	private createTablesOject(north, east, south, west) {
-		const tables = {};
-		const numPlayers = Math.min(
-			north.length,
-			south.length,
-			east.length,
-			west.length
-		);
-		for (let i = 0; i < numPlayers; i++) {
-			tables[i + 1] = [north[i], south[i], east[i], west[i]];
+	private createTablesOject(north,east,south,west){
+		const tables ={}
+		const numPlayers = Math.min(north.length, south.length, east.length, west.length)
+		for (let i =0; i<numPlayers; i++){
+			tables[i+1] = [north[i],south[i],east[i],west[i]]
 		}
 
-		return tables;
+		return tables
 	}
 
 	async getNames() {
@@ -335,104 +293,6 @@ export class FetchCurrentDataService implements OnDestroy {
 
 		// console.log('procesNamesText namesArray: ', namesArray);
 		return namesArray;
-	}
-
-	// Update And Write Operations
-
-	async updateValue(receivedData): Promise<any> {
-		try {
-			console.log(
-				'data received in process match data updateValue(): ',
-				receivedData
-			);
-			const { isNew, data } = receivedData;
-			if (!data) {
-				throw new Error('no data provided for updateValue()');
-			}
-			const storeName = `${data.value.$.type}`;
-			let key = undefined;
-			if (!isNew) {
-				console.log('Not new');
-				key = data.key;
-				console.log('store name: ', storeName, ' key: ', key);
-
-				const existingValue: any = await this.indexedDB.getByKey(storeName, key);
-				if (existingValue) {
-					console.log('wholeObject from db: ', existingValue);
-					const { value } = existingValue;
-					let newValue = { ...value };
-					newValue = data.value;
-
-					await this.indexedDB.update(storeName, key, newValue);
-				} else {
-					throw new Error(
-						'error updating, could not find data with specified key: ',
-						key
-					);
-				}
-			} else {
-				console.log('isNew = true, adding new data', 'isNew: ', isNew);
-				const existingStoreEntries = await this.indexedDB.getAllDataFromStore(
-					storeName
-				);
-				const items = await this.apiProcessing.retrieveAllPlayerDb();
-				const newIndex = (existingStoreEntries.length + 1).toString();
-
-				const newN = (items.length + 1).toString();
-				const newKey = `00${newIndex}`;
-				console.log('new index (n-value): ', newIndex);
-				data.value.$.n = newN;
-				const value = data.value;
-				// const newKey = newIndex
-				console.log('new entry for database: ', value);
-				await this.indexedDB.add(storeName, newKey, value);
-			}
-			return true;
-		} catch (err) {
-			throw err;
-		}
-	}
-
-	async deleteByKey(data): Promise<any> {
-		try {
-			if (!data) {
-				throw new Error('No data in process match data deleteByKey()');
-			}
-			const type = data.value.$.type;
-			const storeName = `${type}`;
-			const key = data.key;
-			console.log(`storenName: ${storeName} and key: ${key}`);
-			const success = await this.indexedDB.delete(storeName, key);
-			if (success) {
-				return true;
-			}
-			return false;
-		} catch (err) {
-			throw err;
-		}
-	}
-
-	private async updateEntry(newData): Promise<any> {}
-
-	private async getPlayerDataFromDB(): Promise<any> {
-		try {
-			const storeName = `player_db`;
-			const existingData = await this.indexedDB.readFromDB([storeName], 'root');
-			return existingData;
-		} catch (err) {
-			throw err;
-		}
-		// Implement logic to retrieve data of a specific type from the database
-	}
-
-	private async buildUpdateObject(dataArray: any[]) {
-		// console.log('DataArray in update Object: ', JSON.stringify(dataArray, null, 2));
-		const updateObject = {
-			storeName: `player_db`,
-			key: 'root',
-			value: dataArray
-		};
-		await this.indexedDB.writeToDB([updateObject]);
 	}
 
 	ngOnDestroy(): void {

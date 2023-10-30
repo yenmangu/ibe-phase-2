@@ -11,13 +11,9 @@ export class DataService implements OnInit, OnDestroy {
 	private dbName = 'ibe_game_data';
 	matchType: string = '';
 	private storeMapping = {};
-	private playerDbStoreMapping = {};
 	private subscription: Subscription;
 	public destroy$ = new Subject<void>();
-	playersArray = [];
-	teamsArray = [];
-	venuesArray = [];
-	eventArray = [];
+
 	constructor(
 		private indexedDB: IndexedDatabaseService,
 		private sharedDataService: SharedDataService,
@@ -119,51 +115,41 @@ export class DataService implements OnInit, OnDestroy {
 	}
 
 	public initialiseDB = async data => {
-		return new Promise<void>(async (resolve, reject) => {
-			try {
-				// console.log('accessing playerdb array test: ', data.playerdb.root[0].item);
-				// console.log('matchType :', this.matchType);
-				const storeMapping = this.mapData(data);
-				const playerDbStoreMapping = this.getPlayerDbStoreMapping(data);
-				this.storeMapping = storeMapping;
-				this.playerDbStoreMapping = playerDbStoreMapping;
-				// console.log('initialiseDB storeMapping: ', storeMapping);
-				await this.indexedDB.initDatabase(
-					storeMapping,
-					playerDbStoreMapping,
-					`${this.dbName}`
-				);
-				console.log(`database with name of ${this.dbName} initialised`);
-
-				resolve();
-			} catch (err) {
-				reject(err);
-			}
-		});
+		// console.log('matchType :', this.matchType);
+		const storeMapping = this.mapData(data);
+		this.storeMapping = storeMapping;
+		// console.log('initialiseDB storeMapping: ', storeMapping);
+		await this.indexedDB.initDatabase(
+			storeMapping,
+			`${this.matchType}-${this.dbName}`
+		);
+		console.log(
+			`database with name of ${this.matchType}-${this.dbName} initialised`
+		);
 	};
 
-	private calculateTotalStores(data: any): number {
-		const playerDbStoreMapping = this.getPlayerDbStoreMapping(data);
-		const storeMapping = this.mapData(data);
-		const playerDBStoreCount = Object.keys(playerDbStoreMapping).length;
-		const storeCount = Object.keys(storeMapping).length;
-		return playerDBStoreCount + storeCount;
+
+
+	async doesDbExist() {
+		try {
+			const exists = await this.indexedDB.doesDatabaseExist(
+				`${this.matchType}-${this.dbName}`
+			);
+			return exists;
+		} catch (err) {
+			console.error('Error checking db', err);
+			return false;
+		}
 	}
 
 	async storeData(data: any): Promise<boolean> {
 		try {
-			const totalStores = this.calculateTotalStores(data);
-			const playerDbStoreMapping = this.getPlayerDbStoreMapping(data);
-			const storeMapping = this.mapData(data);
-
-			this.IDBStatusService.setProgress(totalStores, 0);
-			console.log('total stores to process: ', totalStores);
+			const storeMapping = this.mapData(data); // Map the data
+			// console.log('storeData storeMapping ', storeMapping);
 
 			const result = await this.indexedDB.initialiseWithGameData(
 				storeMapping,
-				playerDbStoreMapping,
-				this.dbName,
-				totalStores
+				this.dbName
 			);
 			this.IDBStatusService.dataFinishedLoadingSubject.next(true);
 			this.saveStoreNames(storeMapping, playerDbStoreMapping);
@@ -175,48 +161,8 @@ export class DataService implements OnInit, OnDestroy {
 		}
 	}
 
-	private getPlayerDbStoreMapping(data: any): any {
-		if (data && data.playerdb.root[0].item) {
-			console.log('storing player db data');
-			const dataArray: any[] = data.playerdb.root[0].item;
-			const temp_playersArray = [];
-			const temp_teamsArray = [];
-			const temp_venuesArray = [];
-			const temp_eventArray = [];
-
-			dataArray.forEach((item: any) => {
-				if (item.$.type) {
-					switch (item.$.type) {
-						case 'player':
-							temp_playersArray.push(item);
-							break;
-						case 'team':
-							temp_teamsArray.push(item);
-							break;
-						case 'loc':
-							temp_venuesArray.push(item);
-							break;
-						case 'event':
-							temp_eventArray.push(item);
-							break;
-					}
-				}
-			});
-			const playerDbMapping = {
-				[`player`]: temp_playersArray,
-				[`team`]: temp_teamsArray,
-				[`event`]: temp_eventArray,
-				[`loc`]: temp_venuesArray
-			};
-			console.log('playerDB Store mapping complete');
-
-			return playerDbMapping;
-		}
-	}
 
 	private mapData(data) {
-		// const playerdbObject = this.processData(data);
-		// console.log('initial player object: ', playerdbObject);
 		const {
 			currentgamedata,
 			hist,
