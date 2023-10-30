@@ -8,7 +8,7 @@ import {
 } from 'rxjs';
 import { SharedDataService } from 'src/app/shared/services/shared-data.service';
 import { IndexedDatabaseStatusService } from 'src/app/shared/services/indexed-database-status.service';
-import { ProcessMatchDataService } from './process-match-data.service';
+import { FetchCurrentDataService } from './fetch-current-data.service';
 import { IndexedDatabaseService } from './indexed-database.service';
 import { ApiDataCoordinationService } from './api/api-data-coordination.service';
 
@@ -29,7 +29,7 @@ export class HistoricGamesDatabaseService implements OnDestroy {
 	constructor(
 		private sharedDataService: SharedDataService,
 		private indexedDatabaseStatus: IndexedDatabaseStatusService,
-		private processMatchDataService: ProcessMatchDataService,
+		private processMatchDataService: FetchCurrentDataService,
 		private apiData: ApiDataCoordinationService
 	) {
 		console.log('historic games & database service init');
@@ -41,13 +41,11 @@ export class HistoricGamesDatabaseService implements OnDestroy {
 		this.indexedDatabaseStatus.isInitialised().subscribe(initialised => {
 			this.isDBInitialised = initialised;
 		});
-
-		console.log('Selected match type: ', this.selectedMatchType);
 	}
 
 	async fetchHistoricData(objectStore: string): Promise<any> {
 		try {
-			const data = await this.processMatchDataService.getAllStoreData(objectStore);
+			const data = await this.processMatchDataService.getHistoricData(objectStore);
 			this.dataLoadingSubject.next(data);
 			this.dataSubject$.next(data);
 			return data;
@@ -60,7 +58,7 @@ export class HistoricGamesDatabaseService implements OnDestroy {
 		try {
 			const data = await this.processMatchDataService.getData(objectStore, key);
 			if (data) {
-				// console.log(data, this.selectedMatchType, key, objectStore)
+				console.log(data, this.selectedMatchType, key, objectStore);
 				const accessedProperty = data[`${objectStore}`];
 				this.dataLoadingSubject.next(accessedProperty);
 
@@ -78,11 +76,13 @@ export class HistoricGamesDatabaseService implements OnDestroy {
 			console.log('historic games db service data and type: ', newData, type);
 			const success = await this.processMatchDataService.updateValue(newData);
 			// console.log('new data from updateByType: ', JSON.stringify(newData, null, 2));
-			this.apiData.invokeAPICoordination(this.selectedMatchType, undefined, newData.data);
-			this.dataUpdated$.next(newData.data);
 			if (success) {
+				const {data} = newData
+				this.apiData.invokeAPICoordination(data);
+				this.dataUpdated$.next(data);
 				return success;
 			}
+			return false;
 		} catch (err) {
 			throw err;
 		}
@@ -94,10 +94,10 @@ export class HistoricGamesDatabaseService implements OnDestroy {
 				'historic games db service - row: ',
 				JSON.stringify(data, null, 2)
 			);
-			const result = await this.processMatchDataService.deleteByKey(data);
-			if (result) {
-				this.dataUpdated$.next(data);
-			}
+			await this.processMatchDataService.deleteByKey(data);
+
+			this.apiData.invokeAPICoordination(data);
+			this.dataUpdated$.next(data);
 		} catch (err) {
 			throw err;
 		}

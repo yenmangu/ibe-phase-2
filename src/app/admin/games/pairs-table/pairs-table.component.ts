@@ -19,8 +19,10 @@ import { Subject, Subscription, takeUntil } from 'rxjs';
 import { BreakpointService } from 'src/app/shared/services/breakpoint.service';
 import { SharedDataService } from 'src/app/shared/services/shared-data.service';
 import { SharedGameDataService } from '../services/shared-game-data.service';
-import { ProcessMatchDataService } from '../services/process-match-data.service';
+import { FetchCurrentDataService } from '../services/fetch-current-data.service';
 import { TablesService } from '../services/tables.service';
+import { ProcessCurrentDataService } from '../services/process-current-data.service';
+import { tag } from 'rxjs-spy/cjs/operators';
 @Component({
 	selector: 'app-pairs-table',
 	templateUrl: './pairs-table.component.html',
@@ -39,8 +41,13 @@ export class PairsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 	currentBreakpoint: string = '';
 	pairsForm: FormGroup;
 	columns: string[] = ['north', 'n/s', 'south', 'east', 'e/w', 'west'];
+	isLoading$: boolean = true;
+
+	originalFormValues: any;
+	changedFields: { [key: string]: { previousValue: any; newValue: any } } = {};
 	tableNumbers: string[];
-	isLoading$: true;
+
+	breakpoint: string = '';
 
 	private tableConfigSubscription: Subscription;
 	private destroy$ = new Subject<void>();
@@ -51,30 +58,24 @@ export class PairsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 		private breakpointService: BreakpointService,
 		private sharedGamedataService: SharedGameDataService,
 		private sharedDataService: SharedDataService,
-		private processMatchData: ProcessMatchDataService,
+		private processCurrentData: ProcessCurrentDataService,
 		private tablesService: TablesService
 	) {
-		this.matchTypeSubscription = this.sharedDataService.selectedMatchType$
-			.pipe(takeUntil(this.destroy$))
-			.subscribe({
-				next: matchType => {
-					this.matchType = matchType;
-					// console.log('confirming: ', this.matchType);
-				}
-			});
-
-		console.log('', this.matchType);
-		this.tablesService.tablesConfig$.subscribe(config => {
+		this.tablesService.tablesConfig$.pipe(tag('pairs-table')).subscribe(config => {
 			this.tableConfig = config;
 			this.tableConfigOption = Object.keys(config);
 
 			// console.log('pairs-table config: ', this.tableConfig);
 		});
 		this.isLoading$ = true;
+		this.breakpointService.currentBreakpoint$.subscribe(breakpoint => {
+			this.breakpoint = breakpoint;
+			console.log('breakpoint: ', this.breakpoint);
+		});
 	}
 
 	ngOnInit(): void {
-		// console.log('tables: ', this.initialTableData.tables);
+		console.log('tables: ', this.initialTableData.tables);
 		this.tableNumbers = Object.keys(this.initialTableData.tables);
 		this.fromDataTableData = this.initialTableData.tables;
 		this.pairsForm = this.createNewPairsForm();
@@ -85,6 +86,21 @@ export class PairsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 		} else {
 			console.log('no form');
 		}
+
+		this.originalFormValues = this.pairsForm.value;
+		this.pairsForm.valueChanges.subscribe(changedValues => {
+			this.changedFields = {};
+			for (const key in changedValues) {
+				if (changedValues.hasOwnProperty(key)) {
+					if (changedValues[key] !== this.originalFormValues[key]) {
+						this.changedFields[key] = {
+							previousValue: this.originalFormValues[key],
+							newValue: changedValues[key]
+						};
+					}
+				}
+			}
+		});
 	}
 	ngAfterViewInit(): void {}
 	private createNewPairsForm(): FormGroup {
@@ -100,6 +116,7 @@ export class PairsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 
 		return (this.pairsForm = this.fb.group(pairsFormControls));
 	}
+
 	private createTableControls(
 		table: any,
 		tableNumber: string
@@ -122,8 +139,8 @@ export class PairsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 			'ns_abbrev',
 			'ew_abbrev',
 			'boardCol',
-			'timings-from',
-			'timings-to',
+			'time_from',
+			'time_to',
 			'lunch'
 		];
 		if (namesArray) {
@@ -137,7 +154,6 @@ export class PairsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 				tableControls[field] = [null];
 			}
 		}
-
 		return tableControls;
 	}
 
@@ -185,17 +201,24 @@ export class PairsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 	}
 
 	getConditionalControl(tableNumber: string, conditional): FormControl {
-		return this.pairsForm.get(`_${tableNumber}.${conditional}`) as FormControl;
+		return this.pairsForm.get(
+			`_${tableNumber.toString()}.${conditional}`
+		) as FormControl;
 	}
 
 	onSubmit() {
 		console.log(this.pairsForm.value);
+		if (this.pairsForm.valid) {
+		}
 	}
 
 	getPairsFormData() {
 		if (this.pairsForm.valid) {
 			const formData = this.pairsForm.value;
-			return formData;
+			console.log('pairs form component form data: ', formData);
+
+			const changedFields = this.changedFields;
+			return { formData, changedFields };
 		}
 		return null;
 	}

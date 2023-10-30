@@ -1,0 +1,24 @@
+:host {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	overflow-y: auto;
+}
+.main {
+	padding: 2rem;
+	align-items: stretch;
+}
+
+.pin-column {
+	width: max-content;
+	gap: 0.4rem;
+}
+
+.gap-1 {
+	justify-content: center;
+	gap: 2rem;
+}
+.bottom-row {
+	margin-top: 2rem;
+}

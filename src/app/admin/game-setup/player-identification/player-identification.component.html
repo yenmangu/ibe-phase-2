@@ -1,0 +1,81 @@
+<h3>Player Identification</h3>
+<form
+	[formGroup]="internationalOrganisationForm"
+	class="container column">
+	<div class="top-row grid-row grid-container">
+		<div class="grid-item">ID Method</div>
+		<div class="grid-item filler"></div>
+		<div class="grid-item right">
+			<div class="inner-item">Default?</div>
+			<div class="inner-item delete filler">Delete</div>
+		</div>
+	</div>
+	<div class="static-row grid-row container row">
+		<span>Names</span>
+		<div class="grid-item filler"></div>
+		<div class="grid-item right">
+			<mat-checkbox class="inner-item"></mat-checkbox>
+			<div>
+				<button
+					class="inner-item delete"
+					mat-flat-button>
+					<mat-icon>delete</mat-icon>
+				</button>
+			</div>
+		</div>
+	</div>
+	<div
+		formArrayName="choices"
+		class="additional-choices">
+		<div
+			*ngFor="let choice of choices.controls; let i = index"
+			[formGroupName]="i"
+			class="choice-wrapper grid-row">
+			<div class="top-level grid-item">
+				<mat-form-field>
+					<mat-label>Select Organisation</mat-label>
+					<mat-select
+						formControlName="selectedOrganisation"
+						(selectionChange)="onOrgChange($event.value, i)">
+						<mat-option
+							*ngFor="let org of organisations"
+							[value]="org.value"
+							>{{ org.name }}</mat-option
+						>
+					</mat-select>
+				</mat-form-field>
+			</div>
+			<div
+				*ngIf="selectedOrganisations[i] && getSubOrgsForChoice(i).length > 0"
+				class="sub-level grid-item">
+				<mat-form-field>
+					<mat-label> Select Sub-Organisation</mat-label>
+					<mat-select *ngIf="selectedOrganisations" formControlName="selectedSubOrganisation">
+						<mat-option
+							*ngFor="let subOrg of getSubOrgsForChoice(i)"
+							[value]="subOrg.value"
+							>{{ subOrg.name }}</mat-option
+						>
+					</mat-select>
+				</mat-form-field>
+			</div>
+			<div class="grid-item right">
+				<mat-checkbox
+					class="inner-item-item"
+					formControlName="setDefault"></mat-checkbox>
+				<button
+					class="inner-item delete"
+					mat-flat-button
+					(click)="removeChoice(i)">
+					<mat-icon>delete</mat-icon>
+				</button>
+			</div>
+		</div>
+	</div>
+	<button
+		class="add"
+		mat-flat-button
+		(click)="addChoice()">
+		Add
+	</button>
+</form>

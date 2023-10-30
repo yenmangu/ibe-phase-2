@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { openDB, IDBPDatabase, IDBPTransaction, StoreNames, DBSchema } from 'idb';
+import { Subject } from 'rxjs';
 import { IndexedDatabaseStatusService } from 'src/app/shared/services/indexed-database-status.service';
 
 @Injectable({
@@ -8,6 +9,8 @@ import { IndexedDatabaseStatusService } from 'src/app/shared/services/indexed-da
 export class IndexedDatabaseService {
 	private db: IDBPDatabase | null = null;
 
+	private exitSignal$ = new Subject<void>();
+
 	constructor(private indexedDatabaseStatus: IndexedDatabaseStatusService) {}
 
 	async initDatabase(
@@ -15,21 +18,21 @@ export class IndexedDatabaseService {
 		playerDbStoreMapping: Record<string, any>,
 		dbName: string
 	): Promise<IDBPDatabase<unknown>> {
+		let dataInitialized = false; // Flag to track data initialisation
 		try {
-			let storeNames;
-			let playerDbStoreNames;
-			const databaseExist = localStorage.getItem('database');
-			if (databaseExist !== 'true') {
-				storeNames = Object.keys(storeMapping);
-				playerDbStoreNames = Object.keys(playerDbStoreMapping);
-			}
+			const storeNames = Object.keys(storeMapping);
+			const playerDbStoreNames = Object.keys(playerDbStoreMapping);
 			const maxVersion = 3;
 			console.log('initDatabase storemapping: ', storeNames);
 
 			this.db = await openDB(dbName, maxVersion, {
 				upgrade(db, oldVersion, newVersion, transaction) {
 					if (oldVersion < 1) {
+						console.log('old version less than 1');
+
 						if (!db.objectStoreNames.contains('meta')) {
+							console.log('db containr meta');
+
 							db.createObjectStore('meta', { keyPath: 'id' });
 						}
 					}
@@ -52,21 +55,49 @@ export class IndexedDatabaseService {
 			});
 
 			this.indexedDatabaseStatus.setStatus(true);
+			console.log('database initialised successfully');
+
 			return this.db;
 		} catch (err) {
 			console.error('Error initialising database', err);
+			this.indexedDatabaseStatus.setStatus(false);
 			return err;
 		}
 	}
-	async doesDatabaseExist(dbName) {
+	async doesDatabaseExist(dbName, expectedStores): Promise<boolean> {
 		const databaseNames = await indexedDB.databases();
-		return databaseNames.some(dbInfo => dbInfo.name === dbName);
+		if (databaseNames.some(dbInfo => dbInfo.name === dbName)) {
+			this.db = await openDB(dbName);
+			const actual = Array.from(this.db.objectStoreNames);
+
+			
+			return expectedStores.every(expected => actual.includes(expected));
+		}
+		return false;
 	}
+
+	// async isDBready(expectedStoreNames: string[]):Promise<boolean> {
+	// 	try {
+	// 		const storeNamesJSON = localStorage.getItem('STORE_NAMES');
+	// 		if(!storeNamesJSON){
+	// 			return false
+	// 		}
+	// 		const storeNamesArray = JSON.parse(storeNamesJSON);
+
+	// 		for (const name of storeNamesArray{
+
+	// 		})
+
+	// 	} catch (err) {
+	// 		throw new Error('Error checking database against existing store names')
+	// 	}
+	// }
 
 	async initialiseWithGameData(
 		storeMapping: Record<string, any>,
 		playerDbStoreMapping: Record<string, any>,
-		dbName: string
+		dbName: string,
+		totalStores
 	): Promise<boolean> {
 		try {
 			const data = Object.keys(storeMapping);
@@ -78,8 +109,6 @@ export class IndexedDatabaseService {
 					playerDbStoreMapping,
 					dbName
 				);
-			} else {
-				// console.log('database created');
 			}
 
 			const tx = this.db.transaction(['meta'], 'readwrite');
@@ -106,7 +135,8 @@ export class IndexedDatabaseService {
 				storeMapping,
 				playerDbStoreMapping,
 				storeNames,
-				playerDbStoreNames
+				playerDbStoreNames,
+				progress => this.indexedDatabaseStatus.setProgress(totalStores, progress)
 			);
 			// Dynamically create object stores based on storeMapping keys
 			return true;
@@ -116,94 +146,120 @@ export class IndexedDatabaseService {
 		}
 	}
 
-	private async createInitialObjectStores(
-		storeMapping: Record<string, any>
-	): Promise<void> {
-		// console.log('createObject storeMapping: ', storeMapping);
-		const storeNames = Object.keys(storeMapping);
-		for (const storeName of storeNames) {
-			if (!this.db.objectStoreNames.contains(storeName)) {
-				this.db.createObjectStore(storeName, { keyPath: 'key' });
-			}
-			console.log(storeName, ' created');
-		}
-	}
-
 	private async addInitialData(
 		storeMapping: Record<string, any>,
 		playerDbStoreMapping: Record<string, any>,
 		storeNames: string[],
-		playerDbStoreNames: string[]
+		playerDbStoreNames: string[],
+		progressCallBack: (progress: number) => void
 	): Promise<Record<string, any>> {
-		const allStoreNames = [...storeNames, ...playerDbStoreNames];
+		const allStoreNames = storeNames.concat(playerDbStoreNames);
 		const tx = this.db.transaction(allStoreNames, 'readwrite');
-
 		try {
 			const promises = [];
+			let progress = 0;
+
 			for (const name of playerDbStoreNames) {
-				// console.log('playerdb store name', name);
+				let id = 1;
+				let key = `00${id}`;
 				try {
-					// console.log('finding store: ', name);
 					const store = tx.objectStore(name);
 					if (!store) {
-						console.log('no store');
-						return new Error('no store');
-					} else {
-						console.log(store);
+						console.log('No Store');
+						throw new Error(`store: ${name} not found for player_db`);
 					}
 					for (const element of playerDbStoreMapping[name]) {
-						const key = element.$.n;
 						const value = element;
 						const existingData = await store.get(key);
+						// console.log('key: ', key);
+
+						const dataToStore = { key, value };
 						if (existingData === undefined) {
-							const dataToStore = { key, value };
 							const promise = store.add(dataToStore);
 							promises.push(promise);
 						} else {
-							continue;
+							const promise = store.put(dataToStore);
+							promises.push(promise);
 						}
+						id++;
+						key = `00${id}`;
 					}
-				} catch (error) {
-					console.error(`Error processing player store ${name}:`, error);
+					progress++;
+					progressCallBack(progress);
+				} catch (err) {
+					console.error(`error processing player store ${name}: ${err}`);
 				}
 			}
+
+			// process other stores
 
 			for (const storeName of storeNames) {
 				try {
 					const store = tx.objectStore(storeName);
-					console.log('storeMaping', storeMapping);
-					const keys = Object.keys(storeMapping[storeName]);
-					// console.log('keys for store', storeName, ': ', keys);
-
-					const storePromises = keys.map(async key => {
-						const value = storeMapping[storeName][key];
-
+					if (!store) {
+						console.log('no store for: ', storeName);
+						throw new Error(`No store for ${storeName}`);
+					}
+					if (storeName === 'lock') {
+						const key = 'lock';
+						const value = storeMapping.lock;
 						const existingData = await store.get(key);
-
-						// console.log('normal store key and value: ', key, value);
-
+						const dataToStore = { key, value };
 						if (existingData === undefined) {
-							const dataToStore = { key, value };
 							const promise = store.add(dataToStore);
-							return promise;
+							promises.push(promise);
 						} else {
-							// Skip this iteration and continue to the next one
-							return undefined; // Returning undefined here to indicate that the promise is not added
+							const promise = store.put(dataToStore);
+							promises.push(promise);
 						}
-					});
-					promises.push(...storePromises.filter(promise => promise !== undefined));
-					// console.log(promises);
-				} catch (error) {
-					console.error(`Error processing store ${storeName}:`, error);
+					} else if (storeName === 'hand_data' || storeName === 'hrev_txt') {
+						console.log(`processing ${storeName} differently: `);
+						let dataToStore = { key: '', value: '' };
+						if (storeName === 'hand_data') {
+							dataToStore = { key: 'hands', value: storeMapping[storeName] };
+						}
+						if (storeName === 'hrev_txt') {
+							dataToStore = { key: 'hrev', value: storeMapping[storeName] };
+						}
+
+						const existingData = await store.get('root');
+						if (existingData === undefined) {
+							const promise = store.add(dataToStore);
+							promises.push(promise);
+						} else {
+							const promise = store.put(dataToStore);
+							promises.push(promise);
+						}
+					} else {
+						const keys = Object.keys(storeMapping[storeName]);
+
+						for (const key of keys) {
+							const value = storeMapping[storeName][key];
+							const existingData = await store.get(key);
+
+							const dataToStore = { key, value };
+							if (existingData === undefined) {
+								const promise = store.add(dataToStore);
+								promises.push(promise);
+							} else {
+								const promise = store.put(dataToStore);
+								promises.push(promise);
+							}
+						}
+					}
+				} catch (err) {
+					console.error(`error processing game data store ${storeName}: ${err}`);
 				}
+				progress++;
+				progressCallBack(progress);
 			}
 
 			await Promise.all(promises);
 			await tx.done;
-			localStorage.setItem('database', 'true');
 			return storeMapping;
 		} catch (err) {
-			return Error('err', err);
+			console.error(`Error in addInitialData(): ${err}`);
+			throw err;
 		}
 	}
 
@@ -234,6 +290,21 @@ export class IndexedDatabaseService {
 			} else {
 				throw new Error(`No data in store for key: ${key}`);
 			}
+		} catch (err) {
+			throw err;
+		}
+	}
+
+	public async getAllKeys(storeName): Promise<any> {
+		try {
+			if (!this.db) {
+				throw new Error('No database found');
+			}
+			const tx = this.db.transaction(storeName, 'readonly');
+			const store = tx.objectStore(storeName);
+			const keys = await store.getAllKeys();
+			await tx.done;
+			return keys;
 		} catch (err) {
 			throw err;
 		}
@@ -344,5 +415,21 @@ export class IndexedDatabaseService {
 		} catch (err) {
 			throw err;
 		}
+	}
+
+	deleteIndexedDBDatabase(databaseName: string): Promise<void> {
+		return new Promise<void>((resolve, reject) => {
+			const deleteRequest = indexedDB.deleteDatabase(databaseName);
+
+			deleteRequest.onsuccess = () => {
+				console.log(`IndexedDB database '${databaseName}' deleted successfully`);
+				resolve();
+			};
+
+			deleteRequest.onerror = () => {
+				console.error(`Error deleting IndexedDB database '${databaseName}'`);
+				reject(new Error(`Failed to delete IndexedDB database '${databaseName}'`));
+			};
+		});
 	}
 }

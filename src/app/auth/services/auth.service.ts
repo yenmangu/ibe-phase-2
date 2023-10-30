@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 import {
 	BehaviorSubject,
 	Observable,
@@ -7,12 +8,15 @@ import {
 	switchMap,
 	tap,
 	map,
-	catchError
+	catchError,
+	Subject
 } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { DateTime } from 'luxon';
 import { TokenService } from './token.service';
 import { SharedDataService } from '../../shared/services/shared-data.service';
+import { DataService } from 'src/app/admin/games/services/data.service';
+import { UserDetailsService } from 'src/app/shared/services/user-details.service';
 
 @Injectable({
 	providedIn: 'root'
@@ -22,6 +26,8 @@ export class AuthService {
 	private statusSubject = new BehaviorSubject<any>('');
 	private responseJSONSubject = new BehaviorSubject<any>({});
 	responseJSON$ = this.responseJSONSubject.asObservable();
+	destroy$ = new Subject<void>();
+	destroySubject = this.destroy$.asObservable();
 
 	private _authed: boolean = false;
 	private userExist: boolean = false;
@@ -30,8 +36,11 @@ export class AuthService {
 
 	constructor(
 		private http: HttpClient,
+		private router: Router,
 		private tokenService: TokenService,
-		private sharedDataService: SharedDataService
+		private sharedDataService: SharedDataService,
+		private dataService: DataService,
+		private userDetailsService: UserDetailsService
 	) {
 		const token = this.tokenService.getToken();
 		if (token) {
@@ -124,7 +133,16 @@ export class AuthService {
 	}
 
 	logout(): void {
+		this.dataService.deleteIndexedDBDatabase();
+		// this.sharedDataService.clearAll();`
+		// this.userDetailsService.clearAllSubjects();
 		this.tokenService.removeToken();
 		this.isAuthedSubject.next(false);
+		this.userDetailsService.updateLoggedIn(false);
+		localStorage.clear();
+		// this.isAuthedSubject.complete()
+		console.log('User logged out successfully');
+		this.router.navigate(['/home']);
+		location.reload();
 	}
 }

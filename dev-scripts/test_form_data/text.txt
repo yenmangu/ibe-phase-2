@@ -1,0 +1,19 @@
+prenam val="y":
+td enters names
+
+prenam val="n":
+td-enters names not ticked
+
+prenam val="f":
+require all names
+
+ttid - team sign in
+
+  <im type="playername" pref="y"/>
+
+
+im type playername pref = y (or not at all)
+
+nativeclub pref = y
+
+popup - two ppage startup

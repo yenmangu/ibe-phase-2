@@ -25,3 +25,19 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+app.use('/ibescore/dev', devRoute);
+
+app.use('/ibescore/webhook', webhook);
+app.use('/ibescore/auth', authRoute);
+app.use('/ibescore/event', eventRoute);
+app.use('/ibescore/test', createTestUsers);
+app.use('/ibescore/p2p', p2pRoute);
+app.use('/ibescore/deal_files', dealFiles);
+app.use('/ibescore/mail', mailRoute);
+app.use('/ibescore/register', newRegistrationRoute);
+app.use('/ibescore/database', receivedDataRoute);
+app.use('/ibescore/current_game', curentGameRoute);
+app.use('/ibescore/player_database', playerDbRoute);
+app.use('/ibescore/historic_games', historicGamesRoute);
+

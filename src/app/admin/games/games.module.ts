@@ -17,6 +17,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 // CDK
 import { CdkColumnDef } from '@angular/cdk/table';
@@ -48,6 +49,9 @@ import { DatabaseLandingComponent } from './database-landing/database-landing.co
 import { AdvancedOptionsDialogComponent } from './database-landing/advanced-options-dialog/advanced-options-dialog.component';
 import { HandPaginationComponent } from './current-game/hand-pagination/hand-pagination.component';
 import { HandDisplayComponent } from './current-game/hand-display/hand-display.component';
+import { PdfGenerationComponent } from './current-game/game-players/pdf-generation/pdf-generation.component';
+import { CreateGameComponent } from './current-game/game-players/create-game/create-game.component';
+
 
 @NgModule({
 	declarations: [
@@ -69,7 +73,10 @@ import { HandDisplayComponent } from './current-game/hand-display/hand-display.c
 		DatabaseLandingComponent,
 		AdvancedOptionsDialogComponent,
   HandPaginationComponent,
-  HandDisplayComponent
+  HandDisplayComponent,
+  PdfGenerationComponent,
+  CreateGameComponent,
+
 	],
 	imports: [
 		CommonModule,
@@ -91,6 +98,7 @@ import { HandDisplayComponent } from './current-game/hand-display/hand-display.c
 		MatSortModule,
 		MatPaginatorModule,
 		MatCheckboxModule,
+		MatProgressBarModule,
 		// Other UI
 		NgxMaterialTimepickerModule
 		// Clarity

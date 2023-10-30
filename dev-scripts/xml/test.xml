@@ -1,0 +1,16 @@
+<setwrequest svs="-v-10126j-v-pairdum" pass="puma">
+	<usesets v="7">
+		<ubs val="b"/>
+	</usesets>
+	<initsets v="20">
+		<popup val="n"/>
+		<nidscr val="y"/>
+		<prenam val="n"/>
+		<ttid val="n"/>
+	</initsets>
+	<secsets v="4">
+		<mlpc val="o"/>
+		<pin on="n" type="n"/>
+		<spec web="n" app="n"/>
+	</secsets>
+</setwrequest>

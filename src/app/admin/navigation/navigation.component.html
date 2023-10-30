@@ -24,16 +24,17 @@
 					>Game Setup</a
 				>
 
-				
 				<a
 					routerLink="/admin/account"
 					class="nav-link"
 					>Account Settings</a
 				>
+				<a routerLink="/admin/upload-download" class="nav-link">Upload / Download</a>
+
 				<!-- <a routerLink="/admin/" class="nav-link"></a> -->
 				<!-- <a class="nav-link"></a> -->
 			</div>
-			<div class="button-wrapper column">
+			<!-- <div class="button-wrapper column">
 				<h4>Development</h4>
 				<mat-radio-group
 					[formControl]="matchTypeControl"
@@ -49,7 +50,7 @@
 					<p>Match Type</p>
 					<p>{{ (selectedMatchType$ | async) || matchTypeControl.value }}</p>
 				</div>
-			</div>
+			</div> -->
 		</mat-drawer>
 		<mat-drawer-content
 			class="content"

@@ -1,0 +1,58 @@
+<div
+	class="container column"
+	[formGroup]="namingNumberingForm">
+	<div class="container row">
+		<mat-form-field>
+			<mat-label>Mitchell EW Numbers:</mat-label>
+			<mat-select formControlName="mitchellEWNumbers">
+				<mat-option
+					*ngFor="let option of mitchellEwConfig"
+					[value]="option.value"
+					>{{ option.display }}</mat-option
+				>
+			</mat-select>
+		</mat-form-field>
+	</div>
+	<div class="container row">
+		<mat-form-field>
+			<mat-label>Table naming for sections:</mat-label>
+			<mat-select formControlName="tableNaming">
+				<mat-option
+					*ngFor="let option of tableNamingConfig"
+					[value]="option.value"
+					>{{ option.display }}</mat-option
+				>
+			</mat-select>
+		</mat-form-field>
+	</div>
+	<div class="container row">
+		<mat-form-field>
+			<mat-label>Shorten player names to:</mat-label>
+			<mat-select formControlName="shortenPlayerNames">
+				<mat-option
+					*ngFor="let option of shortenPlayerNames"
+					[value]="option.value"
+					>{{ option.display }}</mat-option
+				>
+			</mat-select>
+		</mat-form-field>
+	</div>
+	<div class="container row">
+		<mat-form-field>
+			<mat-label>Table naming for sections</mat-label>
+			<mat-select formControlName="defaultNameStyle">
+				<mat-option
+					*ngFor="let option of defaultNameStyle"
+					[value]="option.value"
+					>{{ option.display }}</mat-option
+				>
+			</mat-select>
+		</mat-form-field>
+	</div>
+	<button
+		mat-flat-button
+		(click)="getNamingNumberingValues()"
+		color="primary">
+		Save
+	</button>
+</div>

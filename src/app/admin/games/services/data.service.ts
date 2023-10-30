@@ -2,6 +2,7 @@ import { Injectable, OnDestroy, OnInit } from '@angular/core';
 import { IndexedDatabaseService } from './indexed-database.service';
 import { SharedDataService } from 'src/app/shared/services/shared-data.service';
 import { Subject, Subscription, firstValueFrom, takeUntil } from 'rxjs';
+import { IndexedDatabaseStatusService } from 'src/app/shared/services/indexed-database-status.service';
 
 @Injectable({
 	providedIn: 'root'
@@ -19,7 +20,8 @@ export class DataService implements OnInit, OnDestroy {
 	eventArray = [];
 	constructor(
 		private indexedDB: IndexedDatabaseService,
-		private sharedDataService: SharedDataService
+		private sharedDataService: SharedDataService,
+		private IDBStatusService: IndexedDatabaseStatusService
 	) {
 		// console.log('Data Service initialised');
 		this.subscription = this.sharedDataService.selectedMatchType$.subscribe(
@@ -34,48 +36,138 @@ export class DataService implements OnInit, OnDestroy {
 		console.log('data service ngOnInit called');
 	}
 
-	public initialiseDB = async data => {
-		// console.log('accessing playerdb array test: ', data.playerdb.root[0].item);
-		// console.log('matchType :', this.matchType);
-		let storeMapping;
-		let playerDbStoreMapping;
-		if (localStorage.getItem('database') !== 'true') {
-			storeMapping = this.mapData(data);
-			playerDbStoreMapping = this.getPlayerDbStoreMapping(data);
-			this.storeMapping = storeMapping;
+
+
+	public async dev_checkDatabase(): Promise<any> {
+		try {
+
+			const newExpected = [
+				'current_game_data',
+				'event',
+				'hand_data',
+				'handanxs_data',
+				'historic_game_data',
+				'hrev_text',
+				'loc',
+				'lock',
+				'meta',
+				'params',
+				'player',
+				'team',
+				'xml_settings'
+			];
+
+			const exists = await this.indexedDB.doesDatabaseExist(
+				this.dbName,
+				newExpected
+			);
+
+			if (exists) {
+				console.log('database exists in dev mode... no need to refresh');
+
+				this.IDBStatusService.bypassProgress();
+
+				return true;
+			}
+			return false;
+		} catch (error) {
+			throw new Error('error checking db');
 		}
-		this.playerDbStoreMapping = playerDbStoreMapping;
-		// console.log('initialiseDB storeMapping: ', storeMapping);
-		await this.indexedDB.initDatabase(
-			storeMapping,
-			playerDbStoreMapping,
-			this.dbName
-		);
-		console.log(`database with name of ${this.dbName} initialised`);
+	}
+	public async checkDatabase(data): Promise<any> {
+		try {
+			const storeMapping = this.mapData(data);
+			const playerDbStoreMapping = this.getPlayerDbStoreMapping(data);
+
+			const expectedNames = [
+				...Object.keys(storeMapping),
+				...Object.keys(playerDbStoreMapping)
+			];
+
+			const newExpected = [
+				'current_game_data',
+				'event',
+				'hand_data',
+				'handanxs_data',
+				'historic_game_data',
+				'hrev_text',
+				'loc',
+				'lock',
+				'meta',
+				'params',
+				'player',
+				'team',
+				'xml_settings'
+			];
+
+			const exists = await this.indexedDB.doesDatabaseExist(
+				this.dbName,
+				expectedNames
+			);
+
+			if (exists) {
+				console.log('database exists in dev mode... no need to refresh');
+
+				this.IDBStatusService.bypassProgress();
+
+				return true;
+			}
+			return false;
+		} catch (error) {
+			throw new Error('error checking db');
+		}
+	}
+
+	public initialiseDB = async data => {
+		return new Promise<void>(async (resolve, reject) => {
+			try {
+				// console.log('accessing playerdb array test: ', data.playerdb.root[0].item);
+				// console.log('matchType :', this.matchType);
+				const storeMapping = this.mapData(data);
+				const playerDbStoreMapping = this.getPlayerDbStoreMapping(data);
+				this.storeMapping = storeMapping;
+				this.playerDbStoreMapping = playerDbStoreMapping;
+				// console.log('initialiseDB storeMapping: ', storeMapping);
+				await this.indexedDB.initDatabase(
+					storeMapping,
+					playerDbStoreMapping,
+					`${this.dbName}`
+				);
+				console.log(`database with name of ${this.dbName} initialised`);
+
+				resolve();
+			} catch (err) {
+				reject(err);
+			}
+		});
 	};
 
-	async doesDbExist() {
-		try {
-			const exists = await this.indexedDB.doesDatabaseExist(`${this.dbName}`);
-			return exists;
-		} catch (err) {
-			console.error('Error checking db', err);
-			return false;
-		}
+	private calculateTotalStores(data: any): number {
+		const playerDbStoreMapping = this.getPlayerDbStoreMapping(data);
+		const storeMapping = this.mapData(data);
+		const playerDBStoreCount = Object.keys(playerDbStoreMapping).length;
+		const storeCount = Object.keys(storeMapping).length;
+		return playerDBStoreCount + storeCount;
 	}
 
 	async storeData(data: any): Promise<boolean> {
 		try {
-			console.log('data in store data: ', data);
+			const totalStores = this.calculateTotalStores(data);
 			const playerDbStoreMapping = this.getPlayerDbStoreMapping(data);
-			const storeMapping = this.mapData(data); // Map the data
-			// console.log('storeData storeMapping ', storeMapping);
+			const storeMapping = this.mapData(data);
+
+			this.IDBStatusService.setProgress(totalStores, 0);
+			console.log('total stores to process: ', totalStores);
 
 			const result = await this.indexedDB.initialiseWithGameData(
 				storeMapping,
 				playerDbStoreMapping,
-				this.dbName
+				this.dbName,
+				totalStores
 			);
+			this.IDBStatusService.dataFinishedLoadingSubject.next(true);
+			this.saveStoreNames(storeMapping, playerDbStoreMapping);
+
 			return result;
 		} catch (err) {
 			console.error('Error in NewEntryPoint', err);
@@ -84,9 +176,8 @@ export class DataService implements OnInit, OnDestroy {
 	}
 
 	private getPlayerDbStoreMapping(data: any): any {
-		console.log('data in playerdb storemapping', data);
 		if (data && data.playerdb.root[0].item) {
-			console.log('process player db data being called');
+			console.log('storing player db data');
 			const dataArray: any[] = data.playerdb.root[0].item;
 			const temp_playersArray = [];
 			const temp_teamsArray = [];
@@ -112,11 +203,12 @@ export class DataService implements OnInit, OnDestroy {
 				}
 			});
 			const playerDbMapping = {
-				player: temp_playersArray,
-				team: temp_teamsArray,
-				event: temp_eventArray,
-				loc: temp_venuesArray
+				[`player`]: temp_playersArray,
+				[`team`]: temp_teamsArray,
+				[`event`]: temp_eventArray,
+				[`loc`]: temp_venuesArray
 			};
+			console.log('playerDB Store mapping complete');
 
 			return playerDbMapping;
 		}
@@ -130,35 +222,59 @@ export class DataService implements OnInit, OnDestroy {
 			hist,
 			hands,
 			handanxs,
-			playerdb,
+			// playerdb,
 			params,
 			xmlsettings,
-			slotname,
 			hrevtxt,
 			lock
 		} = data;
 
-		if (slotname) {
-			console.log('slotname: ', JSON.stringify(slotname, null, 2));
-		} else console.log('NO SLOTNAME');
-
 		const storeMapping = {
-			current_game_data: currentgamedata,
-			historic_game_data: hist,
-			hand_data: hands,
-			handanxs_data: handanxs,
-			player_db: playerdb,
-			params: params,
-			xml_settings: xmlsettings,
-			// slot_name: slotname,
-			hrev_txt: hrevtxt,
-			lock: lock
+			[`current_game_data`]: currentgamedata,
+			[`historic_game_data`]: hist,
+			[`hand_data`]: hands,
+			[`handanxs_data`]: handanxs,
+			// [`player_db`]: playerdb,
+			[`params`]: params,
+			[`xml_settings`]: xmlsettings,
+			[`hrev_txt`]: hrevtxt,
+			[`lock`]: lock
 		};
+
+		// console.log('logging hand and hrev');
+		// console.log('hand: ', storeMapping.hand_data);
+		// console.log('hrev: ', storeMapping.hrev_txt);
+		console.log('lock: ', storeMapping.lock);
+		// console.log('store mapping complete');
 
 		return storeMapping;
 	}
 
-	getData(key) {}
+	saveStoreNames(
+		storeMapping: Record<string, any>,
+		playerDbStoreMapping: Record<string, any>
+	): void {
+		const stores = Object.keys(storeMapping);
+		const playerStores = Object.keys(playerDbStoreMapping);
+		const combined = stores.concat(playerStores);
+		localStorage.setItem('STORE_NAMES', JSON.stringify(combined));
+	}
+
+	deleteIndexedDBDatabase(): Promise<void> {
+		return new Promise<void>((resolve, reject) => {
+			const deleteRequest = indexedDB.deleteDatabase(`${this.dbName}`);
+
+			deleteRequest.onsuccess = () => {
+				console.log(`IndexedDB database '${this.dbName}' deleted successfully`);
+				resolve();
+			};
+
+			deleteRequest.onerror = () => {
+				console.error(`Error deleting IndexedDB database '${this.dbName}'`);
+				reject(new Error(`Failed to delete IndexedDB database '${this.dbName}'`));
+			};
+		});
+	}
 
 	ngOnDestroy(): void {
 		if (this.subscription) {

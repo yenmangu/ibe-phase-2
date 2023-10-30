@@ -1,0 +1,29 @@
+:host {
+overflow-y: hidden;
+	padding: 2rem;
+}
+
+.grid-container {
+	gap: 1rem;
+	overflow-y: hidden;
+}
+
+.grid-row {
+	display: grid;
+	align-items: center;
+	grid-gap: 2rem
+}
+
+.players-see,
+.warn-players {
+	grid-template-columns: repeat(6, 1fr);
+}
+.players-input,
+.players-change {
+	grid-template-columns: repeat((6, 1fr));
+}
+
+.additional {
+}
+.results {
+}

@@ -12,7 +12,8 @@ $ibe-green-palette: (
 	700: #61a91f,
 	800: #4b9914,
 	900: #237201,
-	contrast: (50: #3c3c3c,
+	contrast: (
+		50: #3c3c3c,
 		100: #3c3c3c,
 		200: #3c3c3c,
 		300: #3c3c3c,
@@ -21,24 +22,25 @@ $ibe-green-palette: (
 		600: whitesmoke,
 		700: whitesmoke,
 		800: whitesmoke,
-		900: whitesmoke,
+		900: whitesmoke
 	)
 );
 
 $ibe-dark-violet: (
-	300:#a575dd,
+	300: #a575dd,
 	400: #9155d5,
 	500: #7d34cd,
 	600: #732ec6,
-	contrast:(300: #3c3c3c,
+	contrast: (
+		300: #3c3c3c,
 		400: #3c3c3c,
 		500: #3c3c3c,
-		600: whitesmoke,
+		600: whitesmoke
 	)
 );
 
 $ibe-magenta-palette: (
-	50:#ffe2fc,
+	50: #ffe2fc,
 	100: #fbb5f6,
 	200: #f97ef2,
 	300: #f428ed,
@@ -48,7 +50,8 @@ $ibe-magenta-palette: (
 	700: #b600d4,
 	800: #a100d0,
 	900: #7600c7,
-	contrast: (50: #3c3c3c,
+	contrast: (
+		50: #3c3c3c,
 		100: #3c3c3c,
 		200: #3c3c3c,
 		300: #3c3c3c,
@@ -57,7 +60,16 @@ $ibe-magenta-palette: (
 		600: whitesmoke,
 		700: whitesmoke,
 		800: whitesmoke,
-		900: whitesmoke,
+		900: whitesmoke
+	)
+);
+
+$ibe-teal-palette: (
+	700: #2e92bc,
+	900: #005e75,
+	contrast: (
+		700: whitesmoke,
+		900: whitesmoke
 	)
 );
 
@@ -72,7 +84,8 @@ $ibe-indigo-dye-palette: (
 	700: #236696,
 	800: #1b5685,
 	900: #0d3b66,
-	contrast: (50: #3c3c3c,
+	contrast: (
+		50: #3c3c3c,
 		100: #3c3c3c,
 		200: #3c3c3c,
 		300: #3c3c3c,
@@ -81,20 +94,31 @@ $ibe-indigo-dye-palette: (
 		600: whitesmoke,
 		700: whitesmoke,
 		800: whitesmoke,
-		900: whitesmoke,
+		900: whitesmoke
 	)
 );
 
 $ibe-pumpkin-palette: (
 	800: #ffb14d,
 	900: #ff8c42,
-	contrast: (800: #3c3c3c,
-		900: #3c3c3c)
+	contrast: (
+		800: #3c3c3c,
+		900: #3c3c3c
+	)
 );
 
 $ibe-red-alert-palette: (
 	700: #d0342c,
 	900: #b42319,
-	contrast: (700: whitesmoke,
-		900: whitesmoke)
+	contrast: (
+		700: whitesmoke,
+		900: whitesmoke
+	)
+);
+
+$ibe-whitesmoke-palette: (
+	100: whitesmoke,
+	contrast: (
+		100: #3c3c3c
+	)
 );

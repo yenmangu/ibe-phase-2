@@ -1,0 +1,30 @@
+.container {
+	max-width: none;
+
+	gap: 2rem;
+}
+
+.grid-row,
+.addiional-choices {
+	width: 100%;
+}
+.grid-row {
+	position: relative;
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	grid-gap: 1rem;
+}
+
+.grid-item.right {
+	position: absolute;
+	display: flex;
+	flex-direction: row;
+	gap: 2rem;
+	justify-content: space-between;
+	right: 0;
+	// width: 3rem;
+}
+
+.add {
+	width: 3rem;
+}

@@ -1,15 +1,18 @@
 export interface Venue {
-  $: {
-    type: string;
-    n: string;
-    adddate: string;
-  };
-  name: string[];
-  lastplay: {
-    $: {
-      date: string;
-    };
-  }[];
+	key: string;
+	value: {
+		$: {
+			type: string;
+			n: string;
+			adddate: string;
+		};
+		name: string[];
+		lastplay: {
+			$: {
+				date: string;
+			};
+		}[];
+	};
 }
 
 // Example

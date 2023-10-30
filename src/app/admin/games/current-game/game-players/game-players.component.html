@@ -2,7 +2,7 @@
 	class="container row top"
 	[ngClass]="currentBreakpoint">
 	<div
-		class="container column top"
+		class="container row top"
 		[ngClass]="currentBreakpoint">
 		{{ eventName }}
 		<mat-form-field [ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }">
@@ -30,20 +30,38 @@
 	</div>
 </div>
 <div class="container row table">
-	<app-pairs-table
-		*ngIf="initialTableData"
-		[initialTableData]="initialTableData"
-		[loadingStatus]="isLoading"></app-pairs-table>
+	<div
+		class="spinner"
+		*ngIf="isLoading">
+		<mat-spinner></mat-spinner>
+	</div>
+	<ng-container *ngIf="!isLoading && initialTableData && matchType === 'pairs'">
+		<app-pairs-table
+			[initialTableData]="initialTableData"
+			[loadingStatus]="isLoading"></app-pairs-table>
+	</ng-container>
+	<ng-container *ngIf="!isLoading && initialTableData && matchType === 'teams'">
+		<app-teams-table
+			[initialTableData]="initialTableData"
+			[loadingStatus]="isLoading"></app-teams-table>
+	</ng-container>
 	<!-- <app-match-tables [initialTableData]="initialTableData"
 		(formValuesChanged)="(onTeamTableValueChanged)"></app-match-tables> -->
 </div>
 <div class="container row download">
 	<button
+		(click)="getPublicLink()"
 		id="start_pdf"
 		mat-flat-button
 		color="accent">
-		Get Start Positions PDF
+		Get Starting Lineup
 	</button>
+	<ng-container *ngIf="publicLink">
+		<div class="container column">
+			<h3>Share this link</h3>
+			{{ publicLink }}
+		</div>
+	</ng-container>
 
 	<mat-form-field
 		class="date-picker"

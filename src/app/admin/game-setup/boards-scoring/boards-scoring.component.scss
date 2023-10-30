@@ -1,0 +1,46 @@
+:host {
+	padding: 2rem;
+	// overflow-y: hidden;
+}
+form {
+	padding: 2rem 4rem;
+	width: max-content;
+}
+
+.grid-container {
+	// overflow-y: hidden;
+}
+
+.grid-item.header {
+	font-weight: bold;
+	text-align: center;
+}
+
+.grid-row {
+	display: grid;
+	grid-template-columns: 1fr 1fr 2fr 2fr;
+	align-items: center;
+	grid-gap: 1rem;
+}
+.grid-item.label {
+	display: flex;
+
+	justify-items: center;
+	justify-content: center;
+}
+
+.grid-item.checkbox {
+	display: flex;
+	justify-items: center;
+	justify-content: center;
+}
+
+.grid-item.dropdown {
+	display: flex;
+	justify-items: center;
+}
+
+.scoring {
+	width: max-content;
+	gap: 0.4 rem;
+}
