@@ -11,6 +11,7 @@
 // custom theme
 @import './palette.scss';
 @import './component.palette.scss';
+@import './variables_material.scss';
 
 $ibe-primary: mat.define-palette($ibe-green-palette, 400, 300, 800);
 $ibe-accent: mat.define-palette($ibe-dark-violet, 600, 300, 600);
@@ -180,6 +181,29 @@ button.main-save {
 	svg {
 		height: 1.2rem !important;
 	}
+}
+md-progress-linear {
+	height: $progress-linear-bar-height !important;
+
+	.md-container {
+		height: $progress-linear-bar-height !important;
+
+		.md-bar {
+			height: $progress-linear-bar-height !important;
+		}
+
+		.md-dashed:before {
+			height: $progress-linear-bar-height !important;
+		}
+	}
+}
+.mat-mdc-progress-bar {
+	--mdc-linear-progress-active-indicator-height: 30px !important;
+	--mdc-linear-progress-track-height: 30px !important;
+	--mdc-linear-progress-track-shape: 0;
+}
+mat-progress-bar {
+	width: 80% !important;
 }
 
 // Mobile Global Styles
