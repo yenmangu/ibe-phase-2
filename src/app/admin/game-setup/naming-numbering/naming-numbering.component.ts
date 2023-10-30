@@ -42,14 +42,14 @@ export class NamingNumberingComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
-		console.log('namsets: ', this.namingNumberingSettings);
+		// console.log('namsets: ', this.namingNumberingSettings);
 		if (
 			this.namingNumberingForm &&
 			!this.checkEmpty(this.namingNumberingSettings)
 		) {
 			this.namingNumberingForm.setValue(this.namingNumberingSettings);
 		}
-		console.log('naming form: ', this.namingNumberingForm);
+		// console.log('naming form: ', this.namingNumberingForm);
 	}
 	checkEmpty(obj) {
 		for (var i in obj) return false;
@@ -74,7 +74,7 @@ export class NamingNumberingComponent implements OnInit {
 			formData: this.namingNumberingForm.value
 		};
 		// const data = this.namingNumberingForm.value;
-		console.log('naming numbering values: ', this.namingNumberingForm.value);
+		// console.log('naming numbering values: ', this.namingNumberingForm.value);
 		this.namingNumberingEmitter.emit(data);
 	}
 }

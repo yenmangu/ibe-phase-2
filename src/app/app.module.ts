@@ -17,6 +17,7 @@ import { SidenavService } from './shared/services/sidenav.service';
 
 import { SharedModule } from './shared/shared.module';
 import { HomeModule } from './home/home.module';
+import { StoreModule } from '@ngrx/store';
 
 // Pipes
 // import { KeysPipe } from './shared/pipes/keys.pipe';
@@ -32,7 +33,8 @@ import { HomeModule } from './home/home.module';
 		ScrollingModule,
 		SharedModule,
 		HomeModule,
-		ClarityModule
+		ClarityModule,
+		StoreModule.forRoot({}, {})
 	],
 	providers: [
 		{ provide: MatDialogModule, useValue: {} },

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { AdminRoutingModule } from './admin-routing.module';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { StoreModule } from '@ngrx/store';
 // Material
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
@@ -32,6 +33,7 @@ import { AppInterfaceComponent } from './game-setup/app-interface/app-interface.
 import { NamingNumberingComponent } from './game-setup/naming-numbering/naming-numbering.component';
 import { UploadDownloadComponent } from './upload-download/upload-download.component';
 import { SharedModule } from '../shared/shared.module';
+import { adminReducer } from '../admin-state/admin.reducer';
 
 @NgModule({
 	declarations: [
@@ -53,6 +55,7 @@ import { SharedModule } from '../shared/shared.module';
 		ReactiveFormsModule,
 		FormsModule,
 		SharedModule,
+		StoreModule.forFeature('admin', adminReducer),
 		// Material
 		MatSidenavModule,
 		MatButtonModule,

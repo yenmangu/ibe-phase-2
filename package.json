@@ -24,6 +24,7 @@
     "@cds/core": "^6.7.0",
     "@clr/angular": "^15.12.2",
     "@clr/ui": "^15.12.2",
+    "@ngrx/store": "^16.3.0",
     "@riapacheco/yutes": "^4.2.4",
     "@types/jsonwebtoken": "^9.0.3",
     "idb": "^7.1.1",

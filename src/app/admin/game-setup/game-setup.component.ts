@@ -33,6 +33,7 @@ export class GameSetupComponent implements OnInit {
 	gameCode: string = '';
 
 	savedData: any = {};
+	formPopulated: boolean = false;
 
 	applyMagentaGreyTheme = true;
 	constructor(
@@ -60,7 +61,7 @@ export class GameSetupComponent implements OnInit {
 		}
 		this.IDBstatusService.dataProgress$.subscribe(progress => {
 			this.dbProgress = progress;
-			console.log(this.dbProgress)
+			console.log(this.dbProgress);
 		});
 
 		this.sharedSettingsService
@@ -69,14 +70,17 @@ export class GameSetupComponent implements OnInit {
 			.subscribe({
 				next: data => {
 					if (data) {
-						console.log('initial settings data: ', data);
+						// console.log('initial settings data: ', data);
 						this.initialSettingsData = data;
 						this.setupSettings = data.setupConfig;
 						this.scoringSettings = data.scoringConfig;
 						this.appInterfaceSettings = data.appInterfaceConfig;
 						this.namingNumberingSettings = data.namingNumberingConfig;
 						this.populateForm();
-						console.log('from parent: scoringSettings: ', this.scoringSettings);
+						console.log(
+							'from parent: appInterfaceSettings: ',
+							this.appInterfaceSettings
+						);
 					}
 				},
 				error: error => {
@@ -111,12 +115,18 @@ export class GameSetupComponent implements OnInit {
 		});
 	}
 
+		checkEmpty(obj) {
+		for (var i in obj) return false;
+		return true;
+	}
+
+
 	populateForm(): void {
 		if (this.setupSettings && this.setupForm) {
 			Object.keys(this.setupSettings).forEach(key => {
 				if (this.setupForm.get(key)) {
 					this.setupForm.get(key).setValue(this.setupSettings[key]);
-					console.log(`${key} in form set`);
+					// console.log(`${key} in form set`);
 				}
 			});
 			if (this.setupSettings.initConfig) {
@@ -163,18 +173,18 @@ export class GameSetupComponent implements OnInit {
 	}
 
 	onPlayerIdForm(formData: any): void {
-		console.log('Player ID Form: ', formData);
+		// console.log('Player ID Form: ', formData);
 	}
 
 	onScoringForm(formData: any): void {
-		console.log('Scoring form data: ', formData);
+		// console.log('Scoring form data: ', formData);
 	}
 
 	onAppInterfaceForm(formData: any) {
-		console.log('app-interface form data: ', formData);
+		// console.log('app-interface form data: ', formData);
 	}
 
 	onNamingNumberingForm(formData: any) {
-		console.log('Naminng-numbering form data: ', formData);
+		// console.log('Naminng-numbering form data: ', formData);
 	}
 }

@@ -32,9 +32,9 @@ export class GameSettingsService {
 				throw serviceError;
 			}
 			this.initialSettingsData = gameSettings;
-			console.log('gameSettings retrieved successfully from store: ', gameSettings);
+			// console.log('gameSettings retrieved successfully from store: ', gameSettings);
 			if (gameSettings) {
-				console.log('invoking split settings');
+				// console.log('invoking split settings');
 				const splitResult = await this.splitSettings(gameSettings);
 				// console.log('splitResult in the fetchAllSettings: ', splitResult);
 				this.sharedSettingsService.populateGameSettings(splitResult);
@@ -92,7 +92,7 @@ export class GameSettingsService {
 	getSetUpSets(usesets, initsets, secsets) {
 		const initsetsObject = this.destructureSettings(initsets);
 		const secsetsObject = this.destructureSettings(secsets);
-		console.log('secsets object: ', secsetsObject);
+		// console.log('secsets object: ', secsetsObject);
 
 		const setupConfig: any = {
 			newEventUses: this.getUseSets(usesets),
@@ -124,7 +124,7 @@ export class GameSettingsService {
 		}
 		setupConfig.requireAllNames = requireAllNames;
 		setupConfig.tdEntersNames = tdEntersNames;
-		console.log('initsets ttid: ', initsetsObject.ttid);
+		// console.log('initsets ttid: ', initsetsObject.ttid);
 		setupConfig.teamSignIn = initsetsObject.ttid[0]['$'].val === 'y' ? true : false;
 
 		let onGameCreation;
@@ -275,7 +275,7 @@ export class GameSettingsService {
 
 	getAppInterfaceSettings(pluisets) {
 		const value = this.destructureSettings(pluisets);
-		console.log('value to check initially: ', value);
+		// console.log('value to check initially: ', value);
 
 		const {
 			flash,

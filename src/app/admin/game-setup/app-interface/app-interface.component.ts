@@ -1,4 +1,12 @@
-import { OnInit, Component, Output, EventEmitter, Input } from '@angular/core';
+import {
+	OnInit,
+	AfterViewInit,
+	Component,
+	Output,
+	EventEmitter,
+	Input,
+	ChangeDetectorRef
+} from '@angular/core';
 import { FormGroup, FormArray, FormBuilder, FormControl } from '@angular/forms';
 
 @Component({
@@ -6,7 +14,7 @@ import { FormGroup, FormArray, FormBuilder, FormControl } from '@angular/forms';
 	templateUrl: './app-interface.component.html',
 	styleUrls: ['./app-interface.component.scss']
 })
-export class AppInterfaceComponent implements OnInit {
+export class AppInterfaceComponent implements OnInit , AfterViewInit{
 	@Input() appInterfaceSettings: any;
 	@Output() appInterfaceEmitter = new EventEmitter<any>();
 
@@ -46,80 +54,99 @@ export class AppInterfaceComponent implements OnInit {
 	];
 
 	appInterfaceForm: FormGroup;
-
-	constructor(private fb: FormBuilder) {
+	formPopulated: boolean = false;
+	constructor(private fb: FormBuilder, private cd: ChangeDetectorRef) {
 		this.appInterfaceForm = this.createFormGroup();
 
 		this.createFormControls();
 	}
 
 	ngOnInit(): void {
-		console.log('app-interface form: ', this.appInterfaceForm.controls);
+		console.log('testing data readiness: ', this.appInterfaceSettings);
+
+		if (this.appInterfaceForm && this.appInterfaceSettings) {
+			this.cd.detectChanges();
+			console.log('form and app interface settings are present. Populating form: ');
+			this.populateFormControls(this.appInterfaceSettings)
+				.then(() => {
+					this.formPopulated = true;
+					console.log('appInterface form has been populated');
+				})
+				.catch(error => {
+					// handle error
+					console.error('Error populating form: ', error);
+				});
+		}
+		// console.log('app-interface form: ', this.appInterfaceForm.controls);
 		this.appInterfaceForm.valueChanges.subscribe(data => {
 			console.log('app intfc val change: ', data);
-			// if (this.appInterfaceForm.get(''))
 		});
-		console.log(
-			'app interface settings from the db: ',
-			JSON.stringify(this.appInterfaceSettings, null, 2)
-		);
-		if (
-			this.appInterfaceForm &&
-			!this.checkEmpty(this.appInterfaceSettings)
-		) {
-			this.populateFormControls(this.appInterfaceSettings);
-		}
+		console.log('appInterfaceForm initiated');
 	}
 
-	checkEmpty(obj){
+	ngAfterViewInit(): void {
+
+	}
+
+	checkEmpty(obj) {
 		for (var i in obj) return false;
-		return true
+		return true;
 	}
 
 	populateFormControls(data: any) {
-		console.log('data in populate form: ', data);
-		const playersChangeArray = data.playersChange;
-		for (let i = 0; i < playersChangeArray.length; i++) {
-			const controlName = `control${i}`;
-			this.appInterfaceForm
-				.get(`playersChange.${i}.${controlName}`)
-				.setValue(playersChangeArray[0][controlName][i]);
-		}
-		const playersInputArray = data.playersInput;
-		for (let i = 0; i < playersInputArray.length; i++) {
-			const controlName = `control${i}`;
-			this.appInterfaceForm
-				.get(`playersInput.${i}.${controlName}`)
-				.setValue(playersInputArray[0][controlName][i]);
-		}
-		const warnPlayersArray = data.warnPlayers;
-		for (let i = 0; i < warnPlayersArray.length; i++) {
-			const controlName = `control${i}`;
-			this.appInterfaceForm
-				.get(`warnPlayers.${i}.${controlName}`)
-				.setValue(warnPlayersArray[0][controlName][i]);
-		}
-		this.appInterfaceForm
-			.get('handDiagrams')
-			.setValue(this.appInterfaceSettings.handDiagrams);
-		this.appInterfaceForm
-			.get('ownResults')
-			.setValue(this.appInterfaceSettings.ownResults);
-		this.appInterfaceForm
-			.get('othersResults')
-			.setValue(this.appInterfaceSettings.othersResults);
-		this.appInterfaceForm
-			.get('rankings')
-			.setValue(this.appInterfaceSettings.rankings);
-		this.appInterfaceForm
-			.get('adjustedScores')
-			.setValue(this.appInterfaceSettings.adjustedScores);
-		this.appInterfaceForm
-			.get('resultsTimeout')
-			.setValue(this.appInterfaceSettings.resultsTimeout);
-		this.appInterfaceForm.get('flash').setValue(this.appInterfaceSettings.flash);
-		this.appInterfaceForm.get('qaba').setValue(this.appInterfaceSettings.qaba);
-		this.appInterfaceForm.get('scov').setValue(this.appInterfaceSettings.scov);
+		return new Promise((resolve, reject): void => {
+			try {
+				console.log('data in populate form: ', data);
+				const playersChangeArray = data.playersChange;
+				for (let i = 0; i < playersChangeArray.length; i++) {
+					const controlName = `control${i}`;
+					this.appInterfaceForm
+						.get(`playersChange.${i}.${controlName}`)
+						.setValue(playersChangeArray[0][controlName][i]);
+				}
+				const playersInputArray = data.playersInput;
+				for (let i = 0; i < playersInputArray.length; i++) {
+					const controlName = `control${i}`;
+					this.appInterfaceForm
+						.get(`playersInput.${i}.${controlName}`)
+						.setValue(playersInputArray[0][controlName][i]);
+				}
+				const warnPlayersArray = data.warnPlayers;
+				for (let i = 0; i < warnPlayersArray.length; i++) {
+					const controlName = `control${i}`;
+					this.appInterfaceForm
+						.get(`warnPlayers.${i}.${controlName}`)
+						.setValue(warnPlayersArray[0][controlName][i]);
+				}
+				this.appInterfaceForm
+					.get('handDiagrams')
+					.setValue(this.appInterfaceSettings.handDiagrams);
+				this.appInterfaceForm
+					.get('ownResults')
+					.setValue(this.appInterfaceSettings.ownResults);
+				this.appInterfaceForm
+					.get('othersResults')
+					.setValue(this.appInterfaceSettings.othersResults);
+				this.appInterfaceForm
+					.get('rankings')
+					.setValue(this.appInterfaceSettings.rankings);
+				this.appInterfaceForm
+					.get('adjustedScores')
+					.setValue(this.appInterfaceSettings.adjustedScores);
+				this.appInterfaceForm
+					.get('resultsTimeout')
+					.setValue(this.appInterfaceSettings.resultsTimeout);
+				this.appInterfaceForm
+					.get('flash')
+					.setValue(this.appInterfaceSettings.flash);
+				this.appInterfaceForm.get('qaba').setValue(this.appInterfaceSettings.qaba);
+				this.appInterfaceForm.get('scov').setValue(this.appInterfaceSettings.scov);
+
+				resolve(true);
+			} catch (error) {
+				reject(error);
+			}
+		});
 	}
 
 	createFormGroup() {

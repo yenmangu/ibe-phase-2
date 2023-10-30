@@ -61,7 +61,7 @@ export class AdminComponent implements OnInit, OnDestroy {
 		this.IDBStatus.resetProgress();
 
 		this.IDBStatus.dataProgress$.subscribe(status => {
-			this.loadingStatus = status;
+			this.loadingStatus = 5 + status * 0.95;
 		});
 	}
 
@@ -98,7 +98,7 @@ export class AdminComponent implements OnInit, OnDestroy {
 	async checkDBExists(data) {
 		try {
 			const exists = await this.dataService.checkDatabase(data);
-			const dev_exists = await this.dataService.dev_checkDatabase()
+			const dev_exists = await this.dataService.dev_checkDatabase();
 			if (dev_exists) {
 				return exists;
 			}

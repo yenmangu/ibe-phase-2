@@ -13,8 +13,8 @@
 				<div class="container row gap-1">
 					<h3>Settings for new events:</h3>
 					<mat-form-field>
-						<mat-label>New event uses:</mat-label>
-						<mat-select formControlName="newEventUses">
+						<mat-label for="newEvent">New event uses:</mat-label>
+						<mat-select id="newEvent" formControlName="newEventUses">
 							<mat-option value="previous">Settings from previous event</mat-option>
 							<mat-option value="current">These base settings</mat-option>
 						</mat-select>
@@ -137,9 +137,8 @@
 					<!-- Movement/ Scoring Tab In Tab -->
 
 					<mat-tab label="Movement/ Scoring">
-						<ng-container *ngIf="scoringSettings">
+						<ng-container *ngIf="scoringSettings && !checkEmpty(scoringSettings)">
 							<app-boards-scoring
-								*ngIf="scoringSettings"
 								[scoringSettings]="scoringSettings"
 								(boardScoringEmitter)="onScoringForm($event)"
 								(boardScoringEmitter)="onChildForm($event)"></app-boards-scoring>
@@ -150,9 +149,9 @@
 					<!-- App Interface Tab -->
 
 					<mat-tab label="App Interface">
-						<ng-container *ngIf="appInterfaceSettings">
+						<ng-container
+							*ngIf="appInterfaceSettings && !checkEmpty(appInterfaceSettings)">
 							<app-app-interface
-								*ngIf="appInterfaceSettings"
 								[appInterfaceSettings]="appInterfaceSettings"
 								(appInterfaceEmitter)="onAppInterfaceForm($event)"
 								(appInterfaceEmitter)="onChildForm($event)"></app-app-interface>
@@ -163,9 +162,11 @@
 					<!-- Naming Numbering Tab -->
 
 					<mat-tab label="Naming Numbering">
-						<ng-container *ngIf="namingNumberingSettings">
+						<ng-container
+							*ngIf="
+								namingNumberingSettings && !checkEmpty(namingNumberingSettings)
+							">
 							<app-naming-numbering
-								*ngIf="namingNumberingSettings"
 								[namingNumberingSettings]="namingNumberingSettings"
 								(namingNumberingEmitter)="onAppInterfaceForm($event)"
 								(namingNumberingEmitter)="

@@ -37,13 +37,13 @@ export class BoardsScoringComponent implements OnInit, OnChanges {
 	}
 
 	ngOnInit(): void {
-		console.log('checking data: ', this.scoringConfigForm);
-		console.log('form controls: ', this.scoringDataArray.controls);
+		// console.log('checking data: ', this.scoringConfigForm);
+		// console.log('form controls: ', this.scoringDataArray.controls);
 	}
 
 	ngOnChanges(changes: SimpleChanges): void {
 		if(changes.scoringSettings && this.scoringSettings.scoringConfigArray){
-			console.log('scoring component ngOnChanges: ', this.scoringSettings)
+			// console.log('scoring component ngOnChanges: ', this.scoringSettings)
 			this.populateForm(this.scoringSettings)
 		}
 	}

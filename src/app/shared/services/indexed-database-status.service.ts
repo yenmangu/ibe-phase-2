@@ -25,8 +25,10 @@ export class IndexedDatabaseStatusService {
 	}
 
 	setProgress(totalStores: number, storesAdded: number): void {
-		const progress = (storesAdded / totalStores) * 100;
-		this.dataProgressSubject.next(progress);
+		const initialProgress = 5
+		const actualProgress = (storesAdded / totalStores) * 95;
+		const totalProgress = initialProgress + actualProgress
+		this.dataProgressSubject.next(totalProgress);
 	}
 
 	resetProgress(): void {

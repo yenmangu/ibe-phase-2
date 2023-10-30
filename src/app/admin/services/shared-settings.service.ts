@@ -17,4 +17,6 @@ export class SharedSettingsService {
 	getGameSettings() {
 		return this.gameSettingsSubject.asObservable();
 	}
+
+	
 }
