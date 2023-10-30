@@ -89,17 +89,26 @@
 				</mat-select>
 			</mat-form-field>
 		</div>
-		<div
-			class="grid-row additional"
-			formArrayName="additionalConfig">
-			<div
-				*ngFor="let option of additonalConfig; let i = index"
-				class="column grid-item"
-				[formGroupName]="i">
+		<div class="grid-row additional">
+			<div class="column grid-item">
 				<mat-checkbox
-					[formControlName]="'control' + i"
-					[checked]="option.value"
-					>{{ option.name }}</mat-checkbox
+					formControlName="flash"
+					value="false"
+					>Flash Scores</mat-checkbox
+				>
+			</div>
+			<div class="column grid-item">
+				<mat-checkbox
+					formControlName="qaba"
+					value="false"
+					>Quick-adjust button</mat-checkbox
+				>
+			</div>
+			<div class="column grid-item">
+				<mat-checkbox
+					formControlName="scov"
+					value="false"
+					>Opps Verification</mat-checkbox
 				>
 			</div>
 		</div>

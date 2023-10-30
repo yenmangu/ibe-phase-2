@@ -1,0 +1,31 @@
+<div class="upload-container">
+	<div
+		#dragBox
+		class="container column dragbox upload"
+		(dragover)="onDragOver($event)"
+		(drop)="onDrop($event)"
+		(dragleave)="onDragLeave($event)">
+		<div
+			class="custom-file"
+			(click)="customFileClick()">
+			<label for="upload"
+				>Drag or drop files here for upload, or click to browse</label
+			><br />
+			<mat-icon>cloud_upload</mat-icon>
+		</div>
+
+		<input
+			multiple
+			#fileInput
+			name="upload"
+			color="primary"
+			type="file"
+			(click)="onChange($event)"
+			style="display: none" />
+		<div class="container column file-list">
+			<ul>
+				<li *ngFor="let file of selectedFiles">{{ file.name }}</li>
+			</ul>
+		</div>
+	</div>
+</div>

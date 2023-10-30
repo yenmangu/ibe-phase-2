@@ -16,6 +16,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatInput, MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+
 //  Custom
 import { NavigationComponent } from './navigation/navigation.component';
 import { AdminComponent } from './admin.component';
@@ -29,6 +30,8 @@ import { FormControlPipe } from '../form-control.pipe';
 import { PlayerIdentificationComponent } from './game-setup/player-identification/player-identification.component';
 import { AppInterfaceComponent } from './game-setup/app-interface/app-interface.component';
 import { NamingNumberingComponent } from './game-setup/naming-numbering/naming-numbering.component';
+import { UploadDownloadComponent } from './upload-download/upload-download.component';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
 	declarations: [
@@ -41,13 +44,15 @@ import { NamingNumberingComponent } from './game-setup/naming-numbering/naming-n
 		PlayerIdentificationComponent,
 		FormControlPipe,
 		AppInterfaceComponent,
-		NamingNumberingComponent
+		NamingNumberingComponent,
+		UploadDownloadComponent,
 	],
 	imports: [
 		CommonModule,
 		AdminRoutingModule,
 		ReactiveFormsModule,
 		FormsModule,
+		SharedModule,
 		// Material
 		MatSidenavModule,
 		MatButtonModule,
