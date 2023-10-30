@@ -1,5 +1,6 @@
-import { OnInit, Component, Output, EventEmitter } from '@angular/core';
+import { OnInit, Component, Output, EventEmitter, Input } from '@angular/core';
 import { FormGroup, FormArray, FormBuilder, FormControl } from '@angular/forms';
+import { ignoreFocus } from '@cds/core/internal';
 
 @Component({
 	selector: 'app-app-interface',
@@ -7,6 +8,7 @@ import { FormGroup, FormArray, FormBuilder, FormControl } from '@angular/forms';
 	styleUrls: ['./app-interface.component.scss']
 })
 export class AppInterfaceComponent implements OnInit {
+	@Input() appInterfaceSettings: any;
 	@Output() appInterfaceEmitter = new EventEmitter<any>();
 
 	// playersSeeConfig: any = [
@@ -35,11 +37,7 @@ export class AppInterfaceComponent implements OnInit {
 		{ display: '60s', value: 65 },
 		{ display: 'Never', value: 'Never' }
 	];
-	additonalConfig: any = [
-		{ name: 'Flash Scores', value: false },
-		{ name: 'Quick Adjust Button', value: false },
-		{ name: 'Opps Verification', value: false }
-	];
+
 	warnPlayersConfig: any = [
 		{ name: 'Stationary Switch', value: false },
 		{ name: 'Share', value: false },
@@ -62,6 +60,60 @@ export class AppInterfaceComponent implements OnInit {
 			console.log('app intfc val change: ', data);
 			// if (this.appInterfaceForm.get(''))
 		});
+		console.log(
+			'app interface settings from the db: ',
+			JSON.stringify(this.appInterfaceSettings, null, 2)
+		);
+		if (this.appInterfaceForm && this.appInterfaceSettings) {
+			this.populateFormControls(this.appInterfaceSettings);
+		}
+		// this.appInterfaceForm.setValue(this.appInterfaceSettings);
+	}
+
+	populateFormControls(data: any) {
+		console.log('data in populate form: ',data)
+		const playersChangeArray = data.playersChange;
+		for (let i = 0; i < playersChangeArray.length; i++) {
+			const controlName = `control${i}`;
+			this.appInterfaceForm
+				.get(`playersChange.${i}.${controlName}`)
+				.setValue(playersChangeArray[0][controlName][i]);
+		}
+		const playersInputArray = data.playersInput;
+		for (let i = 0; i < playersInputArray.length; i++) {
+			const controlName = `control${i}`;
+			this.appInterfaceForm
+				.get(`playersInput.${i}.${controlName}`)
+				.setValue(playersInputArray[0][controlName][i]);
+		}
+		const warnPlayersArray = data.warnPlayers;
+		for (let i = 0; i < warnPlayersArray.length; i++) {
+			const controlName = `control${i}`;
+			this.appInterfaceForm
+				.get(`warnPlayers.${i}.${controlName}`)
+				.setValue(warnPlayersArray[0][controlName][i]);
+		}
+		this.appInterfaceForm
+			.get('handDiagrams')
+			.setValue(this.appInterfaceSettings.handDiagrams);
+		this.appInterfaceForm
+			.get('ownResults')
+			.setValue(this.appInterfaceSettings.ownResults);
+		this.appInterfaceForm
+			.get('othersResults')
+			.setValue(this.appInterfaceSettings.othersResults);
+		this.appInterfaceForm
+			.get('rankings')
+			.setValue(this.appInterfaceSettings.rankings);
+		this.appInterfaceForm
+			.get('adjustedScores')
+			.setValue(this.appInterfaceSettings.adjustedScores);
+		this.appInterfaceForm
+			.get('resultsTimeout')
+			.setValue(this.appInterfaceSettings.resultsTimeout);
+		this.appInterfaceForm.get('flash').setValue(this.appInterfaceSettings.flash);
+		this.appInterfaceForm.get('qaba').setValue(this.appInterfaceSettings.qaba);
+		this.appInterfaceForm.get('scov').setValue(this.appInterfaceSettings.scov);
 	}
 
 	createFormGroup() {
@@ -69,34 +121,27 @@ export class AppInterfaceComponent implements OnInit {
 			// playersSee: this.fb.array([]),
 			playersChange: this.fb.array([]),
 			playersInput: this.fb.array([]),
-			handDiagrams: new FormControl(null),
-			ownResults: new FormControl(null),
-			othersResults: new FormControl(null),
-			rankings: new FormControl(null),
-			adjustedScores: new FormControl(null),
-			resultsTimeout: new FormControl(null),
-
-			additionalConfig: this.fb.array([]),
+			handDiagrams: new FormControl(false),
+			ownResults: new FormControl(false),
+			othersResults: new FormControl(false),
+			rankings: new FormControl(false),
+			adjustedScores: new FormControl(false),
+			resultsTimeout: new FormControl(15),
+			flash: new FormControl(false),
+			qaba: new FormControl(false),
+			scov: new FormControl(false),
+			// additionalConfig: this.fb.array([]),
 			warnPlayers: this.fb.array([])
 		});
 	}
 
 	createFormControls() {
 		const controls = {
-			playersSee: this.fb.array([]),
 			playersChange: this.fb.array([]),
 			playersInput: this.fb.array([]),
-			additionalConfig: this.fb.array([]),
+			// additionalConfig: this.fb.array([]),
 			warnPlayers: this.fb.array([])
 		};
-
-		// this.playersSeeConfig.forEach((item, index) => {
-		// 	const group = this.fb.group({
-		// 		[`control${index}`]: new FormControl(item.value)
-		// 	});
-		// 	(this.appInterfaceForm.get('playersSee') as FormArray).push(group);
-		// });
-
 		this.playersChangeConfig.forEach((item, index) => {
 			const group = this.fb.group({
 				[`control${index}`]: new FormControl(item.value)
@@ -106,23 +151,20 @@ export class AppInterfaceComponent implements OnInit {
 
 		this.playersInputConfig.forEach((item, index) => {
 			const group = this.fb.group({
-				[`control${index}`]: new FormControl(item.value)
+				[`control${index}`]: new FormControl(item.values[0])
 			});
 			(this.appInterfaceForm.get('playersInput') as FormArray).push(group);
 		});
 
-		this.additonalConfig.forEach((item, index) => {
-			const group = this.fb.group({
-				[`control${index}`]: new FormControl(item.value)
-			});
-			(this.appInterfaceForm.get('additionalConfig') as FormArray).push(group);
-		});
-		controls['handDiagrams'] = new FormControl(false)
+		controls['handDiagrams'] = new FormControl(false);
 		controls['othersResults'] = new FormControl(false);
 		controls['ownResults'] = new FormControl(false);
-		controls['rankings']=new FormControl(false)
-		controls['adjustedScores'] = new FormControl(false)
+		controls['rankings'] = new FormControl(false);
+		controls['adjustedScores'] = new FormControl(false);
 		controls['resultsTimeout'] = new FormControl('15');
+		controls['flash'] = new FormControl(false);
+		controls['qaba'] = new FormControl(false);
+		controls['scov'] = new FormControl(false);
 
 		this.warnPlayersConfig.forEach((item, index) => {
 			const group = this.fb.group({
@@ -140,11 +182,11 @@ export class AppInterfaceComponent implements OnInit {
 	}
 
 	getAppInterfaceValues(): void {
-		const data ={
-			formName:'appInterface',
+		const data = {
+			formName: 'appInterface',
 			xmlElement: 'pluisets',
 			formData: this.appInterfaceForm.value
-		}
+		};
 		console.log('app-interface data: ', data);
 		this.appInterfaceEmitter.emit(data);
 	}

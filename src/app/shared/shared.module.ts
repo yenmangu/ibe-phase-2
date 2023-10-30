@@ -16,6 +16,8 @@ import { EventTableDialogComponent } from './event-table-dialog/event-table-dial
 import { VenueTableDialogComponent } from './venue-table-dialog/venue-table-dialog.component';
 import { UserDetailsComponent } from './header/user-details/user-details.component';
 import { StartingLineupComponent } from './starting-lineup/starting-lineup.component';
+import { UploadFileComponent } from './upload-file/upload-file.component';
+import { DownloadFileComponent } from './download-file/download-file.component';
 
 // Modules
 
@@ -25,14 +27,21 @@ import { StartingLineupComponent } from './starting-lineup/starting-lineup.compo
 		FooterComponent,
 		DialogComponent,
 		EmitDataDirective,
-  PlayerTableDialogComponent,
-  TeamTableDialogComponent,
-  EventTableDialogComponent,
-  VenueTableDialogComponent,
-  UserDetailsComponent,
-  StartingLineupComponent
+		PlayerTableDialogComponent,
+		TeamTableDialogComponent,
+		EventTableDialogComponent,
+		VenueTableDialogComponent,
+		UserDetailsComponent,
+		StartingLineupComponent,
+		UploadFileComponent,
+		DownloadFileComponent
 	],
 	imports: [CommonModule, MaterialModule, FormsModule],
-	exports: [HeaderComponent, FooterComponent]
+	exports: [
+		HeaderComponent,
+		FooterComponent,
+		UploadFileComponent,
+		DownloadFileComponent
+	]
 })
 export class SharedModule {}

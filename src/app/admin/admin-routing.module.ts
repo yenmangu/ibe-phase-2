@@ -8,7 +8,7 @@ import { GameActionsComponent } from './game-actions/game-actions.component';
 import { GameSettingsComponent } from './game-settings/game-settings.component';
 import { AccountSettingsComponent } from './account-settings/account-settings.component';
 import { GamesComponent } from './games/games.component';
-
+import { UploadDownloadComponent } from './upload-download/upload-download.component';
 // dev
 import { PairsTableComponent } from './games/pairs-table/pairs-table.component';
 import { CurrentGameComponent } from './games/current-game/current-game.component';
@@ -26,6 +26,7 @@ const routes: Routes = [
 				loadChildren: () => import('./games/games.module').then(m => m.GamesModule)
 			},
 			{ path: 'game-setup', component: GameSetupComponent },
+			{ path: 'upload-download', component: UploadDownloadComponent },
 			{ path: 'game-actions', component: GameActionsComponent },
 			{ path: 'game-settings', component: GameSettingsComponent },
 			{ path: 'account', component: AccountSettingsComponent },

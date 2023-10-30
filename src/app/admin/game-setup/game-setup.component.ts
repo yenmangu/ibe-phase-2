@@ -21,7 +21,13 @@ export class GameSetupComponent implements OnInit {
 	dbInit: boolean = false;
 	twoPageStartup: boolean;
 
+	dbProgress: number = 0;
+
 	initialSettingsData: any = {};
+	setupSettings: any = {};
+	scoringSettings: any = {};
+	appInterfaceSettings: any = {};
+	namingNumberingSettings: any = {};
 
 	directorKey: string = '';
 	gameCode: string = '';
@@ -52,6 +58,10 @@ export class GameSetupComponent implements OnInit {
 		if (this.dbInit) {
 			this.gameSettingsService.fetchAllSettings();
 		}
+		this.IDBstatusService.dataProgress$.subscribe(progress => {
+			this.dbProgress = progress;
+			console.log(this.dbProgress)
+		});
 
 		this.sharedSettingsService
 			.getGameSettings()
@@ -59,11 +69,19 @@ export class GameSetupComponent implements OnInit {
 			.subscribe({
 				next: data => {
 					if (data) {
-						console.log(data);
+						console.log('initial settings data: ', data);
 						this.initialSettingsData = data;
+						this.setupSettings = data.setupConfig;
+						this.scoringSettings = data.scoringConfig;
+						this.appInterfaceSettings = data.appInterfaceConfig;
+						this.namingNumberingSettings = data.namingNumberingConfig;
+						this.populateForm();
+						console.log('from parent: scoringSettings: ', this.scoringSettings);
 					}
 				},
-				error: error => {}
+				error: error => {
+					console.error('error retrieving data');
+				}
 			});
 
 		this.setupForm = this.fb.group({
@@ -83,7 +101,7 @@ export class GameSetupComponent implements OnInit {
 		});
 
 		this.setupForm.valueChanges.subscribe(values => {
-			console.log('form values: ', values);
+			// console.log('form values: ', values);
 		});
 		this.userDetailsService.directorKey$.subscribe(key => (this.directorKey = key));
 		this.userDetailsService.gameCode$.subscribe(code => (this.gameCode = code));
@@ -92,6 +110,26 @@ export class GameSetupComponent implements OnInit {
 			console.log('twoPageStartup value: ', this.twoPageStartup);
 		});
 	}
+
+	populateForm(): void {
+		if (this.setupSettings && this.setupForm) {
+			Object.keys(this.setupSettings).forEach(key => {
+				if (this.setupForm.get(key)) {
+					this.setupForm.get(key).setValue(this.setupSettings[key]);
+					console.log(`${key} in form set`);
+				}
+			});
+			if (this.setupSettings.initConfig) {
+				const initConfig = this.setupSettings.initConfig;
+				Object.keys(initConfig).forEach(key => {
+					if (this.setupForm.get(key)) {
+						this.setupForm.get(key).setValue(initConfig[key]);
+					}
+				});
+			}
+		}
+	}
+
 	save(): void {
 		const data = {
 			formName: 'setupForm',

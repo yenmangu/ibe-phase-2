@@ -1,4 +1,4 @@
-import { OnInit, Component, Input, Output, EventEmitter } from '@angular/core';
+import { OnInit, Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import {
 	FormBuilder,
 	FormGroup,
@@ -16,8 +16,8 @@ import { boardsScoringData } from '../../games/data/data-store/boards-scoring-da
 	templateUrl: './boards-scoring.component.html',
 	styleUrls: ['./boards-scoring.component.scss']
 })
-export class BoardsScoringComponent implements OnInit {
-	@Input() formValues: any;
+export class BoardsScoringComponent implements OnInit, OnChanges {
+	@Input() scoringSettings: any;
 	@Output() boardScoringEmitter: EventEmitter<any> = new EventEmitter<any>();
 
 	scoringData: BoardsScoringInterface[] = boardsScoringData;
@@ -30,6 +30,7 @@ export class BoardsScoringComponent implements OnInit {
 			tables: null
 		});
 
+
 		boardsScoringData.forEach((item: BoardsScoringInterface, index: number) => {
 			this.addScoringDataItem(item, index);
 		});
@@ -38,6 +39,40 @@ export class BoardsScoringComponent implements OnInit {
 	ngOnInit(): void {
 		console.log('checking data: ', this.scoringConfigForm);
 		console.log('form controls: ', this.scoringDataArray.controls);
+	}
+
+	ngOnChanges(changes: SimpleChanges): void {
+		if(changes.scoringSettings){
+			console.log('scoring component ngOnChanges: ', this.scoringSettings)
+			this.populateForm(this.scoringSettings)
+		}
+	}
+
+	populateForm(scoringSettings):void {
+		const scoringConfigArray = scoringSettings.scoringConfigArray
+		if(scoringConfigArray){
+			console.log('in populate form: ', scoringConfigArray);
+			
+		}
+
+
+		scoringConfigArray.forEach((item, index)=> {
+			const control = this.getControl(index,'defaultSelected');
+			if(control){
+				control.setValue(item.defaultSelected)
+			}
+			const preferredDurationControl = this.getControl(index,'preferredDuration')
+			if(preferredDurationControl){
+				preferredDurationControl.setValue(item.preferredDuration)
+			}
+			const scoringMethodsControl = this.getControl(index,'scoringMethods');
+			if(scoringMethodsControl){
+				scoringMethodsControl.setValue(item.scoringMethods)
+			}
+
+		})
+		this.scoringConfigForm.get('neuberg').setValue(this.scoringSettings.neuberg)
+		this.scoringConfigForm.get('tables').setValue(this.scoringSettings.tables)
 	}
 
 	getBoardsScoringValues(): void {

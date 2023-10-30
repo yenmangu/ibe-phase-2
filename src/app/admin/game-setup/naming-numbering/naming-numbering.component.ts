@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Output, EventEmitter, OnInit, Input } from '@angular/core';
 import { FormBuilder, FormArray, FormControl, FormGroup } from '@angular/forms';
 import { distinctUntilChanged } from 'rxjs';
 
@@ -8,6 +8,7 @@ import { distinctUntilChanged } from 'rxjs';
 	styleUrls: ['./naming-numbering.component.scss']
 })
 export class NamingNumberingComponent implements OnInit {
+	@Input() namingNumberingSettings: any
 	@Output() namingNumberingEmitter: EventEmitter<any> = new EventEmitter<any>();
 
 	mitchellEwConfig = [
@@ -43,7 +44,16 @@ export class NamingNumberingComponent implements OnInit {
 	ngOnInit(): void {
 		// this.namingNumberingForm.valueChanges
 		// 	.pipe(distinctUntilChanged())
-		// 	.subscribe();
+		// 	.subscribe()
+		console.log('namsets: ', this.namingNumberingSettings);
+		this.namingNumberingForm.setValue(this.namingNumberingSettings)
+		console.log('naming form: ', this.namingNumberingForm);
+
+	}
+
+
+	populateFormControls(data){
+		// this.namingNumberingForm.get('mitchellEWNumbers').setValue(this.namingNumberingSettings.)
 	}
 
 	createFormControls() {
