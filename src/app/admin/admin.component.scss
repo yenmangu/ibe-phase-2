@@ -1,11 +1,29 @@
 :host {
 	display: block;
-	height: 100%
+	height: 100%;
+	--mdc-linear-progress-track-height: 12px;
 }
-app-navigation{
+// :host ::ng-deep mat-progress-bar{
+// 	height: 60px;
+// }
+// :host ::ng-deep mat-progress-bar .mdc-linear-progress__bar-inner {
+// 	border-top-width: 20px
+// }
+
+.loading {
+	justify-content: center;
+	align-items: center;
+	padding-top: 4rem;
+}
+h2 {
+	text-align: center;
+}
+app-navigation {
 	display: flex;
 	flex-direction: column;
 	height: 100%;
 	width: 100%;
 	// border: 2px solid lime
 }
+
+

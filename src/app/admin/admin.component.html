@@ -1,7 +1,12 @@
-<mat-progress-bar
-	*ngIf="loadingStatus !== 100"
-	mode="determinate"
-	[value]="loadingStatus"></mat-progress-bar>
+<ng-container *ngIf="loadingStatus !== 100">
+	<div class="container column loading">
+		<h2>Loading...</h2>
+		<mat-progress-bar
+			*ngIf="loadingStatus !== 100"
+			mode="determinate"
+			[value]="loadingStatus"></mat-progress-bar>
+	</div>
+</ng-container>
 <ng-container
 	*ngIf="(authService.isAuthedSubject$ | async) && loadingStatus === 100">
 	<app-navigation></app-navigation>

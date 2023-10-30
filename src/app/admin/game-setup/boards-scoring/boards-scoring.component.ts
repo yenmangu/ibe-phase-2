@@ -42,7 +42,7 @@ export class BoardsScoringComponent implements OnInit, OnChanges {
 	}
 
 	ngOnChanges(changes: SimpleChanges): void {
-		if(changes.scoringSettings){
+		if(changes.scoringSettings && this.scoringSettings.scoringConfigArray){
 			console.log('scoring component ngOnChanges: ', this.scoringSettings)
 			this.populateForm(this.scoringSettings)
 		}
@@ -52,7 +52,7 @@ export class BoardsScoringComponent implements OnInit, OnChanges {
 		const scoringConfigArray = scoringSettings.scoringConfigArray
 		if(scoringConfigArray){
 			console.log('in populate form: ', scoringConfigArray);
-			
+
 		}
 
 

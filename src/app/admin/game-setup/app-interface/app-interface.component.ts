@@ -1,6 +1,5 @@
 import { OnInit, Component, Output, EventEmitter, Input } from '@angular/core';
 import { FormGroup, FormArray, FormBuilder, FormControl } from '@angular/forms';
-import { ignoreFocus } from '@cds/core/internal';
 
 @Component({
 	selector: 'app-app-interface',
@@ -64,14 +63,21 @@ export class AppInterfaceComponent implements OnInit {
 			'app interface settings from the db: ',
 			JSON.stringify(this.appInterfaceSettings, null, 2)
 		);
-		if (this.appInterfaceForm && this.appInterfaceSettings) {
+		if (
+			this.appInterfaceForm &&
+			!this.checkEmpty(this.appInterfaceSettings)
+		) {
 			this.populateFormControls(this.appInterfaceSettings);
 		}
-		// this.appInterfaceForm.setValue(this.appInterfaceSettings);
+	}
+
+	checkEmpty(obj){
+		for (var i in obj) return false;
+		return true
 	}
 
 	populateFormControls(data: any) {
-		console.log('data in populate form: ',data)
+		console.log('data in populate form: ', data);
 		const playersChangeArray = data.playersChange;
 		for (let i = 0; i < playersChangeArray.length; i++) {
 			const controlName = `control${i}`;

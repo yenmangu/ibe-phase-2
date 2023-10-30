@@ -15,6 +15,7 @@ import { Subject, Subscription, startWith, takeUntil } from 'rxjs';
 import { UserDetailsService } from '../services/user-details.service';
 import { IndexedDatabaseStatusService } from '../services/indexed-database-status.service';
 import { SharedGameDataService } from 'src/app/admin/games/services/shared-game-data.service';
+import { BreakpointService } from '../services/breakpoint.service';
 
 @Component({
 	selector: 'app-header',
@@ -31,6 +32,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 	gameCodeSubscription = new Subscription();
 	emailSubscription = new Subscription();
 	userLoggedOut: boolean = false;
+	currentBreakpoint;
 
 	private sidenavSubscription: Subscription;
 	constructor(
@@ -41,12 +43,18 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 		public userDetailsService: UserDetailsService,
 		private cdr: ChangeDetectorRef,
 		private IDBStatus: IndexedDatabaseStatusService,
-		private sharedGameDataService: SharedGameDataService
+		private sharedGameDataService: SharedGameDataService,
+		private breakpointService: BreakpointService
 	) {}
 
 	ngOnInit(): void {
 		this.userDetailsService.updateFromLocalStorage();
 		this.cdr.detectChanges();
+
+		this.breakpointService.currentBreakpoint$.subscribe(breakpoint => {
+			this.currentBreakpoint = breakpoint;
+			console.log(this.currentBreakpoint);
+		});
 	}
 
 	ngAfterViewInit(): void {}

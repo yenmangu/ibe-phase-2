@@ -70,7 +70,7 @@ export class IndexedDatabaseService {
 			this.db = await openDB(dbName);
 			const actual = Array.from(this.db.objectStoreNames);
 
-			
+
 			return expectedStores.every(expected => actual.includes(expected));
 		}
 		return false;
@@ -154,11 +154,15 @@ export class IndexedDatabaseService {
 		progressCallBack: (progress: number) => void
 	): Promise<Record<string, any>> {
 		const allStoreNames = storeNames.concat(playerDbStoreNames);
-		const tx = this.db.transaction(allStoreNames, 'readwrite');
 		try {
 			const promises = [];
 			let progress = 0;
 
+			const tx = this.db.transaction(allStoreNames, 'readwrite');
+
+			tx.oncomplete = () => {
+				progressCallBack(progress)
+			}
 			for (const name of playerDbStoreNames) {
 				let id = 1;
 				let key = `00${id}`;
@@ -255,7 +259,7 @@ export class IndexedDatabaseService {
 			}
 
 			await Promise.all(promises);
-			await tx.done;
+			// await tx.complete;
 			return storeMapping;
 		} catch (err) {
 			console.error(`Error in addInitialData(): ${err}`);
