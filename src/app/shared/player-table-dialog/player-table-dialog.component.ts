@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Inject, Input, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Player } from '../data/interfaces/player-data';
 
@@ -7,9 +7,9 @@ import { Player } from '../data/interfaces/player-data';
 	templateUrl: './player-table-dialog.component.html',
 	styleUrls: ['./player-table-dialog.component.scss']
 })
-export class PlayerTableDialogComponent implements OnInit, AfterViewInit {
+export class PlayerTableDialogComponent implements OnInit {
 	@Input() existingRowData: Player;
-	isEdit: boolean;
+
 	applyMagentaGreyTheme = true;
 	newPlayer: Player;
 	ebuChecked: boolean = false;
@@ -47,12 +47,22 @@ export class PlayerTableDialogComponent implements OnInit, AfterViewInit {
 	}
 
 	ngOnInit(): void {
+<<<<<<< HEAD
 		let existingRowData;
+		// console.log('player-table-dialog OnInit', existingRowData);
 		// console.log('player-table-dialog OnInit', existingRowData);
 		if (this.data && this.data.existingRowData) {
 			this.isEdit = true;
 			existingRowData = { ...this.data.existingRowData };
 			console.log('testing shallow copy', existingRowData);
+			this.playerNumber = existingRowData.value.$?.n;
+			this.playerName = existingRowData.value.name || '';
+			this.playerEmail = existingRowData?.value?.email || undefined;
+			this.playerTelephone = existingRowData?.value?.telephone || undefined;
+			this.dateAdded = existingRowData.value?.$?.adddate || '';
+			if (existingRowData.lastplay) {
+				this.lastPlay = existingRowData?.value?.lastplay[0]?.date || '';
+			}
 			this.playerNumber = existingRowData.value.$?.n;
 			this.playerName = existingRowData.value.name || '';
 			this.playerEmail = existingRowData?.value?.email || undefined;
@@ -104,6 +114,7 @@ export class PlayerTableDialogComponent implements OnInit, AfterViewInit {
 	}
 
 	onSave(): void {
+<<<<<<< HEAD
 		const finalData = { isNew: true || false, data: undefined };
 		if (this.isEdit) {
 			finalData.isNew = false;
@@ -166,9 +177,36 @@ export class PlayerTableDialogComponent implements OnInit, AfterViewInit {
 			console.log('new player created: ', finalData);
 
 			this.dialogRef.close(finalData);
+=======
+		const newPlayer = { ...this.newPlayer };
+		newPlayer.name = [this.playerName];
+		newPlayer.email = [this.playerEmail];
+		newPlayer.telephone = [this.playerTelephone];
+		newPlayer.id = [];
+		newPlayer.$.type = this.newPlayer.$.type;
+		newPlayer.$.n = this.newPlayer.$.n;
+		newPlayer.$.adddate = this.newPlayer.$.adddate;
+		if (this.ebuChecked && this.ebuId) {
+			newPlayer.id.push({
+				$: {
+					type: 'EBU',
+					code: this.ebuId
+				}
+			});
 		}
-	}
+		if (this.bboChecked && this.bboId) {
+			newPlayer.id.push({
+				$: {
+					type: 'BBO',
+					code: this.bboId
+				}
+			});
+>>>>>>> d51187bb20589d052195242e0565b314d43f3471
+		}
 
+		console.log('NewPLayer created: ', JSON.stringify(newPlayer, null, 2));
+		this.dialogRef.close(newPlayer);
+	}
 	onCancel(): void {
 		this.dialogRef.close();
 	}

@@ -29,34 +29,22 @@
 			</ng-template>
 		</mat-tab>
 	</mat-tab-group>
-	<!-- <div
-		class="container row options"
-		style="gap: 2rem">
-		<button
-			mat-flat-button
-			(click)="onClickOptions()"
-			color="accent">
-			Advanced
-		</button>
-	</div> -->
 </div>
 
 <!-- Template References -->
 <ng-template #playersDatabase>
 	<!-- Players Database Tab -->
-	<!-- <mat-spinner *ngIf="playersArray.length < 1"></mat-spinner> -->
-
-	<app-player-database></app-player-database>
+	<app-player-database  [playersArray]="playersArray"></app-player-database>
 </ng-template>
 <ng-template #teamsDatabase>
 	<!-- Teams Database Tab -->
-	<app-teams-database></app-teams-database>
+	<app-teams-database [teamsArray]="teamsArray"></app-teams-database>
 </ng-template>
 <ng-template #eventNamesDatabase>
 	<!-- Event Names Database Tab -->
-	<app-event-names-database></app-event-names-database>
+	<app-event-names-database [eventArray]="eventArray"></app-event-names-database>
 </ng-template>
 <ng-template #venuesDatabase>
-	<app-venues-database></app-venues-database>
+	<app-venues-database [venuesArray]="venuesArray"></app-venues-database>
 	<!-- Venues Database Tab -->
 </ng-template>

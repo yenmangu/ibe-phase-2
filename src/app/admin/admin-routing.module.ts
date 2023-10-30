@@ -10,6 +10,7 @@ import { AccountSettingsComponent } from './account-settings/account-settings.co
 import { GamesComponent } from './games/games.component';
 import { UploadDownloadComponent } from './upload-download/upload-download.component';
 // dev
+
 import { PairsTableComponent } from './games/pairs-table/pairs-table.component';
 import { CurrentGameComponent } from './games/current-game/current-game.component';
 import { HistoricGamesComponent } from './games/historic-games/historic-games.component';

@@ -5,10 +5,8 @@ import { PlayerTableDialogComponent } from '../player-table-dialog/player-table-
 import { SharedDataService } from './shared-data.service';
 import { DialogModel } from '../models/dialog_model';
 import { dialogData } from '../data/dialogs';
-import { TeamTableDialogComponent } from '../team-table-dialog/team-table-dialog.component';
-import { EventTableDialogComponent } from '../event-table-dialog/event-table-dialog.component';
-import { VenueTableDialogComponent } from '../venue-table-dialog/venue-table-dialog.component';
-import { AdvancedOptionsDialogComponent } from 'src/app/admin/games/database-landing/advanced-options-dialog/advanced-options-dialog.component';
+import { DialogConfig } from '@angular/cdk/dialog';
+
 @Injectable({
 	providedIn: 'root'
 })
@@ -88,50 +86,13 @@ export class DialogService implements OnInit {
 	// 	}
 	// }
 
-	openTableEditDialog(
-		type: string,
-		data?: any,
-		searchTerm?: string
-	): MatDialogRef<any> | undefined {
-		// console.log('data passed from component: ', data);
+	openTableEditDialog(data?: any): MatDialogRef<any> | undefined {
 		const matDialogConfig: MatDialogConfig = {
 			width: '400px',
-			data: {
-				existingRowData: data,
-				type: type ? type : undefined,
-				searchTerm: searchTerm && searchTerm !== undefined ? searchTerm : undefined
-			}
+			data: { ...data }
 		};
-		console.log('dialog service config: ', matDialogConfig);
-		let dialogToOpen: any;
-		switch (type) {
-			case 'player':
-				dialogToOpen = PlayerTableDialogComponent;
-				break;
-			case 'team':
-				dialogToOpen = TeamTableDialogComponent;
-				break;
-			case 'event':
-				dialogToOpen = EventTableDialogComponent;
-				break;
-			case 'venue':
-				dialogToOpen = VenueTableDialogComponent;
-				break;
-			default:
-				console.log('No "type" provided so no dialog opened');
-				break;
-		}
-		this.dialogRef = this.dialog.open(dialogToOpen, matDialogConfig);
+		this.dialogRef = this.dialog.open(PlayerTableDialogComponent, matDialogConfig);
 		return this.dialogRef;
-	}
-
-	openDatabaseOptionsDialog(data): MatDialogRef<any> | undefined {
-		const matDialogConfig: MatDialogConfig = {
-			width: '700px',
-
-		};
-		this.dialogRef = this.dialog.open(AdvancedOptionsDialogComponent,matDialogConfig);
-		return this.dialogRef
 	}
 
 	closeDialog(): void {

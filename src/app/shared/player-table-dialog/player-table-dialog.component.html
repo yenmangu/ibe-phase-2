@@ -1,17 +1,13 @@
-<h2>{{ isEdit ? 'Edit ' : 'Add New ' }}Player</h2>
+<h2>Add Player</h2>
 <mat-form-field [ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }">
 	<mat-label [ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }"
 		>Name</mat-label
 	>
-	<input
-		matInput
-		[(ngModel)]="playerName" />
+	<input matInput [(ngModel)]="playerName" />
 </mat-form-field>
 <mat-form-field [ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }">
 	<mat-label>Email</mat-label>
 	<input
-		[disabled]="!playerName"
-		[(ngModel)]="playerEmail"
 		matInput
 		[ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }" />
 </mat-form-field>
@@ -20,15 +16,12 @@
 		>Telephone</mat-label
 	>
 	<input
-		[disabled]="!playerName"
 		[ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }"
-		matInput
-		[(ngModel)]="playerTelephone" />
+		matInput [(ngModel)]="playerTelephone" />
 </mat-form-field>
 <h4>Player IDs (Check any that apply)</h4>
 <div class="container row checkbox-row">
 	<mat-checkbox
-		[disabled]="!playerName"
 		[(ngModel)]="ebuChecked"
 		[ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }"
 		>EBU</mat-checkbox
@@ -40,15 +33,12 @@
 			>ID Code</mat-label
 		>
 		<input
-			[disabled]="!playerName"
 			[ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }"
-			matInput
-			[(ngModel)]="ebuId" />
+			matInput [(ngModel)]="ebuId" />
 	</mat-form-field>
 </div>
 <div class="container row checkbox-row">
 	<mat-checkbox
-		[disabled]="!playerName"
 		[(ngModel)]="bboChecked"
 		[ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }"
 		>BBO</mat-checkbox
@@ -60,26 +50,13 @@
 			>ID Code</mat-label
 		>
 		<input
-			[disabled]="!playerName"
 			matInput
 			[(ngModel)]="bboId"
 			[ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }" />
 	</mat-form-field>
 </div>
-<mat-form-field [ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }">
-	<mat-label [ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }"
-		>Date added</mat-label
-	>
-	<input
-		[disabled]="!playerName"
-		[ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }"
-		matInput
-		[(ngModel)]="dateAdded"
-		type="text" />
-</mat-form-field>
 <div class="container row button-wrapper">
 	<button
-		[disabled]="!playerName"
 		(click)="onSave()"
 		mat-flat-button
 		color="primary"

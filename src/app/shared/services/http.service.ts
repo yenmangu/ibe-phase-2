@@ -6,8 +6,6 @@ import { environment } from 'src/environments/environment';
 	providedIn: 'root'
 })
 export class HttpService {
-	private apiUrl: string = environment.API_URL;
-
 	constructor(private http: HttpClient) {}
 
 	postData(data): Observable<any> {

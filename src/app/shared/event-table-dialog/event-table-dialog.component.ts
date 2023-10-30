@@ -1,10 +1,9 @@
-import { Component, Inject, Input, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { EventInterface } from '../data/interfaces/event-data';
+import { Component } from '@angular/core';
+
 @Component({
-	selector: 'app-event-table-dialog',
-	templateUrl: './event-table-dialog.component.html',
-	styleUrls: ['./event-table-dialog.component.scss']
+  selector: 'app-event-table-dialog',
+  templateUrl: './event-table-dialog.component.html',
+  styleUrls: ['./event-table-dialog.component.scss']
 })
 export class EventTableDialogComponent implements OnInit {
 	@Input() existingRowData: EventInterface;
