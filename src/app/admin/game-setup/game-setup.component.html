@@ -1,4 +1,4 @@
-<ng-container *ngIf="dbProgress !== 100">
+<ng-container *ngIf="dbProgress !== 100 && !initialSettingsData">
 	<div class="loading">
 		<h2>Loading Settings...</h2>
 		<mat-progress-bar
@@ -137,34 +137,42 @@
 					<!-- Movement/ Scoring Tab In Tab -->
 
 					<mat-tab label="Movement/ Scoring">
-						<app-boards-scoring
-							*ngIf="scoringSettings"
-							[scoringSettings]="scoringSettings"
-							(boardScoringEmitter)="onScoringForm($event)"
-							(boardScoringEmitter)="onChildForm($event)"></app-boards-scoring>
+						<ng-container *ngIf="scoringSettings">
+							<app-boards-scoring
+								*ngIf="scoringSettings"
+								[scoringSettings]="scoringSettings"
+								(boardScoringEmitter)="onScoringForm($event)"
+								(boardScoringEmitter)="onChildForm($event)"></app-boards-scoring>
+						</ng-container>
 					</mat-tab>
 
 					<!--  -->
 					<!-- App Interface Tab -->
 
 					<mat-tab label="App Interface">
-						<app-app-interface
-							*ngIf="appInterfaceSettings"
-							[appInterfaceSettings]="appInterfaceSettings"
-							(appInterfaceEmitter)="onAppInterfaceForm($event)"
-							(appInterfaceEmitter)="onChildForm($event)"></app-app-interface>
+						<ng-container *ngIf="appInterfaceSettings">
+							<app-app-interface
+								*ngIf="appInterfaceSettings"
+								[appInterfaceSettings]="appInterfaceSettings"
+								(appInterfaceEmitter)="onAppInterfaceForm($event)"
+								(appInterfaceEmitter)="onChildForm($event)"></app-app-interface>
+						</ng-container>
 					</mat-tab>
 
 					<!--  -->
 					<!-- Naming Numbering Tab -->
 
 					<mat-tab label="Naming Numbering">
-						<app-naming-numbering
-							*ngIf="namingNumberingSettings"
-							[namingNumberingSettings]="namingNumberingSettings"
-							(namingNumberingEmitter)="onAppInterfaceForm($event)"
-							(namingNumberingEmitter)="onChildForm($event)"></app-naming-numbering>
-						<div class="container column"></div>
+						<ng-container *ngIf="namingNumberingSettings">
+							<app-naming-numbering
+								*ngIf="namingNumberingSettings"
+								[namingNumberingSettings]="namingNumberingSettings"
+								(namingNumberingEmitter)="onAppInterfaceForm($event)"
+								(namingNumberingEmitter)="
+									onChildForm($event)
+								"></app-naming-numbering>
+							<div class="container column"></div>
+						</ng-container>
 					</mat-tab>
 				</mat-tab-group>
 			</form>

@@ -21,6 +21,7 @@ import { IconRegistryService } from 'src/app/shared/services/icon-registry.servi
 import { SharedDataService } from 'src/app/shared/services/shared-data.service';
 import { CurrentEventService } from '../games/services/current-event.service';
 import { FormBuilder, FormControl } from '@angular/forms';
+import { BreakpointService } from 'src/app/shared/services/breakpoint.service';
 @Component({
 	selector: 'app-navigation',
 	templateUrl: './navigation.component.html',
@@ -37,13 +38,14 @@ export class NavigationComponent
 	// Dev - used to update match type across the app
 	matchTypeControl: FormControl;
 	selectedMatchType$: any = '';
-
+	currentBreakpoint;
 	// End dev
 	//
 	constructor(
 		private _sidenavService: SidenavService,
 		private _iconRegistry: IconRegistryService,
 		private _matIconRegistry: MatIconRegistry,
+		private breakpointService: BreakpointService,
 
 		// dev
 		private fb: FormBuilder,
@@ -62,6 +64,9 @@ export class NavigationComponent
 	}
 
 	ngOnInit(): void {
+		this.breakpointService.currentBreakpoint$.subscribe(breakpoint => {
+			this.currentBreakpoint = breakpoint;
+		});
 		this.subscription = this.isOpen$.subscribe((isOpen: boolean) => {
 			if (this.drawer) {
 				if (isOpen) {

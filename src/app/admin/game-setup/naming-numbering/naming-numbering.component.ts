@@ -8,7 +8,7 @@ import { distinctUntilChanged } from 'rxjs';
 	styleUrls: ['./naming-numbering.component.scss']
 })
 export class NamingNumberingComponent implements OnInit {
-	@Input() namingNumberingSettings: any
+	@Input() namingNumberingSettings: any;
 	@Output() namingNumberingEmitter: EventEmitter<any> = new EventEmitter<any>();
 
 	mitchellEwConfig = [
@@ -42,18 +42,18 @@ export class NamingNumberingComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
-		// this.namingNumberingForm.valueChanges
-		// 	.pipe(distinctUntilChanged())
-		// 	.subscribe()
 		console.log('namsets: ', this.namingNumberingSettings);
-		this.namingNumberingForm.setValue(this.namingNumberingSettings)
+		if (
+			this.namingNumberingForm &&
+			!this.checkEmpty(this.namingNumberingSettings)
+		) {
+			this.namingNumberingForm.setValue(this.namingNumberingSettings);
+		}
 		console.log('naming form: ', this.namingNumberingForm);
-
 	}
-
-
-	populateFormControls(data){
-		// this.namingNumberingForm.get('mitchellEWNumbers').setValue(this.namingNumberingSettings.)
+	checkEmpty(obj) {
+		for (var i in obj) return false;
+		return true;
 	}
 
 	createFormControls() {
@@ -68,11 +68,11 @@ export class NamingNumberingComponent implements OnInit {
 	}
 
 	getNamingNumberingValues(): void {
-		const data ={
+		const data = {
 			formName: 'namingNumbering',
-			xmlElement:'namsets',
-			formData:this.namingNumberingForm.value
-		}
+			xmlElement: 'namsets',
+			formData: this.namingNumberingForm.value
+		};
 		// const data = this.namingNumberingForm.value;
 		console.log('naming numbering values: ', this.namingNumberingForm.value);
 		this.namingNumberingEmitter.emit(data);
