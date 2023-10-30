@@ -17,7 +17,8 @@ import { IndexedDatabaseStatusService } from '../shared/services/indexed-databas
 import { DataService } from './games/services/data.service';
 import { CurrentEventService } from './games/services/current-event.service';
 import { SharedGameDataService } from './games/services/shared-game-data.service';
-
+import { Store } from '@ngrx/store';
+import { loadAdminData } from '../admin-state/admin.actions';
 @Component({
 	selector: 'app-admin',
 	templateUrl: './admin.component.html',
@@ -34,6 +35,7 @@ export class AdminComponent implements OnInit, OnDestroy {
 	loadingStatus: number = 0;
 
 	constructor(
+		private store: Store,
 		private sharedDataService: SharedDataService,
 		public authService: AuthService,
 		private userDetailsService: UserDetailsService,
