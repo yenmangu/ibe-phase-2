@@ -13,6 +13,7 @@ import {
 	take,
 	takeUntil
 } from 'rxjs';
+import { tag } from 'rxjs-spy/cjs/operators';
 import { IndexedDatabaseStatusService } from '../shared/services/indexed-database-status.service';
 import { DataService } from './games/services/data.service';
 import { CurrentEventService } from './games/services/current-event.service';
@@ -65,6 +66,25 @@ export class AdminComponent implements OnInit, OnDestroy {
 		this.IDBStatus.dataProgress$.subscribe(status => {
 			this.loadingStatus = 5 + status * 0.95;
 		});
+
+		this.sharedGameData.triggerRefreshObservable
+			.pipe(
+				tag('refresh_db'),
+				switchMap(data => {
+					this.IDBStatus.resetProgress();
+
+					return this.fetchData(this.gameCode, this.dirKey);
+				}),
+				switchMap(data => {
+					console.log('data from refresh: ', data);
+					if (data !== 'EMPTY') {
+						return this.processData(data);
+					} else {
+						return of(null);
+					}
+				})
+			)
+			.subscribe();
 	}
 
 	private subscribeToUserDetails(): void {
@@ -123,7 +143,7 @@ export class AdminComponent implements OnInit, OnDestroy {
 			const dbExists = await this.dataService.checkDatabase(data);
 			if (dbExists) {
 				console.log('db exists');
-				return;
+				await this.storeInitialData(data);
 			} else {
 				await this.dataService.initialiseDB(data);
 				await this.storeInitialData(data);

@@ -108,25 +108,25 @@ export class GamesComponent implements OnInit, OnDestroy {
 				error: err => {}
 			});
 
-		this.sharedGameData.triggerRefreshObservable
-			.pipe(
-				tag('refresh_db'),
-				switchMap(data => {
-					this.IDBStatusService.resetProgress();
+		// this.sharedGameData.triggerRefreshObservable
+		// 	.pipe(
+		// 		tag('refresh_db'),
+		// 		switchMap(data => {
+		// 			this.IDBStatusService.resetProgress();
 
-					console.log('database progress: ', this.progress);
-					return this.fetchData(this.gameCode, this.dirKey);
-				}),
-				switchMap(data => {
-					console.log('data from refresh: ', data);
-					if (data !== 'EMPTY') {
-						return this.processData(data);
-					} else {
-						return of(null);
-					}
-				})
-			)
-			.subscribe();
+		// 			console.log('database progress: ', this.progress);
+		// 			return this.fetchData(this.gameCode, this.dirKey);
+		// 		}),
+		// 		switchMap(data => {
+		// 			console.log('data from refresh: ', data);
+		// 			if (data !== 'EMPTY') {
+		// 				return this.processData(data);
+		// 			} else {
+		// 				return of(null);
+		// 			}
+		// 		})
+		// 	)
+		// 	.subscribe();
 	}
 	private callCurrentEventService(gameCode: string, dirKey: string) {
 		// Make the data fetch here using gameCode and dirKey
