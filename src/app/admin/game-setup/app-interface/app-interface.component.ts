@@ -14,7 +14,7 @@ import { FormGroup, FormArray, FormBuilder, FormControl } from '@angular/forms';
 	templateUrl: './app-interface.component.html',
 	styleUrls: ['./app-interface.component.scss']
 })
-export class AppInterfaceComponent implements OnInit , AfterViewInit{
+export class AppInterfaceComponent implements OnInit, AfterViewInit {
 	@Input() appInterfaceSettings: any;
 	@Output() appInterfaceEmitter = new EventEmitter<any>();
 
@@ -62,7 +62,11 @@ export class AppInterfaceComponent implements OnInit , AfterViewInit{
 	}
 
 	ngOnInit(): void {
-		console.log('testing data readiness: ', this.appInterfaceSettings);
+		console.log(
+			'testing data readiness: ',
+			JSON.stringify(this.appInterfaceSettings, null, 2)
+		);
+		console.log('app interface form: ', this.appInterfaceForm.controls);
 
 		if (this.appInterfaceForm && this.appInterfaceSettings) {
 			this.cd.detectChanges();
@@ -84,9 +88,7 @@ export class AppInterfaceComponent implements OnInit , AfterViewInit{
 		console.log('appInterfaceForm initiated');
 	}
 
-	ngAfterViewInit(): void {
-
-	}
+	ngAfterViewInit(): void {}
 
 	checkEmpty(obj) {
 		for (var i in obj) return false;
@@ -102,21 +104,21 @@ export class AppInterfaceComponent implements OnInit , AfterViewInit{
 					const controlName = `control${i}`;
 					this.appInterfaceForm
 						.get(`playersChange.${i}.${controlName}`)
-						.setValue(playersChangeArray[0][controlName][i]);
+						.setValue(playersChangeArray[i][controlName]);
 				}
 				const playersInputArray = data.playersInput;
 				for (let i = 0; i < playersInputArray.length; i++) {
 					const controlName = `control${i}`;
 					this.appInterfaceForm
 						.get(`playersInput.${i}.${controlName}`)
-						.setValue(playersInputArray[0][controlName][i]);
+						.setValue(playersInputArray[i][controlName]);
 				}
 				const warnPlayersArray = data.warnPlayers;
 				for (let i = 0; i < warnPlayersArray.length; i++) {
 					const controlName = `control${i}`;
 					this.appInterfaceForm
 						.get(`warnPlayers.${i}.${controlName}`)
-						.setValue(warnPlayersArray[0][controlName][i]);
+						.setValue(warnPlayersArray[i][controlName]);
 				}
 				this.appInterfaceForm
 					.get('handDiagrams')

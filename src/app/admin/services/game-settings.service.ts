@@ -367,20 +367,24 @@ export class GameSettingsService {
 		appInterfaceConfig.resultsTimeout = resultsTimeout[0]['$'].val;
 
 		appInterfaceConfig.playersChange[0].control0 = dan === 'y' ? true : false;
-		appInterfaceConfig.playersChange[0].control1 = pn === 'y' ? true : false;
-		appInterfaceConfig.playersChange[0].control2 = tsn === 'y' ? true : false;
-		appInterfaceConfig.playersChange[0].control3 = rcr === 'y' ? true : false;
+		appInterfaceConfig.playersChange[1].control1 = pn === 'y' ? true : false;
+		appInterfaceConfig.playersChange[2].control2 = tsn === 'y' ? true : false;
+		appInterfaceConfig.playersChange[3].control3 = rcr === 'y' ? true : false;
 
-		appInterfaceConfig.playersInput[0].control0 = leads === 'y' ? true : false;
-		appInterfaceConfig.playersInput[0].control1 = auctions === 'y' ? true : false;
-		appInterfaceConfig.playersInput[0].control2 = deals === 'y' ? true : false;
-		appInterfaceConfig.playersInput[0].control3 = notes === 'y' ? true : false;
+		appInterfaceConfig.playersInput[0].control0 =
+			leads === 'y' ? 'Yes' : leads === 'n' ? 'No' : 'Required';
+		appInterfaceConfig.playersInput[1].control1 =
+			auctions === 'y' ? 'Yes' : auctions === 'n' ? 'No' : 'Required';
+		appInterfaceConfig.playersInput[2].control2 =
+			deals === 'y' ? 'Yes' : deals === 'n' ? 'No' : 'Required';
+		appInterfaceConfig.playersInput[3].control3 =
+			notes === 'y' ? 'Yes' : notes === 'n' ? 'No' : 'Required';
 
 		appInterfaceConfig.warnPlayers[0].control0 = sw === 'y' ? true : false;
-		appInterfaceConfig.warnPlayers[0].control1 = sh === 'y' ? true : false;
-		appInterfaceConfig.warnPlayers[0].control2 = oo === 'y' ? true : false;
-		appInterfaceConfig.warnPlayers[0].control3 = un === 'y' ? true : false;
-		appInterfaceConfig.warnPlayers[0].control4 = nn === 'y' ? true : false;
+		appInterfaceConfig.warnPlayers[1].control1 = sh === 'y' ? true : false;
+		appInterfaceConfig.warnPlayers[2].control2 = oo === 'y' ? true : false;
+		appInterfaceConfig.warnPlayers[3].control3 = un === 'y' ? true : false;
+		appInterfaceConfig.warnPlayers[4].control4 = nn === 'y' ? true : false;
 
 		// console.log('appInterface config: ', appInterfaceConfig);
 
