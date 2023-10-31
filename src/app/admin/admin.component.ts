@@ -110,6 +110,7 @@ export class AdminComponent implements OnInit, OnDestroy {
 	}
 
 	fetchData(gameCode: string, dirKey: string): Observable<any> {
+		this.store.dispatch(loadAdminData());
 		return this.currentEventService.getLiveData(gameCode, dirKey).pipe(
 			catchError(error => {
 				console.error('error calling current event service', error);
