@@ -1,18 +1,19 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject, switchMap, take } from 'rxjs';
-
+import { BehaviorSubject, Observable, Subject, switchMap, take, of } from 'rxjs';
+import { tag } from 'rxjs-spy/cjs/operators';
 @Injectable({
 	providedIn: 'root'
 })
 export class SharedGameDataService {
 	private tableConfigOptionSubject = new BehaviorSubject<string>('default');
 	private tableLoadingSubject = new BehaviorSubject<boolean>(true);
-	private refreshDatabaseSubject = new BehaviorSubject<boolean | null>(null);
+	private refreshDatabaseSubject = new Subject<boolean | null>();
 	private startingLineupSubject = new BehaviorSubject<any>('');
-	private triggerRefresh$ = new Subject<void>();
+	private triggerRefresh$ = new Subject<boolean>();
+	databaseDeleted$ = new Subject<boolean>()
 
 	public twoPageStartupSubject = new BehaviorSubject<boolean>(false);
-
+	public databaseDeletedSubject = this.databaseDeleted$.asObservable()
 	private requestGamecodeSubject = new Subject<string>();
 	startingLineup$ = this.startingLineupSubject.asObservable();
 	requestGamecode$ = this.requestGamecodeSubject.asObservable();
@@ -34,12 +35,21 @@ export class SharedGameDataService {
 	}
 
 	triggerRefreshDatabase() {
-		this.triggerRefresh$.next();
+		this.triggerRefresh$.next(true);
+		console.log('triggerRefreshDatabase() invoked');
+		this.refreshDatabaseSubject.next(true);
 	}
 
 	get triggerRefreshObservable(): Observable<boolean> {
 		return this.triggerRefresh$.pipe(
-			switchMap(() => this.refreshDatabaseSubject.pipe(take(1)))
+			tag('triggerRefreshObservable'),
+			switchMap(triggerValue => {
+				if (triggerValue) {
+					return this.refreshDatabaseSubject.pipe(take(1));
+				} else {
+					return of(false);
+				}
+			})
 		);
 	}
 

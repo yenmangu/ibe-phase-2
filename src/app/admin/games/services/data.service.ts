@@ -3,7 +3,7 @@ import { IndexedDatabaseService } from './indexed-database.service';
 import { SharedDataService } from 'src/app/shared/services/shared-data.service';
 import { Subject, Subscription, firstValueFrom, takeUntil } from 'rxjs';
 import { IndexedDatabaseStatusService } from 'src/app/shared/services/indexed-database-status.service';
-
+import { SharedGameDataService } from './shared-game-data.service';
 @Injectable({
 	providedIn: 'root'
 })
@@ -21,7 +21,8 @@ export class DataService implements OnInit, OnDestroy {
 	constructor(
 		private indexedDB: IndexedDatabaseService,
 		private sharedDataService: SharedDataService,
-		private IDBStatusService: IndexedDatabaseStatusService
+		private IDBStatusService: IndexedDatabaseStatusService,
+		private sharedGameData: SharedGameDataService
 	) {
 		// console.log('Data Service initialised');
 		this.subscription = this.sharedDataService.selectedMatchType$.subscribe(
@@ -36,11 +37,8 @@ export class DataService implements OnInit, OnDestroy {
 		console.log('data service ngOnInit called');
 	}
 
-
-
 	public async dev_checkDatabase(): Promise<any> {
 		try {
-
 			const newExpected = [
 				'current_game_data',
 				'event',
@@ -63,7 +61,7 @@ export class DataService implements OnInit, OnDestroy {
 			);
 
 			if (exists) {
-				console.log('database exists in dev mode... no need to refresh');
+				// console.log('database exists in dev mode... no need to refresh');
 
 				this.IDBStatusService.bypassProgress();
 
@@ -133,7 +131,7 @@ export class DataService implements OnInit, OnDestroy {
 					playerDbStoreMapping,
 					`${this.dbName}`
 				);
-				console.log(`database with name of ${this.dbName} initialised`);
+				// console.log(`database with name of ${this.dbName} initialised`);
 
 				resolve();
 			} catch (err) {
@@ -157,7 +155,7 @@ export class DataService implements OnInit, OnDestroy {
 			const storeMapping = this.mapData(data);
 
 			this.IDBStatusService.setProgress(totalStores, 0);
-			console.log('total stores to process: ', totalStores);
+			// console.log('total stores to process: ', totalStores);
 
 			const result = await this.indexedDB.initialiseWithGameData(
 				storeMapping,
@@ -170,14 +168,14 @@ export class DataService implements OnInit, OnDestroy {
 
 			return result;
 		} catch (err) {
-			console.error('Error in NewEntryPoint', err);
+			// console.error('Error in NewEntryPoint', err);
 			throw err;
 		}
 	}
 
 	private getPlayerDbStoreMapping(data: any): any {
 		if (data && data.playerdb.root[0].item) {
-			console.log('storing player db data');
+			// console.log('storing player db data');
 			const dataArray: any[] = data.playerdb.root[0].item;
 			const temp_playersArray = [];
 			const temp_teamsArray = [];
@@ -244,7 +242,7 @@ export class DataService implements OnInit, OnDestroy {
 		// console.log('logging hand and hrev');
 		// console.log('hand: ', storeMapping.hand_data);
 		// console.log('hrev: ', storeMapping.hrev_txt);
-		console.log('lock: ', storeMapping.lock);
+		// console.log('lock: ', storeMapping.lock);
 		// console.log('store mapping complete');
 
 		return storeMapping;
@@ -260,19 +258,42 @@ export class DataService implements OnInit, OnDestroy {
 		localStorage.setItem('STORE_NAMES', JSON.stringify(combined));
 	}
 
-	deleteIndexedDBDatabase(): Promise<void> {
+	requestDeleteDB(): Promise<void> {
 		return new Promise<void>((resolve, reject) => {
+			this.indexedDB
+				.deleteIndexedDBDatabase(this.dbName)
+				.then(() => {
+					console.log('database deleted, updating observable');
+					this.sharedGameData.databaseDeleted$.next(true);
+					resolve();
+				})
+				.catch(error => {
+					console.error('Error deleting database: ', error);
+					reject(error);
+				});
+		});
+	}
+
+	deleteIndexedDBDatabase(): Promise<void> {
+		console.log('delete indexed db called');
+
+		return new Promise<void>((resolve, reject) => {
+			console.log('delete indexed db promise created');
+
 			const deleteRequest = indexedDB.deleteDatabase(`${this.dbName}`);
+			if (deleteRequest) {
+				console.log('delete request: ');
 
-			deleteRequest.onsuccess = () => {
-				console.log(`IndexedDB database '${this.dbName}' deleted successfully`);
-				resolve();
-			};
+				deleteRequest.onsuccess = () => {
+					console.log(`IndexedDB database '${this.dbName}' deleted successfully`);
+					resolve();
+				};
 
-			deleteRequest.onerror = () => {
-				console.error(`Error deleting IndexedDB database '${this.dbName}'`);
-				reject(new Error(`Failed to delete IndexedDB database '${this.dbName}'`));
-			};
+				deleteRequest.onerror = () => {
+					console.error(`Error deleting IndexedDB database '${this.dbName}'`);
+					reject(new Error(`Failed to delete IndexedDB database '${this.dbName}'`));
+				};
+			}
 		});
 	}
 

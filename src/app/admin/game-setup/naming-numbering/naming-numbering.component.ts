@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, OnInit, Input } from '@angular/core';
+import { Component, Output, EventEmitter, OnInit, Input , OnDestroy} from '@angular/core';
 import { FormBuilder, FormArray, FormControl, FormGroup } from '@angular/forms';
 import { distinctUntilChanged } from 'rxjs';
 
@@ -7,8 +7,9 @@ import { distinctUntilChanged } from 'rxjs';
 	templateUrl: './naming-numbering.component.html',
 	styleUrls: ['./naming-numbering.component.scss']
 })
-export class NamingNumberingComponent implements OnInit {
+export class NamingNumberingComponent implements OnInit, OnDestroy {
 	@Input() namingNumberingSettings: any;
+	@Input() successMessage: boolean
 	@Output() namingNumberingEmitter: EventEmitter<any> = new EventEmitter<any>();
 
 	mitchellEwConfig = [
@@ -36,6 +37,8 @@ export class NamingNumberingComponent implements OnInit {
 	];
 
 	namingNumberingForm: FormGroup;
+	clicked: boolean = false
+
 
 	constructor(private fb: FormBuilder) {
 		this.namingNumberingForm = new FormGroup(this.createFormControls());
@@ -76,5 +79,10 @@ export class NamingNumberingComponent implements OnInit {
 		// const data = this.namingNumberingForm.value;
 		// console.log('naming numbering values: ', this.namingNumberingForm.value);
 		this.namingNumberingEmitter.emit(data);
+		this.clicked = true
+
+	}
+	ngOnDestroy(): void {
+		this.successMessage = false
 	}
 }

@@ -79,7 +79,7 @@
 			mat-flat-button
 			(click)="getBoardsScoringValues()"
 			color="primary">
-			Save
+			{{ successMessage ? 'Success' : 'Save' }}
 		</button>
 	</div>
 </form>

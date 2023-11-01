@@ -29,11 +29,22 @@
 					class="nav-link"
 					>Account Settings</a
 				>
-				<a routerLink="/admin/upload-download" class="nav-link">Upload / Download</a>
+				<a
+					routerLink="/admin/upload-download"
+					class="nav-link"
+					>Upload / Download</a
+				>
 
 				<!-- <a routerLink="/admin/" class="nav-link"></a> -->
 				<!-- <a class="nav-link"></a> -->
 			</div>
+			<ng-container *ngIf="currentBreakpoint === 'handset'">
+				<div class="container column user-details">
+					<h3>Game Code</h3>
+					<span class="gamecode">{{ gameCode }}</span>
+				</div>
+			</ng-container>
+
 			<!-- <div class="button-wrapper column">
 				<h4>Development</h4>
 				<mat-radio-group

@@ -17,11 +17,13 @@ import {
 } from 'rxjs';
 import { MatIconRegistry } from '@angular/material/icon';
 import { IconRegistryService } from 'src/app/shared/services/icon-registry.service';
+import { UserDetailsComponent } from 'src/app/shared/header/user-details/user-details.component';
 // Dev
 import { SharedDataService } from 'src/app/shared/services/shared-data.service';
 import { CurrentEventService } from '../games/services/current-event.service';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { BreakpointService } from 'src/app/shared/services/breakpoint.service';
+import { UserDetailsService } from 'src/app/shared/services/user-details.service';
 @Component({
 	selector: 'app-navigation',
 	templateUrl: './navigation.component.html',
@@ -34,6 +36,9 @@ export class NavigationComponent
 	isOpen$ = this._sidenavService.isOpen$;
 	private subscription: Subscription;
 	contentClass: string = 'shrink';
+	isOpen: boolean = false
+	gameCode: string = ''
+	email: string = ''
 	//
 	// Dev - used to update match type across the app
 	matchTypeControl: FormControl;
@@ -46,6 +51,7 @@ export class NavigationComponent
 		private _iconRegistry: IconRegistryService,
 		private _matIconRegistry: MatIconRegistry,
 		private breakpointService: BreakpointService,
+		private userDetailsService: UserDetailsService,
 
 		// dev
 		private fb: FormBuilder,
@@ -64,10 +70,8 @@ export class NavigationComponent
 	}
 
 	ngOnInit(): void {
-		this.breakpointService.currentBreakpoint$.subscribe(breakpoint => {
-			this.currentBreakpoint = breakpoint;
-		});
 		this.subscription = this.isOpen$.subscribe((isOpen: boolean) => {
+			this.isOpen = isOpen
 			if (this.drawer) {
 				if (isOpen) {
 					this.drawer.open();
@@ -78,6 +82,15 @@ export class NavigationComponent
 				}
 			}
 		});
+		this.breakpointService.currentBreakpoint$.subscribe(breakpoint => {
+			this.currentBreakpoint = breakpoint;
+			if (this.currentBreakpoint === 'handset' && this.isOpen) {
+				this._sidenavService.toggle()
+			}
+		});
+		this.userDetailsService.email$.subscribe(email=> this.email = email)
+		this.userDetailsService.gameCode$.subscribe(gamecode => this.gameCode = gamecode)
+
 	}
 
 	ngAfterViewInit(): void {

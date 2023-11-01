@@ -32,9 +32,9 @@ export class IndexedDatabaseStatusService {
 	}
 
 	resetProgress(): void {
-		console.log('resetting progress to 0');
+		console.log('resetting progress to 5%');
 
-		this.dataProgressSubject.next(0);
+		this.dataProgressSubject.next(5);
 	}
 
 	bypassProgress() {

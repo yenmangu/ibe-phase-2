@@ -144,6 +144,15 @@ app-root {
 	display: block;
 }
 
+.drawer .mat-drawer-inner-container {
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: flex-start;
+	gap: 2em;
+}
+
 .mdc-floating-label {
 	will-change: unset !important;
 }

@@ -23,7 +23,7 @@ export class IndexedDatabaseService {
 			const storeNames = Object.keys(storeMapping);
 			const playerDbStoreNames = Object.keys(playerDbStoreMapping);
 			const maxVersion = 3;
-			console.log('initDatabase storemapping: ', storeNames);
+			// console.log('initDatabase storemapping: ', storeNames);
 
 			this.db = await openDB(dbName, maxVersion, {
 				upgrade(db, oldVersion, newVersion, transaction) {
@@ -69,7 +69,6 @@ export class IndexedDatabaseService {
 		if (databaseNames.some(dbInfo => dbInfo.name === dbName)) {
 			this.db = await openDB(dbName);
 			const actual = Array.from(this.db.objectStoreNames);
-
 
 			return expectedStores.every(expected => actual.includes(expected));
 		}
@@ -125,12 +124,12 @@ export class IndexedDatabaseService {
 
 			const storeNames = Object.keys(storeMapping);
 			const playerDbStoreNames = Object.keys(playerDbStoreMapping);
-			console.log(
-				'store names: ',
-				storeNames,
-				'playerDbStoreNames: ',
-				playerDbStoreNames
-			);
+			// console.log(
+			// 	'store names: ',
+			// 	storeNames,
+			// 	'playerDbStoreNames: ',
+			// 	playerDbStoreNames
+			// );
 			await this.addInitialData(
 				storeMapping,
 				playerDbStoreMapping,
@@ -155,14 +154,15 @@ export class IndexedDatabaseService {
 	): Promise<Record<string, any>> {
 		const allStoreNames = storeNames.concat(playerDbStoreNames);
 		try {
-			const promises = [];
+			const playerDbPromises = [];
+			const storePromises = [];
 			let progress = 0;
 
 			const tx = this.db.transaction(allStoreNames, 'readwrite');
 
 			tx.oncomplete = () => {
-				progressCallBack(progress)
-			}
+				progressCallBack(progress);
+			};
 			for (const name of playerDbStoreNames) {
 				let id = 1;
 				let key = `00${id}`;
@@ -180,10 +180,10 @@ export class IndexedDatabaseService {
 						const dataToStore = { key, value };
 						if (existingData === undefined) {
 							const promise = store.add(dataToStore);
-							promises.push(promise);
+							playerDbPromises.push(promise);
 						} else {
 							const promise = store.put(dataToStore);
-							promises.push(promise);
+							playerDbPromises.push(promise);
 						}
 						id++;
 						key = `00${id}`;
@@ -211,10 +211,10 @@ export class IndexedDatabaseService {
 						const dataToStore = { key, value };
 						if (existingData === undefined) {
 							const promise = store.add(dataToStore);
-							promises.push(promise);
+							storePromises.push(promise);
 						} else {
 							const promise = store.put(dataToStore);
-							promises.push(promise);
+							storePromises.push(promise);
 						}
 					} else if (storeName === 'hand_data' || storeName === 'hrev_txt') {
 						console.log(`processing ${storeName} differently: `);
@@ -229,10 +229,10 @@ export class IndexedDatabaseService {
 						const existingData = await store.get('root');
 						if (existingData === undefined) {
 							const promise = store.add(dataToStore);
-							promises.push(promise);
+							storePromises.push(promise);
 						} else {
 							const promise = store.put(dataToStore);
-							promises.push(promise);
+							storePromises.push(promise);
 						}
 					} else {
 						const keys = Object.keys(storeMapping[storeName]);
@@ -244,10 +244,10 @@ export class IndexedDatabaseService {
 							const dataToStore = { key, value };
 							if (existingData === undefined) {
 								const promise = store.add(dataToStore);
-								promises.push(promise);
+								storePromises.push(promise);
 							} else {
 								const promise = store.put(dataToStore);
-								promises.push(promise);
+								storePromises.push(promise);
 							}
 						}
 					}
@@ -257,8 +257,8 @@ export class IndexedDatabaseService {
 				progress++;
 				progressCallBack(progress);
 			}
-
-			await Promise.all(promises);
+			await Promise.all(playerDbPromises);
+			await Promise.all(storePromises);
 			// await tx.complete;
 			return storeMapping;
 		} catch (err) {
@@ -421,19 +421,82 @@ export class IndexedDatabaseService {
 		}
 	}
 
-	deleteIndexedDBDatabase(databaseName: string): Promise<void> {
-		return new Promise<void>((resolve, reject) => {
+	// deleteIndexedDBDatabase(databaseName: string): Promise<void> {
+	// 	console.log('db service - delete db called with: ', databaseName);
+
+	// 	return new Promise<void>(async (resolve, reject) => {
+	// 		try {
+	// 			const openDatabases = await indexedDB.databases().catch(error=> {
+	// 				console.error('error getting databases: ', error)
+	// 				throw error
+	// 			});
+	// 			await Promise.all(
+	// 				openDatabases.map(async dbInfo => {
+	// 					try {
+	// 						const dbOpenRequest = indexedDB.open(dbInfo.name);
+	// 						dbOpenRequest.onsuccess = event => {
+	// 							const db = (event.target as IDBOpenDBRequest).result;
+	// 							db.close();
+	// 						};
+	// 						dbOpenRequest.onerror = () => {
+	// 							throw new Error('Error opening open database');
+	// 						};
+	// 					} catch (error) {
+	// 						throw error;
+	// 					}
+	// 				})
+	// 			);
+
+	// 			const deleteRequest = indexedDB.deleteDatabase(databaseName);
+
+	// 			deleteRequest.onsuccess = () => {
+	// 				console.log(`IndexedDB database '${databaseName}' deleted successfully`);
+	// 				resolve();
+	// 			};
+
+	// 			deleteRequest.onerror = () => {
+	// 				console.error(`Error deleting IndexedDB database '${databaseName}'`);
+	// 				reject(
+	// 					new Error(`Failed to delete IndexedDB database '${databaseName}'`)
+	// 				);
+	// 			};
+	// 		} catch (error) {
+	// 			console.error('error while closing open databases: ', error);
+	// 			reject(error);
+	// 		}
+	// 	});
+	// }
+
+	async deleteIndexedDBDatabase(databaseName: string): Promise<void> {
+		console.log('db service - delete db called with: ', databaseName);
+
+		try {
 			const deleteRequest = indexedDB.deleteDatabase(databaseName);
 
-			deleteRequest.onsuccess = () => {
-				console.log(`IndexedDB database '${databaseName}' deleted successfully`);
-				resolve();
-			};
+			await new Promise<void>((resolve, reject) => {
+				console.log('database delete promise made');
 
-			deleteRequest.onerror = () => {
-				console.error(`Error deleting IndexedDB database '${databaseName}'`);
-				reject(new Error(`Failed to delete IndexedDB database '${databaseName}'`));
-			};
-		});
+				deleteRequest.onsuccess = () => {
+					console.log(
+						`IndexedDB database '${databaseName}' deleted successfully, and promise resolved`
+					);
+					resolve();
+				};
+
+				deleteRequest.onerror = () => {
+					console.error(`Error deleting IndexedDB database '${databaseName}'`);
+					reject(
+						new Error(
+							`Failed to delete IndexedDB database '${databaseName}' so promise rejected`
+						)
+					);
+				};
+			});
+
+			console.log('Closing open databases completed');
+		} catch (error) {
+			console.error('Error while deleting database: ', error);
+			throw error;
+		}
 	}
 }

@@ -1,4 +1,12 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import {
+	Component,
+	EventEmitter,
+	OnInit,
+	AfterViewInit,
+	Output,
+	OnDestroy
+} from '@angular/core';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 import { BreakpointService } from 'src/app/shared/services/breakpoint.service';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { ApiDataCoordinationService } from '../games/services/api/api-data-coordination.service';
@@ -14,12 +22,13 @@ import { DataService } from '../games/services/data.service';
 	templateUrl: './game-setup.component.html',
 	styleUrls: ['./game-setup.component.scss']
 })
-export class GameSetupComponent implements OnInit {
+export class GameSetupComponent implements OnInit, AfterViewInit, OnDestroy {
 	setupForm: FormGroup;
 	securityForm: FormGroup;
 	scoringForm: any;
 	dbInit: boolean = false;
 	twoPageStartup: boolean;
+	successMessage: boolean = false;
 
 	dbProgress: number = 0;
 
@@ -34,6 +43,10 @@ export class GameSetupComponent implements OnInit {
 
 	savedData: any = {};
 	formPopulated: boolean = false;
+
+	newEventClicked: boolean = false;
+	setupClicked: boolean = false;
+	tabChanged: boolean = false;
 
 	applyMagentaGreyTheme = true;
 	constructor(
@@ -70,17 +83,13 @@ export class GameSetupComponent implements OnInit {
 			.subscribe({
 				next: data => {
 					if (data) {
-						// console.log('initial settings data: ', data);
+						console.log('initial settings data: ', data);
 						this.initialSettingsData = data;
 						this.setupSettings = data.setupConfig;
 						this.scoringSettings = data.scoringConfig;
 						this.appInterfaceSettings = data.appInterfaceConfig;
 						this.namingNumberingSettings = data.namingNumberingConfig;
 						this.populateForm();
-						console.log(
-							'from parent: appInterfaceSettings: ',
-							this.appInterfaceSettings
-						);
 					}
 				},
 				error: error => {
@@ -114,32 +123,50 @@ export class GameSetupComponent implements OnInit {
 			console.log('twoPageStartup value: ', this.twoPageStartup);
 		});
 	}
+	ngAfterViewInit(): void {}
 
-		checkEmpty(obj) {
+	checkEmpty(obj) {
 		for (var i in obj) return false;
 		return true;
 	}
 
+	onTabChange(event: MatTabChangeEvent) {
+		this.tabChanged = true;
+		this.resetState();
+	}
+
+	resetState() {
+		this.setupClicked = false;
+		this.newEventClicked = false;
+		this.successMessage = false;
+	}
 
 	populateForm(): void {
 		if (this.setupSettings && this.setupForm) {
-			Object.keys(this.setupSettings).forEach(key => {
-				if (this.setupForm.get(key)) {
-					this.setupForm.get(key).setValue(this.setupSettings[key]);
-					// console.log(`${key} in form set`);
-				}
-			});
-			if (this.setupSettings.initConfig) {
-				const initConfig = this.setupSettings.initConfig;
-				Object.keys(initConfig).forEach(key => {
-					if (this.setupForm.get(key)) {
-						this.setupForm.get(key).setValue(initConfig[key]);
-					}
-				});
-			}
+			const { initConfig } = this.setupSettings;
+			console.log('setup settings for populate form: ', initConfig);
+
+			this.setupForm.get('newEventUses').setValue(initConfig.newEventUses);
+			this.setupForm.get('twoPageStartup').setValue(initConfig.twoPageVal);
+			this.setupForm.get('tdEntersNames').setValue(initConfig.tdEntersNames);
+			this.setupForm.get('requireAllNames').setValue(initConfig.requireAllNames);
+			this.setupForm.get('onGameCreation').setValue(initConfig.onGameCreation);
+			this.setupForm.get('usePin').setValue(initConfig.usePin);
+			this.setupForm.get('pinLength').setValue(initConfig.pinLength);
+			this.setupForm.get('pinType').setValue(initConfig.pinType);
+			this.setupForm.get('pinCase').setValue(initConfig.pinCase);
+			this.setupForm.get('spectateApp').setValue(initConfig.spectateApp);
+			this.setupForm
+				.get('spectateWebsite')
+				.setValue(this.setupSettings.spectateWebsite);
 		}
 	}
-
+	setup() {
+		this.setupClicked = true;
+	}
+	newEvent() {
+		this.newEventClicked = true;
+	}
 	save(): void {
 		const data = {
 			formName: 'setupForm',
@@ -153,7 +180,10 @@ export class GameSetupComponent implements OnInit {
 			.setbaseSettings(this.directorKey, this.gameCode, this.savedData)
 			.subscribe({
 				next: response => {
-					console.log('api response: ', response);
+					if (response.response.success) {
+						this.successMessage = true;
+					}
+					console.log('api response: ', response.response.success);
 				},
 				error: error => {}
 			});
@@ -166,7 +196,10 @@ export class GameSetupComponent implements OnInit {
 			.setbaseSettings(this.directorKey, this.gameCode, this.savedData)
 			.subscribe({
 				next: response => {
-					console.log('api response: ', response);
+					console.log('api response: ', response.response.success);
+					if (response.response.success) {
+						this.successMessage = true;
+					}
 				},
 				error: error => {}
 			});
@@ -186,5 +219,8 @@ export class GameSetupComponent implements OnInit {
 
 	onNamingNumberingForm(formData: any) {
 		// console.log('Naminng-numbering form data: ', formData);
+	}
+	ngOnDestroy(): void {
+		this.successMessage = false;
 	}
 }

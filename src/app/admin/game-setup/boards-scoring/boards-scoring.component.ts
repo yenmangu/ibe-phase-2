@@ -1,4 +1,4 @@
-import { OnInit, Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+import { OnInit, Component, Input, Output, EventEmitter, OnChanges, SimpleChanges , OnDestroy} from '@angular/core';
 import {
 	FormBuilder,
 	FormGroup,
@@ -16,12 +16,14 @@ import { boardsScoringData } from '../../games/data/data-store/boards-scoring-da
 	templateUrl: './boards-scoring.component.html',
 	styleUrls: ['./boards-scoring.component.scss']
 })
-export class BoardsScoringComponent implements OnInit, OnChanges {
+export class BoardsScoringComponent implements OnInit, OnChanges, OnDestroy {
 	@Input() scoringSettings: any;
+	@Input() successMessage: boolean
 	@Output() boardScoringEmitter: EventEmitter<any> = new EventEmitter<any>();
 
 	scoringData: BoardsScoringInterface[] = boardsScoringData;
 	scoringConfigForm: FormGroup;
+	clicked: boolean = false
 
 	constructor(private fb: FormBuilder) {
 		this.scoringConfigForm = this.fb.group({
@@ -51,7 +53,7 @@ export class BoardsScoringComponent implements OnInit, OnChanges {
 	populateForm(scoringSettings):void {
 		const scoringConfigArray = scoringSettings.scoringConfigArray
 		if(scoringConfigArray){
-			console.log('in populate form: ', scoringConfigArray);
+			// console.log('in populate form: ', scoringConfigArray);
 
 		}
 
@@ -81,9 +83,10 @@ export class BoardsScoringComponent implements OnInit, OnChanges {
 			xmlElement: 'scosets',
 			formData: this.scoringConfigForm.value
 		};
-		console.log('scoring form: ', data);
+		// console.log('scoring form: ', data);
 
 		this.boardScoringEmitter.emit(data);
+		this.clicked = true
 	}
 
 	getControl(i: number, controlName: string) {
@@ -115,5 +118,8 @@ export class BoardsScoringComponent implements OnInit, OnChanges {
 
 	get formControls() {
 		return this.scoringConfigForm.get('rows') as FormArray;
+	}
+	ngOnDestroy(): void {
+		this.successMessage = false;
 	}
 }

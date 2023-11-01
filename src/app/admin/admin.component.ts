@@ -8,18 +8,20 @@ import {
 	Subscription,
 	catchError,
 	combineLatest,
+	from,
 	of,
 	switchMap,
 	take,
-	takeUntil
+	takeUntil,
+	tap
 } from 'rxjs';
 import { tag } from 'rxjs-spy/cjs/operators';
 import { IndexedDatabaseStatusService } from '../shared/services/indexed-database-status.service';
 import { DataService } from './games/services/data.service';
 import { CurrentEventService } from './games/services/current-event.service';
 import { SharedGameDataService } from './games/services/shared-game-data.service';
-import { Store } from '@ngrx/store';
-import { loadAdminData } from '../admin-state/admin.actions';
+import { Router } from '@angular/router';
+
 @Component({
 	selector: 'app-admin',
 	templateUrl: './admin.component.html',
@@ -36,14 +38,14 @@ export class AdminComponent implements OnInit, OnDestroy {
 	loadingStatus: number = 0;
 
 	constructor(
-		private store: Store,
 		private sharedDataService: SharedDataService,
 		public authService: AuthService,
 		private userDetailsService: UserDetailsService,
 		private IDBStatus: IndexedDatabaseStatusService,
 		private dataService: DataService,
 		private currentEventService: CurrentEventService,
-		private sharedGameData: SharedGameDataService
+		private sharedGameData: SharedGameDataService,
+		private router: Router
 	) {
 		// console.log('admin loaded');
 	}
@@ -51,40 +53,61 @@ export class AdminComponent implements OnInit, OnDestroy {
 		console.log('admin init');
 		this.gameCode$ = this.userDetailsService.gameCode$;
 		this.directorKey$ = this.userDetailsService.directorKey$;
-		this.gameCodeSubscription = this.gameCode$.pipe(take(1)).subscribe(gameCode => {
-			console.log('Game Code: ', gameCode);
-		});
+		// this.gameCodeSubscription = this.gameCode$.pipe(take(1)).subscribe(gameCode => {
+		// 	// console.log('Game Code: ', gameCode);
+		// });
 
-		this.dirKeySubscription = this.directorKey$.pipe(take(1)).subscribe(dirKey => {
-			console.log('Dir Key: ', dirKey);
-		});
+		// this.dirKeySubscription = this.directorKey$.pipe(take(1)).subscribe(dirKey => {
+		// 	// console.log('Dir Key: ', dirKey);
+		// });
 
 		this.subscribeToUserDetails();
 
 		this.IDBStatus.resetProgress();
 
 		this.IDBStatus.dataProgress$.subscribe(status => {
-			this.loadingStatus = 5 + status * 0.95;
+			this.loadingStatus = status;
 		});
 
 		this.sharedGameData.triggerRefreshObservable
 			.pipe(
-				tag('refresh_db'),
-				switchMap(data => {
-					this.IDBStatus.resetProgress();
+				tag('triggerRefreshObservable'),
+				tap(() => {
+					console.log('before deleting database');
+					this.dataService.requestDeleteDB();
+				}),
+				tap(() => {
+					location.reload();
+				}),
+				switchMap(() => {
+					// this.IDBStatus.resetProgress();
 
-					return this.fetchData(this.gameCode, this.dirKey);
+					console.log('after deleting database');
+					return from(this.fetchData(this.gameCode, this.dirKey));
 				}),
 				switchMap(data => {
-					console.log('data from refresh: ', data);
-					if (data !== 'EMPTY') {
-						return this.processData(data);
-					} else {
-						return of(null);
-					}
+					return from(this.processData(data));
+				}),
+				tap(()=> {
+					this.refreshComponent()
 				})
 			)
 			.subscribe();
+		// .subscribe(data => {
+		// 	from(this.dataService.initialiseDB(data))
+		// 		.pipe(switchMap(() => from(this.storeInitialData(data))))
+		// 		.subscribe({
+		// 			next: () => {},
+		// 			error: error => {
+		// 				console.error('error in observable pipeline: ', error);
+		// 			}
+		// 		});
+		// });
+	}
+
+	private refreshComponent(): void {
+		const currentUrl = this.router.url;
+		this.router.navigate([currentUrl]);
 	}
 
 	private subscribeToUserDetails(): void {
@@ -137,13 +160,13 @@ export class AdminComponent implements OnInit, OnDestroy {
 			})
 		);
 	}
-	private async processData(data) {
+	private async processData(data): Promise<void> {
 		console.log('processData() called with data: ', data);
 		try {
 			const dbExists = await this.dataService.checkDatabase(data);
 			if (dbExists) {
 				console.log('db exists');
-				await this.storeInitialData(data);
+				return;
 			} else {
 				await this.dataService.initialiseDB(data);
 				await this.storeInitialData(data);

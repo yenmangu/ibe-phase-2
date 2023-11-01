@@ -132,7 +132,7 @@
 			mat-flat-button
 			(click)="getAppInterfaceValues()"
 			color="primary">
-			Save
+			{{ successMessage ? 'Success' : 'Save' }}
 		</button>
 	</form>
 </ng-container>

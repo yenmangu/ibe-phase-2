@@ -5,7 +5,7 @@ import { BehaviorSubject } from 'rxjs';
 	providedIn: 'root'
 })
 export class SidenavService {
-	private isOpenSubject = new BehaviorSubject<boolean>(true);
+	public isOpenSubject = new BehaviorSubject<boolean>(true);
 	isOpen$ = this.isOpenSubject.asObservable();
 	constructor() {}
 

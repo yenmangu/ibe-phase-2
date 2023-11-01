@@ -5,7 +5,7 @@ import {
 	Output,
 	EventEmitter,
 	Input,
-	ChangeDetectorRef
+	ChangeDetectorRef, OnDestroy
 } from '@angular/core';
 import { FormGroup, FormArray, FormBuilder, FormControl } from '@angular/forms';
 
@@ -14,8 +14,9 @@ import { FormGroup, FormArray, FormBuilder, FormControl } from '@angular/forms';
 	templateUrl: './app-interface.component.html',
 	styleUrls: ['./app-interface.component.scss']
 })
-export class AppInterfaceComponent implements OnInit, AfterViewInit {
+export class AppInterfaceComponent implements OnInit, AfterViewInit, OnDestroy {
 	@Input() appInterfaceSettings: any;
+	@Input() successMessage: boolean
 	@Output() appInterfaceEmitter = new EventEmitter<any>();
 
 	// playersSeeConfig: any = [
@@ -55,6 +56,8 @@ export class AppInterfaceComponent implements OnInit, AfterViewInit {
 
 	appInterfaceForm: FormGroup;
 	formPopulated: boolean = false;
+	clicked: boolean = false
+
 	constructor(private fb: FormBuilder, private cd: ChangeDetectorRef) {
 		this.appInterfaceForm = this.createFormGroup();
 
@@ -62,11 +65,11 @@ export class AppInterfaceComponent implements OnInit, AfterViewInit {
 	}
 
 	ngOnInit(): void {
-		console.log(
-			'testing data readiness: ',
-			JSON.stringify(this.appInterfaceSettings, null, 2)
-		);
-		console.log('app interface form: ', this.appInterfaceForm.controls);
+		// console.log(
+		// 	'testing data readiness: ',
+		// 	JSON.stringify(this.appInterfaceSettings, null, 2)
+		// );
+		// console.log('app interface form: ', this.appInterfaceForm.controls);
 
 		if (this.appInterfaceForm && this.appInterfaceSettings) {
 			this.cd.detectChanges();
@@ -83,7 +86,7 @@ export class AppInterfaceComponent implements OnInit, AfterViewInit {
 		}
 		// console.log('app-interface form: ', this.appInterfaceForm.controls);
 		this.appInterfaceForm.valueChanges.subscribe(data => {
-			console.log('app intfc val change: ', data);
+			// console.log('app intfc val change: ', data);
 		});
 		console.log('appInterfaceForm initiated');
 	}
@@ -98,7 +101,7 @@ export class AppInterfaceComponent implements OnInit, AfterViewInit {
 	populateFormControls(data: any) {
 		return new Promise((resolve, reject): void => {
 			try {
-				console.log('data in populate form: ', data);
+				// console.log('data in populate form: ', data);
 				const playersChangeArray = data.playersChange;
 				for (let i = 0; i < playersChangeArray.length; i++) {
 					const controlName = `control${i}`;
@@ -222,7 +225,12 @@ export class AppInterfaceComponent implements OnInit, AfterViewInit {
 			xmlElement: 'pluisets',
 			formData: this.appInterfaceForm.value
 		};
-		console.log('app-interface data: ', data);
+		// console.log('app-interface data: ', data);
 		this.appInterfaceEmitter.emit(data);
+		this.clicked = true
+
+	}
+	ngOnDestroy(): void {
+		this.successMessage = false
 	}
 }

@@ -1,3 +1,4 @@
+@import '../../../colours.styles.scss';
 :host {
 	height: 100%;
 }
@@ -15,6 +16,7 @@
 
 .drawer {
 	display: block;
+
 	width: 220px;
 	height: 100%;
 	padding-left: 2em;
@@ -25,7 +27,7 @@
 .drawer .mat-drawer-inner-container {
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
+	justify-content: space-between;
 	align-items: flex-start;
 	gap: 2em;
 }
@@ -93,4 +95,20 @@
 	align-items: center;
 	justify-content: flex-start;
 	gap: 1em;
+}
+
+.user-details {
+	height: fit-content;
+	width: 100%;
+	padding-bottom: 2rem;
+	h3 {
+		margin-block-start: 0;
+		margin-block-end: 0;
+	}
+	align-items: flex-start;
+	gap: 1rem;
+	.gamecode {
+		font-size: 1.2rem;
+		color: $ibe-teal-single;
+	}
 }

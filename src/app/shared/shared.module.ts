@@ -41,7 +41,8 @@ import { DownloadFileComponent } from './download-file/download-file.component';
 		HeaderComponent,
 		FooterComponent,
 		UploadFileComponent,
-		DownloadFileComponent
+		DownloadFileComponent,
+		UserDetailsComponent
 	]
 })
 export class SharedModule {}

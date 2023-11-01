@@ -83,14 +83,14 @@ export class ProcessCurrentDataService {
 			const sides = await this.indexedDB.readFromDB([store], 'sidenamestxt');
 			const settingsText = await this.indexedDB.readFromDB([store], 'settingstxt');
 			// console.log(settingsText);
-			console.log('people initial: ', people);
+			// console.log('people initial: ', people);
 			const movementValue = this.destructureValue(movement, 'current_game_data');
 			const peopleValue = this.destructureValue(people, 'current_game_data');
 			const teamsValue = this.destructureAndSplitTeams(teams);
 			const sidesValue = this.destructureAndSplitTeams(sides);
 			const matchTypeObject = this.getMatchType(settingsText);
-			console.log('movement value: ', movementValue);
-			console.log('people value: ', peopleValue);
+			// console.log('movement value: ', movementValue);
+			// console.log('people value: ', peopleValue);
 
 			const currentGameConfig = this.buildCurrentGameObject(
 				movementValue,
@@ -134,9 +134,9 @@ export class ProcessCurrentDataService {
 
 	private buildCurrentGameObject(movement, people, teams, sides, matchTypeObject) {
 		const cleanedMovement = this.processMovementText(movement);
-		console.log('cleaned movement: ', cleanedMovement);
+		// console.log('cleaned movement: ', cleanedMovement);
 		const numOfTables = cleanedMovement[1][1];
-		console.log('num of tables: ', numOfTables);
+		// console.log('num of tables: ', numOfTables);
 
 		const teamsOrPairs = this.processNamesText(people, numOfTables);
 		let dataObj: any = {};
@@ -277,14 +277,14 @@ export class ProcessCurrentDataService {
 	// }
 
 	private destructureValue(object, string) {
-		console.log('attempting to destructure: ', object);
+		// console.log('attempting to destructure: ', object);
 		if (object && object[`${string}`] && object[`${string}`].value) {
 			// Destructure the 'value' property
 			const { value } = object[`${string}`];
 			return value;
 		} else {
 			// Handle the case where the data is missing or doesn't have the expected structure
-			console.error('Invalid data structure:', object);
+			// console.error('Invalid data structure:', object);
 			return null;
 		}
 	}
@@ -309,7 +309,7 @@ export class ProcessCurrentDataService {
 			.map(line => line.trim())
 			.map(line => line.split(','));
 
-		console.log('splitLines: ', splitLines);
+		// console.log('splitLines: ', splitLines);
 		return splitLines;
 		// return splitLines
 	}
@@ -323,7 +323,7 @@ export class ProcessCurrentDataService {
 			.filter(line => line.trim() !== '')
 			.map(line => line.trim());
 		const cleanedLines = lines.slice(1).map(line => line.trim());
-		console.log('cleaned lines: ', cleanedLines);
+		// console.log('cleaned lines: ', cleanedLines);
 
 		const tapHereIndex = lines.findIndex(line => line.includes('Tap here'));
 		namesArray = namesInPlay !== -1 ? lines.slice(0, namesInPlay) : lines;
@@ -357,13 +357,13 @@ export class ProcessCurrentDataService {
 				{};
 			for (const text of value) {
 				if (text.startsWith('MV I')) {
-					console.log('individual');
+					// console.log('individual');
 					matchType.individual = true;
 				} else if (text.startsWith('MV T')) {
-					console.log('team');
+					// console.log('team');
 					matchType.teams = true;
 				} else if (text.startsWith('MV P')) {
-					console.log('pairs');
+					// console.log('pairs');
 					matchType.pairs = true;
 				} else {
 					matchType.pairs = true;

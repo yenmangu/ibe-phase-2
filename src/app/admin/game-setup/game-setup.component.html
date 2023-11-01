@@ -14,7 +14,9 @@
 					<h3>Settings for new events:</h3>
 					<mat-form-field>
 						<mat-label for="newEvent">New event uses:</mat-label>
-						<mat-select id="newEvent" formControlName="newEventUses">
+						<mat-select
+							id="newEvent"
+							formControlName="newEventUses">
 							<mat-option value="previous">Settings from previous event</mat-option>
 							<mat-option value="current">These base settings</mat-option>
 						</mat-select>
@@ -22,12 +24,13 @@
 					<button
 						mat-flat-button
 						(click)="save()"
+						(click)="newEvent()"
 						color="primary">
-						Save
+						{{ successMessage && newEventClicked ? 'Success' : 'Save' }}
 					</button>
 				</div>
 				<div class="container row bottom-row"></div>
-				<mat-tab-group animationDuration="0s">
+				<mat-tab-group animationDuration="0s" (selectedTabChange)="onTabChange($event)">
 					<!--  -->
 					<!-- How To Use Tab -->
 					<!--  -->
@@ -61,10 +64,11 @@
 					</app-player-identification> -->
 							<div class="container row bottom-row">
 								<button
+								(click)="setup()"
 									(click)="save()"
 									mat-flat-button
 									color="primary">
-									Save
+									{{ successMessage ? 'Success' : 'Save' }}
 								</button>
 							</div>
 						</div>
@@ -127,7 +131,7 @@
 									mat-flat-button
 									(click)="save()"
 									color="primary">
-									Save
+									{{ successMessage ? 'Success' : 'Save' }}
 								</button>
 							</div>
 						</div>
@@ -139,6 +143,7 @@
 					<mat-tab label="Movement/ Scoring">
 						<ng-container *ngIf="scoringSettings && !checkEmpty(scoringSettings)">
 							<app-boards-scoring
+							[successMessage]="successMessage"
 								[scoringSettings]="scoringSettings"
 								(boardScoringEmitter)="onScoringForm($event)"
 								(boardScoringEmitter)="onChildForm($event)"></app-boards-scoring>
@@ -152,6 +157,7 @@
 						<ng-container
 							*ngIf="appInterfaceSettings && !checkEmpty(appInterfaceSettings)">
 							<app-app-interface
+							[successMessage]="successMessage"
 								[appInterfaceSettings]="appInterfaceSettings"
 								(appInterfaceEmitter)="onAppInterfaceForm($event)"
 								(appInterfaceEmitter)="onChildForm($event)"></app-app-interface>
@@ -167,6 +173,7 @@
 								namingNumberingSettings && !checkEmpty(namingNumberingSettings)
 							">
 							<app-naming-numbering
+							[successMessage]="successMessage"
 								[namingNumberingSettings]="namingNumberingSettings"
 								(namingNumberingEmitter)="onAppInterfaceForm($event)"
 								(namingNumberingEmitter)="
