@@ -68,7 +68,7 @@
 									(click)="save()"
 									mat-flat-button
 									color="primary">
-									{{ successMessage ? 'Success' : 'Save' }}
+									{{ successMessage && setupClicked ? 'Success' : 'Save' }}
 								</button>
 							</div>
 						</div>
