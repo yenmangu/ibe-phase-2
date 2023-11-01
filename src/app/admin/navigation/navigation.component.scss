@@ -78,6 +78,7 @@
 
 .mat-drawer-content {
 	transition: width 100ms linear;
+	overflow-y: hidden;
 }
 
 .mat-drawer-content.full {

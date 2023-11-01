@@ -7,7 +7,7 @@
 	width: fit-content;
 	padding: 1em 0 0 0;
 	gap: 2rem;
-	margin-bottom: 2rem;
+	// margin-bottom: 2rem;
 }
 .table {
 	display: block;
@@ -30,6 +30,8 @@
 	gap: 2rem;
 	flex: 1;
 	justify-content: flex-start;
+	align-items: center;
+	flex-wrap: wrap;
 
 	.date-picker {
 		margin-right: auto;
@@ -43,4 +45,15 @@
 
 mat-spinner {
 	margin: auto;
+}
+
+.public-link {
+	gap: 1rem;
+	align-items: center;
+}
+
+.date-wrapper,
+.link-wrapper {
+	flex-wrap: wrap;
+	gap: 1rem;
 }

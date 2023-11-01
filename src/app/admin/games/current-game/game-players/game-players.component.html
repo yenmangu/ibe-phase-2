@@ -49,7 +49,9 @@
 		(formValuesChanged)="(onTeamTableValueChanged)"></app-match-tables> -->
 </div>
 <div class="container row download">
-	<button
+	<div class="container row link-wrapper">
+
+		<button
 		(click)="getPublicLink()"
 		id="start_pdf"
 		mat-flat-button
@@ -57,11 +59,13 @@
 		Get Starting Lineup
 	</button>
 	<ng-container *ngIf="publicLink">
-		<div class="container column">
+		<div class="container row public-link">
 			<h3>Share this link</h3>
 			{{ publicLink }}
 		</div>
 	</ng-container>
+	</div>
+<div class="container row date-wrapper">
 
 	<mat-form-field
 		class="date-picker"
@@ -88,4 +92,5 @@
 		(click)="captureFormData()">
 		SAVE
 	</button>
+</div>
 </div>
