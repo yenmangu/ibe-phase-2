@@ -93,6 +93,7 @@ export class AuthService {
 					console.log('login response: ', response);
 					const token = response.idToken;
 					const expiresIn = response.expires;
+					const directorId = response.directorId;
 					if (token && expiresIn) {
 						this.tokenService.setToken(token, expiresIn);
 						const expires: number = response.expires;
@@ -102,6 +103,7 @@ export class AuthService {
 						this.isAuthedSubject.next(true);
 						this.statusSubject.next('AUTHED');
 						this.responseJSONSubject.next(response.json);
+						localStorage.setItem('DIRECTOR_ID', directorId);
 
 						console.log('User Authenticated');
 					}
@@ -144,5 +146,16 @@ export class AuthService {
 		console.log('User logged out successfully');
 		this.router.navigate(['/home']);
 		location.reload();
+	}
+
+	updateUserDetails(details): void {
+		if (details.newKey) {
+			const newDirectorKey = details.newKey;
+			this.userDetailsService.directorKeySubject.next(newDirectorKey);
+		}
+		if (details.newEmail) {
+			const newEmail = details.newEmail;
+			this.userDetailsService.emailSubject.next(newEmail);
+		}
 	}
 }

@@ -10,6 +10,39 @@ export class HttpService {
 
 	constructor(private http: HttpClient) {}
 
+	// Auth Routes
+
+	updateEmail(data): Observable<any> {
+		const body = {
+			directorId: data.directorId,
+			newEmail: data.newEmail
+		};
+		return this.http.put<any>(`${this.apiUrl}/auth/update-email`, body);
+	}
+
+	updatePassword(data): Observable<any> {
+		const params = new HttpParams().append('SLOT', data.gameCode);
+		const body = {
+			directorId: data.directorId,
+			currentPassword: data.currentKey,
+			password: data.newKey
+		};
+		console.log('body in update password: ', body)
+		// return new Observable<any>()
+		return this.http.put<any>(`${this.apiUrl}/auth/update-password`, body, { params });
+	}
+	
+	requestPassword(data): Observable<any> {
+		const { gameCode, email } = data;
+		const params = new HttpParams().append('SLOT', gameCode);
+		const body = {
+			email: email
+		};
+		return this.http.post(`${this.apiUrl}/auth/request-password`, body, { params });
+	}
+
+	// Data routes
+
 	postData(data): Observable<any> {
 		return this.http.post<any>(`${this.apiUrl}/player_database`, data).pipe(
 			tap(response => {
@@ -67,5 +100,10 @@ export class HttpService {
 			.append('game_code', gameCode)
 			.append('game_id', gameId);
 		return this.http.get(`${this.apiUrl}/lineup/games`, { params });
+	}
+
+	downloadCurrent(gameCode): Observable<any> {
+		const params = new HttpParams().append('gameCode', gameCode);
+		return this.http.get<any>(`${this.apiUrl}/current_game/deal_file`, { params });
 	}
 }

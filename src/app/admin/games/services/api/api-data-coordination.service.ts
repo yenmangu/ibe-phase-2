@@ -2,14 +2,16 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { HttpService } from 'src/app/shared/services/http.service';
 import { ApiDataProcessingService } from './api-data-processing.service';
-
+import { AuthService } from 'src/app/auth/services/auth.service';
+import { tap, map } from 'rxjs';
 @Injectable({
 	providedIn: 'root'
 })
 export class ApiDataCoordinationService {
 	constructor(
 		private apiDataProcessing: ApiDataProcessingService,
-		private httpService: HttpService
+		private httpService: HttpService,
+		private authService: AuthService
 	) {}
 
 	public invokeAPICoordination(
@@ -32,8 +34,8 @@ export class ApiDataCoordinationService {
 		return of(null);
 	}
 
-	public setbaseSettings (dir_key,game_code,data): Observable<any>{
-		return this.httpService.postSettings(data, game_code,dir_key)
+	public setbaseSettings(dir_key, game_code, data): Observable<any> {
+		return this.httpService.postSettings(data, game_code, dir_key);
 	}
 
 	private postSettings(dir_key, game_code, data): Observable<any> {
@@ -58,5 +60,49 @@ export class ApiDataCoordinationService {
 
 		const { gameCode, gameId } = data;
 		return this.httpService.getStartingLineup(gameCode, gameId);
+	}
+
+	getCurrentDealFile(data): Observable<any> {
+		return this.httpService.downloadCurrent(data);
+	}
+
+	changeEmail(formData): Observable<any> {
+		const directorId = localStorage.getItem('DIRECTOR_ID');
+		const { email } = formData;
+		const data = {
+			directorId: directorId,
+			email: email
+		};
+		return this.httpService.updateEmail(data).pipe(
+			map(response => {
+				if (response.success) {
+					const details = { newEmail: email };
+					this.authService.updateUserDetails(details);
+					return {...response, updated: true}
+				}
+			})
+		);
+	}
+
+	updatePassword(formData): Observable<any> {
+		const directorId = localStorage.getItem('DIRECTOR_ID');
+
+		const { gameCode, currentKey, newKey } = formData;
+		const data = {
+			gameCode,
+			directorId,
+			currentKey,
+			newKey
+		};
+		return this.httpService.updatePassword(data).pipe(
+			map(response => {
+				if (response.success) {
+					// console.log('response in map: ', response);
+					const details = { newKey };
+					this.authService.updateUserDetails(details);
+					return {...response, updated: true}
+				}
+			})
+		);
 	}
 }

@@ -16,11 +16,33 @@
 		<div
 			[innerHTML]="data.message"
 			class="message-container"></div>
+			<!-- EMAIL -->
+		<ng-container *ngIf="data.email">
+			<h3>{{data.email}}</h3>
+		</ng-container>
+			<!-- DIRECTOR KEY -->
+		<ng-container *ngIf="data.dirKey">
+			<h3>{{data.dirKey}}</h3>
+		</ng-container>
+		<!-- LOGIN FORM -->
 		<ng-container *ngIf="data.loginForm">
 			<ng-container *ngComponentOutlet="data.loginForm"></ng-container>
 		</ng-container>
+		<!-- ERROR -->
+		<ng-container *ngIf="data.error"
+			><div class="error">
+				{{ data.error.message | json }}
+			</div></ng-container
+		>
 	</mat-dialog-content>
 	<mat-dialog-actions align="end">
+		<button
+			*ngIf="data.title === 'updateSUCCESS'"
+			mat-flat-button
+			color="primary"
+			(click)="emitSuccess()">
+			Close
+		</button>
 		<button
 			*ngIf="data.title !== 'SUCCESS'"
 			mat-flat-button
@@ -32,7 +54,7 @@
 			href="https://ibescore.com"
 			class="ok"
 			mat-flat-button
-			color="success"
+			color="accent"
 			*ngIf="data.title === 'SUCCESS'">
 			IBEScore
 		</a>

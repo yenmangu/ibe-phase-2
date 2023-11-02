@@ -5,7 +5,10 @@ export interface DialogModel {
 		| {
 				title: string;
 				message: string;
-				gameCode: string | null;
+				gameCode?: string | null;
+				email?: string | null;
+				dirKey?: string | null;
+				error?: string;
 		  }
 		| any;
 }

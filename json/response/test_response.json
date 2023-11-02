@@ -1,0 +1,28 @@
+{
+  "message": "Password updated successfully",
+  "director": {
+    "_id": "64f5d6bffceaeef725ae5c40",
+    "full_name": "Jack Shelford",
+    "type": "bexbronze",
+    "valid_user": true,
+    "email": "robert.shelford@googlemail.com",
+    "tel_phone": "+441245455455",
+    "password": "$2a$10$ql1awHZ5j6/UP2.NopTbH.GFatA2nxq3Lna2Yvk9KdYVy5WlaWag.",
+    "country": "United Kingdom",
+    "slot": "test_code_0041",
+    "slots": [
+      {
+        "slot": "test_code_0041",
+        "_id": "64f5d6bffceaeef725ae5c41"
+      }
+    ],
+    "userData": {
+      "addDate": "1693832895356",
+      "lastPlayed": "",
+      "pp_n": "",
+      "_id": "64f5d6bffceaeef725ae5c42"
+    },
+    "__v": 0
+  },
+  "success": true
+}

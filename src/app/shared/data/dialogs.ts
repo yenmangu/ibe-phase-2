@@ -30,6 +30,43 @@ export const dialogData: DialogModel[] = [
 		}
 	},
 	{
+		dialogName: 'keyUpdateSuccess',
+		width: '400px',
+		data: {
+			title: 'updateSUCCESS',
+			message: 'Your director key has been successfully changed to: ',
+			dirKey: ''
+		}
+	},
+	{
+		dialogName: 'emailUpdateSuccess',
+		width: '400px',
+		data: {
+			title: 'updateSUCCESS',
+			message: 'Your email has been successfully changed to: ',
+			email: ''
+		}
+	},
+	{
+		dialogName: 'errorUpdatingEmail',
+		width: '400px',
+		data: {
+			title: 'Error updating Email',
+			message: 'There has been an error updating your Email',
+			error: ''
+		}
+	},
+	{
+		dialogName: 'errorUpdatingKey',
+		width: '400px',
+		data: {
+			title: 'Error updating director key',
+			message: 'There has been an error updating your director key',
+			error: ''
+		}
+	},
+
+	{
 		dialogName: 'testDialog',
 		width: '400px',
 		data: {

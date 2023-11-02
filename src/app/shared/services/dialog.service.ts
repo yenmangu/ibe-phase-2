@@ -45,7 +45,13 @@ export class DialogService implements OnInit {
 		return undefined;
 	}
 
-	openDialog(dialogName: string): MatDialogRef<any> | undefined {
+	openDialog(
+		dialogName: string,
+		error?: string,
+		email?: string,
+		dirKey?: string,
+		values?: any
+	): MatDialogRef<any> | undefined {
 		const dialogConfig = this.findDialog(dialogName);
 		let matDialogConfig: MatDialogConfig | undefined;
 		if (dialogConfig) {
@@ -53,6 +59,15 @@ export class DialogService implements OnInit {
 				width: dialogConfig.width,
 				data: dialogConfig.data
 			};
+			if (error) {
+				dialogConfig.data.error = error;
+			}
+			if (email) {
+				dialogConfig.data.email = email;
+			}
+			if (dirKey) {
+				dialogConfig.data.dirKey = dirKey;
+			}
 		}
 		if (matDialogConfig) {
 			this.dialogRef = this.dialog.open(DialogComponent, matDialogConfig);
@@ -127,11 +142,13 @@ export class DialogService implements OnInit {
 
 	openDatabaseOptionsDialog(data): MatDialogRef<any> | undefined {
 		const matDialogConfig: MatDialogConfig = {
-			width: '700px',
-
+			width: '700px'
 		};
-		this.dialogRef = this.dialog.open(AdvancedOptionsDialogComponent,matDialogConfig);
-		return this.dialogRef
+		this.dialogRef = this.dialog.open(
+			AdvancedOptionsDialogComponent,
+			matDialogConfig
+		);
+		return this.dialogRef;
 	}
 
 	closeDialog(): void {
