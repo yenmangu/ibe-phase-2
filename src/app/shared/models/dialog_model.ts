@@ -3,6 +3,7 @@ export interface DialogModel {
 	width: string;
 	data:
 		| {
+				code?: string;
 				title: string;
 				message: string;
 				gameCode?: string | null;

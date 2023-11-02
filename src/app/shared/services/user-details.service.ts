@@ -79,17 +79,18 @@ export class UserDetailsService {
 	updateGameCode(gamecode: string): void {
 		console.log('update gamecode: ', gamecode);
 
+		localStorage.setItem('GAME_CODE', gamecode);
 		this.gameCodeSubject.next(gamecode);
 	}
 	updateEmail(email: string): void {
 		console.log('updating email: ', email);
-
+		localStorage.setItem('EMAIL', email);
 		this.emailSubject.next(email);
 	}
 
 	updateDirectorKey(directorKey: string): void {
 		console.log('updating director key: ', directorKey);
-
+		localStorage.setItem('DIR_KEY', directorKey);
 		this.directorKeySubject.next(directorKey);
 	}
 

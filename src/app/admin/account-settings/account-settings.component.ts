@@ -14,6 +14,7 @@ import { BreakpointService } from 'src/app/shared/services/breakpoint.service';
 import { ApiDataCoordinationService } from '../games/services/api/api-data-coordination.service';
 import { UserDetailsService } from 'src/app/shared/services/user-details.service';
 import { DialogService } from 'src/app/shared/services/dialog.service';
+import { AuthService } from 'src/app/auth/services/auth.service';
 
 function keyMatchValidator(): ValidatorFn {
 	return (group: FormGroup): ValidationErrors | null => {
@@ -50,7 +51,8 @@ export class AccountSettingsComponent implements OnInit, OnDestroy {
 		private breakpointService: BreakpointService,
 		private apiData: ApiDataCoordinationService,
 		private userDetails: UserDetailsService,
-		private dialogService: DialogService
+		private dialogService: DialogService,
+		private authService: AuthService
 	) {
 		this.emailForm = this.fb.group({
 			email: ['', [Validators.required, Validators.email]]
@@ -132,7 +134,7 @@ export class AccountSettingsComponent implements OnInit, OnDestroy {
 			.subscribe({
 				next: response => {
 					console.log('repsonse data: ', response);
-					if (response.success && response.update) {
+					if (response.success && response.updated) {
 						this.successMessage = true;
 						this.dialogService
 							.openDialog(
@@ -146,6 +148,8 @@ export class AccountSettingsComponent implements OnInit, OnDestroy {
 							.subscribe(result => {
 								if (result) {
 									this.directorKeyForm.reset();
+									const details = { newKey };
+									this.authService.updateUserDetails(details);
 								}
 							});
 					}

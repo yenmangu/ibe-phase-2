@@ -35,7 +35,9 @@
 						#directorKey
 						matInput
 						formControlName="newKey" />
-					<mat-hint align="end">{{ directorKey.value.length }}/4</mat-hint>
+					<mat-hint align="end"
+						>characters: {{ directorKey.value.length }}</mat-hint
+					>
 					<mat-error *ngIf="directorKeyForm.get('newKey').invalid"></mat-error>
 				</mat-form-field>
 				<mat-form-field hintLabel="Enter the same director key as above">
@@ -45,7 +47,12 @@
 						matInput
 						formControlName="confirmKey" />
 					<mat-hint align="end"></mat-hint>
-					<mat-error *ngIf="directorKeyForm.get('confirmKey').invalid"></mat-error>
+					<mat-error *ngIf="directorKeyForm.get('confirmKey').invalid"
+						>Invalid Key</mat-error
+					>
+					<mat-error *ngIf="directorKeyForm.hasError('keyMatch', 'confirmKey')"
+						>Keys do not match</mat-error
+					>
 				</mat-form-field>
 				<button
 					mat-flat-button

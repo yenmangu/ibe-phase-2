@@ -53,6 +53,9 @@ export class AdminComponent implements OnInit, OnDestroy {
 		console.log('admin init');
 		this.gameCode$ = this.userDetailsService.gameCode$;
 		this.directorKey$ = this.userDetailsService.directorKey$;
+		this.gameCode = localStorage.getItem('GAME_CODE');
+		this.dirKey = localStorage.getItem('DIR_KEY');
+
 		// this.gameCodeSubscription = this.gameCode$.pipe(take(1)).subscribe(gameCode => {
 		// 	// console.log('Game Code: ', gameCode);
 		// });
@@ -83,13 +86,17 @@ export class AdminComponent implements OnInit, OnDestroy {
 					// this.IDBStatus.resetProgress();
 
 					console.log('after deleting database');
-					return from(this.fetchData(this.gameCode, this.dirKey));
+					console.log('credentials: ', this.gameCode, this.dirKey);
+					const gameCode = localStorage.getItem('GAME_CODE');
+					const dirKey = localStorage.getItem('DIR_KEY');
+
+					return from(this.fetchData(gameCode, dirKey));
 				}),
 				switchMap(data => {
 					return from(this.processData(data));
 				}),
-				tap(()=> {
-					this.refreshComponent()
+				tap(() => {
+					this.refreshComponent();
 				})
 			)
 			.subscribe();
@@ -122,6 +129,11 @@ export class AdminComponent implements OnInit, OnDestroy {
 						this.gameCode = gamecode;
 						this.dirKey = dirkey;
 						// const exists = this.checkDBExists
+						console.log(
+							'checking game code and dirkey: ',
+							this.gameCode,
+							this.dirKey
+						);
 
 						return this.fetchData(this.gameCode, this.dirKey);
 					} else {
@@ -153,6 +165,8 @@ export class AdminComponent implements OnInit, OnDestroy {
 	}
 
 	fetchData(gameCode: string, dirKey: string): Observable<any> {
+		console.log('fetch data called with: ', gameCode, dirKey);
+
 		return this.currentEventService.getLiveData(gameCode, dirKey).pipe(
 			catchError(error => {
 				console.error('error calling current event service', error);

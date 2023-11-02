@@ -148,14 +148,14 @@ export class AuthService {
 		location.reload();
 	}
 
-	updateUserDetails(details): void {
+	updateUserDetails(details) {
 		if (details.newKey) {
-			const newDirectorKey = details.newKey;
-			this.userDetailsService.directorKeySubject.next(newDirectorKey);
+			const newKey = details.newKey;
+			this.userDetailsService.updateDirectorKey(newKey);
 		}
 		if (details.newEmail) {
 			const newEmail = details.newEmail;
-			this.userDetailsService.emailSubject.next(newEmail);
+			this.userDetailsService.updateEmail(newEmail);
 		}
 	}
 }

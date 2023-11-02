@@ -5,6 +5,7 @@ export const dialogData: DialogModel[] = [
 		dialogName: 'registrationSuccess',
 		width: '400px',
 		data: {
+			code: 'regSUCCESS',
 			title: 'SUCCESS',
 			message:
 				'was successfully created. You will receive an Email to the Email address provided with your account details. Please click below to visit the home page.',
@@ -33,7 +34,8 @@ export const dialogData: DialogModel[] = [
 		dialogName: 'keyUpdateSuccess',
 		width: '400px',
 		data: {
-			title: 'updateSUCCESS',
+			code: 'updateSUCCESS',
+			title: 'SUCCESS',
 			message: 'Your director key has been successfully changed to: ',
 			dirKey: ''
 		}
@@ -42,7 +44,8 @@ export const dialogData: DialogModel[] = [
 		dialogName: 'emailUpdateSuccess',
 		width: '400px',
 		data: {
-			title: 'updateSUCCESS',
+			code: 'updateSUCCESS',
+			title: 'SUCCESS',
 			message: 'Your email has been successfully changed to: ',
 			email: ''
 		}

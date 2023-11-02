@@ -16,13 +16,13 @@
 		<div
 			[innerHTML]="data.message"
 			class="message-container"></div>
-			<!-- EMAIL -->
+		<!-- EMAIL -->
 		<ng-container *ngIf="data.email">
-			<h3>{{data.email}}</h3>
+			<h3>{{ data.email }}</h3>
 		</ng-container>
-			<!-- DIRECTOR KEY -->
+		<!-- DIRECTOR KEY -->
 		<ng-container *ngIf="data.dirKey">
-			<h3>{{data.dirKey}}</h3>
+			<h3>{{ data.dirKey }}</h3>
 		</ng-container>
 		<!-- LOGIN FORM -->
 		<ng-container *ngIf="data.loginForm">
@@ -37,7 +37,7 @@
 	</mat-dialog-content>
 	<mat-dialog-actions align="end">
 		<button
-			*ngIf="data.title === 'updateSUCCESS'"
+			*ngIf="data.code === 'updateSUCCESS'"
 			mat-flat-button
 			color="primary"
 			(click)="emitSuccess()">
@@ -55,7 +55,7 @@
 			class="ok"
 			mat-flat-button
 			color="accent"
-			*ngIf="data.title === 'SUCCESS'">
+			*ngIf="data.code === 'updateSUCCESS' || data.code === 'regSUCCESS'">
 			IBEScore
 		</a>
 	</mat-dialog-actions>
