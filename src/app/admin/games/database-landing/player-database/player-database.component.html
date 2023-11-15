@@ -46,7 +46,7 @@
 				<td
 					mat-cell
 					*matCellDef="let player">
-					{{ player.value.$.n || '' }}
+					{{ player?.newKey || '' }}
 				</td>
 			</ng-container>
 
@@ -61,7 +61,7 @@
 				<td
 					mat-cell
 					*matCellDef="let player">
-					{{ player?.value.name || '' }}
+					{{ player?.name || '' }}
 				</td>
 			</ng-container>
 
@@ -76,7 +76,7 @@
 				<td
 					mat-cell
 					*matCellDef="let player">
-					{{ player?.value.email || '' }}
+					{{ player?.email || '' }}
 				</td>
 			</ng-container>
 
@@ -90,7 +90,7 @@
 				<td
 					mat-cell
 					*matCellDef="let player">
-					{{ player?.value.telephone || '' }}
+					{{ player?.telephone || '' }}
 				</td>
 			</ng-container>
 
@@ -104,7 +104,7 @@
 				<td
 					mat-cell
 					*matCellDef="let player">
-					{{ getIds(player?.value.id)?.join(', ') || '' }}
+					{{ getIds(player?.id)?.join(', ') || '' }}
 				</td>
 			</ng-container>
 
@@ -118,7 +118,7 @@
 				<td
 					mat-cell
 					*matCellDef="let player">
-					{{ player?.value?.lastplay ? player .value?.lastplay[0]?.$?.date : '' }}
+					{{ player?.lastplay ? player.lastplay[0]?.$?.date : '' }}
 				</td>
 			</ng-container>
 
@@ -133,7 +133,7 @@
 				<td
 					mat-cell
 					*matCellDef="let player">
-					{{ player.value?.$.adddate || '' }}
+					{{ player.$.adddate || '' }}
 				</td>
 			</ng-container>
 			<!--  Delete Column -->

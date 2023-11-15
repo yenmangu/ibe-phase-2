@@ -99,6 +99,9 @@ export class FetchCurrentDataService implements OnDestroy {
 			);
 
 			const data = await this.indexedDB.readFromDB([`${storeName}`], key);
+
+			console.log('initial store data: ', data);
+
 			return data;
 		} catch (err) {
 			console.error('Error getting data: ', err);

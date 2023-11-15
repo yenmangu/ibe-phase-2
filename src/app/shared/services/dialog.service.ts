@@ -50,15 +50,18 @@ export class DialogService implements OnInit {
 		error?: string,
 		email?: string,
 		dirKey?: string,
-		values?: any
+		values?: any,
+		component?: any,
+		data?: any
 	): MatDialogRef<any> | undefined {
 		const dialogConfig = this.findDialog(dialogName);
 		let matDialogConfig: MatDialogConfig | undefined;
 		if (dialogConfig) {
 			matDialogConfig = {
 				width: dialogConfig.width,
-				data: dialogConfig.data
+				data: { ...dialogConfig.data }
 			};
+
 			if (error) {
 				dialogConfig.data.error = error;
 			}
@@ -114,7 +117,8 @@ export class DialogService implements OnInit {
 			data: {
 				existingRowData: data,
 				type: type ? type : undefined,
-				searchTerm: searchTerm && searchTerm !== undefined ? searchTerm : undefined
+				searchTerm: searchTerm && searchTerm !== undefined ? searchTerm : undefined,
+
 			}
 		};
 		console.log('dialog service config: ', matDialogConfig);

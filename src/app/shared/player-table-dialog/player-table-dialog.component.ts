@@ -8,20 +8,20 @@ import { Player } from '../data/interfaces/player-data';
 	styleUrls: ['./player-table-dialog.component.scss']
 })
 export class PlayerTableDialogComponent implements OnInit, AfterViewInit {
-	@Input() existingRowData: Player;
 	isEdit: boolean;
 	applyMagentaGreyTheme = true;
 	newPlayer: Player;
 	ebuChecked: boolean = false;
 	bboChecked: boolean = false;
-	playerName: string='';
-	playerEmail: string= '';
+	playerName: string[] | string = '';
+	playerEmail: string = '';
 	playerTelephone: string = '';
 	playerNumber: string | null = '';
 	ebuId: string;
 	bboId: string;
 	dateAdded: string;
 	lastPlay: string[];
+	existingName: string = '';
 
 	playerObject: Player = {
 		key: '',
@@ -35,7 +35,8 @@ export class PlayerTableDialogComponent implements OnInit, AfterViewInit {
 					year: '2-digit'
 				})
 			},
-			name: []
+			name: [],
+			id: []
 		}
 	};
 
@@ -50,10 +51,12 @@ export class PlayerTableDialogComponent implements OnInit, AfterViewInit {
 		let existingRowData;
 		// console.log('player-table-dialog OnInit', existingRowData);
 		if (this.data && this.data.existingRowData) {
+			console.log('this data: ', this.data);
+
 			this.isEdit = true;
 			existingRowData = { ...this.data.existingRowData };
-			console.log('testing shallow copy', existingRowData);
 			this.playerNumber = existingRowData.value.$?.n;
+			this.existingName = existingRowData.value.name || '';
 			this.playerName = existingRowData.value.name || '';
 			this.playerEmail = existingRowData?.value?.email || undefined;
 			this.playerTelephone = existingRowData?.value?.telephone || undefined;
@@ -104,7 +107,7 @@ export class PlayerTableDialogComponent implements OnInit, AfterViewInit {
 	}
 
 	onSave(): void {
-		const finalData = { isNew: true || false, data: undefined };
+		const finalData = { isNew: true || false, existingName: null, data: undefined };
 		if (this.isEdit) {
 			finalData.isNew = false;
 			const updatedPlayer = { ...this.data.existingRowData };
@@ -112,9 +115,10 @@ export class PlayerTableDialogComponent implements OnInit, AfterViewInit {
 			updatedPlayer.value.email = this.playerEmail;
 			updatedPlayer.value.telephone = this.playerTelephone;
 			console.log('seeing how the data looks: ', updatedPlayer);
+			let idArray = []
 			if (this.ebuChecked && this.ebuId) {
-				updatedPlayer.value.id = [];
-				updatedPlayer.value.id.push({
+				// updatedPlayer.value.id = [];
+				idArray.push({
 					$: {
 						type: 'EBU',
 						code: this.ebuId
@@ -122,13 +126,17 @@ export class PlayerTableDialogComponent implements OnInit, AfterViewInit {
 				});
 			}
 			if (this.bboChecked && this.bboId) {
-				updatedPlayer.value.id.push({
+				idArray.push({
 					$: {
 						type: 'BBO',
 						code: this.bboId
 					}
 				});
 			}
+			if(this.bboId || this.ebuId){
+				updatedPlayer.value.id = idArray
+			}
+			finalData.existingName = this.existingName;
 			finalData.data = updatedPlayer;
 			console.log('Updated player with: ', finalData);
 			this.dialogRef.close(finalData);
@@ -138,7 +146,7 @@ export class PlayerTableDialogComponent implements OnInit, AfterViewInit {
 			const newPlayer = { ...this.playerObject };
 			console.log(JSON.stringify(newPlayer, null, 2));
 			newPlayer.value.$.n = this.playerNumber;
-			newPlayer.value.name = [this.playerName];
+			newPlayer.value.name = this.playerName;
 			if (this.playerEmail) {
 				newPlayer.value.email = [this.playerEmail];
 			}

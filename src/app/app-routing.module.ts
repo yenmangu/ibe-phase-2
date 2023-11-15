@@ -6,6 +6,7 @@ import { AuthGuard } from './shared/services/permissions.service';
 import { PairsTableComponent } from './admin/games/pairs-table/pairs-table.component';
 import { GamesComponent } from './admin/games/games.component';
 import { StartingLineupComponent } from './shared/starting-lineup/starting-lineup.component';
+import { HandComponent } from './dev/hand/hand.component';
 
 const routes: Routes = [
 	{ path: 'dev', component: GamesComponent },
@@ -24,6 +25,7 @@ const routes: Routes = [
 		path: 'starting-lineup',
 		component: StartingLineupComponent
 	},
+	{ path: 'dev/hand', component: HandComponent },
 	{
 		path: '',
 		pathMatch: 'full',

@@ -6,8 +6,7 @@ import {
 	OnDestroy,
 	ViewChild,
 	Input,
-	AfterViewInit,
-	ChangeDetectorRef
+	AfterViewInit
 } from '@angular/core';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { Subscription, Subject } from 'rxjs';
@@ -18,7 +17,8 @@ import { EventInterface } from 'src/app/shared/data/interfaces/event-data';
 import { SharedDataService } from 'src/app/shared/services/shared-data.service';
 import { HistoricGamesDatabaseService } from '../../services/historic-games-database.service';
 import { DialogService } from 'src/app/shared/services/dialog.service';
-
+import { CurrentEventService } from '../../services/current-event.service';
+import { SharedGameDataService } from '../../services/shared-game-data.service';
 @Component({
 	selector: 'app-event-names-database',
 	templateUrl: './event-names-database.component.html',
@@ -35,7 +35,7 @@ export class EventNamesDatabaseComponent
 	eventData$ = this.eventDataSubject.asObservable();
 
 	applyMagentaGreyTheme = true;
-	applyGreenGreyTheme = true
+	applyGreenGreyTheme = true;
 	storeName = 'event';
 	// private playerDataSubject = new Subject<EventInterface>();
 	// playerData$ = this.playerDataSubject.asObservable();
@@ -49,11 +49,19 @@ export class EventNamesDatabaseComponent
 	displayedColumns: string[] = ['number', 'event', 'lastUsed', 'added', 'delete'];
 	searchTerm: string | undefined;
 	selectedRowData: EventInterface | undefined;
+	currentRemoteDBRevision: string = '';
+
+	updatedData: any[] = [];
+	sortedData: any[];
+	gameCode: string = '';
+	dirkey: string = '';
+
 	constructor(
 		private historicDatabaseService: HistoricGamesDatabaseService,
 		private sharedDataService: SharedDataService,
 		private dialogService: DialogService,
-		private changeDetectorRef: ChangeDetectorRef
+		private currentEventService: CurrentEventService,
+		private sharedGameData: SharedGameDataService
 	) {}
 
 	ngOnInit(): void {
@@ -67,6 +75,8 @@ export class EventNamesDatabaseComponent
 			this.isLoading = false;
 		});
 		this.fetchInitialData();
+		this.gameCode = localStorage.getItem('GAME_CODE');
+		this.dirkey = localStorage.getItem('DIR_KEY');
 	}
 
 	private emitInitial() {
@@ -85,7 +95,6 @@ export class EventNamesDatabaseComponent
 				next: value => {
 					if (value) {
 						this.refresh();
-						this.changeDetectorRef.detectChanges();
 						this.table.renderRows();
 					}
 				}
@@ -97,6 +106,20 @@ export class EventNamesDatabaseComponent
 	}
 
 	ngAfterViewChecked(): void {}
+
+	async fetchCurrentRevision() {
+		console.log('fetch current revision initialised');
+
+		this.currentEventService
+			.getLiveData(this.gameCode, this.dirkey)
+			.subscribe(data => {
+				console.log('live data raw: ', data);
+				this.currentRemoteDBRevision = data.currentDBRevision;
+				this.sharedGameData.databaseRevisionSubject.next(
+					this.currentRemoteDBRevision
+				);
+			});
+	}
 
 	async fetchInitialData() {
 		try {
@@ -110,26 +133,38 @@ export class EventNamesDatabaseComponent
 		}
 	}
 
+	private sortArray(data) {
+		return data.sort((a, b) => +b.key - +a.key);
+	}
+
 	private initDataSource(): void {
-		// console.log('init dataSource invoked with: ', this.playersArray);
-		this.dataSource.data = this.eventArray;
-		// console.log('new datasource: ', this.dataSource.data);
+		this.sortArray(this.eventArray);
+		const updatedData = this.eventArray.map(item => {
+			return {
+				...item,
+				value: {
+					newKey: item.key,
+					...item.value
+				}
+			};
+		});
+		const mappedDataSource = updatedData.map(item => item.value);
+		this.dataSource.data = mappedDataSource;
 	}
 
 	private compare(a: number | string, b: number | string, isAsc: boolean) {
 		return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
 	}
 
-	private refresh() {
-		this.fetchInitialData();
+	private async refresh() {
+		await this.fetchInitialData();
 		// console.log('updated data source: ', this.eventArray);
 		this.dataSource.data = this.eventArray;
 		if (this.paginator && this.sort) {
 			this.dataSource.paginator = this.paginator;
 			this.dataSource.sort = this.sort;
 		}
-		this.table.renderRows();
-		this.changeDetectorRef.detectChanges();
+		// this.table.renderRows();
 	}
 
 	private async delete(data) {
@@ -149,9 +184,12 @@ export class EventNamesDatabaseComponent
 		console.log('db component search term: ', searchTerm);
 		this.openTableEditDialogWithCallback(undefined, searchTerm);
 	}
-	onRowClick(rowData: EventInterface): void {
-		this.selectedRowData = rowData;
-		this.openTableEditDialogWithCallback(rowData, undefined);
+	onRowClick(rowData: any): void {
+		const selectedKey = rowData.newKey;
+
+		const selectedData = this.eventArray.find(item => item.key === selectedKey);
+		this.selectedRowData = selectedData;
+		this.openTableEditDialogWithCallback(selectedData, undefined);
 	}
 
 	private openTableEditDialogWithCallback(
@@ -165,10 +203,11 @@ export class EventNamesDatabaseComponent
 		);
 
 		dialogRef.afterClosed().subscribe({
-			next: result => {
+			next: async result => {
 				if (result) {
 					console.log('dialog call back data: ', result);
-					this.handleDataUpdate(result);
+					await this.handleDataUpdate(result);
+					this.fetchCurrentRevision();
 					this.table.renderRows();
 				}
 			}
@@ -181,7 +220,7 @@ export class EventNamesDatabaseComponent
 			if (data) {
 				await this.historicDatabaseService.updateByType('event', data);
 
-				this.refresh();
+				await this.refresh();
 			}
 		} catch (err) {
 			console.error('error updating', err);

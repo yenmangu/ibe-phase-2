@@ -142,6 +142,10 @@ mat-tab-body {
 
 app-root {
 	display: block;
+
+}
+app-root::-webkit-scrollbar{
+	display: none;
 }
 
 .drawer .mat-drawer-inner-container {
@@ -213,6 +217,10 @@ md-progress-linear {
 }
 mat-progress-bar {
 	width: 80% !important;
+}
+mat-spinner.finalise {
+	width: 40px !important;
+	height: 40px !important;
 }
 
 // Mobile Global Styles

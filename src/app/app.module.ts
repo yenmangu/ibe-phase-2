@@ -18,12 +18,14 @@ import { SidenavService } from './shared/services/sidenav.service';
 import { SharedModule } from './shared/shared.module';
 import { HomeModule } from './home/home.module';
 import { StoreModule } from '@ngrx/store';
+import { HandComponent } from './dev/hand/hand.component';
+import { HandDisplayComponent } from './dev/hand/hand-display/hand-display.component';
 
 // Pipes
 // import { KeysPipe } from './shared/pipes/keys.pipe';
 
 @NgModule({
-	declarations: [AppComponent],
+	declarations: [AppComponent, HandComponent, HandDisplayComponent],
 	imports: [
 		BrowserModule,
 		MaterialModule,

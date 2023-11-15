@@ -31,6 +31,14 @@ export const dialogData: DialogModel[] = [
 		}
 	},
 	{
+		dialogName: 'forgotPASSWORD',
+		width: '400px',
+		data: {
+			code: 'FORGOT',
+			title: 'Request new director key'
+		}
+	},
+	{
 		dialogName: 'keyUpdateSuccess',
 		width: '400px',
 		data: {
@@ -84,8 +92,27 @@ export const dialogData: DialogModel[] = [
 		data: {}
 	},
 	{
+		dialogName: 'PURGE',
+		width: '400px',
+		data: {
+			code: 'PURGE',
+			title: 'Purge Current Game',
+			message: 'Are you sure you want to purge?',
+			message_2:
+				'This will delete all trace of the current event - movement, results, adjustmentsand rankings - without any possibility of recovering them. Are you sure?'
+		}
+	},
+	{
 		dialogName: 'genericDialog',
 		width: '400px',
 		data: {}
+	},
+	{
+		dialogName: 'BBO',
+		width: '600px',
+		data: {
+			code: 'BBO',
+			title: 'Upload BBO Digest'
+		}
 	}
 ];

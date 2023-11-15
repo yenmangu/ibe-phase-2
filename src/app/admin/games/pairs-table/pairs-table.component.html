@@ -4,9 +4,12 @@
 		(ngSubmit)="onSubmit()">
 		<div class="table-wrapper">
 			<table *ngIf="!tableConfig.timesLunch">
-				<div class="header-flex">
+				<!-- <div class="header-flex"> -->
+					<thead>
+
+
 					<tr class="header-row">
-						<div class="north-south">
+						<!-- <div class="north-south"> -->
 							<th>Table Number</th>
 							<th
 								class="conditional"
@@ -51,9 +54,9 @@
 								class="conditional empty">
 								Abbreviations
 							</th>
-						</div>
+						<!-- </div> -->
 						<th class="split divider"></th>
-						<div class="east-west">
+						<!-- <div class="east-west"> -->
 							<th class="east">East</th>
 							<th class="divider"></th>
 							<th class="west">West</th>
@@ -87,17 +90,21 @@
 								class="conditional empty">
 								Abbreviations
 							</th>
-						</div>
+						<!-- </div> -->
 					</tr>
-				</div>
-				<div class="flex">
+				</thead>
+				<!-- </div> -->
+				<!-- <div class="flex"> -->
+					<tbody>
+
+
 					<ng-container
 						*ngFor="let tableNumber of getTableNumbers(); let i = index">
 						<tr
 							class="tables-row"
 							*ngIf="pairsForm?.get(tableNumber.toString())"
 							[formGroupName]="tableNumber.toString()">
-							<div class="north-south">
+							<!-- <div class="north-south"> -->
 								<td>{{ i + 1 }}</td>
 								<!-- Venues -->
 								<ng-container *ngIf="tableConfig.venues">
@@ -165,9 +172,9 @@
 										<input [formControlName]="column" />
 									</td>
 								</ng-container>
-							</div>
+							<!-- </div> -->
 							<td class="divider split"></td>
-							<div class="east-west">
+							<!-- <div class="east-west"> -->
 								<td *ngFor="let column of ['east']">
 									<input [formControlName]="column" />
 								</td>
@@ -219,10 +226,11 @@
 										<input [formControlName]="column" />
 									</td>
 								</ng-container>
-							</div>
+							<!-- </div> -->
 						</tr>
 					</ng-container>
-				</div>
+				</tbody>
+				<!-- </div> -->
 			</table>
 			<ng-container *ngIf="currentBreakpoint === 'handset'">
 				<div class="mobile-only">

@@ -76,6 +76,21 @@ export class GameSetupComponent implements OnInit, AfterViewInit, OnDestroy {
 			this.dbProgress = progress;
 			console.log(this.dbProgress);
 		});
+		this.setupForm = this.fb.group({
+			newEventUses: 'previous',
+			twoPageStartup: false,
+			tdEntersNames: false,
+			requireAllNames: false,
+			teamSignIn: false,
+			// Security
+			onGameCreation: 'no-lock-change',
+			usePin: false,
+			pinLength: 0,
+			pinType: 'numeric',
+			pinCase: 'lower',
+			spectateApp: null,
+			spectateWeb:null
+		});
 
 		this.sharedSettingsService
 			.getGameSettings()
@@ -97,22 +112,6 @@ export class GameSetupComponent implements OnInit, AfterViewInit, OnDestroy {
 				}
 			});
 
-		this.setupForm = this.fb.group({
-			newEventUses: 'previous',
-			twoPageStartup: false,
-			tdEntersNames: false,
-			requireAllNames: false,
-			teamSignIn: false,
-			// Security
-			onGameCreation: 'no-lock-change',
-			usePin: false,
-			pinLength: null,
-			pinType: 'numeric',
-			pinCase: 'lower',
-			spectateApp: false,
-			spectateWebsite: false
-		});
-
 		this.setupForm.valueChanges.subscribe(values => {
 			// console.log('form values: ', values);
 		});
@@ -130,6 +129,10 @@ export class GameSetupComponent implements OnInit, AfterViewInit, OnDestroy {
 		return true;
 	}
 
+	onNewEventChange() {
+		this.successMessage = false;
+	}
+
 	onTabChange(event: MatTabChangeEvent) {
 		this.tabChanged = true;
 		this.resetState();
@@ -144,6 +147,7 @@ export class GameSetupComponent implements OnInit, AfterViewInit, OnDestroy {
 	populateForm(): void {
 		if (this.setupSettings && this.setupForm) {
 			const { initConfig } = this.setupSettings;
+
 			console.log('setup settings for populate form: ', initConfig);
 
 			this.setupForm.get('newEventUses').setValue(initConfig.newEventUses);
@@ -155,10 +159,10 @@ export class GameSetupComponent implements OnInit, AfterViewInit, OnDestroy {
 			this.setupForm.get('pinLength').setValue(initConfig.pinLength);
 			this.setupForm.get('pinType').setValue(initConfig.pinType);
 			this.setupForm.get('pinCase').setValue(initConfig.pinCase);
-			this.setupForm.get('spectateApp').setValue(initConfig.spectateApp);
+			this.setupForm.get('spectateApp').setValue(!!initConfig.spectateApp);
 			this.setupForm
-				.get('spectateWebsite')
-				.setValue(this.setupSettings.spectateWebsite);
+				.get('spectateWeb')
+				.setValue(!!initConfig.spectateWeb);
 		}
 	}
 	setup() {

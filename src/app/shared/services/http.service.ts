@@ -27,26 +27,43 @@ export class HttpService {
 			currentPassword: data.currentKey,
 			password: data.newKey
 		};
-		console.log('body in update password: ', body)
+		console.log('body in update password: ', body);
 		// return new Observable<any>()
-		return this.http.put<any>(`${this.apiUrl}/auth/update-password`, body, { params });
+		return this.http.put<any>(`${this.apiUrl}/auth/update-password`, body, {
+			params
+		});
 	}
-	
+
 	requestPassword(data): Observable<any> {
-		const { gameCode, email } = data;
+		console.log('password requested');
+
+		const { gameCode, emailField } = data;
 		const params = new HttpParams().append('SLOT', gameCode);
 		const body = {
-			email: email
+			email: emailField
 		};
 		return this.http.post(`${this.apiUrl}/auth/request-password`, body, { params });
 	}
 
 	// Data routes
 
-	postData(data): Observable<any> {
-		return this.http.post<any>(`${this.apiUrl}/player_database`, data).pipe(
+	updateEntry(data): Observable<any> {
+		return this.http.post<any>(`${this.apiUrl}/player_database/update`, data).pipe(
 			tap(response => {
-				console.log(response);
+				console.log('response from updateEntry: ', response);
+			}),
+			catchError(err => {
+				throw err;
+			})
+		);
+	}
+
+	addNewEntry(data): Observable<any> {
+		console.log('post data invoked');
+
+		return this.http.post<any>(`${this.apiUrl}/player_database/new`, data).pipe(
+			tap(response => {
+				console.log('response from postData: ', response);
 			}),
 			catchError(err => {
 				throw err;
@@ -105,5 +122,10 @@ export class HttpService {
 	downloadCurrent(gameCode): Observable<any> {
 		const params = new HttpParams().append('gameCode', gameCode);
 		return this.http.get<any>(`${this.apiUrl}/current_game/deal_file`, { params });
+	}
+
+	restoreHistoricGame(data): Observable<any> {
+		const body = {};
+		return this.http.post<any>(`${this.apiUrl}/current_game/restore-game`, body);
 	}
 }

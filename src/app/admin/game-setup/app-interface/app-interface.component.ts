@@ -5,7 +5,8 @@ import {
 	Output,
 	EventEmitter,
 	Input,
-	ChangeDetectorRef, OnDestroy
+	ChangeDetectorRef,
+	OnDestroy
 } from '@angular/core';
 import { FormGroup, FormArray, FormBuilder, FormControl } from '@angular/forms';
 
@@ -16,7 +17,7 @@ import { FormGroup, FormArray, FormBuilder, FormControl } from '@angular/forms';
 })
 export class AppInterfaceComponent implements OnInit, AfterViewInit, OnDestroy {
 	@Input() appInterfaceSettings: any;
-	@Input() successMessage: boolean
+	@Input() successMessage: boolean;
 	@Output() appInterfaceEmitter = new EventEmitter<any>();
 
 	// playersSeeConfig: any = [
@@ -42,7 +43,7 @@ export class AppInterfaceComponent implements OnInit, AfterViewInit, OnDestroy {
 		{ display: '15s', value: 15 },
 		{ display: '30s', value: 30 },
 		{ display: '45s', value: 45 },
-		{ display: '60s', value: 65 },
+		{ display: '60s', value: 60 },
 		{ display: 'Never', value: 'Never' }
 	];
 
@@ -56,7 +57,7 @@ export class AppInterfaceComponent implements OnInit, AfterViewInit, OnDestroy {
 
 	appInterfaceForm: FormGroup;
 	formPopulated: boolean = false;
-	clicked: boolean = false
+	clicked: boolean = false;
 
 	constructor(private fb: FormBuilder, private cd: ChangeDetectorRef) {
 		this.appInterfaceForm = this.createFormGroup();
@@ -227,10 +228,9 @@ export class AppInterfaceComponent implements OnInit, AfterViewInit, OnDestroy {
 		};
 		// console.log('app-interface data: ', data);
 		this.appInterfaceEmitter.emit(data);
-		this.clicked = true
-
+		this.clicked = true;
 	}
 	ngOnDestroy(): void {
-		this.successMessage = false
+		this.successMessage = false;
 	}
 }

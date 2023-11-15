@@ -1,0 +1,26 @@
+<div class="dialog-container">
+	<a href="https://ibescore.com">
+		<img
+			src="assets/images/ibescore.jpeg"
+			alt="IBEScore Logo"
+			srcset="" />
+	</a>
+	<h2>{{ data.title }}</h2>
+	<mat-dialog-content>
+		<span>{{data.message}}</span>
+	</mat-dialog-content>
+	<mat-dialog-actions>
+		<button
+			mat-flat-button
+			color="primary"
+			(click)="onRestore()">
+			Restore
+		</button>
+		<button
+			mat-flat-button
+			color="warn"
+			(click)="onClose()">
+			Cancel
+		</button>
+	</mat-dialog-actions>
+</div>

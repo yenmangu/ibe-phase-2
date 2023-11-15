@@ -8,12 +8,12 @@ import { Venue } from '../data/interfaces/venue-data';
 	styleUrls: ['./venue-table-dialog.component.scss']
 })
 export class VenueTableDialogComponent {
-	@Input() existingRowData: Venue;
 	isEdit: boolean;
 	applyMagentaGreyTheme = true;
 	newVenue: Venue;
 
-	venueName: string | undefined;
+	existingName: string = '';
+	venueName: string = '';
 	venueNumber: string | null;
 	venueAdded: string;
 	lastPlay: { $: { date: string } }[];
@@ -51,16 +51,15 @@ export class VenueTableDialogComponent {
 		this.newVenue = { ...this.venueObject };
 	}
 	ngOnInit(): void {
+		let existingRowData;
 		if (this.data && this.data.existingRowData) {
-			this.existingRowData = this.data.existingRowData;
 			this.isEdit = true;
-			if (this.data && this.data.existingRowData) {
-				this.venueName = this.existingRowData.value.name[0] || '';
-				this.venueNumber = this.existingRowData.value.$?.n;
-				this.venueAdded = this.existingRowData.value.$?.adddate || '';
-				this.lastPlay = [...this.existingRowData.value.lastplay];
-				console.log('existing row data: ', this.existingRowData);
-			}
+			existingRowData = { ...this.data.existingRowData };
+			this.existingName = existingRowData.value.name || '';
+			this.venueName = existingRowData.value.name || '';
+			this.venueNumber = existingRowData.value.$?.n;
+			this.venueAdded = existingRowData.value.$?.adddate || '';
+			this.lastPlay = [...existingRowData.value.lastplay];
 		}
 		if (this.data && this.data.searchTerm) {
 			this.venueName = this.data.searchTerm;
@@ -92,14 +91,18 @@ export class VenueTableDialogComponent {
 	}
 
 	onSave(): void {
-		const finalData = { isNew: true || false, data: undefined };
+		const finalData = { isNew: true || false, existingName: null, data: undefined };
 		if (this.isEdit) {
 			finalData.isNew = false;
-			const updatedVenue: Venue = { ...this.data.existing };
-			updatedVenue.value.name = [this.venueName];
+			const updatedVenue: Venue = { ...this.data.existingRowData };
+			console.log('updatedVenue: ', updatedVenue);
+			console.log('this.venueName: ', this.venueName);
+
+			updatedVenue.value.name = this.venueName;
 			updatedVenue.value.$.n = this.venueNumber;
 			updatedVenue.value.$.adddate = this.venueAdded;
 			updatedVenue.value.lastplay = this.lastPlay;
+			finalData.existingName = this.existingName;
 			finalData.data = updatedVenue;
 		} else {
 			finalData.isNew = true;

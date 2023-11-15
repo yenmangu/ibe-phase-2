@@ -27,6 +27,7 @@
     "@ngrx/store": "^16.3.0",
     "@riapacheco/yutes": "^4.2.4",
     "@types/jsonwebtoken": "^9.0.3",
+    "angular-vertical-tabs": "github:SamuelMarks/angular-vertical-material-tabs",
     "idb": "^7.1.1",
     "jsonwebtoken": "^9.0.2",
     "luxon": "^3.4.3",

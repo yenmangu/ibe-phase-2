@@ -16,11 +16,11 @@ export class ApiDataProcessingService {
 			data.director_key = directorKey;
 			console.log(data);
 
-			// const allPlayerDb = await this.retrieveAllPlayerDb();
+			const allPlayerDb = await this.retrieveAllPlayerDb();
 
-			// if (!allPlayerDb) {
-			// 	throw new Error('No data retrieved by helper function in "processData"');
-			// }
+			if (!allPlayerDb) {
+				throw new Error('No data retrieved by helper function in "processData"');
+			}
 
 			console.log('dataToSend: ', data);
 			// return;

@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -18,6 +18,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatDialogModule } from '@angular/material/dialog';
 
 // CDK
 import { CdkColumnDef } from '@angular/cdk/table';
@@ -47,11 +48,11 @@ import { VenuesDatabaseComponent } from './database-landing/venues-database/venu
 import { EventNamesDatabaseComponent } from './database-landing/event-names-database/event-names-database.component';
 import { DatabaseLandingComponent } from './database-landing/database-landing.component';
 import { AdvancedOptionsDialogComponent } from './database-landing/advanced-options-dialog/advanced-options-dialog.component';
-import { HandPaginationComponent } from './current-game/hand-pagination/hand-pagination.component';
-import { HandDisplayComponent } from './current-game/hand-display/hand-display.component';
+import { HandPaginationComponent } from '../hands/hand-pagination/hand-pagination.component';
+import { HandDisplayComponent } from '../hands/hand-display/hand-display.component';
 import { PdfGenerationComponent } from './current-game/game-players/pdf-generation/pdf-generation.component';
 import { CreateGameComponent } from './current-game/game-players/create-game/create-game.component';
-
+import { RestoreDialogComponent } from './historic-games/restore-dialog/restore-dialog.component';
 
 @NgModule({
 	declarations: [
@@ -72,11 +73,11 @@ import { CreateGameComponent } from './current-game/game-players/create-game/cre
 		EventNamesDatabaseComponent,
 		DatabaseLandingComponent,
 		AdvancedOptionsDialogComponent,
-  HandPaginationComponent,
-  HandDisplayComponent,
-  PdfGenerationComponent,
-  CreateGameComponent,
-
+		HandPaginationComponent,
+		HandDisplayComponent,
+		PdfGenerationComponent,
+		CreateGameComponent,
+		RestoreDialogComponent
 	],
 	imports: [
 		CommonModule,
@@ -99,10 +100,12 @@ import { CreateGameComponent } from './current-game/game-players/create-game/cre
 		MatPaginatorModule,
 		MatCheckboxModule,
 		MatProgressBarModule,
+		MatDialogModule,
 		// Other UI
 		NgxMaterialTimepickerModule
 		// Clarity
 	],
-	providers: [DataService, CdkColumnDef]
+	exports: [HandDisplayComponent, HandPaginationComponent],
+	providers: [DataService, CdkColumnDef, DatePipe]
 })
 export class GamesModule {}

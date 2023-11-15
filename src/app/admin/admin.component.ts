@@ -143,6 +143,12 @@ export class AdminComponent implements OnInit, OnDestroy {
 				}),
 				switchMap(data => {
 					if (data !== 'EMPTY') {
+						console.log('\ninitial fetched data: ', data);
+						const remoteServerDbRevision = data.currentDBRevision.toString();
+						this.sharedGameData.databaseRevisionSubject.next(
+							remoteServerDbRevision
+						);
+
 						return this.processData(data);
 					} else {
 						return of(null);

@@ -1,5 +1,5 @@
 :host {
-overflow-y: hidden;
+	overflow-y: hidden;
 	padding: 2rem;
 }
 
@@ -11,7 +11,10 @@ overflow-y: hidden;
 .grid-row {
 	display: grid;
 	align-items: center;
-	grid-gap: 2rem
+	grid-gap: 2rem;
+}
+.grid-row.results {
+	width: max-content;
 }
 
 .players-see,

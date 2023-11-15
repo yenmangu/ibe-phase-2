@@ -124,14 +124,14 @@ export class DatabaseLandingComponent implements OnInit, OnDestroy {
 
 // To be implemented at a later date
 
-	// onClickOptions(){
-	// 	const dialogRef = this.dialogService.openDatabaseOptionsDialog(this.tempDialogData)
-	// 	dialogRef.afterClosed().subscribe({
-	// 		next: (data) => {
-	// 			console.log(data)
-	// 		}
-	// 	})
-	// }
+	onClickOptions(){
+		const dialogRef = this.dialogService.openDatabaseOptionsDialog(this.tempDialogData)
+		dialogRef.afterClosed().subscribe({
+			next: (data) => {
+				console.log(data)
+			}
+		})
+	}
 
 	ngOnDestroy(): void {
 		this.dataSubscription.unsubscribe();

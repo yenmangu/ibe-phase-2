@@ -114,6 +114,7 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 				next: data => {
 					if (data) {
 						// console.log('initialTableData: ', JSON.stringify(data, null, 2));
+						console.log('initialTableData: ', data);
 						this.initialTableData = data;
 						const { matchType } = data;
 						matchType.pairs
@@ -227,7 +228,7 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 			west: [];
 			tables?: number;
 			sitters?: [];
-			tableConfig: any
+			tableConfig: any;
 		} = {
 			north,
 			south,

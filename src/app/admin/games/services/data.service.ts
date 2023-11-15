@@ -1,7 +1,7 @@
 import { Injectable, OnDestroy, OnInit } from '@angular/core';
 import { IndexedDatabaseService } from './indexed-database.service';
 import { SharedDataService } from 'src/app/shared/services/shared-data.service';
-import { Subject, Subscription, firstValueFrom, takeUntil } from 'rxjs';
+import { Observable, Subject, Subscription, firstValueFrom, takeUntil } from 'rxjs';
 import { IndexedDatabaseStatusService } from 'src/app/shared/services/indexed-database-status.service';
 import { SharedGameDataService } from './shared-game-data.service';
 @Injectable({
@@ -248,6 +248,22 @@ export class DataService implements OnInit, OnDestroy {
 		return storeMapping;
 	}
 
+	public async getSingleStore(storeName): Promise<any> {
+		try {
+			if (!storeName) {
+				throw new Error('No Store Name');
+			}
+			const data = await this.indexedDB.getAllDataFromStore(storeName);
+			if (!data) {
+				throw new Error('No data in store');
+			}
+			console.log('data from store: ', data);
+			return data;
+		} catch (error) {
+			console.error('error fetching single store');
+		}
+	}
+
 	saveStoreNames(
 		storeMapping: Record<string, any>,
 		playerDbStoreMapping: Record<string, any>
@@ -256,6 +272,20 @@ export class DataService implements OnInit, OnDestroy {
 		const playerStores = Object.keys(playerDbStoreMapping);
 		const combined = stores.concat(playerStores);
 		localStorage.setItem('STORE_NAMES', JSON.stringify(combined));
+	}
+
+	updateSingle(updateData, storeName, key) {
+		return new Promise((resolve, reject) => {
+			this.indexedDB
+				.update(storeName, key, updateData)
+				.then(() => {
+					resolve(true);
+				})
+				.catch(error => {
+					console.error('error updating database: ', error);
+					reject(error);
+				});
+		});
 	}
 
 	requestDeleteDB(): Promise<void> {

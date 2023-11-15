@@ -1,4 +1,8 @@
 <div class="upload-container">
+	<ng-container *ngIf="data">
+		<h2>{{ data.title }}</h2>
+		<h4>{{ data.message }}</h4>
+	</ng-container>
 	<div
 		#dragBox
 		class="container column dragbox upload"
@@ -8,9 +12,12 @@
 		<div
 			class="custom-file"
 			(click)="customFileClick()">
-			<label for="upload"
-				>Drag or drop files here for upload, or click to browse</label
-			><br />
+			<ng-container *ngIf="!data">
+				<label for="upload"
+					>Drag or drop files here for upload, or click to browse</label
+				>
+			</ng-container>
+			<br />
 			<mat-icon>cloud_upload</mat-icon>
 		</div>
 
@@ -28,5 +35,19 @@
 				<li *ngFor="let file of selectedFiles">{{ file.name }}</li>
 			</ul>
 		</div>
+	</div>
+	<div class="container row button-wrapper">
+		<button
+			*ngIf="selectedFiles.length > 0"
+			mat-flat-button
+			color="primary"
+			(click)="onUpload()">
+			Upload
+		</button>
+		<button
+			mat-flat-button
+			color="warn">
+			Close
+		</button>
 	</div>
 </div>

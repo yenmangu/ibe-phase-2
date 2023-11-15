@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { MaterialModule } from '../material/material.module';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 
@@ -13,12 +14,14 @@ import { AuthInterceptor } from '../interceptors/auth.interceptor';
 
 // Modules
 import { SharedModule } from '../shared/shared.module';
+import { PasswordRecoverComponent } from './password-recover/password-recover.component';
 
 @NgModule({
-	declarations: [LoginComponent, RegisterComponent, ForgotPasswordComponent],
+	declarations: [LoginComponent, RegisterComponent, ForgotPasswordComponent, PasswordRecoverComponent],
 	imports: [
 		CommonModule,
 		MaterialModule,
+		FormsModule,
 		HttpClientModule,
 		ReactiveFormsModule,
 		SharedModule

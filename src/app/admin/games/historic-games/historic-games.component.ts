@@ -11,7 +11,10 @@ import { MatPaginator } from '@angular/material/paginator';
 import { Subject, Subscription, takeUntil } from 'rxjs';
 import { IconRegistryService } from 'src/app/shared/services/icon-registry.service';
 import { IndexedDatabaseStatusService } from 'src/app/shared/services/indexed-database-status.service';
-
+import { MatDialog } from '@angular/material/dialog';
+import { RestoreDialogComponent } from './restore-dialog/restore-dialog.component';
+import { HttpService } from 'src/app/shared/services/http.service';
+import { UserDetailsService } from 'src/app/shared/services/user-details.service';
 @Component({
 	selector: 'app-historic-games',
 	templateUrl: './historic-games.component.html',
@@ -31,12 +34,16 @@ export class HistoricGamesComponent implements OnInit, AfterViewInit, OnDestroy 
 	isLoading: boolean = true;
 	isDBInit: boolean = false;
 	IDBStatusSubscription = new Subscription();
+	zip: string = '';
 
 	private destroy$ = new Subject<void>();
 
 	constructor(
 		private historicGamesService: HistoricGamesDatabaseService,
-		private IDBStatus: IndexedDatabaseStatusService
+		private IDBStatus: IndexedDatabaseStatusService,
+		private dialog: MatDialog,
+		private httpService: HttpService,
+		private userDetails: UserDetailsService
 	) {}
 
 	ngOnInit(): void {
@@ -52,14 +59,14 @@ export class HistoricGamesComponent implements OnInit, AfterViewInit, OnDestroy 
 					this.dataSource = new MatTableDataSource();
 
 					if (data) {
-						console.log('data: ', data);
-						this.dataSource.data = data.value
+						console.log('historic data: ', data);
+						this.dataSource.data = data.value;
 						this.dataSource.paginator = this.paginator;
 						this.isLoading = false;
-					}else  {
+					} else {
 						console.log('no data');
 
-						this.dataSource.data = []
+						this.dataSource.data = [];
 					}
 					console.log('historic games component: ', this.dataSource);
 				}
@@ -109,6 +116,32 @@ export class HistoricGamesComponent implements OnInit, AfterViewInit, OnDestroy 
 
 	onDeleteClicked(game: any) {
 		// alert(`Game ID ${}`)
+	}
+
+	onRowClick(row): void {
+		console.log('row: ', row);
+		this.zip = row.zipname[0];
+	}
+
+	private openDialog() {
+		const dialogRef = this.dialog.open(RestoreDialogComponent, {
+			width: '300px',
+			data: {
+				title: 'Restore this game?',
+				message:
+					'Restoring this game will overwrite the current game, which will be achived and may be restored later',
+				zip: this.zip
+			}
+		});
+		dialogRef.afterClosed().subscribe(result => {
+			if (result === true) {
+				const gameCode = localStorage.getItem('GAME_CODE');
+				const dirKeky = localStorage.getItem('DIR_KEY');
+				const data = { gameCode, dirKeky, zip: this.zip };
+
+				//
+			}
+		});
 	}
 
 	ngOnDestroy(): void {

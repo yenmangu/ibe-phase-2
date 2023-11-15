@@ -1,0 +1,15 @@
+<div class="container row pagination">
+	<button
+		mat-flat-button
+		color="warn"
+		(click)="navigateToPage(currentHandPage - 1)">
+		Previous
+	</button>
+	<span>{{currentHandPage}}</span>
+	<button
+		mat-flat-button
+		color="primary"
+		(click)="navigateToPage(currentHandPage + 1)">
+		Next
+	</button>
+</div>

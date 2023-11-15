@@ -17,6 +17,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatInput, MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 //  Custom
 import { NavigationComponent } from './navigation/navigation.component';
@@ -34,6 +36,9 @@ import { NamingNumberingComponent } from './game-setup/naming-numbering/naming-n
 import { UploadDownloadComponent } from './upload-download/upload-download.component';
 import { SharedModule } from '../shared/shared.module';
 import { adminReducer } from '../admin-state/admin.reducer';
+import { HandRecordsLandingComponent } from './hands/hand-records-landing/hand-records-landing.component';
+import { HandTabComponent } from './hands/hand-tab/hand-tab.component';
+import { HandActionsComponent } from './hands/hand-actions/hand-actions.component';
 
 @NgModule({
 	declarations: [
@@ -48,6 +53,9 @@ import { adminReducer } from '../admin-state/admin.reducer';
 		AppInterfaceComponent,
 		NamingNumberingComponent,
 		UploadDownloadComponent,
+		HandRecordsLandingComponent,
+		HandTabComponent,
+  HandActionsComponent
 	],
 	imports: [
 		CommonModule,
@@ -69,10 +77,15 @@ import { adminReducer } from '../admin-state/admin.reducer';
 		MatSelectModule,
 		MatInputModule,
 		MatProgressBarModule,
+		MatDialogModule,
 
 		// Custom
 		DashboardModule,
 		GamesModule
+	],
+	providers: [
+		{ provide: MatDialogModule, useValue: {} },
+		{ provide: MatDialogRef, useValue: {} }
 	]
 })
 export class AdminModule {}

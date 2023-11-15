@@ -1,0 +1,381 @@
+<div class="container row main">
+	<div class="container column tabs">
+		<div
+			#movement
+			(click)="selectTab('movement')"
+			[class.selected]="selectedTab === 'movement'"
+			class="tab-header">
+			Move Cards
+		</div>
+		<div
+			#masterpoints
+			(click)="selectTab('masterpoints')"
+			[class.selected]="selectedTab === 'masterpoints'"
+			class="tab-header">
+			Bridge Webs
+		</div>
+		<div
+			#html
+			(click)="selectTab('html')"
+			[class.selected]="selectedTab === 'html'"
+			class="tab-header">
+			HTML/ PDF
+		</div>
+		<div
+			#ebu
+			(click)="selectTab('ebu')"
+			[class.selected]="selectedTab === 'ebu'"
+			class="tab-header">
+			EBU P2P
+		</div>
+		<!-- <div
+			#bridgenix
+			(click)="selectTab('bridgenix')"
+			[class.selected]="selectedTab === 'bridgenix'"
+			class="tab-header">
+			Move Cards
+		</div> -->
+		<div
+			#ecats
+			(click)="selectTab('ecats')"
+			[class.selected]="selectedTab === 'ecats'"
+			class="tab-header">
+			ECats
+		</div>
+	</div>
+
+	<!-- Tab Content -->
+	<!--  -->
+	<!-- Movement -->
+	<div class="container column content">
+		<ng-container *ngIf="selectedTab === 'movement'">
+			<div class="container column movement">
+				<h3 class="movement">Generate movement pdf</h3>
+				<mat-form-field>
+					<mat-label>Title</mat-label>
+					<input
+						matInput
+						[(ngModel)]="movementInput" />
+				</mat-form-field>
+				<div class="button-wrapper container row">
+					<button
+						mat-flat-button
+						color="accent">
+						Preview
+					</button>
+					<button
+						mat-flat-button
+						color="primary"
+						(click)="getMovement()">
+						Download
+					</button>
+				</div>
+			</div>
+		</ng-container>
+		<!-- Masterpoints -->
+		<ng-container *ngIf="selectedTab === 'masterpoints'">
+			<div class="container column masterpoints">
+				<form [formGroup]="masterpointsForm">
+					<div class="container column form">
+						<h3>Upload to BridgeWebs</h3>
+						<mat-form-field>
+							<mat-label>Event Name:</mat-label>
+							<input
+								matInput
+								formControlName="eventName" />
+						</mat-form-field>
+						<mat-form-field>
+							<mat-label>Director Name:</mat-label>
+							<input
+								matInput
+								formControlName="directorName" />
+						</mat-form-field>
+						<mat-form-field>
+							<mat-label>Scorer Name:</mat-label>
+							<input
+								matInput
+								formControlName="scorerName" />
+						</mat-form-field>
+						<mat-checkbox formControlName="masterpoints"
+							>Master points?</mat-checkbox
+						>
+						<mat-form-field>
+							<mat-label>BridgeWebs Account:</mat-label>
+							<input
+								matInput
+								formControlName="bridgeWebsAccount" />
+						</mat-form-field>
+						<mat-form-field>
+							<mat-label>Password:</mat-label>
+							<input
+								matInput
+								formControlName="password" />
+						</mat-form-field>
+						<div class="container column button-wrapper">
+							<button
+								mat-flat-button
+								color="primary"
+								(click)="uploadBridgeWebs()">
+								Upload
+							</button>
+						</div>
+						<div class="container column button-wrapper">
+							<h3>Download BridgeWebs file to your device</h3>
+							<button
+								mat-flat-button
+								color="accent"
+								(click)="downloadBridgeWebs()">
+								Download
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</ng-container>
+		<!-- HTML/PDF -->
+		<ng-container *ngIf="selectedTab === 'html'">
+			<div class="container column center">
+				<h3>Download HTML / PDF</h3>
+				<form [formGroup]="htmlPdfForm">
+					<div class="form container column center">
+						<mat-form-field>
+							<mat-label>Event Name</mat-label>
+							<input
+								matInput
+								formControlName="eventName" />
+						</mat-form-field>
+						<mat-form-field>
+							<mat-label>Director Name</mat-label>
+							<input
+								matInput
+								formControlName="directorName" />
+						</mat-form-field>
+						<mat-form-field>
+							<mat-label>Comments</mat-label>
+							<input
+								matInput
+								formControlName="comments" />
+						</mat-form-field>
+						<div class="radio container row">
+							<mat-radio-group
+								formControlName="fileType"
+								aria-label="Select a file type option">
+								<mat-radio-button value="html">HTML</mat-radio-button>
+								<mat-radio-button value="pdf">PDF</mat-radio-button>
+							</mat-radio-group>
+						</div>
+						<div class="checkbox container row">
+							<mat-checkbox formControlName="rankings">Rankings</mat-checkbox>
+							<mat-checkbox formControlName="matrix">Matrix</mat-checkbox>
+							<mat-checkbox formControlName="hands">Hands</mat-checkbox>
+							<mat-checkbox formControlName="scorecards">Scorecards</mat-checkbox>
+						</div>
+						<div class="button-wrapper container row">
+							<button
+								mat-flat-button
+								color="accent"
+								(click)="previewHtmlPdf()">
+								Preview
+							</button>
+							<button
+								mat-flat-button
+								color="primary"
+								(click)="downloadHtmlPdf()">
+								Download
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</ng-container>
+		<!-- EBU -->
+		<ng-container *ngIf="selectedTab === 'ebu'">
+			<div class="container row">
+				<div class="container column center">
+					<h3>Game P2P details</h3>
+					<form [formGroup]="ebuDownloadForm">
+						<mat-form-field>
+							<mat-label>EBU Charge Code</mat-label>
+							<mat-select>
+								<mat-option
+									*ngFor="let code of chargeCodes; let i = index"
+									[value]="code.value"
+									>{{ code.display }}</mat-option
+								>
+							</mat-select>
+							<mat-hint
+								><a
+									href="https://www.ebu.co.uk/documents/universal-membership/player-session-rates.pdf"
+									>See List</a
+								></mat-hint
+							>
+						</mat-form-field>
+						<mat-checkbox formControlName="masterpoints"
+							>Master Points?</mat-checkbox
+						>
+						<h3>Download P2P file to device</h3>
+						<div class="container row button-wrapper">
+							<button
+								mat-flat-button
+								color="primary"
+								(click)="(downloadEBU)">
+								Download
+							</button>
+						</div>
+					</form>
+				</div>
+				<div class="container column center">
+					<h3>Upload session to the EBU</h3>
+					<form [formGroup]="ebuUploadForm">
+						<div class="container column center">
+							<mat-form-field>
+								<mat-label>Event Name</mat-label>
+								<input
+									matInput
+									formControlName="eventName" />
+							</mat-form-field>
+							<mat-form-field>
+								<mat-label>Director Name</mat-label>
+								<input
+									matInput
+									formControlName="directorName" />
+							</mat-form-field>
+							<mat-form-field>
+								<mat-label>Club Name</mat-label>
+								<input
+									matInput
+									formControlName="clubName" />
+							</mat-form-field>
+							<mat-form-field>
+								<mat-label>Club ID</mat-label>
+								<input
+									matInput
+									formControlName="clubId" />
+							</mat-form-field>
+							<mat-form-field>
+								<mat-label>Password</mat-label>
+								<input
+									matInput
+									formControlName="password" />
+							</mat-form-field>
+							<mat-form-field>
+								<mat-label>Comments</mat-label>
+								<textarea
+									matInput
+									formControlName="comment"></textarea>
+							</mat-form-field>
+							<h3>Upload</h3>
+							<div class="container button-wrapper">
+								<button
+									mat-flat-button
+									color="primary"
+									(click)="uploadEBU()">
+									Upload
+								</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</ng-container>
+		<!-- BRidgenix -->
+		<ng-container *ngIf="selectedTab === 'bridgenix'">
+			<div class="container column center"></div>
+		</ng-container>
+		<!-- ECATS -->
+		<ng-container *ngIf="selectedTab === 'ecats'">
+			<div class="container column center">
+				<form [formGroup]="ecatsForm">
+					<div class="container column center">
+						<h3>ECats Sim Details</h3>
+						<mat-form-field>
+							<mat-label>Session ID #</mat-label>
+							<input
+								matInput
+								formControlName="sessionId" />
+						</mat-form-field>
+						<mat-form-field>
+							<mat-label>Club Name</mat-label>
+							<input
+								matInput
+								formControlName="clubName" />
+						</mat-form-field>
+						<mat-form-field>
+							<mat-label>National Federation ID</mat-label>
+							<input
+								matInput
+								formControlName="fedId" />
+						</mat-form-field>
+						<mat-form-field>
+							<mat-label>Country</mat-label>
+							<input
+								matInput
+								formControlName="country" />
+						</mat-form-field>
+
+						<mat-form-field>
+							<mat-label>County</mat-label>
+							<input
+								matInput
+								formControlName="county" />
+						</mat-form-field>
+						<mat-form-field>
+							<mat-label>Town</mat-label>
+							<input
+								matInput
+								formControlName="town" />
+						</mat-form-field>
+						<mat-form-field>
+							<mat-label>Email</mat-label>
+							<input
+								matInput
+								formControlName="email" />
+						</mat-form-field>
+						<mat-form-field>
+							<mat-label>Phone Number</mat-label>
+							<input
+								matInput
+								formControlName="phone" />
+						</mat-form-field>
+						<mat-form-field>
+							<mat-label>Contact Name</mat-label>
+							<input
+								matInput
+								formControlName="contactName" />
+						</mat-form-field>
+						<mat-form-field>
+							<mat-label>Event Name</mat-label>
+							<input
+								matInput
+								formControlName="eventName" />
+						</mat-form-field>
+						<mat-form-field>
+							<mat-label>Fax Number</mat-label>
+							<input
+								matInput
+								formControlName="fax" />
+						</mat-form-field>
+						<h3>Upload ECats file to the ECats Server</h3>
+						<div class="container button-wrapper">
+							<button
+								mat-flat-button
+								color="accent"
+								(click)="uploadEcats()">
+								Upload
+							</button>
+						</div>
+						<h3>Download ECats files to your computer</h3>
+						<div class="container button-wrapper">
+							<button
+								mat-flat-button
+								color="accent"
+								(click)="downloadEcats()">
+								Upload
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</ng-container>
+	</div>
+</div>

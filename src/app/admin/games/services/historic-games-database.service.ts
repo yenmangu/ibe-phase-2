@@ -4,7 +4,8 @@ import {
 	Subject,
 	Subscription,
 	takeUntil,
-	Observable
+	Observable,
+	tap
 } from 'rxjs';
 import { SharedDataService } from 'src/app/shared/services/shared-data.service';
 import { IndexedDatabaseStatusService } from 'src/app/shared/services/indexed-database-status.service';
@@ -54,6 +55,10 @@ export class HistoricGamesDatabaseService implements OnDestroy {
 		}
 	}
 
+	async getDatabaseVersion(): Promise<any>{
+		
+	}
+
 	async fetchMainData(objectStore, key): Promise<any> {
 		try {
 			const data = await this.processMatchDataService.getData(objectStore, key);
@@ -77,9 +82,17 @@ export class HistoricGamesDatabaseService implements OnDestroy {
 			const success = await this.processMatchDataService.updateValue(newData);
 			// console.log('new data from updateByType: ', JSON.stringify(newData, null, 2));
 			if (success) {
-				const {data} = newData
-				this.apiData.invokeAPICoordination(data);
-				this.dataUpdated$.next(data);
+				// const { data: updateData, existingName } = newData;
+				// const data = {updateData, existingName}
+				this.apiData
+					.invokeAPICoordination(newData)
+					.pipe(
+						tap(data => {
+							console.log('data in invoke API coordination Tap');
+						})
+					)
+					.subscribe();
+				this.dataUpdated$.next(newData);
 				return success;
 			}
 			return false;

@@ -12,8 +12,9 @@ import { Subscription, Subject } from 'rxjs';
 import { Venue } from 'src/app/shared/data/interfaces/venue-data';
 import { HistoricGamesDatabaseService } from '../../services/historic-games-database.service';
 import { DialogService } from 'src/app/shared/services/dialog.service';
-import { ChangeDetectorRef } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
+import { CurrentEventService } from '../../services/current-event.service';
+import { SharedGameDataService } from '../../services/shared-game-data.service';
 @Component({
 	selector: 'app-venues-database',
 	templateUrl: './venues-database.component.html',
@@ -29,6 +30,9 @@ export class VenuesDatabaseComponent
 	applyIbescoreTheme = true;
 
 	venueArray: Venue[] = [];
+	updatedData: any[] = [];
+
+	sortedData: any[];
 
 	private venueDataSubject = new Subject<Venue[]>();
 	public venueData$ = this.venueDataSubject.asObservable();
@@ -43,11 +47,15 @@ export class VenuesDatabaseComponent
 	displayedColumns: string[] = ['number', 'venue', 'lastUsed', 'added', 'delete'];
 	selectedRowData: Venue | undefined;
 	searchTerm: string = '';
+	currentRemoteDBRevision: string = '';
 
+	gameCode: string = '';
+	dirkey: string = '';
 	constructor(
 		private historicGamesDatabaseService: HistoricGamesDatabaseService,
 		private dialogService: DialogService,
-		private changeDetectorRef: ChangeDetectorRef
+		private currentEventService: CurrentEventService,
+		private sharedGameData: SharedGameDataService
 	) {}
 
 	ngOnInit(): void {
@@ -59,6 +67,8 @@ export class VenuesDatabaseComponent
 			this.isLoading = false;
 		});
 		this.fetchInitialData();
+		this.gameCode = localStorage.getItem('GAME_CODE');
+		this.dirkey = localStorage.getItem('DIR_KEY');
 	}
 
 	ngAfterViewInit(): void {
@@ -95,6 +105,19 @@ export class VenuesDatabaseComponent
 			return false;
 		}
 	}
+	async fetchCurrentRevision() {
+		console.log('fetch current revision initialised');
+
+		this.currentEventService
+			.getLiveData(this.gameCode, this.dirkey)
+			.subscribe(data => {
+				console.log('live data raw: ', data);
+				this.currentRemoteDBRevision = data.currentDBRevision;
+				this.sharedGameData.databaseRevisionSubject.next(
+					this.currentRemoteDBRevision
+				);
+			});
+	}
 
 	onVenueAdd(): void {
 		const searchTerm = this.searchTerm ? this.searchTerm : '';
@@ -102,10 +125,12 @@ export class VenuesDatabaseComponent
 		this.openTableEditDialogWithCallback(undefined, searchTerm);
 	}
 
-	onRowClick(rowData: Venue): void {
+	onRowClick(rowData: any): void {
 		console.log('row clicked');
-		this.selectedRowData = rowData;
-		this.openTableEditDialogWithCallback(rowData, undefined);
+		const selectedKey = rowData.newKey;
+		const selectedData = this.venueArray.find(item => item.key === selectedKey);
+		this.selectedRowData = selectedData;
+		this.openTableEditDialogWithCallback(selectedData, undefined);
 	}
 
 	clearFilter(input: HTMLInputElement): void {
@@ -118,9 +143,26 @@ export class VenuesDatabaseComponent
 		// alert(`${row.value.name} clicked`);
 		this.delete(row);
 	}
+	private sortArray(data) {
+		return data.sort((a, b) => +b.key - +a.key);
+	}
 
 	private initDataSource(): void {
-		this.dataSource.data = this.venueArray;
+		this.sortArray(this.venueArray);
+
+		const updatedData = this.venueArray.map(item => {
+			return {
+				...item,
+				value: {
+					newKey: item.key,
+					...item.value
+				}
+			};
+		});
+		const mappedDataSource = updatedData.map(item => item.value);
+		this.dataSource.data = mappedDataSource;
+
+		this.dataSource.data = mappedDataSource;
 	}
 
 	private refresh() {
@@ -134,7 +176,6 @@ export class VenuesDatabaseComponent
 			if (this.dataSource.data.length > 0) {
 				this.table.renderRows();
 			}
-			// this.changeDetectorRef.detectChanges();
 		}
 	}
 
@@ -163,6 +204,7 @@ export class VenuesDatabaseComponent
 					console.log('dialog call back data: ', result);
 					this.handleDataUpdate(result);
 					this.table.renderRows();
+					this.fetchCurrentRevision();
 				}
 			}
 		});

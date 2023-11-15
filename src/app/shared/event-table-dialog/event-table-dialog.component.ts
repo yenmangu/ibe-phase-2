@@ -7,11 +7,11 @@ import { EventInterface } from '../data/interfaces/event-data';
 	styleUrls: ['./event-table-dialog.component.scss']
 })
 export class EventTableDialogComponent implements OnInit {
-	@Input() existingRowData: EventInterface;
 	isEdit: boolean;
 	applyMagentaGreyTheme = true;
 	newEvent: EventInterface;
 
+	existingName: string = '';
 	eventName: string | undefined;
 	eventNumber: string | null;
 	eventAdded: string;
@@ -51,16 +51,16 @@ export class EventTableDialogComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
+		let existingRowData;
 		if (this.data && this.data.existingRowData) {
-			this.existingRowData = this.data.existingRowData;
 			this.isEdit = true;
-			if (this.data && this.data.existingRowData) {
-				this.eventName = this.existingRowData.value.name[0] || '';
-				this.eventNumber = this.existingRowData.value.$?.n;
-				this.eventAdded = this.existingRowData.value.$?.adddate || '';
-				this.lastPlay = [...this.existingRowData.value.lastplay];
-				console.log('existing row data: ', this.existingRowData);
-			}
+			existingRowData = { ...this.data.existingRowData };
+
+			this.eventName = existingRowData.value.name || '';
+			this.eventNumber = existingRowData.value.$?.n;
+			this.eventAdded = existingRowData.value.$?.adddate || '';
+			this.lastPlay = [...existingRowData.value.lastplay];
+			console.log('existing row data: ', existingRowData);
 		}
 		if (this.data && this.data.searchTerm) {
 			this.eventName = this.data.searchTerm;
@@ -123,14 +123,15 @@ export class EventTableDialogComponent implements OnInit {
 	}
 
 	onSave(): void {
-		const finalData = { isNew: true || false, data: undefined };
+		const finalData = { isNew: true || false, existingName: null, data: undefined };
 		if (this.isEdit) {
 			finalData.isNew = false;
 			const updatedEvent: EventInterface = { ...this.data.existingRowData };
-			updatedEvent.value.name = [this.eventName];
+			updatedEvent.value.name = this.eventName;
 			updatedEvent.value.$.n = this.eventNumber;
 			updatedEvent.value.$.adddate = this.eventAdded;
 			updatedEvent.value.lastplay = this.lastPlay;
+			finalData.existingName = this.existingName;
 			finalData.data = updatedEvent;
 			console.log('event to be updated with: ', JSON.stringify(finalData, null, 2));
 			// this.dialogRef.close(updatedEvent);

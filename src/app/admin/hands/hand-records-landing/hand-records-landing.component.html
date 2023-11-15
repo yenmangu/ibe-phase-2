@@ -1,0 +1,46 @@
+<div class="container column main">
+	<mat-tab-group animationDuration="0s">
+		<mat-tab label="Hand Records">
+			<app-hand-tab></app-hand-tab>
+		</mat-tab>
+		<mat-tab label="Hand Actions">
+			<app-hand-actions></app-hand-actions>
+		</mat-tab>
+		<mat-tab label="Upload">
+			<h2>Upload Hand Record Files</h2>
+
+			<div class="container column upload">
+				<h4>
+					Upload single hand files (.dlm, .dup or .pbn format) or multiple files
+					(.lin format)
+				</h4>
+				<app-upload-file (upload)="handleFiles($event)"></app-upload-file>
+			</div>
+		</mat-tab>
+		<mat-tab label="Download">
+			<h2>Download Current</h2>
+			<div class="container column upload download">
+				<h4>Download the current deal file as .pbn</h4>
+				<button
+					class="download"
+					mat-flat-button
+					color="accent">
+					Download current deal file
+				</button>
+			</div>
+			<ng-container *ngIf="downloadError">
+				<div class="container column download-error">
+					<h3>There has been an error downloading the latest deal file.</h3>
+					<h3>click the button below to try again</h3>
+					<button
+						mat-flat-button
+						color="primary"
+						(click)="tryAgain()">
+						Try Again
+					</button>
+				</div>
+			</ng-container>
+			<ng-container></ng-container>
+		</mat-tab>
+	</mat-tab-group>
+</div>

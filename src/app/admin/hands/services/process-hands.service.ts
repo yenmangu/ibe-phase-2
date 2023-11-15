@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { IndexedDatabaseService } from './indexed-database.service';
+import { IndexedDatabaseService } from '../../games/services/indexed-database.service';
 import { IndexedDatabaseStatusService } from 'src/app/shared/services/indexed-database-status.service';
 
 @Injectable({
@@ -20,7 +20,7 @@ export class ProcessHandsService {
 			const key = 'handanx';
 			const handData = await this.indexedDatabaseService.getByKey(storeName, key);
 			if (handData) {
-        // console.log(handData)
+				// console.log(handData)
 				return handData;
 			} else {
 				throw new Error('No hand data in store');

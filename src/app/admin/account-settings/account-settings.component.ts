@@ -35,6 +35,7 @@ function keyMatchValidator(): ValidatorFn {
 	styleUrls: ['./account-settings.component.scss']
 })
 export class AccountSettingsComponent implements OnInit, OnDestroy {
+  applyMagentaGreyTheme = true
 	emailForm: FormGroup;
 	directorKeyForm: FormGroup;
 	currentBreakpoint: string;

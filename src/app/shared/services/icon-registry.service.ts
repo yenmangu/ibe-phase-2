@@ -37,25 +37,25 @@ export class IconRegistryService {
 		this._matIconRegistry.addSvgIcon(
 			'spades-card',
 			this._domSanitizer.bypassSecurityTrustResourceUrl(
-				domain + svgUrlBase + 'spades.svg'
+				domain + svgUrlBase + 'card-suits/spades.svg'
 			)
 		);
 		this._matIconRegistry.addSvgIcon(
 			'hearts-card',
 			this._domSanitizer.bypassSecurityTrustResourceUrl(
-				domain + svgUrlBase + 'hearts.svg'
+				domain + svgUrlBase + 'card-suits/hearts.svg'
 			)
 		);
 		this._matIconRegistry.addSvgIcon(
 			'clubs-card',
 			this._domSanitizer.bypassSecurityTrustResourceUrl(
-				domain + svgUrlBase + 'clubs.svg'
+				domain + svgUrlBase + 'card-suits/clubs.svg'
 			)
 		);
 		this._matIconRegistry.addSvgIcon(
 			'diamonds-card',
 			this._domSanitizer.bypassSecurityTrustResourceUrl(
-				domain + svgUrlBase + 'diamonds.svg'
+				domain + svgUrlBase + 'card-suits/diamonds.svg'
 			)
 		);
 	}

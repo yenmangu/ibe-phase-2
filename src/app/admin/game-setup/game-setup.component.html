@@ -16,7 +16,8 @@
 						<mat-label for="newEvent">New event uses:</mat-label>
 						<mat-select
 							id="newEvent"
-							formControlName="newEventUses">
+							formControlName="newEventUses"
+							(selectionChange)="onNewEventChange()">
 							<mat-option value="previous">Settings from previous event</mat-option>
 							<mat-option value="current">These base settings</mat-option>
 						</mat-select>
@@ -30,7 +31,9 @@
 					</button>
 				</div>
 				<div class="container row bottom-row"></div>
-				<mat-tab-group animationDuration="0s" (selectedTabChange)="onTabChange($event)">
+				<mat-tab-group
+					animationDuration="0s"
+					(selectedTabChange)="onTabChange($event)">
 					<!--  -->
 					<!-- How To Use Tab -->
 					<!--  -->
@@ -47,12 +50,12 @@
 								>TD enters names</mat-checkbox
 							>
 							<mat-checkbox
-								*ngIf="twoPageStartup && !setupForm.get('tdEntersNames').value"
+								*ngIf="twoPageStartup"
 								formControlName="requireAllNames"
 								>Require all names</mat-checkbox
 							>
 							<mat-checkbox
-								*ngIf="twoPageStartup && !setupForm.get('tdEntersNames').value"
+								*ngIf="twoPageStartup"
 								formControlName="teamSignIn"
 								>Team sign-in</mat-checkbox
 							>
@@ -64,7 +67,7 @@
 					</app-player-identification> -->
 							<div class="container row bottom-row">
 								<button
-								(click)="setup()"
+									(click)="setup()"
 									(click)="save()"
 									mat-flat-button
 									color="primary">
@@ -125,7 +128,7 @@
 							</div>
 							<h3>Spectating</h3>
 							<mat-checkbox formControlName="spectateApp">App</mat-checkbox>
-							<mat-checkbox formControlName="spectateWebsite">Website</mat-checkbox>
+							<mat-checkbox formControlName="spectateWeb">Website</mat-checkbox>
 							<div class="container row bottom-row">
 								<button
 									mat-flat-button
@@ -143,7 +146,7 @@
 					<mat-tab label="Movement/ Scoring">
 						<ng-container *ngIf="scoringSettings && !checkEmpty(scoringSettings)">
 							<app-boards-scoring
-							[successMessage]="successMessage"
+								[successMessage]="successMessage"
 								[scoringSettings]="scoringSettings"
 								(boardScoringEmitter)="onScoringForm($event)"
 								(boardScoringEmitter)="onChildForm($event)"></app-boards-scoring>
@@ -157,7 +160,7 @@
 						<ng-container
 							*ngIf="appInterfaceSettings && !checkEmpty(appInterfaceSettings)">
 							<app-app-interface
-							[successMessage]="successMessage"
+								[successMessage]="successMessage"
 								[appInterfaceSettings]="appInterfaceSettings"
 								(appInterfaceEmitter)="onAppInterfaceForm($event)"
 								(appInterfaceEmitter)="onChildForm($event)"></app-app-interface>
@@ -173,7 +176,7 @@
 								namingNumberingSettings && !checkEmpty(namingNumberingSettings)
 							">
 							<app-naming-numbering
-							[successMessage]="successMessage"
+								[successMessage]="successMessage"
 								[namingNumberingSettings]="namingNumberingSettings"
 								(namingNumberingEmitter)="onAppInterfaceForm($event)"
 								(namingNumberingEmitter)="

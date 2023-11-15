@@ -16,7 +16,8 @@ import { UserDetailsService } from '../services/user-details.service';
 import { IndexedDatabaseStatusService } from '../services/indexed-database-status.service';
 import { SharedGameDataService } from 'src/app/admin/games/services/shared-game-data.service';
 import { BreakpointService } from '../services/breakpoint.service';
-
+import { DialogService } from '../services/dialog.service';
+import { PasswordRecoverComponent } from 'src/app/auth/password-recover/password-recover.component';
 @Component({
 	selector: 'app-header',
 	templateUrl: './header.component.html',
@@ -44,7 +45,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 		private cdr: ChangeDetectorRef,
 		private IDBStatus: IndexedDatabaseStatusService,
 		private sharedGameDataService: SharedGameDataService,
-		private breakpointService: BreakpointService
+		private breakpointService: BreakpointService,
+		private dialogService: DialogService
 	) {}
 
 	ngOnInit(): void {
@@ -83,6 +85,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 
 	forgotPassword(): void {
 		console.log('Forgot password clicked');
+		this.dialogService.openDialog('forgotPASSWORD',undefined,undefined,undefined,undefined,PasswordRecoverComponent)
 	}
 
 	ngOnDestroy(): void {

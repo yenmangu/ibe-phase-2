@@ -7,11 +7,11 @@ import { Team } from '../data/interfaces/team-data';
 	styleUrls: ['./team-table-dialog.component.scss']
 })
 export class TeamTableDialogComponent implements OnInit {
-	@Input() existingRowData: Team;
 	isEdit: boolean;
 	applyMagentaGreyTheme = true;
 	newTeam: Team;
 
+	existingName: string = ''
 	teamName: string;
 	teamNumber: string;
 	teamAdded: string;
@@ -52,13 +52,13 @@ export class TeamTableDialogComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
+		let existingRowData
 		if (this.data && this.data.existingRowData) {
-			this.existingRowData = { ...this.data.existingRowData };
+			existingRowData = { ...this.data.existingRowData };
 			this.isEdit = true;
-			this.teamName = this.existingRowData.value.name[0] || '';
-			this.teamAdded = this.existingRowData.value.$?.adddate || '';
-			this.lastPlay = [...this.existingRowData.value.lastplay];
-			console.log(this.existingRowData);
+			this.teamName = existingRowData.value.name || '';
+			this.teamAdded = existingRowData.value.$?.adddate || '';
+			this.lastPlay = [...existingRowData.value.lastplay];
 		}
 		if (this.data && this.data.searchTerm) {
 			this.teamName = this.data.searchTerm;
@@ -84,14 +84,15 @@ export class TeamTableDialogComponent implements OnInit {
 	}
 
 	onSave(): void {
-		const finalData = { isNew: true || false, data: undefined };
+		const finalData = { isNew: true || false, existingName: null ,data: undefined };
 		if (this.isEdit) {
 			finalData.isNew = false;
-			const updatedTeam: Team = { ...this.data.existing };
-			updatedTeam.value.name = [this.teamName];
+			const updatedTeam: Team = { ...this.data.existingRowData };
+			updatedTeam.value.name = this.teamName;
 			updatedTeam.value.$.n = this.teamNumber;
 			updatedTeam.value.$.adddate = this.teamAdded;
 			updatedTeam.value.lastplay = this.lastPlay;
+			finalData.existingName = this.existingName;
 			finalData.data = updatedTeam;
 		} else {
 			finalData.isNew = true;

@@ -4,8 +4,7 @@ import {
 	DoCheck,
 	OnDestroy,
 	AfterViewInit,
-	ViewChild,
-	ChangeDetectorRef
+	ViewChild
 } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -14,7 +13,8 @@ import { Subscription, Subject } from 'rxjs';
 import { Team } from 'src/app/shared/data/interfaces/team-data';
 import { HistoricGamesDatabaseService } from '../../services/historic-games-database.service';
 import { DialogService } from 'src/app/shared/services/dialog.service';
-import { TitleStrategy } from '@angular/router';
+import { CurrentEventService } from '../../services/current-event.service';
+import { SharedGameDataService } from '../../services/shared-game-data.service';
 
 @Component({
 	selector: 'app-teams-database',
@@ -42,10 +42,18 @@ export class TeamsDatabaseComponent
 	displayedColumns: string[] = ['number', 'team', 'lastUsed', 'added', 'delete'];
 	searchTerm: string = '';
 	selectedRowData: Team | undefined;
+	currentRemoteDBRevision: string = '';
+
+	updatedData: any[] = [];
+	sortedData: any[];
+
+	gameCode: string = '';
+	dirkey: string = '';
 	constructor(
 		private historicDatabaseService: HistoricGamesDatabaseService,
 		private dialogService: DialogService,
-		private changeDetectorRef: ChangeDetectorRef
+		private currentEventService: CurrentEventService,
+		private sharedGameData: SharedGameDataService
 	) {}
 
 	ngOnInit(): void {
@@ -57,6 +65,8 @@ export class TeamsDatabaseComponent
 			this.isLoading = false;
 		});
 		this.fetchInitialData();
+		this.gameCode = localStorage.getItem('GAME_CODE');
+		this.dirkey = localStorage.getItem('DIR_KEY');
 	}
 
 	ngAfterViewInit(): void {
@@ -82,13 +92,24 @@ export class TeamsDatabaseComponent
 	async fetchInitialData() {
 		try {
 			console.log(this.storeName);
-			const teamData = await this.historicDatabaseService.fetchHistoricData(
-				'team'
-			);
+			const teamData = await this.historicDatabaseService.fetchHistoricData('team');
 			this.teamDataSubject.next(teamData);
 		} catch (err) {
 			console.error('Error fetching initial: ', err);
 		}
+	}
+	async fetchCurrentRevision() {
+		console.log('fetch current revision initialised');
+
+		this.currentEventService
+			.getLiveData(this.gameCode, this.dirkey)
+			.subscribe(data => {
+				console.log('live data raw: ', data);
+				this.currentRemoteDBRevision = data.currentDBRevision;
+				this.sharedGameData.databaseRevisionSubject.next(
+					this.currentRemoteDBRevision
+				);
+			});
 	}
 
 	onTeamAdd(): void {
@@ -97,10 +118,12 @@ export class TeamsDatabaseComponent
 		this.openTableEditDialogWithCallback(undefined, searchTerm);
 	}
 
-	onRowClick(rowData: Team): void {
-		console.log('row clicked');
-		this.selectedRowData = rowData;
-		this.openTableEditDialogWithCallback(rowData, undefined);
+	onRowClick(rowData: any): void {
+		const selectedKey = rowData.newKey;
+
+		const selectedData = this.teamArray.find(item => item.key === selectedKey);
+		this.selectedRowData = selectedData;
+		this.openTableEditDialogWithCallback(selectedData, undefined);
 	}
 
 	clearFilter(input: HTMLInputElement): void {
@@ -127,12 +150,26 @@ export class TeamsDatabaseComponent
 			this.isLoading = true;
 		}
 	}
-
-	private initDataSource(): void {
-		this.dataSource.data = this.teamArray;
+	private sortArray(data) {
+		return data.sort((a, b) => +b.key - +a.key);
 	}
 
-	private refresh() {
+	private initDataSource(): void {
+		this.sortArray(this.teamArray);
+		const updatedData = this.teamArray.map(item => {
+			return {
+				...item,
+				value: {
+					newKey: item.key,
+					...item.value
+				}
+			};
+		});
+		const mappedDataSource = updatedData.map(item => item.value);
+		this.dataSource.data = mappedDataSource;
+	}
+
+	private async refresh() {
 		this.fetchInitialData();
 		this.dataSource.data = this.teamArray;
 		if (this.paginator && this.sort) {
@@ -140,7 +177,6 @@ export class TeamsDatabaseComponent
 			this.dataSource.sort = this.sort;
 		}
 		this.table.renderRows();
-		this.changeDetectorRef.detectChanges();
 	}
 	private async delete(data) {
 		try {
@@ -163,10 +199,11 @@ export class TeamsDatabaseComponent
 		);
 
 		dialogRef.afterClosed().subscribe({
-			next: result => {
+			next: async result => {
 				if (result) {
 					console.log('dialog call back data: ', result);
-					this.handleDataUpdate(result);
+					await this.handleDataUpdate(result);
+					this.fetchCurrentRevision();
 					this.table.renderRows();
 				}
 			}
@@ -179,7 +216,7 @@ export class TeamsDatabaseComponent
 			if (data) {
 				await this.historicDatabaseService.updateByType('team', data);
 
-				this.refresh();
+				await this.refresh();
 			}
 		} catch (err) {
 			console.error('error updating', err);

@@ -5,6 +5,8 @@
 			alt="IBEScore Logo"
 			srcset="" />
 	</a>
+	<ng-container *ngIf="data.title !== 'FORGOT'"> </ng-container>
+
 	<h2>{{ data.title ? data.title : '' }}</h2>
 	<mat-dialog-content>
 		<div
@@ -14,8 +16,13 @@
 			<h3>{{ data.gameCode }}</h3>
 		</div>
 		<div
+			*ngIf="data.code !== 'FORGOT'"
 			[innerHTML]="data.message"
 			class="message-container"></div>
+		<div
+			class="message_2"
+			*ngIf="data.message_2"
+			[innerHTML]="data.message_2"></div>
 		<!-- EMAIL -->
 		<ng-container *ngIf="data.email">
 			<h3>{{ data.email }}</h3>
@@ -28,14 +35,27 @@
 		<ng-container *ngIf="data.loginForm">
 			<ng-container *ngComponentOutlet="data.loginForm"></ng-container>
 		</ng-container>
+		<ng-container *ngIf="data.bbo">
+			<div class="title">{{data.title}}</div>
+			<div class="message">{{data.message}}</div>
+				<ng-container *ngComponentOutlet="data.bbo" #uploadFileComponent></ng-container>
+
+		</ng-container>
+
 		<!-- ERROR -->
 		<ng-container *ngIf="data.error"
 			><div class="error">
 				{{ data.error.message | json }}
 			</div></ng-container
 		>
+		<ng-container *ngIf="data.code === 'FORGOT'">
+			<ng-container *ngComponentOutlet="data.passwordRequest"></ng-container>
+		</ng-container>
+		<ng-container *ngIf="data.code === 'USEBIO'"></ng-container>
 	</mat-dialog-content>
-	<mat-dialog-actions align="end">
+	<mat-dialog-actions
+		*ngIf="data.code !== 'FORGOT'"
+		align="end">
 		<button
 			*ngIf="data.code === 'updateSUCCESS'"
 			mat-flat-button
@@ -44,7 +64,12 @@
 			Close
 		</button>
 		<button
-			*ngIf="data.title !== 'SUCCESS'"
+			*ngIf="
+				data.title !== 'SUCCESS' &&
+				data.code !== 'FORGOT' &&
+				data.code !== 'PURGE' &&
+				data.code !== 'BBO'
+			"
 			mat-flat-button
 			color="accent"
 			(click)="emitSuccess()">
@@ -58,5 +83,21 @@
 			*ngIf="data.code === 'updateSUCCESS' || data.code === 'regSUCCESS'">
 			IBEScore
 		</a>
+		<div
+			*ngIf="data.code === 'PURGE'"
+			class="container row button-wrapper">
+			<button
+				mat-flat-button
+				color="primary"
+				(click)="emitSuccess()">
+				PURGE
+			</button>
+			<button
+				mat-flat-button
+				color="warn"
+				(click)="onCancel()">
+				CANCEL
+			</button>
+		</div>
 	</mat-dialog-actions>
 </div>

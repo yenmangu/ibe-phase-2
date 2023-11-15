@@ -23,6 +23,9 @@
 	padding-top: 2em;
 	// position: fixed
 }
+mat-drawer-content.mat-drawer-content {
+	min-height: 81.8vh !important;
+}
 
 .drawer .mat-drawer-inner-container {
 	display: flex;

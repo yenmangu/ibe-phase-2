@@ -1,14 +1,19 @@
 :host {
-	height: 100vh;
+	min-height: 100vh;
+	width: 100vw;
+
 	display: block;
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
 	overflow: scroll;
 }
+.host::-webkit-scrollbar {
+	display: none;
+}
 app-home {
 	width: 100%;
-	// height: 100vh;
+	min-height: 100vh;
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;

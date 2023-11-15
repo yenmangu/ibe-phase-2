@@ -8,13 +8,15 @@ import {
 	take,
 	firstValueFrom,
 	throwError,
-	catchError
+	catchError,
+	of
 } from 'rxjs';
 import { DataService } from './data.service';
-import { ProcessHandsService } from './process-hands.service';
+import { ProcessHandsService } from '../../hands/services/process-hands.service';
 import { FetchCurrentDataService } from './fetch-current-data.service';
 import { ProcessCurrentDataService } from './process-current-data.service';
 import { IndexedDatabaseStatusService } from 'src/app/shared/services/indexed-database-status.service';
+import { SharedGameDataService } from './shared-game-data.service';
 import { tag } from 'rxjs-spy/operators';
 tag;
 
@@ -37,7 +39,8 @@ export class CurrentGamesDatabaseServiceService {
 		private processHands: ProcessHandsService,
 		private fetchMatchData: FetchCurrentDataService,
 		private iDBStatus: IndexedDatabaseStatusService,
-		private processCurrentDataService: ProcessCurrentDataService
+		private processCurrentDataService: ProcessCurrentDataService,
+		private sharedGameData: SharedGameDataService
 	) {
 		this.iDBStatus.isInitialised$
 			.pipe(takeUntil(this.destroy$))
@@ -71,8 +74,49 @@ export class CurrentGamesDatabaseServiceService {
 		);
 	}
 
-	async refreshDatabase (){
-		this.dataService.deleteIndexedDBDatabase()
+	async fetchLock(): Promise<Observable<any>> {
+		try {
+			console.log('fetch current actions settings invoked ');
+			const data = await this.dataService.getSingleStore('lock');
+			if (data) {
+				const lockValue = this.processCurrentDataService.processLock(data);
+				// console.log('lock value after processing:  ', lockValue);
+
+				this.sharedGameData.gameActionsSubject.next(lockValue);
+			}
+			return of(null);
+		} catch (error) {
+			console.error('Error fetching current game lock settings');
+			throw error;
+		}
+	}
+
+	async writeLock(lock): Promise<any> {
+		try {
+			const lockValue = lock === true ? 't' : 'f';
+
+			const dataToWrite = { value: { $: { tf: lockValue } } };
+
+			const result = await this.dataService.updateSingle(
+				dataToWrite,
+				'lock',
+				'lock'
+			);
+			if (result === true) {
+				console.log('update successful');
+				this.sharedGameData.gameActionsSubject.next(lock);
+			} else {
+				throw new Error('Update failed:');
+			}
+			return result;
+		} catch (error) {
+			console.error('error writing lock: ', error);
+			return false;
+		}
+	}
+
+	async refreshDatabase() {
+		this.dataService.deleteIndexedDBDatabase();
 	}
 
 	private async waitForDBInitialization() {

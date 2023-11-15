@@ -60,6 +60,9 @@ export class GameSettingsService {
 			const namsets = this.findItemInArray(initialData, 'namsets');
 
 			setupConfig.newEventUses = this.getUseSets(usesets);
+			console.log('\n++++++++++++++++ secsets config: ', secsets);
+			// const secsetsTest = this.
+
 			setupConfig.initConfig = this.getSetUpSets(usesets, initsets, secsets);
 
 			settingsObject.scoringConfig = this.getScoringSets(scosets);
@@ -80,8 +83,10 @@ export class GameSettingsService {
 	private setupSettingsMap = {};
 
 	getUseSets(usesets) {
+		console.log('\n------------------ USESETS: \n', usesets);
+
 		const { value } = usesets;
-		return value[0].ubs === 'b' ? 'current' : 'previous';
+		return value[0].ubs[0]['$'].val === 'b' ? 'current' : 'previous';
 	}
 
 	destructureSettings(settings) {
@@ -92,7 +97,7 @@ export class GameSettingsService {
 	getSetUpSets(usesets, initsets, secsets) {
 		const initsetsObject = this.destructureSettings(initsets);
 		const secsetsObject = this.destructureSettings(secsets);
-		// console.log('secsets object: ', secsetsObject);
+		console.log('secsets object: ', secsetsObject);
 
 		const setupConfig: any = {
 			newEventUses: this.getUseSets(usesets),
@@ -114,7 +119,7 @@ export class GameSettingsService {
 
 		if (initsetsObject.prenam[0]['$'].val === 'f') {
 			requireAllNames = true;
-			tdEntersNames = true;
+			tdEntersNames = false;
 		} else if (initsetsObject.prenam[0]['$'].val === 'y') {
 			requireAllNames = false;
 			tdEntersNames = true;
@@ -178,8 +183,14 @@ export class GameSettingsService {
 			]
 		} = secsetsObject;
 
-		setupConfig.spectateApp = app === 'y' ? true : false;
-		setupConfig.spectateWebsite = web === 'y' ? true : false;
+		setupConfig.spectateWeb = secsetsObject.spec[0]['$'].web == 'y' ? true : false;
+		setupConfig.spectateApp = secsetsObject.spec[0]['$'].app == 'y' ? true : false;
+		//  secsetsObject.spec[0].
+
+		// setupConfig.spectateApp = app === 'y' ? true : false;
+		// setupConfig.spectateWebsite = web === 'y' ? true : false;
+
+		console.log('\n\nsetup config after secsets: ', setupConfig);
 
 		return setupConfig;
 	}

@@ -1,14 +1,17 @@
 import {
 	Component,
+	Input,
 	OnInit,
 	ElementRef,
 	ViewChild,
 	AfterViewInit,
 	Output,
-	EventEmitter
+	EventEmitter,
+	Inject
 } from '@angular/core';
 import { Renderer2 } from '@angular/core';
 import { Observable } from 'rxjs';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
 	selector: 'app-upload-file',
@@ -16,12 +19,19 @@ import { Observable } from 'rxjs';
 	styleUrls: ['./upload-file.component.scss']
 })
 export class UploadFileComponent implements OnInit, AfterViewInit {
+	@Input() data: any
+	@Input() fileType: any
 	@ViewChild('dragBox') dragBox: ElementRef;
 	@ViewChild('fileInput') fileInput: ElementRef;
 	@Output() upload = new EventEmitter<any>();
+	@Output() signalUpload = new EventEmitter<boolean>();
 	selectedFiles: any[] = [];
 
-	constructor(private elementRef: ElementRef, private renderer: Renderer2) {}
+	constructor(
+		private elementRef: ElementRef,
+		private renderer: Renderer2,
+
+	) {}
 
 	ngOnInit(): void {}
 
@@ -33,8 +43,15 @@ export class UploadFileComponent implements OnInit, AfterViewInit {
 		this.fileInput.nativeElement.click();
 	}
 
+	onUpload() {
+		console.log('onUpload invoked');
+
+		this.emitFiles(this.selectedFiles);
+		this.signalUpload.emit(true);
+	}
+
 	onChange(event: Event) {
-		console.log(event);
+		// console.log(event);
 		const input = event.target as HTMLInputElement;
 		if (input.files) {
 			this.selectedFiles = Array.from(input.files);
@@ -42,15 +59,15 @@ export class UploadFileComponent implements OnInit, AfterViewInit {
 	}
 
 	onDragOver(event: DragEvent) {
-		console.log(event);
+		// console.log(event);
 		event.preventDefault();
 
 		this.renderer.addClass(this.dragBox.nativeElement, 'drag-over');
-		console.log('drag over');
+		// console.log('drag over');
 	}
 	onDragLeave(event: DragEvent) {
 		this.renderer.removeClass(this.dragBox.nativeElement, 'drag-over');
-		console.log('drag leave');
+		// console.log('drag leave');
 	}
 
 	onDrop(event: DragEvent): void {
@@ -84,6 +101,8 @@ export class UploadFileComponent implements OnInit, AfterViewInit {
 	}
 
 	private emitFiles(fileArray) {
+		console.log('emitFiles invoked with: ', fileArray);
+
 		this.upload.emit(fileArray);
 	}
 }

@@ -397,7 +397,7 @@ export class IndexedDatabaseService {
 			// Complete the transaction
 			await tx.done;
 		} catch (error) {
-			console.error(`Error adding data to ${storeName}:`, error);
+			console.error(`Error adding ${JSON.stringify(value,null,2)} with key: ${key} to ${storeName}:`, error);
 			throw error;
 		}
 	}

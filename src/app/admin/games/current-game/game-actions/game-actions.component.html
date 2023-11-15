@@ -1,36 +1,51 @@
-<div class="container row" [ngClass]="currentBreakpoint">
+<div
+	class="container row"
+	[ngClass]="currentBreakpoint">
 	<div class="container column left">
-		<div class="button-wrapper container column" [ngClass]="currentBreakpoint">
+		<div
+			class="button-wrapper container column"
+			[ngClass]="currentBreakpoint">
 			<h4></h4>
 			<button
+				*ngIf="!finalising"
 				mat-flat-button
-				color="primary">
-				Finalise Game
+				color="primary"
+				(click)="onFinalise()">
+				{{ finaliseSuccess === true ? 'Game Finalised' : 'Finalise Game' }}
+			</button>
+			<ng-container *ngIf="finalising">
+				<mat-spinner class="finalise"></mat-spinner>
+			</ng-container>
+
+			<button
+				mat-flat-button
+				color="primary"
+				(click)="onLock()">
+				{{ lockValue === true ? 'Unlock Game' : 'Lock Game' }}
 			</button>
 			<button
 				mat-flat-button
-				color="primary">
-				Lock
-			</button>
-			<button
-				mat-flat-button
-				color="primary">
+				color="primary"
+				(click)="onBBO()">
 				BBO 2 BriAn
 			</button>
-			<button
+			<!-- <button
 				mat-flat-button
-				color="primary">
+				color="primary"
+				(click)="onBCL()">
 				BCL 2 BRiAn
-			</button>
+			</button> -->
 			<button
 				mat-flat-button
-				color="primary">
+				color="primary"
+				(click)="onImportUSEBIO()">
 				Import USEBIO
 			</button>
 			<button
 				mat-flat-button
-				color="warn">
-				Purge Game
+				color="warn"
+				(click)="onPurge()">
+				{{ purgeSuccess === true ? 'Game Purged' : 'Purge Game' }}
 			</button>
 		</div>
 	</div>
@@ -38,15 +53,17 @@
 		<div class="container row">
 			<h4>Re-date current game</h4>
 			<button
-			mat-flat-button
-			color="primary">
-			Save
-		</button>
+				mat-flat-button
+				color="primary"
+				(click)="saveDate()">
+				{{ redateSuccess === true ? 'Game Redated' : 'Save' }}
+			</button>
 		</div>
 		<mat-card class="calendar-card">
 			<mat-calendar
 				[ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }"
-				[(selected)]="dateSelected"></mat-calendar>
+				[(selected)]="dateSelected"
+				(selectedChange)="onChange()"></mat-calendar>
 		</mat-card>
 	</div>
 	<div class="container column right">
@@ -54,18 +71,25 @@
 			<mat-form-field [ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }">
 				<mat-label>Set Simultaneous</mat-label>
 				<input
+					[(ngModel)]="simultaneous"
+					(input)="onMergeChange()"
 					type="text"
 					matInput />
 				<button
+					*ngIf="simultaneousSuccess === false"
 					[ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }"
 					color="primary"
 					mat-flat-button
 					class="save"
-					matSuffix>Save</button>
+					(click)="saveSimultaneous()"
+					matSuffix>
+					Save
+				</button>
 			</mat-form-field>
 		</div>
-		<div class="container row">
-
-		</div>
+		<ng-container *ngIf="simultaneousSuccess === true">
+			{{ mergeCleared === true ? 'Merge Cleared' : 'Game Merged' }}
+		</ng-container>
+		<div class="container row"></div>
 	</div>
 </div>

@@ -1,4 +1,11 @@
-import { Component, Output, EventEmitter, OnInit, Input , OnDestroy} from '@angular/core';
+import {
+	Component,
+	Output,
+	EventEmitter,
+	OnInit,
+	Input,
+	OnDestroy
+} from '@angular/core';
 import { FormBuilder, FormArray, FormControl, FormGroup } from '@angular/forms';
 import { distinctUntilChanged } from 'rxjs';
 
@@ -9,7 +16,7 @@ import { distinctUntilChanged } from 'rxjs';
 })
 export class NamingNumberingComponent implements OnInit, OnDestroy {
 	@Input() namingNumberingSettings: any;
-	@Input() successMessage: boolean
+	@Input() successMessage: boolean;
 	@Output() namingNumberingEmitter: EventEmitter<any> = new EventEmitter<any>();
 
 	mitchellEwConfig = [
@@ -37,8 +44,7 @@ export class NamingNumberingComponent implements OnInit, OnDestroy {
 	];
 
 	namingNumberingForm: FormGroup;
-	clicked: boolean = false
-
+	clicked: boolean = false;
 
 	constructor(private fb: FormBuilder) {
 		this.namingNumberingForm = new FormGroup(this.createFormControls());
@@ -50,9 +56,9 @@ export class NamingNumberingComponent implements OnInit, OnDestroy {
 			this.namingNumberingForm &&
 			!this.checkEmpty(this.namingNumberingSettings)
 		) {
-			this.namingNumberingForm.setValue(this.namingNumberingSettings);
+			// this.namingNumberingForm.setValue(this.namingNumberingSettings);
+			this.populateForm();
 		}
-		// console.log('naming form: ', this.namingNumberingForm);
 	}
 	checkEmpty(obj) {
 		for (var i in obj) return false;
@@ -62,12 +68,39 @@ export class NamingNumberingComponent implements OnInit, OnDestroy {
 	createFormControls() {
 		const controls = {};
 
+		console.log();
+
 		return {
 			mitchellEWNumbers: new FormControl(this.mitchellEwConfig[0].value),
 			tableNaming: new FormControl(this.tableNamingConfig[0].value),
 			shortenPlayerNames: new FormControl(this.shortenPlayerNames[0].value),
 			defaultNameStyle: new FormControl(this.defaultNameStyle[0].value)
 		};
+	}
+
+	populateForm(): void {
+		if (this.namingNumberingSettings && this.namingNumberingForm) {
+			const {
+				mitchellEWNumbers,
+				tableNaming,
+				shortenPlayerNames,
+				defaultNameStyle
+			} = this.namingNumberingSettings;
+			console.log('naming numbering settings: ', this.namingNumberingSettings);
+
+			this.namingNumberingForm
+				.get('mitchellEWNumbers')
+				.setValue(mitchellEWNumbers || this.mitchellEwConfig[0].value);
+			this.namingNumberingForm
+				.get('tableNaming')
+				.setValue(tableNaming || this.tableNamingConfig[0].value);
+			this.namingNumberingForm
+				.get('shortenPlayerNames')
+				.setValue(shortenPlayerNames || this.shortenPlayerNames[0].value);
+			this.namingNumberingForm
+				.get('defaultNameStyle')
+				.setValue(defaultNameStyle || this.defaultNameStyle[3].value);
+		}
 	}
 
 	getNamingNumberingValues(): void {
@@ -79,10 +112,9 @@ export class NamingNumberingComponent implements OnInit, OnDestroy {
 		// const data = this.namingNumberingForm.value;
 		// console.log('naming numbering values: ', this.namingNumberingForm.value);
 		this.namingNumberingEmitter.emit(data);
-		this.clicked = true
-
+		this.clicked = true;
 	}
 	ngOnDestroy(): void {
-		this.successMessage = false
+		this.successMessage = false;
 	}
 }

@@ -44,7 +44,7 @@
 					<td
 						mat-cell
 						*matCellDef="let team">
-						{{ team.value.$?.n || '' }}
+						{{ team.newKey || '' }}
 					</td>
 				</ng-container>
 				<!-- Team Column -->
@@ -58,7 +58,7 @@
 					<td
 						mat-cell
 						*matCellDef="let team">
-						{{ team.value?.name || '' }}
+						{{ team?.name || '' }}
 					</td>
 				</ng-container>
 				<!-- Last Used Column -->
@@ -72,7 +72,7 @@
 					<td
 						mat-cell
 						*matCellDef="let team">
-						{{ team.value?.lastplay[0]?.$?.date || '' }}
+						{{ team?.lastplay[0]?.$?.date || '' }}
 					</td>
 				</ng-container>
 				<!-- Date Added Column -->

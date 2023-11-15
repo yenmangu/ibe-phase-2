@@ -1,0 +1,77 @@
+<div class="upload-container">
+	<ng-container *ngIf="dialogData">
+		<h2>{{ dialogData.title }}</h2>
+		<h4>{{ dialogData.message }}</h4>
+	</ng-container>
+	<ng-container *ngIf="uploading === false">
+		<div
+			#dragBox
+			class="container column dragbox upload"
+			(dragover)="onDragOver($event)"
+			(drop)="onDrop($event)"
+			(dragleave)="onDragLeave($event)">
+			<div
+				class="custom-file"
+				(click)="customFileClick()">
+				<ng-container *ngIf="!dialogData">
+					<label for="upload"
+						>Drag or drop your USEBIO .xml file here for upload, or click to
+						browse</label
+					>
+				</ng-container>
+				<br />
+				<mat-icon>cloud_upload</mat-icon>
+			</div>
+
+			<input
+				id="upload"
+				multiple
+				#fileInput
+				name="upload"
+				color="primary"
+				type="file"
+				(click)="onChange($event)"
+				style="display: none" />
+			<div class="container column file-list">
+				<ul>
+					<li *ngFor="let file of selectedFiles">{{ file.name }}</li>
+				</ul>
+			</div>
+		</div>
+	</ng-container>
+	<ng-container *ngIf="uploading === true">
+		<div class="container row spinner">
+			<mat-spinner></mat-spinner>
+		</div>
+	</ng-container>
+	<ng-container *ngIf="uploadSuccess === true">
+		<div class="success">
+			<h4>
+				Upload Success. Please click refresh database to see the latest records. you
+				may now click close.
+			</h4>
+		</div>
+	</ng-container>
+	<ng-container *ngIf="uploadSuccess === false && errorMessage">
+		<div class="error">
+			<h4>Error Uploading:</h4>
+			<span *ngIf="errorMessage">{{ errorMessage }}</span>
+		</div>
+	</ng-container>
+
+	<div class="container row button-wrapper">
+		<button
+			*ngIf="selectedFiles.length > 0 && uploadSuccess !== true"
+			mat-flat-button
+			color="primary"
+			(click)="onUpload()">
+			Upload
+		</button>
+		<button
+			mat-flat-button
+			color="warn"
+			(click)="closeDialog()">
+			{{ uploadSuccess === true ? 'Close' : 'Cancel' }}
+		</button>
+	</div>
+</div>

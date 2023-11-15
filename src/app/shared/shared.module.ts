@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 // Material
 // import { MatToolbarModule } from '@angular/material/toolbar';
 import { MaterialModule } from '../material/material.module';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 
 // Components
 import { HeaderComponent } from './header/header.component';
@@ -18,6 +20,9 @@ import { UserDetailsComponent } from './header/user-details/user-details.compone
 import { StartingLineupComponent } from './starting-lineup/starting-lineup.component';
 import { UploadFileComponent } from './upload-file/upload-file.component';
 import { DownloadFileComponent } from './download-file/download-file.component';
+import { BboUploadComponent } from './bbo-upload/bbo-upload.component';
+import { UsebioComponent } from './usebio/usebio.component';
+import { DeleteRowDialogComponent } from './delete-row-dialog/delete-row-dialog.component';
 
 // Modules
 
@@ -34,15 +39,28 @@ import { DownloadFileComponent } from './download-file/download-file.component';
 		UserDetailsComponent,
 		StartingLineupComponent,
 		UploadFileComponent,
-		DownloadFileComponent
+		DownloadFileComponent,
+  BboUploadComponent,
+  UsebioComponent,
+  DeleteRowDialogComponent
 	],
-	imports: [CommonModule, MaterialModule, FormsModule],
+	imports: [
+		CommonModule,
+		MaterialModule,
+		FormsModule,
+		MatFormFieldModule,
+		MatDialogModule
+	],
 	exports: [
 		HeaderComponent,
 		FooterComponent,
 		UploadFileComponent,
 		DownloadFileComponent,
 		UserDetailsComponent
+	],
+	providers: [
+		{ provide: MatDialogModule, useValue: {} },
+		{ provide: MatDialogRef, useValue: {} }
 	]
 })
 export class SharedModule {}

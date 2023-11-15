@@ -6,7 +6,7 @@ export interface EventInterface {
 			n: string;
 			adddate: string;
 		};
-		name: string[];
+		name: string[] | string;
 		lastplay?: {
 			$: {
 				date: string;

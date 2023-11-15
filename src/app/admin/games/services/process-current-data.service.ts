@@ -314,9 +314,9 @@ export class ProcessCurrentDataService {
 		// return splitLines
 	}
 
-	private processNamesText(value,numOfTables) {
+	private processNamesText(value, numOfTables) {
 		let namesArray = [];
-		const namesInPlay = numOfTables * 2
+		const namesInPlay = numOfTables * 2;
 
 		const lines = value[0]
 			.split('\n')
@@ -373,5 +373,16 @@ export class ProcessCurrentDataService {
 			data.sidesOf = sidesOf;
 			return data;
 		}
+	}
+
+	public processLock(lockData): any {
+		const value = lockData[0]
+		const { key, value:lock } = value;
+		// console.log('before processing: ', lock);
+		// console.log(lock['$'].tf);
+		const lockValue = lock['$'].tf === 'f' ? false : true;
+		console.log('lockValue in processing: ', lockValue);
+
+		return lockValue;
 	}
 }

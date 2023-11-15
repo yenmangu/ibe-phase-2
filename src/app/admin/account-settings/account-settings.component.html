@@ -1,11 +1,13 @@
 <h2>Account Settings</h2>
-<div class="container row user-settings">
+<div
+	class="container row user-settings"
+	[ngClass]="currentBreakpoint">
 	<div class="container column">
 		<h3>Change Email</h3>
 
 		<form [formGroup]="emailForm">
 			<div class="container column form-column">
-				<mat-form-field>
+				<mat-form-field [ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }">
 					<mat-label>Email</mat-label>
 					<input
 						matInput
@@ -18,7 +20,7 @@
 				<button
 					mat-flat-button
 					color="primary"
-					[disabled]="emailForm.pristine && emailClicked"
+					[disabled]="emailForm.pristine && emailClicked && directorKeyForm.invalid"
 					(click)="getEmail()">
 					{{ successMessage && emailClicked ? 'Success' : 'Update Email' }}
 				</button>
@@ -28,8 +30,8 @@
 	<div class="container column form-column">
 		<h3>Change Director Key</h3>
 		<form [formGroup]="directorKeyForm">
-			<div class="container column">
-				<mat-form-field hintLabel="Min 4 characters">
+			<div class="container column director-key">
+				<mat-form-field [ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }">
 					<mat-label>Director Key</mat-label>
 					<input
 						#directorKey
@@ -40,7 +42,7 @@
 					>
 					<mat-error *ngIf="directorKeyForm.get('newKey').invalid"></mat-error>
 				</mat-form-field>
-				<mat-form-field hintLabel="Enter the same director key as above">
+				<mat-form-field [ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }">
 					<mat-label>Confirm director key</mat-label>
 					<input
 						#confirmKey
@@ -57,7 +59,11 @@
 				<button
 					mat-flat-button
 					color="primary"
-					[disabled]="directorKeyForm.pristine && updateDirectorKeyClicked"
+					[disabled]="
+						directorKeyForm.pristine &&
+						updateDirectorKeyClicked &&
+						directorKeyForm.valid
+					"
 					(click)="getNewDirectorKey()">
 					{{
 						successMessage && updateDirectorKeyClicked ? 'Success' : 'Update Key'

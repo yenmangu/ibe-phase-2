@@ -10,11 +10,17 @@ export class SharedGameDataService {
 	private refreshDatabaseSubject = new Subject<boolean | null>();
 	private startingLineupSubject = new BehaviorSubject<any>('');
 	private triggerRefresh$ = new Subject<boolean>();
-	databaseDeleted$ = new Subject<boolean>()
+	public gameActionsSubject = new BehaviorSubject<any>('');
+
+	public databaseRevisionSubject = new BehaviorSubject<string>('');
+	public databaseRevision$ = this.databaseRevisionSubject.asObservable();
+
+	databaseDeleted$ = new Subject<boolean>();
 
 	public twoPageStartupSubject = new BehaviorSubject<boolean>(false);
-	public databaseDeletedSubject = this.databaseDeleted$.asObservable()
+	public databaseDeletedSubject = this.databaseDeleted$.asObservable();
 	private requestGamecodeSubject = new Subject<string>();
+	public GameAction$ = this.gameActionsSubject.asObservable();
 	startingLineup$ = this.startingLineupSubject.asObservable();
 	requestGamecode$ = this.requestGamecodeSubject.asObservable();
 
