@@ -1,335 +1,344 @@
-<div class="container column">
-	<table class="hand-table">
-		<thead>
-			<tr>
-				<th></th>
-				<th><mat-icon svgIcon="clubs-card"></mat-icon></th>
-				<th><mat-icon svgIcon="diamonds-card"></mat-icon></th>
-				<th><mat-icon svgIcon="hearts-card"></mat-icon></th>
-				<th><mat-icon svgIcon="spades-card"></mat-icon></th>
+<div class="container column main">
+	<h2>Available Tricks</h2>
+	<ng-container *ngIf="isEmpty">
+		<h3>
+			If no tricks are shown, it may be the server has not finished analysing the
+			hands. Please refresh the database to try again. <br /><br />
+			If the problem persists please contact us
+		</h3>
+	</ng-container>
+	<ng-container *ngIf="!hidden">
+		<table class="hand-table">
+			<thead>
+				<tr>
+					<th></th>
+					<th><mat-icon svgIcon="clubs-card"></mat-icon></th>
+					<th><mat-icon svgIcon="diamonds-card"></mat-icon></th>
+					<th><mat-icon svgIcon="hearts-card"></mat-icon></th>
+					<th><mat-icon svgIcon="spades-card"></mat-icon></th>
 
-				<th>N/T</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<th></th>
-				<td>{{ handData[1] }}</td>
-				<td>{{ handData[2] }}</td>
-				<td>{{ handData[3] }}</td>
-				<td>{{ handData[4] }}</td>
-				<td>{{ handData[5] }}</td>
-			</tr>
-			<tr>
-				<th>North</th>
-				<td>{{ handData[6] }}</td>
-				<td>{{ handData[7] }}</td>
-				<td>{{ handData[8] }}</td>
-				<td>{{ handData[9] }}</td>
-				<td>{{ handData[10] }}</td>
-			</tr>
-			<tr>
-				<th>South</th>
-				<td>{{ handData[11] }}</td>
-				<td>{{ handData[12] }}</td>
-				<td>{{ handData[13] }}</td>
-				<td>{{ handData[14] }}</td>
-				<td>{{ handData[15] }}</td>
-			</tr>
-			<tr>
-				<th>East</th>
-				<td>{{ handData[16] }}</td>
-				<td>{{ handData[17] }}</td>
-				<td>{{ handData[18] }}</td>
-				<td>{{ handData[19] }}</td>
-				<td>{{ handData[20] }}</td>
-			</tr>
-			<tr>
-				<th>West</th>
-				<td>{{ handData[21] }}</td>
-				<td>{{ handData[22] }}</td>
-				<td>{{ handData[23] }}</td>
-				<td>{{ handData[24] }}</td>
-				<td>{{ handData[25] }}</td>
-			</tr>
-		</tbody>
-	</table>
+					<th>N/T</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<th>North</th>
+					<td>{{ handData[1] }}</td>
+					<td>{{ handData[2] }}</td>
+					<td>{{ handData[3] }}</td>
+					<td>{{ handData[4] }}</td>
+					<td>{{ handData[5] }}</td>
+				</tr>
+				<tr>
+					<th>South</th>
+					<td>{{ handData[6] }}</td>
+					<td>{{ handData[7] }}</td>
+					<td>{{ handData[8] }}</td>
+					<td>{{ handData[9] }}</td>
+					<td>{{ handData[10] }}</td>
+				</tr>
+				<tr>
+					<th>East</th>
+					<td>{{ handData[11] }}</td>
+					<td>{{ handData[12] }}</td>
+					<td>{{ handData[13] }}</td>
+					<td>{{ handData[14] }}</td>
+					<td>{{ handData[15] }}</td>
+				</tr>
+				<tr>
+					<th>West</th>
+					<td>{{ handData[16] }}</td>
+					<td>{{ handData[17] }}</td>
+					<td>{{ handData[18] }}</td>
+					<td>{{ handData[19] }}</td>
+					<td>{{ handData[20] }}</td>
+				</tr>
+			</tbody>
+		</table>
+	</ng-container>
+	<ng-container *ngIf="hidden">
+		<div class="column center container hidden-container">
+			<h2>Tricks Hidden</h2>
+		</div>
+	</ng-container>
+	<div class="spacer"></div>
+	<ng-container *ngIf="!isEmpty">
+		<div class="container column">
+			<div class="container row top">
+				<div class="container column left">
+					<div class="container row spade">
+						<mat-icon svgIcon="spades-card"></mat-icon>
+						<div class="container suit"></div>
+						<div class="container count"></div>
+					</div>
+					<div class="container row heart">
+						<mat-icon svgIcon="hearts-card"></mat-icon>
+						<div class="container suit"></div>
+						<div class="container count"></div>
+					</div>
+					<div class="container row diamond">
+						<mat-icon svgIcon="diamonds-card"></mat-icon>
+						<div class="container suit"></div>
+						<div class="container count"></div>
+					</div>
+					<div class="container row club">
+						<mat-icon svgIcon="clubs-card"></mat-icon>
+						<div class="container suit"></div>
+						<div class="container count"></div>
+					</div>
+				</div>
+				<div class="container column middle">
+					<div class="container row spade">
+						<mat-icon svgIcon="spades-card"></mat-icon>
+						<div class="container suit"></div>
+						<div class="container count"></div>
+					</div>
+					<div class="container row heart">
+						<mat-icon svgIcon="hearts-card"></mat-icon>
+						<div class="container suit"></div>
+						<div class="container count"></div>
+					</div>
+					<div class="container row diamond">
+						<mat-icon svgIcon="diamonds-card"></mat-icon>
+						<div class="container suit"></div>
+						<div class="container count"></div>
+					</div>
+					<div class="container row club">
+						<mat-icon svgIcon="clubs-card"></mat-icon>
+						<div class="container suit"></div>
+						<div class="container count"></div>
+					</div>
+				</div>
+				<div class="container column right">
+					<div class="container row spade">
+						<mat-icon svgIcon="spades-card"></mat-icon>
+						<div class="container suit"></div>
+						<div class="container count"></div>
+					</div>
+					<div class="container row heart">
+						<mat-icon svgIcon="hearts-card"></mat-icon>
+						<div class="container suit"></div>
+						<div class="container count"></div>
+					</div>
+					<div class="container row diamond">
+						<mat-icon svgIcon="diamonds-card"></mat-icon>
+						<div class="container suit"></div>
+						<div class="container count"></div>
+					</div>
+					<div class="container row club">
+						<mat-icon svgIcon="clubs-card"></mat-icon>
+						<div class="container suit"></div>
+						<div class="container count"></div>
+					</div>
+				</div>
+			</div>
+			<div class="container row middle">
+				<div class="container column left">
+					<div class="container row spade">
+						<mat-icon svgIcon="spades-card"></mat-icon>
+						<div class="container suit"></div>
+						<div class="container count"></div>
+					</div>
+					<div class="container row heart">
+						<mat-icon svgIcon="hearts-card"></mat-icon>
+						<div class="container suit"></div>
+						<div class="container count"></div>
+					</div>
+					<div class="container row diamond">
+						<mat-icon svgIcon="diamonds-card"></mat-icon>
+						<div class="container suit"></div>
+						<div class="container count"></div>
+					</div>
+					<div class="container row club">
+						<mat-icon svgIcon="clubs-card"></mat-icon>
+						<div class="container suit"></div>
+						<div class="container count"></div>
+					</div>
+				</div>
+				<div class="container hand-indictor column middle">
+					<div class="hand-number"></div>
+					<div class="dealer"></div>
+					<div class="vulnerable"></div>
+				</div>
+				<div class="container column right">
+					<div class="container row spade">
+						<mat-icon svgIcon="spades-card"></mat-icon>
+						<div class="container suit"></div>
+						<div class="container count"></div>
+					</div>
+					<div class="container row heart">
+						<mat-icon svgIcon="hearts-card"></mat-icon>
+						<div class="container suit"></div>
+						<div class="container count"></div>
+					</div>
+					<div class="container row diamond">
+						<mat-icon svgIcon="diamonds-card"></mat-icon>
+						<div class="container suit"></div>
+						<div class="container count"></div>
+					</div>
+					<div class="container row club">
+						<mat-icon svgIcon="clubs-card"></mat-icon>
+						<div class="container suit"></div>
+						<div class="container count"></div>
+					</div>
+				</div>
+			</div>
+			<div class="container row bottom">
+				<div class="container column left">
+					<div class="container row spade">
+						<mat-icon svgIcon="spades-card"></mat-icon>
+						<div class="container suit"></div>
+						<div class="container count"></div>
+					</div>
+					<div class="container row heart">
+						<mat-icon svgIcon="hearts-card"></mat-icon>
+						<div class="container suit"></div>
+						<div class="container count"></div>
+					</div>
+					<div class="container row diamond">
+						<mat-icon svgIcon="diamonds-card"></mat-icon>
+						<div class="container suit"></div>
+						<div class="container count"></div>
+					</div>
+					<div class="container row club">
+						<mat-icon svgIcon="clubs-card"></mat-icon>
+						<div class="container suit"></div>
+						<div class="container count"></div>
+					</div>
+				</div>
+				<div class="container column middle">
+					<div class="container row spade">
+						<mat-icon svgIcon="spades-card"></mat-icon>
+						<div class="container suit"></div>
+						<div class="container count"></div>
+					</div>
+					<div class="container row heart">
+						<mat-icon svgIcon="hearts-card"></mat-icon>
+						<div class="container suit"></div>
+						<div class="container count"></div>
+					</div>
+					<div class="container row diamond">
+						<mat-icon svgIcon="diamonds-card"></mat-icon>
+						<div class="container suit"></div>
+						<div class="container count"></div>
+					</div>
+					<div class="container row club">
+						<mat-icon svgIcon="clubs-card"></mat-icon>
+						<div class="container suit"></div>
+						<div class="container count"></div>
+					</div>
+				</div>
+				<div class="container column right">
+					<div class="container row spade">
+						<mat-icon svgIcon="spades-card"></mat-icon>
+						<div class="container suit"></div>
+						<div class="container count"></div>
+					</div>
+					<div class="container row heart">
+						<mat-icon svgIcon="hearts-card"></mat-icon>
+						<div class="container suit"></div>
+						<div class="container count"></div>
+					</div>
+					<div class="container row diamond">
+						<mat-icon svgIcon="diamonds-card"></mat-icon>
+						<div class="container suit"></div>
+						<div class="container count"></div>
+					</div>
+					<div class="container row club">
+						<mat-icon svgIcon="clubs-card"></mat-icon>
+						<div class="container suit"></div>
+						<div class="container count"></div>
+					</div>
+				</div>
+			</div>
+		</div>
 
-	<div class="container column">
-		<div class="container row top">
-			<div class="container column left">
-				<div class="container row spade">
-					<mat-icon svgIcon="spades-card"></mat-icon>
-					<div class="container suit"></div>
-					<div class="container count"></div>
-				</div>
-				<div class="container row heart">
-					<mat-icon svgIcon="hearts-card"></mat-icon>
-					<div class="container suit"></div>
-					<div class="container count"></div>
-				</div>
-				<div class="container row diamond">
-					<mat-icon svgIcon="diamonds-card"></mat-icon>
-					<div class="container suit"></div>
-					<div class="container count"></div>
-				</div>
-				<div class="container row club">
-					<mat-icon svgIcon="clubs-card"></mat-icon>
-					<div class="container suit"></div>
-					<div class="container count"></div>
-				</div>
-			</div>
-			<div class="container column middle">
-				<div class="container row spade">
-					<mat-icon svgIcon="spades-card"></mat-icon>
-					<div class="container suit"></div>
-					<div class="container count"></div>
-				</div>
-				<div class="container row heart">
-					<mat-icon svgIcon="hearts-card"></mat-icon>
-					<div class="container suit"></div>
-					<div class="container count"></div>
-				</div>
-				<div class="container row diamond">
-					<mat-icon svgIcon="diamonds-card"></mat-icon>
-					<div class="container suit"></div>
-					<div class="container count"></div>
-				</div>
-				<div class="container row club">
-					<mat-icon svgIcon="clubs-card"></mat-icon>
-					<div class="container suit"></div>
-					<div class="container count"></div>
-				</div>
-			</div>
-			<div class="container column right">
-				<div class="container row spade">
-					<mat-icon svgIcon="spades-card"></mat-icon>
-					<div class="container suit"></div>
-					<div class="container count"></div>
-				</div>
-				<div class="container row heart">
-					<mat-icon svgIcon="hearts-card"></mat-icon>
-					<div class="container suit"></div>
-					<div class="container count"></div>
-				</div>
-				<div class="container row diamond">
-					<mat-icon svgIcon="diamonds-card"></mat-icon>
-					<div class="container suit"></div>
-					<div class="container count"></div>
-				</div>
-				<div class="container row club">
-					<mat-icon svgIcon="clubs-card"></mat-icon>
-					<div class="container suit"></div>
-					<div class="container count"></div>
-				</div>
-			</div>
-		</div>
-		<div class="container row middle">
-			<div class="container column left">
-				<div class="container row spade">
-					<mat-icon svgIcon="spades-card"></mat-icon>
-					<div class="container suit"></div>
-					<div class="container count"></div>
-				</div>
-				<div class="container row heart">
-					<mat-icon svgIcon="hearts-card"></mat-icon>
-					<div class="container suit"></div>
-					<div class="container count"></div>
-				</div>
-				<div class="container row diamond">
-					<mat-icon svgIcon="diamonds-card"></mat-icon>
-					<div class="container suit"></div>
-					<div class="container count"></div>
-				</div>
-				<div class="container row club">
-					<mat-icon svgIcon="clubs-card"></mat-icon>
-					<div class="container suit"></div>
-					<div class="container count"></div>
-				</div>
-			</div>
-			<div class="container hand-indictor column middle">
-				<div class="hand-number"></div>
-				<div class="dealer"></div>
-				<div class="vulnerable"></div>
-			</div>
-			<div class="container column right">
-				<div class="container row spade">
-					<mat-icon svgIcon="spades-card"></mat-icon>
-					<div class="container suit"></div>
-					<div class="container count"></div>
-				</div>
-				<div class="container row heart">
-					<mat-icon svgIcon="hearts-card"></mat-icon>
-					<div class="container suit"></div>
-					<div class="container count"></div>
-				</div>
-				<div class="container row diamond">
-					<mat-icon svgIcon="diamonds-card"></mat-icon>
-					<div class="container suit"></div>
-					<div class="container count"></div>
-				</div>
-				<div class="container row club">
-					<mat-icon svgIcon="clubs-card"></mat-icon>
-					<div class="container suit"></div>
-					<div class="container count"></div>
-				</div>
-			</div>
-		</div>
-		<div class="container row bottom">
-			<div class="container column left">
-				<div class="container row spade">
-					<mat-icon svgIcon="spades-card"></mat-icon>
-					<div class="container suit"></div>
-					<div class="container count"></div>
-				</div>
-				<div class="container row heart">
-					<mat-icon svgIcon="hearts-card"></mat-icon>
-					<div class="container suit"></div>
-					<div class="container count"></div>
-				</div>
-				<div class="container row diamond">
-					<mat-icon svgIcon="diamonds-card"></mat-icon>
-					<div class="container suit"></div>
-					<div class="container count"></div>
-				</div>
-				<div class="container row club">
-					<mat-icon svgIcon="clubs-card"></mat-icon>
-					<div class="container suit"></div>
-					<div class="container count"></div>
-				</div>
-			</div>
-			<div class="container column middle">
-				<div class="container row spade">
-					<mat-icon svgIcon="spades-card"></mat-icon>
-					<div class="container suit"></div>
-					<div class="container count"></div>
-				</div>
-				<div class="container row heart">
-					<mat-icon svgIcon="hearts-card"></mat-icon>
-					<div class="container suit"></div>
-					<div class="container count"></div>
-				</div>
-				<div class="container row diamond">
-					<mat-icon svgIcon="diamonds-card"></mat-icon>
-					<div class="container suit"></div>
-					<div class="container count"></div>
-				</div>
-				<div class="container row club">
-					<mat-icon svgIcon="clubs-card"></mat-icon>
-					<div class="container suit"></div>
-					<div class="container count"></div>
-				</div>
-			</div>
-			<div class="container column right">
-				<div class="container row spade">
-					<mat-icon svgIcon="spades-card"></mat-icon>
-					<div class="container suit"></div>
-					<div class="container count"></div>
-				</div>
-				<div class="container row heart">
-					<mat-icon svgIcon="hearts-card"></mat-icon>
-					<div class="container suit"></div>
-					<div class="container count"></div>
-				</div>
-				<div class="container row diamond">
-					<mat-icon svgIcon="diamonds-card"></mat-icon>
-					<div class="container suit"></div>
-					<div class="container count"></div>
-				</div>
-				<div class="container row club">
-					<mat-icon svgIcon="clubs-card"></mat-icon>
-					<div class="container suit"></div>
-					<div class="container count"></div>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<div class="container-column">
-		<div class="container-row">
-			<div class="left container column">
-				<div class="1">
-					<div class="container row">
-						<div class="suit">suit</div>
-						<div class="count">count</div>
+		<div class="container-column">
+			<div class="container-row">
+				<div class="left container column">
+					<div class="1">
+						<div class="container row">
+							<div class="suit">suit</div>
+							<div class="count">count</div>
+						</div>
+					</div>
+					<div class="2">
+						<div class="container row">
+							<div class="suit">suit</div>
+							<div class="count">count</div>
+						</div>
+					</div>
+					<div class="3">
+						<div class="container row">
+							<div class="suit">suit</div>
+							<div class="count">count</div>
+						</div>
+					</div>
+					<div class="4">
+						<div class="container row">
+							<div class="suit">suit</div>
+							<div class="count">count</div>
+						</div>
 					</div>
 				</div>
-				<div class="2">
-					<div class="container row">
-						<div class="suit">suit</div>
-						<div class="count">count</div>
+				<div class="middle">
+					<div class="1">
+						<div class="container row">
+							<div class="suit">suit</div>
+							<div class="count">count</div>
+						</div>
+					</div>
+					<div class="2">
+						<div class="container row">
+							<div class="suit">suit</div>
+							<div class="count">count</div>
+						</div>
+					</div>
+					<div class="3">
+						<div class="container row">
+							<div class="suit">suit</div>
+							<div class="count">count</div>
+						</div>
+					</div>
+					<div class="4">
+						<div class="container row">
+							<div class="suit">suit</div>
+							<div class="count">count</div>
+						</div>
 					</div>
 				</div>
-				<div class="3">
-					<div class="container row">
-						<div class="suit">suit</div>
-						<div class="count">count</div>
+				<div class="right container column">
+					<div class="1">
+						<div class="container row">
+							<div class="suit">suit</div>
+							<div class="count">count</div>
+						</div>
 					</div>
-				</div>
-				<div class="4">
-					<div class="container row">
-						<div class="suit">suit</div>
-						<div class="count">count</div>
+					<div class="2">
+						<div class="container row">
+							<div class="suit">suit</div>
+							<div class="count">count</div>
+						</div>
 					</div>
-				</div>
-			</div>
-			<div class="middle">
-				<div class="1">
-					<div class="container row">
-						<div class="suit">suit</div>
-						<div class="count">count</div>
+					<div class="3">
+						<div class="container row">
+							<div class="suit">suit</div>
+							<div class="count">count</div>
+						</div>
 					</div>
-				</div>
-				<div class="2">
-					<div class="container row">
-						<div class="suit">suit</div>
-						<div class="count">count</div>
-					</div>
-				</div>
-				<div class="3">
-					<div class="container row">
-						<div class="suit">suit</div>
-						<div class="count">count</div>
-					</div>
-				</div>
-				<div class="4">
-					<div class="container row">
-						<div class="suit">suit</div>
-						<div class="count">count</div>
-					</div>
-				</div>
-			</div>
-			<div class="right container column">
-				<div class="1">
-					<div class="container row">
-						<div class="suit">suit</div>
-						<div class="count">count</div>
-					</div>
-				</div>
-				<div class="2">
-					<div class="container row">
-						<div class="suit">suit</div>
-						<div class="count">count</div>
-					</div>
-				</div>
-				<div class="3">
-					<div class="container row">
-						<div class="suit">suit</div>
-						<div class="count">count</div>
-					</div>
-				</div>
-				<div class="4">
-					<div class="container row">
-						<div class="suit">suit</div>
-						<div class="count">count</div>
+					<div class="4">
+						<div class="container row">
+							<div class="suit">suit</div>
+							<div class="count">count</div>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-	<div class="hand-indicator container column">
-		<div class="hand-number"></div>
-		<div class="dealer"></div>
-		<div class="vulnerable"></div>
-	</div>
+		<div class="hand-indicator container column">
+			<div class="hand-number"></div>
+			<div class="dealer"></div>
+			<div class="vulnerable"></div>
+		</div>
+	</ng-container>
 </div>

@@ -1,17 +1,27 @@
 <div class="container column">
-	<h1 class="title">Starting Lineup</h1>
+	<h1 class="title">
+		Starting Lineup for {{ eventName ? eventName : 'Un Named' }}
+	</h1>
 
 	<div
-		*ngIf="startingLineupData && currentBreakpoint!=='handset'"
+		*ngIf="startingLineupData && currentBreakpoint !== 'handset'"
 		class="table-container">
 		<table>
 			<tr class="header row">
-				<th [ngClass]="currentBreakpoint">
+				<th
+					class="table-number"
+					[ngClass]="currentBreakpoint">
 					Table <br />
 					{{ currentBreakpoint === 'handset' ? 'No.' : 'Number' }}
 				</th>
+				<th
+					class="pairs"
+					[ngClass]="currentBreakpoint">
+					Pair No.
+				</th>
 				<th [ngClass]="currentBreakpoint">North</th>
 				<th [ngClass]="currentBreakpoint">South</th>
+				<th>Pair No.</th>
 				<th [ngClass]="currentBreakpoint">East</th>
 				<th [ngClass]="currentBreakpoint">West</th>
 			</tr>
@@ -24,6 +34,11 @@
 					</td>
 					<td
 						[ngClass]="currentBreakpoint"
+						class="pairs">
+						{{ pairNumbers.northSouth[i] }}
+					</td>
+					<td
+						[ngClass]="currentBreakpoint"
 						class="north">
 						{{ north[i] }}
 					</td>
@@ -31,6 +46,11 @@
 						[ngClass]="currentBreakpoint"
 						class="north">
 						{{ south[i] }}
+					</td>
+					<td
+						[ngClass]="currentBreakpoint"
+						class="pairs">
+						{{ pairNumbers.eastWest[i] }}
 					</td>
 					<td
 						[ngClass]="currentBreakpoint"
@@ -47,37 +67,38 @@
 		</table>
 	</div>
 
-		<ng-container *ngIf="currentBreakpoint === 'handset'">
-			<table>
+	<ng-container *ngIf="currentBreakpoint === 'handset'">
+		<table>
 			<tr>
 				<th>Table No</th>
-					<th>North</th>
-					<th>South</th>
-
+				<th>Pair No.</th>
+				<th>North</th>
+				<th>South</th>
+			</tr>
+			<ng-container *ngFor="let table of north; let i = index">
+				<tr>
+					<td [ngClass]="currentBreakpoint">{{ i + 1 }}</td>
+					<td [ngClass]="currentBreakpoint">{{ pairNumbers.northSouth[i] }}</td>
+					<td [ngClass]="currentBreakpoint">{{ north[i] }}</td>
+					<td [ngClass]="currentBreakpoint">{{ south[i] }}</td>
 				</tr>
-				<ng-container *ngFor="let table of north; let i = index">
-					<tr>
-						<td [ngClass]="currentBreakpoint">{{i +1}}</td>
-						<td [ngClass]="currentBreakpoint">{{north[i]}}</td>
-						<td [ngClass]="currentBreakpoint">{{south[i]}}</td>
-					</tr>
-				</ng-container>
-			</table>
-			<table>
+			</ng-container>
+		</table>
+		<table>
 			<tr>
 				<th>Table No</th>
-					<th>East</th>
-					<th>West</th>
+				<th>Pair No.</th>
+				<th>East</th>
+				<th>West</th>
+			</tr>
+			<ng-container *ngFor="let table of north; let i = index">
+				<tr>
+					<td [ngClass]="currentBreakpoint">{{ i + 1 }}</td>
+					<td [ngClass]="currentBreakpoint">{{ pairNumbers.eastWest[i] }}</td>
+					<td [ngClass]="currentBreakpoint">{{ east[i] }}</td>
+					<td [ngClass]="currentBreakpoint">{{ west[i] }}</td>
 				</tr>
-				<ng-container *ngFor="let table of north; let i = index">
-					<tr>
-						<td [ngClass]="currentBreakpoint">{{i +1}}</td>
-						<td [ngClass]="currentBreakpoint">{{east[i]}}</td>
-						<td [ngClass]="currentBreakpoint">{{west[i]}}</td>
-					</tr>
-				</ng-container>
-
-			</table>
-		</ng-container>
-
+			</ng-container>
+		</table>
+	</ng-container>
 </div>

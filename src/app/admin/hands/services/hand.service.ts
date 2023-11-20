@@ -36,10 +36,33 @@ export class HandService {
 				const handArray = currentHand._.split(' ');
 				return handArray;
 			} else {
-				throw new Error('Entire gave not found');
+				throw new Error('Entire game not found');
 			}
 		} catch (error) {
 			console.error('Error processing current hand', error);
+			return false;
+		}
+	}
+	async processFullHand(handPage) {
+		try {
+			if (!handPage || handPage === null) {
+				throw new Error('Undefined or null handPage parameter');
+			}
+			const index = handPage - 1;
+			const entireGameHand = await this.processHands.getHandConfig(
+				this.selectedMatchType
+			);
+			if (entireGameHand) {
+				// console.log('entire hand for dev: ', entireGameHand);
+
+				const arrayOfHands = entireGameHand.value.split(' ');
+				console.log('array of hands: ', arrayOfHands);
+				// arrayOfHands.forEach((hand, i) => {
+				// 	console.log(`length of hand index ${i}: ${hand.length}`);
+				// });
+				return arrayOfHands;
+			}
+		} catch (error) {
 			throw error;
 		}
 	}

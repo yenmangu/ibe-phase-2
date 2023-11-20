@@ -19,19 +19,18 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 	styleUrls: ['./upload-file.component.scss']
 })
 export class UploadFileComponent implements OnInit, AfterViewInit {
-	@Input() data: any
-	@Input() fileType: any
+	@Input() data: any;
+	@Input() fileType: any;
+	@Input() isLoading: boolean = false;
+	@Input() uploadSuccess: boolean = false;
 	@ViewChild('dragBox') dragBox: ElementRef;
 	@ViewChild('fileInput') fileInput: ElementRef;
 	@Output() upload = new EventEmitter<any>();
 	@Output() signalUpload = new EventEmitter<boolean>();
+	@Output() signalAgain = new EventEmitter<boolean>();
 	selectedFiles: any[] = [];
 
-	constructor(
-		private elementRef: ElementRef,
-		private renderer: Renderer2,
-
-	) {}
+	constructor(private elementRef: ElementRef, private renderer: Renderer2) {}
 
 	ngOnInit(): void {}
 
@@ -45,11 +44,15 @@ export class UploadFileComponent implements OnInit, AfterViewInit {
 
 	onUpload() {
 		console.log('onUpload invoked');
-
 		this.emitFiles(this.selectedFiles);
 		this.signalUpload.emit(true);
 	}
 
+	onUploadMore() {
+		this.uploadSuccess = false;
+		this.signalAgain.emit(true);
+		this.selectedFiles = [];
+	}
 	onChange(event: Event) {
 		// console.log(event);
 		const input = event.target as HTMLInputElement;

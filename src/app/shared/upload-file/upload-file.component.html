@@ -14,7 +14,7 @@
 			(click)="customFileClick()">
 			<ng-container *ngIf="!data">
 				<label for="upload"
-					>Drag or drop files here for upload, or click to browse</label
+					>Drag or drop file here for upload, or click to browse</label
 				>
 			</ng-container>
 			<br />
@@ -36,18 +36,34 @@
 			</ul>
 		</div>
 	</div>
-	<div class="container row button-wrapper">
-		<button
-			*ngIf="selectedFiles.length > 0"
-			mat-flat-button
-			color="primary"
-			(click)="onUpload()">
-			Upload
-		</button>
-		<button
-			mat-flat-button
-			color="warn">
-			Close
-		</button>
+	<div class="container column center">
+		<ng-container
+			class="contaienr column center"
+			*ngIf="isLoading && !uploadSuccess">
+			<mat-spinner></mat-spinner
+		></ng-container>
+		<ng-container *ngIf="!isLoading && !uploadSuccess">
+			<div class="container row button-wrapper">
+				<button
+					*ngIf="selectedFiles.length > 0"
+					mat-flat-button
+					color="primary"
+					(click)="onUpload()">
+					Upload
+				</button>
+			</div>
+		</ng-container>
+		<ng-container *ngIf="uploadSuccess && !isLoading">
+			<h3>
+				Hand config file has been uploaded successfully. Please refresh database to
+				see latest changes.
+			</h3>
+			<button
+				mat-flat-button
+				color="accent"
+				(click)="onUploadMore()">
+				Upload Again
+			</button>
+		</ng-container>
 	</div>
 </div>

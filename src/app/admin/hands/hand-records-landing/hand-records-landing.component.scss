@@ -1,5 +1,5 @@
-:host{
-	width: 100%
+:host {
+	width: 100%;
 }
 h2,
 h4 {
@@ -14,6 +14,10 @@ h4 {
 
 .container.download {
 	align-items: center;
+}
+
+.upload.download {
+	gap: 2rem;
 }
 
 button.download {

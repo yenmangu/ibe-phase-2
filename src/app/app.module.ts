@@ -4,6 +4,7 @@ import { MaterialModule } from './material/material.module';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { HttpClientModule } from '@angular/common/http';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { MatIconModule } from '@angular/material/icon';
 
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -20,15 +21,23 @@ import { HomeModule } from './home/home.module';
 import { StoreModule } from '@ngrx/store';
 import { HandComponent } from './dev/hand/hand.component';
 import { HandDisplayComponent } from './dev/hand/hand-display/hand-display.component';
+import { PaginationComponent } from './dev/hand/pagination/pagination.component';
+import { IconRegistryService } from './shared/services/icon-registry.service';
 
 // Pipes
 // import { KeysPipe } from './shared/pipes/keys.pipe';
 
 @NgModule({
-	declarations: [AppComponent, HandComponent, HandDisplayComponent],
+	declarations: [
+		AppComponent,
+		HandComponent,
+		HandDisplayComponent,
+		PaginationComponent
+	],
 	imports: [
 		BrowserModule,
 		MaterialModule,
+		MatIconModule,
 		AppRoutingModule,
 		BrowserAnimationsModule,
 		HttpClientModule,
@@ -41,7 +50,8 @@ import { HandDisplayComponent } from './dev/hand/hand-display/hand-display.compo
 	providers: [
 		{ provide: MatDialogModule, useValue: {} },
 		{ provide: MatDialogRef, useValue: {} },
-		SidenavService
+		SidenavService,
+		IconRegistryService
 	],
 	bootstrap: [AppComponent]
 })

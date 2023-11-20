@@ -1,0 +1,21 @@
+@import '../../../../colours.styles.scss';
+.container.top {
+	padding: 2rem;
+	gap: 2rem;
+	justify-content: center;
+	border-bottom: 2px solid $ibe-teal-single;
+}
+.button-wrapper {
+	gap: 1rem;
+	align-items: center;
+}
+.show-hide {
+	width: 6rem;
+	background-color: $ibe-pumpkin-single !important;
+}
+
+.container.top.handset {
+	flex-direction: column;
+	align-items: center;
+	gap: 1rem;
+}

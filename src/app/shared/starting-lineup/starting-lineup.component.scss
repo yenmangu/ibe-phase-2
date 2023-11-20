@@ -1,24 +1,33 @@
-
 .container.column {
 	align-items: center;
 	justify-content: flex-start;
-	gap: 1rem
+	gap: 1rem;
 }
-.table-container{
+.table-container {
 	width: max-content;
 	margin: auto;
 }
 table {
 	border-collapse: separate;
-
 }
-th,td{
+th {
 	text-align: center;
+}
+td {
+	text-align: center;
+}
+
+td.pairs {
+	text-align: center;
+}
+th,
+td {
 	white-space: wrap;
 	padding: 0.4rem;
-
 }
-
-td.handset,th.handset {
-
+td.north,
+td.south,
+td.east,
+td.west {
+	text-align: left;
 }

@@ -1,5 +1,7 @@
 <div class="container column main">
-	<mat-tab-group animationDuration="0s">
+	<mat-tab-group
+		animationDuration="0s"
+		[selectedIndex]="selectedTabIndex">
 		<mat-tab label="Hand Records">
 			<app-hand-tab></app-hand-tab>
 		</mat-tab>
@@ -10,23 +12,30 @@
 			<h2>Upload Hand Record Files</h2>
 
 			<div class="container column upload">
-				<h4>
-					Upload single hand files (.dlm, .dup or .pbn format) or multiple files
-					(.lin format)
-				</h4>
-				<app-upload-file (upload)="handleFiles($event)"></app-upload-file>
+				<h4>Upload single hand files (.dlm, .dup or .pbn format)</h4>
+				<app-upload-file
+					[uploadSuccess]="uploadSuccess"
+					[isLoading]="isLoading"
+					(upload)="handleFiles($event)"
+					(signalAgain)="resetStatus()"></app-upload-file>
 			</div>
 		</mat-tab>
 		<mat-tab label="Download">
 			<h2>Download Current</h2>
 			<div class="container column upload download">
 				<h4>Download the current deal file as .pbn</h4>
-				<button
-					class="download"
-					mat-flat-button
-					color="accent">
-					Download current deal file
-				</button>
+				<ng-container *ngIf="!isLoading">
+					<button
+						class="download"
+						mat-flat-button
+						color="accent"
+						(click)="handleDownload()">
+						Download current deal file
+					</button>
+				</ng-container>
+				<ng-container *ngIf="isLoading">
+					<mat-spinner></mat-spinner>
+				</ng-container>
 			</div>
 			<ng-container *ngIf="downloadError">
 				<div class="container column download-error">

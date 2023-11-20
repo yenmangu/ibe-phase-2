@@ -1,0 +1,22 @@
+<div class="container column center">
+	<h2>Confirm Delete</h2>
+	<div class="message">
+		This action will completely clear the current hand config.<br /><br />
+		Are you sure you want to continue?
+	</div>
+
+	<div class="container button-wrapper row">
+		<button
+			mat-flat-button
+			color="accent"
+			(click)="confirmDelete()">
+			Delete
+		</button>
+		<button
+			mat-flat-button
+			color="warn"
+			(click)="dialogRef.close()">
+			Cancel
+		</button>
+	</div>
+</div>

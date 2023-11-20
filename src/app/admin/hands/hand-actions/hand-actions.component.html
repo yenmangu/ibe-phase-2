@@ -60,13 +60,14 @@
 				<div class="button-wrapper container row">
 					<button
 						mat-flat-button
-						color="accent">
+						color="accent"
+						(click)="getMovement({ preview: true })">
 						Preview
 					</button>
 					<button
 						mat-flat-button
 						color="primary"
-						(click)="getMovement()">
+						(click)="getMovement({ download: true })">
 						Download
 					</button>
 				</div>

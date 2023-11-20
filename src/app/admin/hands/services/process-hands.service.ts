@@ -29,4 +29,19 @@ export class ProcessHandsService {
 			throw err;
 		}
 	}
+	async getHandConfig(selectedMatchType):Promise <any>{
+		try {
+			if(!selectedMatchType){
+				throw new Error('No Match Type Selected')
+			}
+			const storeName = 'hand_data'
+			const key = 'hands'
+			const fullHands = await this.indexedDatabaseService.getByKey(storeName,key);
+			if(fullHands){
+				return fullHands
+			}
+		} catch (error) {
+			throw error
+		}
+	}
 }

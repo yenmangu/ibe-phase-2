@@ -3,6 +3,9 @@ import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms'
 import { HandActionsHttpService } from 'src/app/shared/services/hand-actions-http.service';
 import { ChargeCodeInterface, chargeCodes } from 'src/app/shared/data/charge-code';
 import { BreakpointService } from 'src/app/shared/services/breakpoint.service';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 @Component({
 	selector: 'app-hand-actions',
 	templateUrl: './hand-actions.component.html',
@@ -14,6 +17,7 @@ export class HandActionsComponent implements OnInit, AfterViewInit {
 	selectedTab: string = 'movement';
 	gameCode: string = '';
 	dirKey: string = '';
+	constData: any;
 
 	// Movement
 	movementInput: string = '';
@@ -35,16 +39,22 @@ export class HandActionsComponent implements OnInit, AfterViewInit {
 	constructor(
 		private fb: FormBuilder,
 		private handActionsHttp: HandActionsHttpService,
-		private breakpointService: BreakpointService
+		private breakpointService: BreakpointService,
+		private dialog: MatDialog,
+		private snackbar: MatSnackBar
 	) {}
 
 	ngOnInit(): void {
 		this.breakpointService.currentBreakpoint$.subscribe(
 			breakpoint => (this.currentBreakpoint = breakpoint)
 		);
+		this.gameCode = localStorage.getItem('GAME_CODE');
 		this.buildMasterpointsForm();
 		this.buildHtmlForm();
 		this.buildEbuForm();
+		this.constData = {
+			gameCode: this.gameCode
+		};
 	}
 
 	ngAfterViewInit(): void {}
@@ -66,32 +76,53 @@ export class HandActionsComponent implements OnInit, AfterViewInit {
 		});
 	}
 
-	getMovement() {
+	getMovement(options) {
 		const data = {
 			gameCode: this.gameCode,
 			title: this.movementInput
 		};
 
+		console.log('data in getMovement: ', data);
+
 		this.handActionsHttp.fetchMovement(data).subscribe({
-			next: response => {
-				if (response.data) {
-					console.log(response.data);
+			next: (response: Blob) => {
+				if (response) {
+					console.log('response: ', response);
+
+					const blob = new Blob([response], { type: 'application/pdf' });
+					const blobURL = window.URL.createObjectURL(blob);
+					if (options.preview) {
+						window.open(blobURL);
+					} else {
+						const link = document.createElement('a');
+						link.href = blobURL;
+						link.download = 'movement.pdf';
+						document.body.appendChild(link);
+						link.click();
+						document.body.removeChild(link);
+					}
 				}
 			},
-			error: () => {}
+			error: error => {
+				this.snackbar.open(
+					'Error creating PDF, please try again. If the error persists please contact "..."',
+					'Dismiss'
+				);
+				console.error('Error creating PDF: ', error);
+			}
 		});
 	}
 
 	buildHtmlForm() {
 		this.htmlPdfForm = this.fb.group({
-			eventName: [''],
-			directorName: [''],
+			eventName: ['', [Validators.required]],
+			directorName: ['', [Validators.required]],
 			comments: [''],
 			fileType: [''],
-			rankings: [],
-			matrix: [],
-			hands: [],
-			scorecards: []
+			rankings: [false],
+			matrix: [false],
+			hands: [false],
+			scorecards: [false]
 		});
 		this.htmlPdfForm.patchValue({
 			fileType: 'html'
@@ -134,8 +165,8 @@ export class HandActionsComponent implements OnInit, AfterViewInit {
 	downloadPdf() {}
 
 	uploadBridgeWebs() {
-		if(this.masterpointsForm.valid){
-			const values = {...this.masterpointsForm.value}
+		if (this.masterpointsForm.valid) {
+			const values = { ...this.masterpointsForm.value };
 		}
 	}
 
@@ -144,8 +175,16 @@ export class HandActionsComponent implements OnInit, AfterViewInit {
 	previewHtmlPdf() {}
 	downloadHtmlPdf() {
 		if (this.htmlPdfForm.valid) {
-			const values = { ...this.htmlPdfForm.value };
-			console.log('formData: ', values);
+			const values = { ...this.htmlPdfForm.value, gameCode: this.gameCode, format: 'pdf' };
+			console.log('payload: ', values);
+			this.handActionsHttp.htmlPDF(values).subscribe({
+				next: response => {
+					console.log(response);
+				},
+				error: error => {
+					console.error('Error fetching file: ', error);
+				}
+			});
 		}
 	}
 	downloadEBU() {}

@@ -17,6 +17,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatInput, MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
@@ -39,6 +40,7 @@ import { adminReducer } from '../admin-state/admin.reducer';
 import { HandRecordsLandingComponent } from './hands/hand-records-landing/hand-records-landing.component';
 import { HandTabComponent } from './hands/hand-tab/hand-tab.component';
 import { HandActionsComponent } from './hands/hand-actions/hand-actions.component';
+import { DeleteDialogComponent } from './hands/delete-dialog/delete-dialog.component';
 
 @NgModule({
 	declarations: [
@@ -55,7 +57,8 @@ import { HandActionsComponent } from './hands/hand-actions/hand-actions.componen
 		UploadDownloadComponent,
 		HandRecordsLandingComponent,
 		HandTabComponent,
-  HandActionsComponent
+		HandActionsComponent,
+		DeleteDialogComponent
 	],
 	imports: [
 		CommonModule,
@@ -77,6 +80,7 @@ import { HandActionsComponent } from './hands/hand-actions/hand-actions.componen
 		MatSelectModule,
 		MatInputModule,
 		MatProgressBarModule,
+		MatProgressSpinnerModule,
 		MatDialogModule,
 
 		// Custom

@@ -6,6 +6,8 @@ import {
 	AfterViewInit,
 	ViewChild
 } from '@angular/core';
+import { Clipboard } from '@angular/cdk/clipboard';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Subject, takeUntil, Subscription, takeLast } from 'rxjs';
@@ -75,7 +77,9 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 		private currentGamesDatabase: CurrentGamesDatabaseServiceService,
 		private apiCoordination: ApiDataCoordinationService,
 		private userDetailService: UserDetailsService,
-		private domainService: DomainService
+		private domainService: DomainService,
+		private clipboard: Clipboard,
+		private snackbar: MatSnackBar
 	) {
 		this.compositeForm = this.fb.group({
 			pairsForm: this.fb.group({}),
@@ -214,14 +218,19 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 		data.gameCode = this.gameCode;
 
 		const {
+			pairConfig,
+			pairNumbers,
 			playerConfig: { north, south, east, west },
 			tables
 		} = this.initialTableData;
 		// const tablesLength = Object.keys(tables).length
 		console.log(tables);
+		const eventName = this.eventName;
 
 		console.log(north, south, east, west);
 		const gameConfig: {
+			pairConfig;
+			pairNumbers;
 			north: [];
 			south: [];
 			east: [];
@@ -229,13 +238,17 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 			tables?: number;
 			sitters?: [];
 			tableConfig: any;
+			eventName?: string;
 		} = {
+			pairConfig,
+			pairNumbers,
 			north,
 			south,
 			east,
 			west,
 			tables: Object.keys(tables).length,
-			tableConfig: tables
+			tableConfig: tables,
+			eventName
 		};
 		console.log('gameConfig: ', gameConfig);
 		data.gameConfig = gameConfig;
@@ -261,6 +274,22 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 
 	getPublicLink(): void {
 		this.generatePublicLink();
+	}
+
+	getTruncatedLink(link: string): string {
+		if (link.length > 40) {
+			return link.substring(0, 40) + '...';
+		}
+		return link;
+	}
+
+	copyToClipboard(text: string) {
+		this.clipboard.copy(text);
+		this.openCopySuccess();
+	}
+
+	openCopySuccess() {
+		this.snackbar.open('Link copied!', 'Dismiss');
 	}
 
 	ngOnDestroy(): void {

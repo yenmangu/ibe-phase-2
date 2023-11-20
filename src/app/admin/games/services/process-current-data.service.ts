@@ -85,6 +85,11 @@ export class ProcessCurrentDataService {
 			// console.log(settingsText);
 			// console.log('people initial: ', people);
 			const movementValue = this.destructureValue(movement, 'current_game_data');
+			console.log('movementValue: ', movementValue);
+			// workign out pair numbers
+			const pairNumbers = this.getPairNumbers(movementValue);
+			console.log('pairNumbers: ', pairNumbers);
+
 			const peopleValue = this.destructureValue(people, 'current_game_data');
 			const teamsValue = this.destructureAndSplitTeams(teams);
 			const sidesValue = this.destructureAndSplitTeams(sides);
@@ -99,11 +104,65 @@ export class ProcessCurrentDataService {
 				sidesValue,
 				matchTypeObject
 			);
+			console.log('currentGameConfig: ', currentGameConfig);
+			const { tables } = currentGameConfig;
+			const pairConfig = this.assignPairNumbers(pairNumbers, tables);
+			// console.log('pairConfig: ', pairConfig);
+			currentGameConfig.pairConfig = pairConfig;
+			currentGameConfig.pairNumbers = pairNumbers
+
 			return currentGameConfig;
 		} catch (err) {
 			console.error('Error getting current movement data', err);
 			throw err;
 		}
+	}
+
+	private getPairNumbers(movementValue) {
+		const split = movementValue[0].split('\n');
+		// remove first two elements
+		const pairsArray = split.slice(2);
+		pairsArray.pop();
+		let northSouthPairs = [];
+		let eastWestPairs = [];
+
+		pairsArray.forEach(element => {
+			if (element.length > 0) {
+				let pairs = element.split(',').map(Number);
+				northSouthPairs.push(pairs[0]);
+				eastWestPairs.push(pairs[1]);
+			}
+		});
+		const data = {
+			northSouth: northSouthPairs,
+			eastWest: eastWestPairs
+		};
+		return data;
+	}
+
+	private assignPairNumbers(pairNumbers, tableConfig) {
+		let pairedTables = {};
+		const { northSouth, eastWest } = pairNumbers;
+		Object.keys(tableConfig).forEach((table, index) => {
+			const tablePlayers = tableConfig[table];
+			const pairs = {};
+			// console.log('tablePlayers in loop: ', index, tableConfig[table]);
+
+			for (let i = 0; i < tablePlayers.length; i += 4) {
+				const firstPairLabel = `${northSouth[index]}`;
+				const secondPairLabel = `${eastWest[index]}`;
+				// console.log('in nested loop iteration: ', i);
+
+				console.log(tablePlayers[i], tablePlayers[i + 1]);
+				if (i + 3 < tablePlayers.length) {
+					// Ensure that indexing doesn't exceed array bounds
+					pairs[firstPairLabel] = [tablePlayers[i], tablePlayers[i + 1]];
+					pairs[secondPairLabel] = [tablePlayers[i + 2], tablePlayers[i + 3]];
+				}
+			}
+			pairedTables[table] = pairs;
+		});
+		return pairedTables;
 	}
 
 	private splitUnevenArray(array) {
@@ -376,8 +435,8 @@ export class ProcessCurrentDataService {
 	}
 
 	public processLock(lockData): any {
-		const value = lockData[0]
-		const { key, value:lock } = value;
+		const value = lockData[0];
+		const { key, value: lock } = value;
 		// console.log('before processing: ', lock);
 		// console.log(lock['$'].tf);
 		const lockValue = lock['$'].tf === 'f' ? false : true;

@@ -4,7 +4,6 @@
 	<div
 		class="container row top"
 		[ngClass]="currentBreakpoint">
-		{{ eventName }}
 		<mat-form-field [ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }">
 			<mat-label [ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }"
 				>Show Details</mat-label
@@ -50,47 +49,62 @@
 </div>
 <div class="container row download">
 	<div class="container row link-wrapper">
-
 		<button
-		(click)="getPublicLink()"
-		id="start_pdf"
-		mat-flat-button
-		color="accent">
-		Get Starting Lineup
-	</button>
-	<ng-container *ngIf="publicLink">
-		<div class="container row public-link">
-			<h3>Share this link</h3>
-			{{ publicLink }}
-		</div>
-	</ng-container>
+			(click)="getPublicLink()"
+			id="start_pdf"
+			mat-flat-button
+			color="accent">
+			Get Starting Lineup
+		</button>
+		<ng-container *ngIf="publicLink">
+			<div
+				class="container row public-link"
+				(click)="copyToClipboard(publicLink)">
+				<div class="copy">
+					<h3>Click to copy this link!</h3>
+					<mat-icon>file_copy</mat-icon>
+				</div>
+				<div
+					class="public-link-text link-text-wrapper"
+					[title]="publicLink">
+					<a
+						class="public-link-text"
+						target="_blank"
+						rel="noreferrer"
+						[href]="publicLink"
+						><span class="public-link-text">{{ publicLink }}</span></a
+					>
+				</div>
+			</div>
+		</ng-container>
 	</div>
-<div class="container row date-wrapper">
-
-	<mat-form-field
-		class="date-picker"
-		[ngClass]="{ ' grey-magenta-theme': applyMagentaGreyTheme }">
-		<mat-label>Forward-Date (Optional) </mat-label>
-		<input
-			[ngClass]="{ 'grey-magenta-theme:': applyMagentaGreyTheme }"
-			type="text"
-			[(ngModel)]="forwardDate"
-			matInput
-			[matDatepicker]="date" />
-		<mat-datepicker-toggle
-			[ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }"
-			matIconSuffix
-			[for]="date"></mat-datepicker-toggle>
-		<mat-datepicker
-			#date
-			[ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }"></mat-datepicker>
-	</mat-form-field>
-	<button
-		class="main-save"
-		mat-flat-button
-		color="primary"
-		(click)="captureFormData()">
-		SAVE
-	</button>
-</div>
+	<div class="container row date-wrapper">
+		<mat-form-field
+			class="date-picker"
+			[ngClass]="{ ' grey-magenta-theme': applyMagentaGreyTheme }">
+			<mat-label>Forward-Date (Optional) </mat-label>
+			<input
+				[ngClass]="{ 'grey-magenta-theme:': applyMagentaGreyTheme }"
+				type="text"
+				[(ngModel)]="forwardDate"
+				matInput
+				[matDatepicker]="date" />
+			<mat-datepicker-toggle
+				[ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }"
+				matIconSuffix
+				[for]="date"></mat-datepicker-toggle>
+			<mat-datepicker
+				#date
+				[ngClass]="{
+					'grey-magenta-theme': applyMagentaGreyTheme
+				}"></mat-datepicker>
+		</mat-form-field>
+		<button
+			class="main-save"
+			mat-flat-button
+			color="primary"
+			(click)="captureFormData()">
+			SAVE
+		</button>
+	</div>
 </div>

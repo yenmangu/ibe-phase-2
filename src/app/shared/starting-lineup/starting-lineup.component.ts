@@ -17,6 +17,11 @@ export class StartingLineupComponent implements OnInit {
 	south: [] = [];
 	east: [] = [];
 	west: [] = [];
+	nsPairs: any = {};
+	ewPairs: any = {};
+	eventName: string = '';
+	pairConfig: any;
+	pairNumbers: any;
 
 	currentBreakpoint = '';
 
@@ -44,14 +49,27 @@ export class StartingLineupComponent implements OnInit {
 		this.apiCoordinationService.getPublicGame(data).subscribe(data => {
 			if (data) {
 				this.startingLineupData = data;
+				console.log('starting line up: ', data);
+
 				// this.tablesArray = data.foundGameConfig.tableConfig;
 				const {
-					foundGameConfig: { north, south, east, west }
+					foundGameConfig: {
+						north,
+						south,
+						east,
+						west,
+						eventName,
+						pairNumbers,
+						pairConfig
+					}
 				} = this.startingLineupData;
 				this.north = north;
 				this.south = south;
 				this.east = east;
 				this.west = west;
+				(this.eventName = eventName),
+					(this.pairConfig = pairConfig),
+					(this.pairNumbers = pairNumbers);
 			}
 			console.log(this.tablesArray);
 

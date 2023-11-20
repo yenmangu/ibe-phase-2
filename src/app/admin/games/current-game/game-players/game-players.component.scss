@@ -1,3 +1,4 @@
+@import '../../../../../colours.styles.scss';
 :host {
 	width: 100%;
 	display: flex;
@@ -50,10 +51,37 @@ mat-spinner {
 .public-link {
 	gap: 1rem;
 	align-items: center;
+	// cursor: pointer;
 }
 
+.public-link-text,
+a.public-link-text {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	max-width: 310px;
+	color: #3c3c3c;
+}
+
+.public-link-text:hover,
+a.public-link-text:hover {
+	white-space: unset;
+	overflow: visible;
+	color: $ibe-green-single;
+	cursor: pointer;
+}
 .date-wrapper,
 .link-wrapper {
 	flex-wrap: wrap;
 	gap: 1rem;
+}
+.copy {
+	display: flex;
+	align-items: center;
+	gap: 0.4rem;
+	cursor: pointer;
+}
+
+.link-text-wrapper:hover {
+	cursor: pointer;
 }
