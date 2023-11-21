@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+ import { Injectable } from '@angular/core';
 
 import {
 	Subject,
@@ -193,6 +193,11 @@ export class ProcessCurrentDataService {
 
 	private buildCurrentGameObject(movement, people, teams, sides, matchTypeObject) {
 		const cleanedMovement = this.processMovementText(movement);
+		if(cleanedMovement[1]==='USEBIO2BRIAN'){
+			// work out usebio values
+			console.log('USEBIO detected, building tables differently ');
+
+		}
 		// console.log('cleaned movement: ', cleanedMovement);
 		const numOfTables = cleanedMovement[1][1];
 		// console.log('num of tables: ', numOfTables);
@@ -368,8 +373,9 @@ export class ProcessCurrentDataService {
 			.map(line => line.trim())
 			.map(line => line.split(','));
 
-		// console.log('splitLines: ', splitLines);
+		console.log('splitLines: ', splitLines);
 		return splitLines;
+
 		// return splitLines
 	}
 

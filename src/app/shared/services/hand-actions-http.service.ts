@@ -73,8 +73,10 @@ export class HandActionsHttpService {
 		const params = new HttpParams()
 			.append('gameCode', data.gameCode)
 			.append('TYPE', 'HTMLNEW')
-			.append('fomat', data.format);
-		return this.http.post<Blob>(`${this.apiUrl}/hand-actions/html-pdf`, data, { params });
+		return this.http.post<Blob>(`${this.apiUrl}/hand-actions/html-pdf`, data, {
+			params,
+			responseType: 'blob' as 'json'
+		});
 	}
 
 	deleteHandRecord(data): Observable<any> {

@@ -175,13 +175,13 @@
 							<button
 								mat-flat-button
 								color="accent"
-								(click)="previewHtmlPdf()">
+								(click)="handleHtmlPdf({ preview: true })">
 								Preview
 							</button>
 							<button
 								mat-flat-button
 								color="primary"
-								(click)="downloadHtmlPdf()">
+								(click)="handleHtmlPdf({ download: true })">
 								Download
 							</button>
 						</div>

@@ -172,14 +172,35 @@ export class HandActionsComponent implements OnInit, AfterViewInit {
 
 	downloadBridgeWebs() {}
 
-	previewHtmlPdf() {}
-	downloadHtmlPdf() {
+	handleHtmlPdf(options) {
 		if (this.htmlPdfForm.valid) {
-			const values = { ...this.htmlPdfForm.value, gameCode: this.gameCode, format: 'pdf' };
+			const fileType = this.htmlPdfForm.get('fileType').value;
+			const values = {
+				...this.htmlPdfForm.value,
+				gameCode: this.gameCode,
+				format: 'pdf'
+			};
 			console.log('payload: ', values);
 			this.handActionsHttp.htmlPDF(values).subscribe({
-				next: response => {
-					console.log(response);
+				next: (response: Blob) => {
+					console.log('response: ', response);
+					console.log('file type: ', fileType);
+
+					const blob = new Blob([response], {
+						type: fileType === 'pdf' ? 'application/pdf' : 'text/html'
+					});
+					const blobURL = window.URL.createObjectURL(blob);
+					if (options.preview) {
+						window.open(blobURL);
+					} else if (options.download) {
+						const link = document.createElement('a');
+						link.href = blobURL;
+						link.download = `${this.gameCode}.${fileType}`;
+						document.body.appendChild(link);
+						link.click();
+						document.body.removeChild(link);
+						URL.revokeObjectURL(link.href);
+					}
 				},
 				error: error => {
 					console.error('Error fetching file: ', error);
