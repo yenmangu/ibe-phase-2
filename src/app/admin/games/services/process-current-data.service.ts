@@ -3,12 +3,10 @@ import { Injectable } from '@angular/core';
 import {
 	Subject,
 	Subscription,
-	takeUntil,
 	take,
 	firstValueFrom,
 	filter,
 	first,
-	tap,
 	from,
 	Observable,
 	switchMap,
@@ -19,8 +17,7 @@ import { tag } from 'rxjs-spy/cjs/operators';
 
 import { IndexedDatabaseService } from './indexed-database.service';
 import { IndexedDatabaseStatusService } from '../../../shared/services/indexed-database-status.service';
-import { SharedDataService } from '../../../shared/services/shared-data.service';
-import { ApiDataProcessingService } from './api/api-data-processing.service';
+
 @Injectable({
 	providedIn: 'root'
 })
@@ -32,14 +29,11 @@ export class ProcessCurrentDataService {
 
 	constructor(
 		private indexedDB: IndexedDatabaseService,
-		private sharedDataService: SharedDataService,
 		private indexedDatabaseStatus: IndexedDatabaseStatusService,
-		private apiProcessing: ApiDataProcessingService
 	) {}
 
 	async getData(storeName, key) {
 		try {
-			// console.log(` ${storeName}`)
 			await firstValueFrom(
 				this.indexedDatabaseStatus.isInitialised$.pipe(
 					tag('process-match-data is init sub'),
@@ -88,7 +82,7 @@ export class ProcessCurrentDataService {
 			console.log('movementValue: ', movementValue);
 			// workign out pair numbers
 			const pairNumbers = this.getPairNumbers(movementValue);
-			console.log('pairNumbers: ', pairNumbers);
+			// console.log('pairNumbers: ', pairNumbers);
 
 			const peopleValue = this.destructureValue(people, 'current_game_data');
 			const teamsValue = this.destructureAndSplitTeams(teams);
@@ -108,9 +102,7 @@ export class ProcessCurrentDataService {
 			);
 			console.log('currentGameConfig: ', currentGameConfig);
 			const { tables } = currentGameConfig;
-			const pairConfig = this.assignPairNumbers(pairNumbers, tables);
-			// console.log('pairConfig: ', pairConfig);
-			currentGameConfig.pairConfig = pairConfig;
+
 			currentGameConfig.pairNumbers = pairNumbers;
 
 			return currentGameConfig;
@@ -184,14 +176,14 @@ export class ProcessCurrentDataService {
 		}
 	}
 
-	private splitArray(array) {
-		const half = Math.floor(array.length / 2);
-		if (array.length % 2 === 0) {
-			return [[array.slice(0, half)], [array.slice(half)]];
-		} else {
-			return [[array.slice(0, half)], [array.slice(half)]];
-		}
-	}
+	// private splitArray(array) {
+	// 	const half = Math.floor(array.length / 2);
+	// 	if (array.length % 2 === 0) {
+	// 		return [[array.slice(0, half)], [array.slice(half)]];
+	// 	} else {
+	// 		return [[array.slice(0, half)], [array.slice(half)]];
+	// 	}
+	// }
 
 	private buildCurrentGameObject(movement, people, teams, sides, matchTypeObject) {
 		let usebio = false;
@@ -217,20 +209,28 @@ export class ProcessCurrentDataService {
 		let dataObj: any = {};
 		dataObj.rounds = cleanedMovement[1][4];
 		dataObj.players = this.splitUnevenArray(teamsOrPairs);
+		dataObj.rawPlayers = teamsOrPairs;
 		const tableNumbers = teamsOrPairs.length / 2;
 		dataObj.tableNumbers = tableNumbers;
 		console.log('data object before tables: ', dataObj);
 		const tableArray = [];
 		for (let i = 0; i < dataObj.players[0].length; i++) {
-			const team = [dataObj.players[0][i], dataObj.players[1][i]];
+			const team = [dataObj.players[0][i], dataObj.players[0][i + 1]];
 			tableArray.push(team);
 		}
-		console.log('tableArray: ', tableArray);
-		console.log('data object after tables: ', dataObj);
+		const cardinalArrays = this.createCardinalArrays(dataObj.rawPlayers);
+		const pairNumbers: any = {};
+		for (let i = 0; i < dataObj.rawPlayers.length; i++) {
+			pairNumbers[i + 1] = dataObj.rawPlayers[i];
+		}
+
+		// console.log('tableArray: ', tableArray);
+		// console.log('data object after tables: ', dataObj);
 
 		dataObj.tables = tableArray;
 		dataObj.playerConfig = this.extractPairs(dataObj.players);
 
+		// console.log('data object after extractPairs: ', dataObj);
 
 		const { north, south, east, west } = dataObj.playerConfig;
 		const currentGame: any = {
@@ -241,7 +241,18 @@ export class ProcessCurrentDataService {
 				west: west
 			}
 		};
-		currentGame.tables = this.createTablesOject(north, south, east, west);
+		currentGame.cardinalArrays = cardinalArrays;
+		currentGame.newPairNumbers = pairNumbers;
+		console.log('current game pairNumbers: ', currentGame.pairNumbers);
+
+		const pairAndTablesObject = this.createNewPairAndTableConfig(
+			dataObj.rawPlayers
+		);
+		console.log('new pair and table object: ', pairAndTablesObject
+		);
+
+		currentGame.tables = pairAndTablesObject.tables;
+		currentGame.newPairConfig = pairAndTablesObject.pairConfig
 		const index = currentGame.playerConfig.north.length;
 		teams.splice(index);
 
@@ -279,6 +290,31 @@ export class ProcessCurrentDataService {
 		return currentGame;
 	}
 
+	private createCardinalArrays(rawPlayerData) {
+		let cardinalArays = {};
+		let northSide = [];
+		let eastSide = [];
+		let southSide = [];
+		let westSide = [];
+		for (let i = 0; i < rawPlayerData.length; i++) {
+			console.log('i: ', i);
+			const pair = rawPlayerData[i];
+			const playerOne = pair[0];
+			const playerTwo = pair[1];
+
+			if (i % 2 === 0) {
+				northSide.push(playerOne);
+				southSide.push(playerTwo);
+			} else {
+				eastSide.push(playerOne);
+				westSide.push(playerTwo);
+			}
+		}
+
+		cardinalArays = { northSide, southSide, eastSide, westSide };
+		return cardinalArays;
+	}
+
 	private extractSides(sides, teams, sidesOf) {
 		const playersPerSide = sidesOf / 4;
 		const totalSides = Math.floor(teams.length / playersPerSide);
@@ -314,15 +350,19 @@ export class ProcessCurrentDataService {
 		const playerArrayOne = players[0];
 		const playerArrayTwo = players[1];
 		for (const pair of playerArrayOne) {
-			console.log('building pairs: arrayOne pair: ', pair);
+			// console.log('building pairs: arrayOne pair: ', pair);
 
 			north.push(pair[0]);
 			south.push(pair[1]);
+			// console.log('north: ', north);
+			// console.log('south: ', south);
 		}
 		for (const pair of playerArrayTwo) {
-			console.log('building pairs: arrayTwo pair: ', pair);
+			// console.log('building pairs: arrayTwo pair: ', pair);
 			east.push(pair[0]);
 			west.push(pair[1]);
+			// console.log('east: ', east);
+			// console.log('west: ', west);
 		}
 		players.north = north;
 		players.south = south;
@@ -331,33 +371,39 @@ export class ProcessCurrentDataService {
 		return players;
 	}
 
-	private createTablesOject(north, east, south, west) {
-		const tables = {};
-		const numPlayers = Math.min(
-			north.length,
-			south.length,
-			east.length,
-			west.length
-		);
-		for (let i = 0; i < numPlayers; i++) {
-			tables[i + 1] = [north[i], south[i], east[i], west[i]];
+	private createNewPairAndTableConfig(pairObject) {
+		let finalObject: any = {};
+		let tables = {};
+		let pairConfig: any = {};
+		for (let i = 0; i < Object.keys(pairObject).length; i += 2) {
+			const pairOne = pairObject[i];
+			const pairTwo = pairObject[i + 1];
+			const tableNumber =Math.ceil( (i + 1)/2);
+			pairConfig[tableNumber] = {
+				[i]: pairOne,
+				[i + 1]: pairTwo
+			};
+			tables[tableNumber] = [pairOne[0], pairOne[1], pairTwo[0], pairTwo[1]];
 		}
-		console.log('tables in create table object: ', tables);
-
-		return tables;
+		finalObject.pairConfig = pairConfig;
+		finalObject.tables = tables;
+		return finalObject;
 	}
 
-	// async getNames() {
-	// 	try {
-	// 		const storeName = 'current_game_data';
-	// 		const namestext = await this.getData(storeName, 'namestxt');
-	// 		// console.log('namestxt: ', namestext);
-	// 		const nameArray = this.processNamesText(namestext);
-	// 		// console.log('NameArray from getNames(): ', nameArray);
-	// 		return nameArray;
-	// 	} catch (err) {
-	// 		throw err;
+	// private createTablesOject(north, east, south, west) {
+	// 	const tables = {};
+	// 	const numPlayers = Math.min(
+	// 		north.length,
+	// 		south.length,
+	// 		east.length,
+	// 		west.length
+	// 	);
+	// 	for (let i = 0; i < numPlayers; i++) {
+	// 		tables[i + 1] = [north[i], south[i], east[i], west[i]];
 	// 	}
+	// 	// console.log('tables in create table object: ', tables);
+
+	// 	return tables;
 	// }
 
 	private destructureValue(object, string) {

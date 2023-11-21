@@ -8,20 +8,11 @@ import {
 	AfterViewInit
 	// ChangeDetectionStrategy
 } from '@angular/core';
-import {
-	FormBuilder,
-	FormGroup,
-	FormControl,
-	FormArray,
-	Validators
-} from '@angular/forms';
-import { Subject, Subscription, takeUntil } from 'rxjs';
+import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
+import { Subject, Subscription } from 'rxjs';
 import { BreakpointService } from 'src/app/shared/services/breakpoint.service';
-import { SharedDataService } from 'src/app/shared/services/shared-data.service';
-import { SharedGameDataService } from '../services/shared-game-data.service';
-import { FetchCurrentDataService } from '../services/fetch-current-data.service';
 import { TablesService } from '../services/tables.service';
-import { ProcessCurrentDataService } from '../services/process-current-data.service';
+
 import { tag } from 'rxjs-spy/cjs/operators';
 @Component({
 	selector: 'app-pairs-table',
@@ -44,6 +35,10 @@ export class PairsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 	pairsForm: FormGroup;
 	columns: string[] = ['north', 'n/s', 'south', 'east', 'e/w', 'west'];
 	isLoading$: boolean = true;
+	northSide: [] = [];
+	southSide: [] = [];
+	eastSide: [] = [];
+	westSide: [] = [];
 
 	originalFormValues: any;
 	changedFields: { [key: string]: { previousValue: any; newValue: any } } = {};
@@ -58,9 +53,6 @@ export class PairsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 	constructor(
 		private fb: FormBuilder,
 		private breakpointService: BreakpointService,
-		private sharedGamedataService: SharedGameDataService,
-		private sharedDataService: SharedDataService,
-		private processCurrentData: ProcessCurrentDataService,
 		private tablesService: TablesService
 	) {
 		this.tablesService.tablesConfig$.pipe(tag('pairs-table')).subscribe(config => {
@@ -87,10 +79,15 @@ export class PairsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 		this.pairConfig = this.initialTableData.pairConfig;
 		this.pairNumbers = this.initialTableData.pairNumbers;
 		this.pairsForm = this.createNewPairsForm();
-		// console.log('pairs form controls: ', this.pairsForm.controls);
-		// console.log(this.fromDataTableData);
+		const {
+			cardinalArrays: { northSide, southSide, eastSide, westSide }
+		} = this.initialTableData;
+		this.northSide = northSide;
+		this.southSide = southSide;
+		this.eastSide = eastSide;
+		this.westSide = westSide;
+
 		if (this.pairsForm) {
-			// console.log('pairs form exists', this.pairsForm.value);
 		} else {
 			console.log('no form');
 		}
@@ -151,18 +148,24 @@ export class PairsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 			'time_to',
 			'lunch'
 		];
-		console.log('table number: ', tableNumber);
-		console.log('namesArray: ', namesArray);
+
 
 		if (namesArray) {
+			console.log('in names array');
+
 			for (const field of initialArray) {
 				if (field === 'nsPairs' || field === 'ewPairs') {
 					const index = parseInt(tableNumber, 10) - 1;
+					console.log('tableNumber index: ', tableNumber);
+
 
 					if (field === 'nsPairs') {
+						console.log('ns pair number: ', this.pairNumbers.northSouth[index]);
+
 						// at table number [i]
 						tableControls[field] = this.pairNumbers.northSouth[index];
 					} else if (field === 'ewPairs') {
+						console.log('ew pair number: ', this.pairNumbers.eastWest[index]);
 						tableControls[field] = this.pairNumbers.eastWest[index];
 					}
 				} else {
