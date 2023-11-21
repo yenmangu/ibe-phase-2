@@ -7,6 +7,10 @@
 	width: max-content;
 	margin: auto;
 }
+h1.title {
+	text-align: center;
+	padding: 1rem;
+}
 table {
 	border-collapse: separate;
 }
@@ -30,4 +34,7 @@ td.south,
 td.east,
 td.west {
 	text-align: left;
+}
+.mobile-container {
+	padding: 2rem;
 }

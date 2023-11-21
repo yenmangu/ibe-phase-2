@@ -7,13 +7,13 @@
 			class="tab-header">
 			Move Cards
 		</div>
-		<div
+		<!-- <div
 			#masterpoints
 			(click)="selectTab('masterpoints')"
 			[class.selected]="selectedTab === 'masterpoints'"
 			class="tab-header">
 			Bridge Webs
-		</div>
+		</div> -->
 		<div
 			#html
 			(click)="selectTab('html')"
@@ -22,12 +22,19 @@
 			HTML/ PDF
 		</div>
 		<div
+			#delete
+			(click)="selectTab('delete')"
+			[class.selected]="selectedTab === 'delete'"
+			class="tab-header">
+			Delete Hand
+		</div>
+		<!-- <div
 			#ebu
 			(click)="selectTab('ebu')"
 			[class.selected]="selectedTab === 'ebu'"
 			class="tab-header">
 			EBU P2P
-		</div>
+		</div> -->
 		<!-- <div
 			#bridgenix
 			(click)="selectTab('bridgenix')"
@@ -35,13 +42,13 @@
 			class="tab-header">
 			Move Cards
 		</div> -->
-		<div
+		<!-- <div
 			#ecats
 			(click)="selectTab('ecats')"
 			[class.selected]="selectedTab === 'ecats'"
 			class="tab-header">
 			ECats
-		</div>
+		</div> -->
 	</div>
 
 	<!-- Tab Content -->
@@ -376,6 +383,16 @@
 						</div>
 					</div>
 				</form>
+			</div>
+		</ng-container>
+		<ng-container *ngIf="selectedTab === 'delete'">
+			<div class="container column center delete">
+				<h2>Delete current hand record?</h2>
+				<button
+					mat-flat-button
+					color="warn" (click)="deleteHand()">
+					Delete
+				</button>
 			</div>
 		</ng-container>
 	</div>

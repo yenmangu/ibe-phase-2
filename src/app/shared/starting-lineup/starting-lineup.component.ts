@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { SharedGameDataService } from 'src/app/admin/games/services/shared-game-data.service';
 import { ApiDataCoordinationService } from 'src/app/admin/games/services/api/api-data-coordination.service';
 import { BreakpointService } from '../services/breakpoint.service';
+
 @Component({
 	selector: 'app-starting-lineup',
 	templateUrl: './starting-lineup.component.html',
@@ -22,11 +22,11 @@ export class StartingLineupComponent implements OnInit {
 	eventName: string = '';
 	pairConfig: any;
 	pairNumbers: any;
+	matchType: string;
 
 	currentBreakpoint = '';
 
 	constructor(
-		private sharedGameData: SharedGameDataService,
 		private route: ActivatedRoute,
 		private apiCoordinationService: ApiDataCoordinationService,
 		private breakpointService: BreakpointService
@@ -37,6 +37,7 @@ export class StartingLineupComponent implements OnInit {
 			this.gameId = params['game_id'];
 			this.gameCode = params['game_code'];
 		});
+
 		const data = { gameCode: this.gameCode, gameId: this.gameId };
 
 		this.getPublicData(data);
@@ -60,9 +61,13 @@ export class StartingLineupComponent implements OnInit {
 						west,
 						eventName,
 						pairNumbers,
-						pairConfig
+						pairConfig,
+						matchType
 					}
 				} = this.startingLineupData;
+				console.log('match type: ', matchType);
+
+				this.matchType = matchType;
 				this.north = north;
 				this.south = south;
 				this.east = east;

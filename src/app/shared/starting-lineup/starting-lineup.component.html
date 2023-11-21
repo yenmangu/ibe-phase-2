@@ -14,14 +14,18 @@
 					Table <br />
 					{{ currentBreakpoint === 'handset' ? 'No.' : 'Number' }}
 				</th>
-				<th
-					class="pairs"
-					[ngClass]="currentBreakpoint">
-					Pair No.
-				</th>
+				<ng-container *ngIf="matchType === 'pairs'">
+					<th
+						class="pairs"
+						[ngClass]="currentBreakpoint">
+						Pair No.
+					</th>
+				</ng-container>
 				<th [ngClass]="currentBreakpoint">North</th>
 				<th [ngClass]="currentBreakpoint">South</th>
-				<th>Pair No.</th>
+				<ng-container *ngIf="matchType === 'pairs'">
+					<th>Pair No.</th>
+				</ng-container>
 				<th [ngClass]="currentBreakpoint">East</th>
 				<th [ngClass]="currentBreakpoint">West</th>
 			</tr>
@@ -32,11 +36,13 @@
 						class="table-number">
 						{{ i + 1 }}
 					</td>
-					<td
-						[ngClass]="currentBreakpoint"
-						class="pairs">
-						{{ pairNumbers.northSouth[i] }}
-					</td>
+					<ng-container *ngIf="matchType === 'pairs'">
+						<td
+							[ngClass]="currentBreakpoint"
+							class="pairs">
+							{{ pairNumbers.northSouth[i] }}
+						</td>
+					</ng-container>
 					<td
 						[ngClass]="currentBreakpoint"
 						class="north">
@@ -47,11 +53,13 @@
 						class="north">
 						{{ south[i] }}
 					</td>
-					<td
-						[ngClass]="currentBreakpoint"
-						class="pairs">
-						{{ pairNumbers.eastWest[i] }}
-					</td>
+					<ng-container *ngIf="matchType === 'pairs'">
+						<td
+							[ngClass]="currentBreakpoint"
+							class="pairs">
+							{{ pairNumbers.eastWest[i] }}
+						</td>
+					</ng-container>
 					<td
 						[ngClass]="currentBreakpoint"
 						class="north">
@@ -68,37 +76,55 @@
 	</div>
 
 	<ng-container *ngIf="currentBreakpoint === 'handset'">
-		<table>
-			<tr>
-				<th>Table No</th>
-				<th>Pair No.</th>
-				<th>North</th>
-				<th>South</th>
-			</tr>
-			<ng-container *ngFor="let table of north; let i = index">
+		<div class="container column center mobile-container">
+			<table>
 				<tr>
-					<td [ngClass]="currentBreakpoint">{{ i + 1 }}</td>
-					<td [ngClass]="currentBreakpoint">{{ pairNumbers.northSouth[i] }}</td>
-					<td [ngClass]="currentBreakpoint">{{ north[i] }}</td>
-					<td [ngClass]="currentBreakpoint">{{ south[i] }}</td>
+					<th>Table No.</th>
+					<ng-container *ngIf="matchType === 'pairs'">
+						<th>Pair No.</th>
+					</ng-container>
+					<th>North</th>
+					<th>South</th>
 				</tr>
-			</ng-container>
-		</table>
-		<table>
-			<tr>
-				<th>Table No</th>
-				<th>Pair No.</th>
-				<th>East</th>
-				<th>West</th>
-			</tr>
-			<ng-container *ngFor="let table of north; let i = index">
+				<ng-container *ngFor="let table of north; let i = index">
+					<tr>
+						<td [ngClass]="currentBreakpoint">{{ i + 1 }}</td>
+						<ng-container *ngIf="matchType === 'pairs'">
+							<td
+								[ngClass]="currentBreakpoint"
+								class="pairs">
+								{{ pairNumbers.northSouth[i] }}
+							</td>
+						</ng-container>
+						<td [ngClass]="currentBreakpoint">{{ north[i] }}</td>
+						<td [ngClass]="currentBreakpoint">{{ south[i] }}</td>
+					</tr>
+				</ng-container>
+			</table>
+			<table>
 				<tr>
-					<td [ngClass]="currentBreakpoint">{{ i + 1 }}</td>
-					<td [ngClass]="currentBreakpoint">{{ pairNumbers.eastWest[i] }}</td>
-					<td [ngClass]="currentBreakpoint">{{ east[i] }}</td>
-					<td [ngClass]="currentBreakpoint">{{ west[i] }}</td>
+					<th>Table No</th>
+					<ng-container *ngIf="matchType === 'pairs'">
+						<th>Pair No.</th>
+					</ng-container>
+					<th>East</th>
+					<th>West</th>
 				</tr>
-			</ng-container>
-		</table>
+				<ng-container *ngFor="let table of north; let i = index">
+					<tr>
+						<td [ngClass]="currentBreakpoint">{{ i + 1 }}</td>
+						<ng-container *ngIf="matchType === 'pairs'">
+							<td
+								[ngClass]="currentBreakpoint"
+								class="pairs">
+								{{ pairNumbers.eastWest[i] }}
+							</td>
+						</ng-container>
+						<td [ngClass]="currentBreakpoint">{{ east[i] }}</td>
+						<td [ngClass]="currentBreakpoint">{{ west[i] }}</td>
+					</tr>
+				</ng-container>
+			</table>
+		</div>
 	</ng-container>
 </div>

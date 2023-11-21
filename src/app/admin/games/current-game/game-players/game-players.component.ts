@@ -21,6 +21,7 @@ import { tag } from 'rxjs-spy/operators';
 import { ApiDataCoordinationService } from '../../services/api/api-data-coordination.service';
 import { UserDetailsService } from 'src/app/shared/services/user-details.service';
 import { DomainService } from 'src/app/shared/services/domain.service';
+import { SharedDataService } from 'src/app/shared/services/shared-data.service';
 @Component({
 	selector: 'app-game-players',
 	templateUrl: './game-players.component.html',
@@ -73,6 +74,7 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 		private route: ActivatedRoute,
 		private breakpointService: BreakpointService,
 		private tablesService: TablesService,
+		private sharedDataService: SharedDataService,
 		private fb: FormBuilder,
 		private currentGamesDatabase: CurrentGamesDatabaseServiceService,
 		private apiCoordination: ApiDataCoordinationService,
@@ -126,6 +128,7 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 							: matchType.teams
 							? (this.matchType = 'teams')
 							: (this.matchType = 'individual');
+						this.sharedDataService.updateMatchType(this.matchType);
 					} else {
 						this.initialTableData = [];
 					}
@@ -228,9 +231,12 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 		const eventName = this.eventName;
 
 		console.log(northSide, southSide, eastSide, westSide);
+		const matchType = this.matchType
 		const gameConfig: {
+
 			pairConfig;
 			pairNumbers;
+			matchType;
 			north: [];
 			south: [];
 			east: [];
@@ -242,6 +248,7 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 		} = {
 			pairConfig,
 			pairNumbers,
+			matchType: matchType,
 			north: northSide,
 			south: southSide,
 			east: eastSide,
@@ -252,6 +259,7 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 		};
 		console.log('gameConfig: ', gameConfig);
 		data.gameConfig = gameConfig;
+		data.matchType = this.matchType
 		console.log(data);
 
 		// const gameConfig =

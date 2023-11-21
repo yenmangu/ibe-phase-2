@@ -190,16 +190,15 @@ export class ProcessCurrentDataService {
 		let teamsOrPairs;
 		const cleanedMovement = this.processMovementText(movement);
 		const numOfTables = cleanedMovement[1][1];
-
+		console.log('number of tables: ', numOfTables);
 
 		if (cleanedMovement[0][0] !== 'USEBIO2BRIAN') {
 			// work out usebio values
-			console.log('USEBIO detected, building tables differently ');
+			console.log('Normal detected, building tables appropriately ');
 			notUsebio = true;
-			teamsOrPairs = this.processNormalNames(people,numOfTables)
+			teamsOrPairs = this.processNormalNames(people, numOfTables);
 		} else {
 			teamsOrPairs = this.processNamesText(people, numOfTables);
-
 		}
 
 		console.log('teams or pairs: ', teamsOrPairs);
@@ -295,6 +294,8 @@ export class ProcessCurrentDataService {
 		let eastSide = [];
 		let southSide = [];
 		let westSide = [];
+		// console.log('Raw player data: ', rawPlayerData);
+
 		for (let i = 0; i < rawPlayerData.length; i++) {
 			console.log('i: ', i);
 			const pair = rawPlayerData[i];
@@ -389,22 +390,6 @@ export class ProcessCurrentDataService {
 		return finalObject;
 	}
 
-	// private createTablesOject(north, east, south, west) {
-	// 	const tables = {};
-	// 	const numPlayers = Math.min(
-	// 		north.length,
-	// 		south.length,
-	// 		east.length,
-	// 		west.length
-	// 	);
-	// 	for (let i = 0; i < numPlayers; i++) {
-	// 		tables[i + 1] = [north[i], south[i], east[i], west[i]];
-	// 	}
-	// 	// console.log('tables in create table object: ', tables);
-
-	// 	return tables;
-	// }
-
 	private destructureValue(object, string) {
 		// console.log('attempting to destructure: ', object);
 		if (object && object[`${string}`] && object[`${string}`].value) {
@@ -447,58 +432,60 @@ export class ProcessCurrentDataService {
 	private processNormalNames(names, numOfTables) {
 		const namesInPlay = numOfTables * 2;
 
-	let namesArray = [];
-	const lines = names[0].split('\n').filter(line => line.trim() !== '');
-	console.log('lines: ', lines);
+		let namesArray = [];
+		console.log('names in process normal names: ', names);
 
-	const splitIndex = Math.ceil(lines.length / 2);
-	namesArray = namesInPlay !== -1 ? lines.slice(0, namesInPlay) : lines;
-	console.log('namesArray: ', namesArray);
+		const lines = names[0].split('\n').filter(line => line.trim() !== '');
+		// console.log('lines: ', lines);
 
-	namesArray = namesArray.map(item => item.split(' & '));
+		const splitIndex = Math.ceil(numOfTables);
+		namesArray = namesInPlay !== -1 ? lines.slice(0, namesInPlay) : lines;
+		// console.log('namesArray: ', namesArray);
 
-	console.log('namesArray: ', namesArray);
+		namesArray = namesArray.map(item => item.split(' & '));
 
-	console.log('split index: ', splitIndex);
-	const firstHalf = namesArray.slice(0, splitIndex);
-	const secondHalf = namesArray.slice(splitIndex);
+		// console.log('namesArray after split at "&": ', namesArray);
 
-	console.log(firstHalf);
-	console.log(secondHalf);
-	let newArray = [];
-	for (let i = 0; i < firstHalf.length; i++) {
-		newArray.push(firstHalf[i]);
-		newArray.push(secondHalf[i]);
-	}
-	console.log('new array: ', newArray);
+		// console.log('split index: ', splitIndex);
+		const firstHalf = namesArray.slice(0, splitIndex);
+		const secondHalf = namesArray.slice(splitIndex);
+
+		console.log(firstHalf);
+		console.log(secondHalf);
+		let newArray = [];
+		for (let i = 0; i < firstHalf.length; i++) {
+			newArray.push(firstHalf[i]);
+			newArray.push(secondHalf[i]);
+		}
+		// console.log('new array: ', newArray);
 		return newArray;
 	}
 
-	private processNonUsebioNames(value, numOfTables) {
-		let ns: any[] = [];
-		let ew: any[] = [];
-		let namesArray: any[] = [];
-		const namesInPlay = numOfTables * 2;
-		const lines = value[0]
-			.split('\n')
-			.filter(line => line.trim() !== '')
-			.map(line => line.trim());
+	// private processNonUsebioNames(value, numOfTables) {
+	// 	let ns: any[] = [];
+	// 	let ew: any[] = [];
+	// 	let namesArray: any[] = [];
+	// 	const namesInPlay = numOfTables * 2;
+	// 	const lines = value[0]
+	// 		.split('\n')
+	// 		.filter(line => line.trim() !== '')
+	// 		.map(line => line.trim());
 
-		namesArray = namesInPlay !== -1 ? lines.slice(0, namesInPlay) : lines;
-		namesArray = namesArray.map(item => item.split(' & '));
-		for (let i = 0; i < namesArray.length; i++) {
-			console.log('pair in array: ', namesArray[i]);
-			if (i % 2 === 0) {
-				ns.push(namesArray[i]);
-			} else {
-				ew.push(namesArray[i]);
-			}
-		}
-		const finalArray = ns.concat(ew);
-		console.log('final array: ', finalArray);
+	// 	namesArray = namesInPlay !== -1 ? lines.slice(0, namesInPlay) : lines;
+	// 	namesArray = namesArray.map(item => item.split(' & '));
+	// 	for (let i = 0; i < namesArray.length; i++) {
+	// 		console.log('pair in array: ', namesArray[i]);
+	// 		if (i % 2 === 0) {
+	// 			ns.push(namesArray[i]);
+	// 		} else {
+	// 			ew.push(namesArray[i]);
+	// 		}
+	// 	}
+	// 	const finalArray = ns.concat(ew);
+	// 	console.log('final array: ', finalArray);
 
-		return namesArray;
-	}
+	// 	return namesArray;
+	// }
 
 	private processNamesText(value, numOfTables) {
 		let namesArray = [];
@@ -511,7 +498,6 @@ export class ProcessCurrentDataService {
 		const cleanedLines = lines.slice(1).map(line => line.trim());
 		// console.log('cleaned lines: ', cleanedLines);
 
-		const tapHereIndex = lines.findIndex(line => line.includes('Tap here'));
 		namesArray = namesInPlay !== -1 ? lines.slice(0, namesInPlay) : lines;
 		// console.log('After tapHereIndex: ', namesArray);
 		// namesArray = value[0].split('\n').filter(name => name.trim()!== '').map(line=> line.trim(''))
@@ -543,13 +529,16 @@ export class ProcessCurrentDataService {
 				{};
 			for (const text of value) {
 				if (text.startsWith('MV I')) {
-					// console.log('individual');
+					console.log('individual');
 					matchType.individual = true;
 				} else if (text.startsWith('MV T')) {
-					// console.log('team');
+					console.log('team');
 					matchType.teams = true;
 				} else if (text.startsWith('MV P') || text.startsWith('MV CPM')) {
-					// console.log('pairs');
+					console.log('pairs');
+					if (text.startsWith('MV CPM')) {
+						console.log('USEBIO Import');
+					}
 					matchType.pairs = true;
 				} else {
 					matchType.pairs = true;

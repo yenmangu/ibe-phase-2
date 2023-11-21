@@ -5,6 +5,7 @@ import { ChargeCodeInterface, chargeCodes } from 'src/app/shared/data/charge-cod
 import { BreakpointService } from 'src/app/shared/services/breakpoint.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component';
 
 @Component({
 	selector: 'app-hand-actions',
@@ -223,5 +224,27 @@ export class HandActionsComponent implements OnInit, AfterViewInit {
 		if (this.ecatsForm.valid) {
 			const values = { ...this.ecatsForm.value };
 		}
+	}
+
+	deleteHand() {
+		const dialogRef = this.dialog.open(DeleteDialogComponent, {
+			width: '360px'
+		});
+		dialogRef.afterClosed().subscribe(result => {
+			if (result) {
+				this.handActionsHttp
+					.deleteHandRecord({ gameCode: this.gameCode })
+					.subscribe({
+						next: response => {
+							if (response.success === true) {
+								this.snackbar.open(
+									'Hand config deleted. please refresh the database to see the latest changes',
+									'Dismiss'
+								);
+							}
+						}
+					});
+			}
+		});
 	}
 }
