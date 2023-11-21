@@ -29,7 +29,7 @@ export class ProcessCurrentDataService {
 
 	constructor(
 		private indexedDB: IndexedDatabaseService,
-		private indexedDatabaseStatus: IndexedDatabaseStatusService,
+		private indexedDatabaseStatus: IndexedDatabaseStatusService
 	) {}
 
 	async getData(storeName, key) {
@@ -186,25 +186,25 @@ export class ProcessCurrentDataService {
 	// }
 
 	private buildCurrentGameObject(movement, people, teams, sides, matchTypeObject) {
-		let usebio = false;
+		let notUsebio = false;
+		let teamsOrPairs;
 		const cleanedMovement = this.processMovementText(movement);
-		console.log('cleaned movement: ', cleanedMovement);
+		const numOfTables = cleanedMovement[1][1];
 
-		if (cleanedMovement[0][0] === 'USEBIO2BRIAN') {
+
+		if (cleanedMovement[0][0] !== 'USEBIO2BRIAN') {
 			// work out usebio values
 			console.log('USEBIO detected, building tables differently ');
-			usebio = true;
-		}
-		// console.log('cleaned movement: ', cleanedMovement);
-		const numOfTables = cleanedMovement[1][1];
-		// console.log('num of tables: ', numOfTables);
-		let teamsOrPairs;
-		if (usebio) {
-		}
+			notUsebio = true;
+			teamsOrPairs = this.processNormalNames(people,numOfTables)
+		} else {
+			teamsOrPairs = this.processNamesText(people, numOfTables);
 
-		teamsOrPairs = this.processNamesText(people, numOfTables);
+		}
 
 		console.log('teams or pairs: ', teamsOrPairs);
+		if (notUsebio) {
+		}
 
 		let dataObj: any = {};
 		dataObj.rounds = cleanedMovement[1][4];
@@ -248,11 +248,10 @@ export class ProcessCurrentDataService {
 		const pairAndTablesObject = this.createNewPairAndTableConfig(
 			dataObj.rawPlayers
 		);
-		console.log('new pair and table object: ', pairAndTablesObject
-		);
+		console.log('new pair and table object: ', pairAndTablesObject);
 
 		currentGame.tables = pairAndTablesObject.tables;
-		currentGame.newPairConfig = pairAndTablesObject.pairConfig
+		currentGame.newPairConfig = pairAndTablesObject.pairConfig;
 		const index = currentGame.playerConfig.north.length;
 		teams.splice(index);
 
@@ -378,7 +377,7 @@ export class ProcessCurrentDataService {
 		for (let i = 0; i < Object.keys(pairObject).length; i += 2) {
 			const pairOne = pairObject[i];
 			const pairTwo = pairObject[i + 1];
-			const tableNumber =Math.ceil( (i + 1)/2);
+			const tableNumber = Math.ceil((i + 1) / 2);
 			pairConfig[tableNumber] = {
 				[i]: pairOne,
 				[i + 1]: pairTwo
@@ -445,10 +444,60 @@ export class ProcessCurrentDataService {
 		// return splitLines
 	}
 
-	processUsebioNames(value, numOfTables) {
-		let namesArray = [];
+	private processNormalNames(names, numOfTables) {
 		const namesInPlay = numOfTables * 2;
-		const lines = value[0];
+
+	let namesArray = [];
+	const lines = names[0].split('\n').filter(line => line.trim() !== '');
+	console.log('lines: ', lines);
+
+	const splitIndex = Math.ceil(lines.length / 2);
+	namesArray = namesInPlay !== -1 ? lines.slice(0, namesInPlay) : lines;
+	console.log('namesArray: ', namesArray);
+
+	namesArray = namesArray.map(item => item.split(' & '));
+
+	console.log('namesArray: ', namesArray);
+
+	console.log('split index: ', splitIndex);
+	const firstHalf = namesArray.slice(0, splitIndex);
+	const secondHalf = namesArray.slice(splitIndex);
+
+	console.log(firstHalf);
+	console.log(secondHalf);
+	let newArray = [];
+	for (let i = 0; i < firstHalf.length; i++) {
+		newArray.push(firstHalf[i]);
+		newArray.push(secondHalf[i]);
+	}
+	console.log('new array: ', newArray);
+		return newArray;
+	}
+
+	private processNonUsebioNames(value, numOfTables) {
+		let ns: any[] = [];
+		let ew: any[] = [];
+		let namesArray: any[] = [];
+		const namesInPlay = numOfTables * 2;
+		const lines = value[0]
+			.split('\n')
+			.filter(line => line.trim() !== '')
+			.map(line => line.trim());
+
+		namesArray = namesInPlay !== -1 ? lines.slice(0, namesInPlay) : lines;
+		namesArray = namesArray.map(item => item.split(' & '));
+		for (let i = 0; i < namesArray.length; i++) {
+			console.log('pair in array: ', namesArray[i]);
+			if (i % 2 === 0) {
+				ns.push(namesArray[i]);
+			} else {
+				ew.push(namesArray[i]);
+			}
+		}
+		const finalArray = ns.concat(ew);
+		console.log('final array: ', finalArray);
+
+		return namesArray;
 	}
 
 	private processNamesText(value, numOfTables) {
