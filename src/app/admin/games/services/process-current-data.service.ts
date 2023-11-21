@@ -1,4 +1,4 @@
- import { Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 
 import {
 	Subject,
@@ -94,8 +94,10 @@ export class ProcessCurrentDataService {
 			const teamsValue = this.destructureAndSplitTeams(teams);
 			const sidesValue = this.destructureAndSplitTeams(sides);
 			const matchTypeObject = this.getMatchType(settingsText);
+			console.log('current match type: ', matchTypeObject);
+
 			// console.log('movement value: ', movementValue);
-			// console.log('people value: ', peopleValue);
+			console.log('people value: ', peopleValue);
 
 			const currentGameConfig = this.buildCurrentGameObject(
 				movementValue,
@@ -109,7 +111,7 @@ export class ProcessCurrentDataService {
 			const pairConfig = this.assignPairNumbers(pairNumbers, tables);
 			// console.log('pairConfig: ', pairConfig);
 			currentGameConfig.pairConfig = pairConfig;
-			currentGameConfig.pairNumbers = pairNumbers
+			currentGameConfig.pairNumbers = pairNumbers;
 
 			return currentGameConfig;
 		} catch (err) {
@@ -192,29 +194,43 @@ export class ProcessCurrentDataService {
 	}
 
 	private buildCurrentGameObject(movement, people, teams, sides, matchTypeObject) {
+		let usebio = false;
 		const cleanedMovement = this.processMovementText(movement);
-		if(cleanedMovement[1]==='USEBIO2BRIAN'){
+		console.log('cleaned movement: ', cleanedMovement);
+
+		if (cleanedMovement[0][0] === 'USEBIO2BRIAN') {
 			// work out usebio values
 			console.log('USEBIO detected, building tables differently ');
-
+			usebio = true;
 		}
 		// console.log('cleaned movement: ', cleanedMovement);
 		const numOfTables = cleanedMovement[1][1];
 		// console.log('num of tables: ', numOfTables);
+		let teamsOrPairs;
+		if (usebio) {
+		}
 
-		const teamsOrPairs = this.processNamesText(people, numOfTables);
+		teamsOrPairs = this.processNamesText(people, numOfTables);
+
+		console.log('teams or pairs: ', teamsOrPairs);
+
 		let dataObj: any = {};
 		dataObj.rounds = cleanedMovement[1][4];
 		dataObj.players = this.splitUnevenArray(teamsOrPairs);
 		const tableNumbers = teamsOrPairs.length / 2;
 		dataObj.tableNumbers = tableNumbers;
+		console.log('data object before tables: ', dataObj);
 		const tableArray = [];
 		for (let i = 0; i < dataObj.players[0].length; i++) {
 			const team = [dataObj.players[0][i], dataObj.players[1][i]];
 			tableArray.push(team);
 		}
+		console.log('tableArray: ', tableArray);
+		console.log('data object after tables: ', dataObj);
+
 		dataObj.tables = tableArray;
 		dataObj.playerConfig = this.extractPairs(dataObj.players);
+
 
 		const { north, south, east, west } = dataObj.playerConfig;
 		const currentGame: any = {
@@ -298,10 +314,13 @@ export class ProcessCurrentDataService {
 		const playerArrayOne = players[0];
 		const playerArrayTwo = players[1];
 		for (const pair of playerArrayOne) {
+			console.log('building pairs: arrayOne pair: ', pair);
+
 			north.push(pair[0]);
 			south.push(pair[1]);
 		}
 		for (const pair of playerArrayTwo) {
+			console.log('building pairs: arrayTwo pair: ', pair);
 			east.push(pair[0]);
 			west.push(pair[1]);
 		}
@@ -323,6 +342,7 @@ export class ProcessCurrentDataService {
 		for (let i = 0; i < numPlayers; i++) {
 			tables[i + 1] = [north[i], south[i], east[i], west[i]];
 		}
+		console.log('tables in create table object: ', tables);
 
 		return tables;
 	}
@@ -379,6 +399,12 @@ export class ProcessCurrentDataService {
 		// return splitLines
 	}
 
+	processUsebioNames(value, numOfTables) {
+		let namesArray = [];
+		const namesInPlay = numOfTables * 2;
+		const lines = value[0];
+	}
+
 	private processNamesText(value, numOfTables) {
 		let namesArray = [];
 		const namesInPlay = numOfTables * 2;
@@ -427,7 +453,7 @@ export class ProcessCurrentDataService {
 				} else if (text.startsWith('MV T')) {
 					// console.log('team');
 					matchType.teams = true;
-				} else if (text.startsWith('MV P')) {
+				} else if (text.startsWith('MV P') || text.startsWith('MV CPM')) {
 					// console.log('pairs');
 					matchType.pairs = true;
 				} else {
