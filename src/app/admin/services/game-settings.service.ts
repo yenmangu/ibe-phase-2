@@ -97,7 +97,7 @@ export class GameSettingsService {
 	getSetUpSets(usesets, initsets, secsets) {
 		const initsetsObject = this.destructureSettings(initsets);
 		const secsetsObject = this.destructureSettings(secsets);
-		console.log('secsets object: ', secsetsObject);
+		console.log('initsets object: ', initsetsObject);
 
 		const setupConfig: any = {
 			newEventUses: this.getUseSets(usesets),
@@ -111,8 +111,22 @@ export class GameSettingsService {
 			pinType: '',
 			pinCase: '',
 			spectateApp: '',
-			spectateWebsite: ''
+			spectateWebsite: '',
+
 		};
+		let playerIDArray = [];
+		// console.log('ims: ', JSON.stringify(initsetsObject,null, 2));
+
+		initsetsObject.ims[0]['im'].forEach(idType => {
+			playerIDArray.push({
+				type: idType['$'].type,
+				fid: idType['$']?.fid,
+				pref: idType['$']?.pref === 'y' ? true : false
+			});
+		});
+
+		setupConfig.playerIdArray = playerIDArray;
+
 		setupConfig.twoPageVal =
 			initsetsObject.popup[0]['$'].val === 'y' ? true : false;
 		let requireAllNames, tdEntersNames;

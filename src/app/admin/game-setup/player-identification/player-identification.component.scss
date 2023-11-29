@@ -1,6 +1,5 @@
-.container {
-	max-width: none;
-
+form.container {
+	width: fit-content;
 	gap: 2rem;
 }
 
@@ -8,9 +7,14 @@
 .addiional-choices {
 	width: 100%;
 }
+.static-row {
+	height: 2rem;
+	align-items: center;
+}
 .grid-row {
 	position: relative;
 	display: grid;
+	vertical-align: middle;
 	grid-template-columns: 1fr 1fr 1fr;
 	grid-gap: 1rem;
 }
@@ -25,6 +29,15 @@
 	// width: 3rem;
 }
 
+.delete-wrapper {
+	display: grid;
+	place-items: center;
+	width: 4rem;
+}
+
 .add {
 	width: 3rem;
+}
+mat-icon {
+	margin: 0 !important;
 }

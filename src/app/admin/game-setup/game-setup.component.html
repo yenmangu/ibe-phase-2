@@ -60,6 +60,14 @@
 								>Team sign-in</mat-checkbox
 							>
 							<!-- To Be Re Added Once the player ID has been reworked server side -->
+							<ng-container *ngIf="initialPlayerIdValues">
+								<app-player-identification
+									#playerIdentification
+									[initialPlayerIdValues]="initialPlayerIdValues"
+									(savePlayerIdForm)="onSavePlayerIdForm($event)"
+									(formDirty)="idFormChange($event)">
+								</app-player-identification>
+							</ng-container>
 							<!-- <app-player-identification
 						[hidden]="!twoPageStartup"
 						(idFormEmitter)="onPlayerIdForm($event)"
@@ -71,11 +79,20 @@
 									(click)="save()"
 									mat-flat-button
 									color="primary">
-									{{ successMessage && setupClicked ? 'Success' : 'Save' }}
+									{{ successMessage ? 'Success' : 'Save' }}
 								</button>
 							</div>
 						</div>
 					</mat-tab>
+
+					<!--  -->
+					<!-- Player Identification Tab -->
+					<!-- <mat-tab label="Player Identification">
+						<ng-container class="container column">
+							<app-player-identification
+								(playerIdForm)="onChildForm($event)"></app-player-identification>
+						</ng-container>
+					</mat-tab> -->
 					<!--  -->
 					<!-- Security Tab -->
 

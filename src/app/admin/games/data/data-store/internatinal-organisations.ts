@@ -3,7 +3,7 @@ import { Organisation } from "../international-organisation";
 
 
 export const organisations: Organisation[] = [
-  { name: 'Local club number', value: 'local' },
+  { name: 'Local club number', value: 'nativeclub' },
   { name: 'ACBL (USA)', value: 'ACBL' },
   { name: 'ABF (Australia)', value: 'ABF' },
   { name: 'EBU (England)', value: 'EBU' },
@@ -150,3 +150,5 @@ export const organisations: Organisation[] = [
     ],
   },
 ];
+
+

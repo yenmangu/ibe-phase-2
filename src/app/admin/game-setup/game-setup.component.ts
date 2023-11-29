@@ -4,7 +4,8 @@ import {
 	OnInit,
 	AfterViewInit,
 	Output,
-	OnDestroy
+	OnDestroy,
+	ViewChild
 } from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { BreakpointService } from 'src/app/shared/services/breakpoint.service';
@@ -17,19 +18,26 @@ import { IndexedDatabaseStatusService } from 'src/app/shared/services/indexed-da
 import { SharedSettingsService } from '../services/shared-settings.service';
 import { tag } from 'rxjs-spy/cjs/operators';
 import { DataService } from '../games/services/data.service';
+import { PlayerIdentificationComponent } from './player-identification/player-identification.component';
 @Component({
 	selector: 'app-game-setup',
 	templateUrl: './game-setup.component.html',
 	styleUrls: ['./game-setup.component.scss']
 })
 export class GameSetupComponent implements OnInit, AfterViewInit, OnDestroy {
+	@ViewChild('playerIdentification', { static: false })
+	playerIdentification: PlayerIdentificationComponent;
 	setupForm: FormGroup;
 	securityForm: FormGroup;
 	scoringForm: any;
 	dbInit: boolean = false;
 	twoPageStartup: boolean;
 	successMessage: boolean = false;
+	initialPlayerIdValues: any;
+	receivedPlayerIdValues: any;
 
+	idFormChanged: boolean;
+	touched: boolean;
 	dbProgress: number = 0;
 
 	initialSettingsData: any = {};
@@ -37,6 +45,8 @@ export class GameSetupComponent implements OnInit, AfterViewInit, OnDestroy {
 	scoringSettings: any = {};
 	appInterfaceSettings: any = {};
 	namingNumberingSettings: any = {};
+
+	getPlayerIdValues: boolean = false;
 
 	directorKey: string = '';
 	gameCode: string = '';
@@ -85,11 +95,11 @@ export class GameSetupComponent implements OnInit, AfterViewInit, OnDestroy {
 			// Security
 			onGameCreation: 'no-lock-change',
 			usePin: false,
-			pinLength: 0,
+			pinLength: 4,
 			pinType: 'numeric',
 			pinCase: 'lower',
 			spectateApp: null,
-			spectateWeb:null
+			spectateWeb: null
 		});
 
 		this.sharedSettingsService
@@ -104,6 +114,7 @@ export class GameSetupComponent implements OnInit, AfterViewInit, OnDestroy {
 						this.scoringSettings = data.scoringConfig;
 						this.appInterfaceSettings = data.appInterfaceConfig;
 						this.namingNumberingSettings = data.namingNumberingConfig;
+						this.initialPlayerIdValues = data.setupConfig.initConfig.playerIdArray;
 						this.populateForm();
 					}
 				},
@@ -121,6 +132,8 @@ export class GameSetupComponent implements OnInit, AfterViewInit, OnDestroy {
 			this.twoPageStartup = isChecked;
 			console.log('twoPageStartup value: ', this.twoPageStartup);
 		});
+
+		console.log('player id values: ', this.initialPlayerIdValues);
 	}
 	ngAfterViewInit(): void {}
 
@@ -160,9 +173,7 @@ export class GameSetupComponent implements OnInit, AfterViewInit, OnDestroy {
 			this.setupForm.get('pinType').setValue(initConfig.pinType);
 			this.setupForm.get('pinCase').setValue(initConfig.pinCase);
 			this.setupForm.get('spectateApp').setValue(!!initConfig.spectateApp);
-			this.setupForm
-				.get('spectateWeb')
-				.setValue(!!initConfig.spectateWeb);
+			this.setupForm.get('spectateWeb').setValue(!!initConfig.spectateWeb);
 		}
 	}
 	setup() {
@@ -172,11 +183,14 @@ export class GameSetupComponent implements OnInit, AfterViewInit, OnDestroy {
 		this.newEventClicked = true;
 	}
 	save(): void {
+		this.triggerIdForm();
 		const data = {
 			formName: 'setupForm',
-			formData: this.setupForm.value
+			formData: this.setupForm.value,
+			playerIdForm: this.receivedPlayerIdValues ? this.receivedPlayerIdValues : null
 		};
 		this.savedData = data;
+		console.log('data in form: ', data);
 
 		// data.setupForm = this.setupForm.value;
 		console.log('set up form data: ', data);
@@ -209,8 +223,14 @@ export class GameSetupComponent implements OnInit, AfterViewInit, OnDestroy {
 			});
 	}
 
-	onPlayerIdForm(formData: any): void {
-		// console.log('Player ID Form: ', formData);
+	onSavePlayerIdForm(formData: any) {
+		this.receivedPlayerIdValues = formData;
+	}
+
+	triggerIdForm() {
+		if (this.playerIdentification) {
+			this.playerIdentification.savePlayerIdValues();
+		}
 	}
 
 	onScoringForm(formData: any): void {
@@ -225,6 +245,15 @@ export class GameSetupComponent implements OnInit, AfterViewInit, OnDestroy {
 		// console.log('Naminng-numbering form data: ', formData);
 	}
 	ngOnDestroy(): void {
+		this.successMessage = false;
+	}
+
+	idFormChange(isChanged: boolean) {
+		this.idFormChanged = isChanged;
+		this.resetButtons();
+	}
+
+	resetButtons() {
 		this.successMessage = false;
 	}
 }

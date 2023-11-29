@@ -37,6 +37,8 @@ yarn-error.log
 testem.log
 /typings
 **/*._
+json/*
+**/json
 
 # System files
 .DS_Store
