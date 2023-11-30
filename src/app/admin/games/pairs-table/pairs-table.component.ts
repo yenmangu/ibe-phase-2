@@ -72,21 +72,23 @@ export class PairsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	ngOnInit(): void {
 		console.log('initialTableData: ', this.initialTableData);
-		
+
 
 		console.log('tables: ', this.initialTableData.tables);
-		this.tableNumbers = Object.keys(this.initialTableData.tables);
+		this.tableNumbers = Object.keys(this.initialTableData.tableConfig);
 		this.fromDataTableData = this.initialTableData.tables;
 		this.pairConfig = this.initialTableData.pairConfig;
+		console.log('pair config: ', this.pairConfig);
+
 		this.pairNumbers = this.initialTableData.pairNumbers;
 		this.pairsForm = this.createNewPairsForm();
 		const {
-			cardinalArrays: { northSide, southSide, eastSide, westSide }
+			cardinals: { north, south,east, west }
 		} = this.initialTableData;
-		this.northSide = northSide;
-		this.southSide = southSide;
-		this.eastSide = eastSide;
-		this.westSide = westSide;
+		this.northSide = north;
+		this.southSide = south;
+		this.eastSide = east;
+		this.westSide = west;
 
 		if (this.pairsForm) {
 		} else {

@@ -77,11 +77,16 @@ export class RevisedProcessCurrentDataService {
 			const settingsText = await this.indexedDB.readFromDB([store], 'settingstxt');
 			const movementValue = this.destructureValue(movement, 'current_game_data');
 			const peopleValue = this.destructureValue(people, 'current_game_data');
+			const teamsValue = this.destructureAndSplitTeams(teams);
+			const sidesValue = this.destructureAndSplitTeams(sides);
+
+			console.log('\n\n\n teamsValue: ', teamsValue);
 
 			const currentGameConfig = await this.generateConfig(
 				movementValue,
 				peopleValue,
-				settingsText
+				settingsText,
+				teamsValue
 			);
 			return currentGameConfig;
 		} catch (error) {}
@@ -89,18 +94,46 @@ export class RevisedProcessCurrentDataService {
 
 	// START NEW CODE
 
-	async generateConfig(movementtxt, namestxt, settingstxt) {
+	async generateConfig(movementtxt, namestxt, settingstxt, teamsValue) {
 		try {
+			const { matchType, sidesOf } = this.getMatchType(settingstxt);
+			const sidesOfInt = Number(sidesOf);
+
+			console.log('\n\n\n match type: \n\n\n', matchType);
+
 			const movementAndPairs = await this.determinePairNumberStyle(movementtxt);
+
+			const cleanedMovement = this.processMovementText(movementtxt);
+			const numOfTables = cleanedMovement[1][1];
+			let notUsebio = false;
+			let usebio = false;
+			let teamsOrPairs;
+
+			if (cleanedMovement[0][0] !== 'USEBIO2BRIAN') {
+				notUsebio = true;
+				usebio = false;
+			} else {
+				notUsebio = false;
+				usebio = true;
+			}
+
+			console.log(
+				'movement and pairs after determine pair number style: ',
+				movementAndPairs
+			);
 
 			const {
 				totalTables,
 				totalPairs,
-				nsPairs,
-				ewPairs,
+				northSouth,
+				eastWest,
+				eastWestSorted,
+				pairNumbers,
 				movementOnly,
 				pairNumberingStyle
 			} = movementAndPairs;
+
+			let finalConfig: any = {};
 
 			const pairsObject = await this.retrievePairList(namestxt, totalPairs);
 
@@ -125,24 +158,98 @@ export class RevisedProcessCurrentDataService {
 			}
 
 			console.log('tableConfig: ', tableConfig);
+			const { teamConfig, teamsInPlay } = await this.generateTeamConfig(
+				tableConfig,
+				teamsValue,
+				totalTables
+			);
 
+			console.log('TEAMS: ', teamConfig);
 			const cardinals = await this.assignCardinalColumns(tableConfig);
-			const matchType = this.getMatchType(settingstxt);
+			const tables = await this.generateTables(tableConfig);
 
-			console.log('cardinals: ', cardinals);
+			const sideTeamMap = this.generateSideTeamMap(sidesOfInt, teamsInPlay);
 
-			movementAndPairs.cardinals = cardinals;
-			movementAndPairs.tableConfig = tableConfig;
-			movementAndPairs.matchType = matchType;
+			finalConfig.teamConfig = teamConfig;
+			finalConfig.teams = teamsInPlay;
+			finalConfig.cardinals = cardinals;
+			finalConfig.tableConfig = tableConfig;
+			finalConfig.matchType = matchType;
+			finalConfig.tables = tables;
+			finalConfig.pairNumbers = pairNumbers;
+			finalConfig.sidesOf = sidesOf;
+			finalConfig.sideTeamMap = sideTeamMap;
 
 			console.log('final tableConfig: ', tableConfig);
 
 			console.log('Final movement and pairs config: ', movementAndPairs);
 
-			return movementAndPairs;
+			return finalConfig;
 		} catch (error) {
 			console.error('error assigning pair numbers: ', error);
 		}
+	}
+
+	generateTeamConfig(tableConfig, teamsValue, totalTables: number) {
+		const teamsInPlay = teamsValue.slice(0, totalTables);
+		console.log('table config to work from: ', tableConfig);
+
+		let teamConfig: any = {};
+
+		teamsInPlay.forEach((team, index) => {
+			const table = tableConfig[index + 1];
+			console.log('table in question: ', table);
+
+			teamConfig[team] = {
+				index: index,
+				tables: [
+					table[0][0].trim(),
+					table[0][1].trim(),
+					table[1][0].trim(),
+					table[1][1].trim()
+				]
+			};
+		});
+
+		return { teamConfig, teamsInPlay };
+	}
+
+	generateSideTeamMap(sidesOfInt: number, teamsInPlay: string[]) {
+		let sideTeamMap: any = {};
+
+		if (sidesOfInt === 0) {
+			sideTeamMap = { [0]: teamsInPlay };
+		} else {
+			const teamsPerSide: number = Number(sidesOfInt) / 4;
+
+			console.log('teamsPerSide: ', teamsPerSide);
+			const numOfSides: number = Number(teamsInPlay.length) / teamsPerSide;
+
+			console.log('Number of sides: ', numOfSides);
+			for (let i = 0; i < numOfSides; i++) {
+				const teamArray = teamsInPlay.splice(0, teamsPerSide);
+				sideTeamMap[i] = teamArray;
+			}
+		}
+
+		return sideTeamMap;
+	}
+
+	generateTables(tableConfig) {
+		let tables: any = {};
+		for (const tableKey in tableConfig) {
+			if (Object.prototype.hasOwnProperty.call(tableConfig, tableKey)) {
+				const table: any = tableConfig[tableKey];
+
+				tables[tableKey] = [
+					table[0][0].trim(),
+					table[0][1].trim(),
+					table[1][0].trim(),
+					table[1][1].trim()
+				];
+			}
+		}
+		return tables;
 	}
 
 	assignCardinalColumns(tableConfig) {
@@ -154,10 +261,10 @@ export class RevisedProcessCurrentDataService {
 		for (const tableKey in tableConfig) {
 			if (Object.prototype.hasOwnProperty.call(tableConfig, tableKey)) {
 				const table: any = tableConfig[tableKey];
-				north.push(table[0][0]);
-				south.push(table[0][1]);
-				east.push(table[1][0]);
-				west.push(table[1][1]);
+				north.push(table[0][0].trim());
+				south.push(table[0][1].trim());
+				east.push(table[1][0].trim());
+				west.push(table[1][1].trim());
 			}
 		}
 
@@ -181,19 +288,19 @@ export class RevisedProcessCurrentDataService {
 		);
 
 		movementOnly.forEach((movement, index) => {
-			const ns = pairsObject[movement.split(',')[0]];
+			const ns = pairsObject[movement.split(',')[0].trim()];
 			let ew: any;
 			let pairNumString;
 			if (victorPairing) {
 				pairNumString = movement.split(',')[1];
 				const pairAsNum = Number(pairNumString);
 				const pairToFind = pairAsNum + Number(totalTables);
-				ew = pairsObject[pairToFind.toString()];
+				ew = pairsObject[pairToFind.toString().trim()];
 			} else {
-				ew = pairsObject[movement.split(',')[1]];
+				ew = pairsObject[movement.split(',')[1].trim()];
 			}
 
-			tableConfig[`table_${index + 1}`] = [ns, ew];
+			tableConfig[`${index + 1}`] = [ns, ew];
 		});
 
 		return tableConfig;
@@ -216,15 +323,15 @@ export class RevisedProcessCurrentDataService {
 		console.log('movemenet lines: ', movementLines);
 
 		let movementAndPairs: any = {};
-		movementAndPairs.totalTables = movementLines[1].trim().split(',')[1];
+		movementAndPairs.totalTables = movementLines[1].trim().split(',')[1].trim();
 		const movementOnly = movementLines.slice(2, movementLines.length);
 
 		let nsPairs: any[] = [];
 		let ewPairs: any[] = [];
 
 		movementOnly.forEach((movement, index) => {
-			nsPairs.push(movement.split(',')[0]);
-			ewPairs.push(movement.split(',')[1]);
+			nsPairs.push(Number(movement.split(',')[0].trim()));
+			ewPairs.push(Number(movement.split(',')[1].trim()));
 		});
 		const ewSorted = ewPairs.slice().sort((a, b) => b - a);
 		const largestPairNumber = ewSorted[0];
@@ -236,6 +343,8 @@ export class RevisedProcessCurrentDataService {
 		movementAndPairs.eastWestSorted = ewSorted;
 		movementAndPairs.largestPairNumber = largestPairNumber;
 		movementAndPairs.movementOnly = movementOnly;
+		const { northSouth, eastWest } = movementAndPairs;
+		movementAndPairs.pairNumbers = { northSouth, eastWest };
 
 		let totalPairs: number;
 		pairNumberingStyle =
@@ -315,6 +424,30 @@ export class RevisedProcessCurrentDataService {
 			data.sidesOf = sidesOf;
 			return data;
 		}
+	}
+	private processMovementText(data) {
+		const movementText = data[0];
+		const splitLines = movementText
+			.split(/\r?\n/)
+			.filter(line => line.trim() !== '')
+			.map(line => line.trim())
+			.map(line => line.split(','));
+
+		console.log('splitLines: ', splitLines);
+		return splitLines;
+	}
+
+	private destructureAndSplitTeams(data) {
+		const {
+			current_game_data: { value }
+		} = data;
+		const split = value[0].split('\n');
+		let trimmed = [];
+		split.forEach(e => {
+			const trimmedValue = e.trim();
+			trimmed.push(trimmedValue);
+		});
+		return trimmed;
 	}
 
 	public processLock(lockData): any {

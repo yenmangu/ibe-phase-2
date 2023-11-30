@@ -120,7 +120,7 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 				next: data => {
 					if (data) {
 						// console.log('initialTableData: ', JSON.stringify(data, null, 2));
-						console.log('initialTableData: ', data);
+						console.log('initialTableData in gamePlayers: ', data);
 						this.initialTableData = data;
 						const { matchType } = data;
 						matchType.pairs
@@ -223,7 +223,7 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 		const {
 			pairConfig,
 			pairNumbers,
-			cardinalArrays: { northSide, southSide, eastSide, westSide },
+			cardinals: { north:northSide, south:southSide, east:eastSide, west:westSide },
 			tables
 		} = this.initialTableData;
 		// const tablesLength = Object.keys(tables).length
