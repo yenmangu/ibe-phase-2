@@ -76,15 +76,24 @@ export class ProcessCurrentDataService {
 
 			const sides = await this.indexedDB.readFromDB([store], 'sidenamestxt');
 			const settingsText = await this.indexedDB.readFromDB([store], 'settingstxt');
-			// console.log(settingsText);
-			// console.log('people initial: ', people);
+
 			const movementValue = this.destructureValue(movement, 'current_game_data');
+			const peopleValue = this.destructureValue(people, 'current_game_data');
 			console.log('movementValue: ', movementValue);
+			console.log('namestext: ', peopleValue);
+			// USE THESE VALUES ^^^ FOR THE CREATION OF THE CONFIG
+
+			const currentGameConfig = await this.generateConfig(
+				movementValue,
+				peopleValue
+			);
+
+			console.log('new current game config: ', currentGameConfig);
+
 			// workign out pair numbers
 			const pairNumbers = this.getPairNumbers(movementValue);
-			// console.log('pairNumbers: ', pairNumbers);
+			console.log('pairNumbers: ', pairNumbers);
 
-			const peopleValue = this.destructureValue(people, 'current_game_data');
 			const teamsValue = this.destructureAndSplitTeams(teams);
 			const sidesValue = this.destructureAndSplitTeams(sides);
 			const matchTypeObject = this.getMatchType(settingsText);
@@ -93,13 +102,13 @@ export class ProcessCurrentDataService {
 			// console.log('movement value: ', movementValue);
 			console.log('people value: ', peopleValue);
 
-			const currentGameConfig = this.buildCurrentGameObject(
-				movementValue,
-				peopleValue,
-				teamsValue,
-				sidesValue,
-				matchTypeObject
-			);
+			// const currentGameConfig = this.buildCurrentGameObject(
+			// 	movementValue,
+			// 	peopleValue,
+			// 	teamsValue,
+			// 	sidesValue,
+			// 	matchTypeObject
+			// );
 			console.log('currentGameConfig: ', currentGameConfig);
 			const { tables } = currentGameConfig;
 
@@ -111,6 +120,179 @@ export class ProcessCurrentDataService {
 			throw err;
 		}
 	}
+
+	// START NEW CODE
+
+	async generateConfig(movementtxt, namestxt) {
+		try {
+			const movementAndPairs = await this.determinePairNumberStyle(movementtxt);
+
+			const {
+				totalTables,
+				totalPairs,
+				nsPairs,
+				ewPairs,
+				movementOnly,
+				pairNumberingStyle
+			} = movementAndPairs;
+
+			const pairsObject = await this.retrievePairList(namestxt, totalPairs);
+
+			let tableConfig: any = {};
+
+			if (pairNumberingStyle === 'standardPairing') {
+				tableConfig = await this.assignStartingPositions(
+					pairsObject,
+					movementOnly,
+					undefined,
+					undefined
+				);
+			} else if (pairNumberingStyle === 'victorPairing') {
+				console.log('victorPairing detected... \n');
+
+				tableConfig = await this.assignStartingPositions(
+					pairsObject,
+					movementOnly,
+					true,
+					totalTables
+				);
+			}
+
+			console.log('tableConfig: ', tableConfig);
+
+			const cardinals = await this.assignCardinalColumns(tableConfig);
+
+			console.log('cardinals: ', cardinals);
+
+			movementAndPairs.cardinals = cardinals;
+			movementAndPairs.tableConfig = tableConfig;
+
+			console.log('final tableConfig: ', tableConfig);
+
+			console.log('Final movement and pairs config: ', movementAndPairs);
+
+			return movementAndPairs;
+		} catch (error) {
+			console.error('error assigning pair numbers: ', error);
+		}
+	}
+
+	assignCardinalColumns(tableConfig) {
+		let north: any[] = [];
+		let south: any[] = [];
+		let east: any[] = [];
+		let west: any[] = [];
+
+		for (const tableKey in tableConfig) {
+			if (Object.prototype.hasOwnProperty.call(tableConfig, tableKey)) {
+				const table: any = tableConfig[tableKey];
+				north.push(table[0][0]);
+				south.push(table[0][1]);
+				east.push(table[1][0]);
+				west.push(table[1][1]);
+			}
+		}
+
+		const cardinals = { north, south, east, west };
+		return cardinals;
+	}
+
+	// The following works for both Victor and Standard pair numbering
+
+	assignStartingPositions(
+		pairsObject,
+		movementOnly,
+		victorPairing?: boolean,
+		totalTables?: number
+	) {
+		let tableConfig: any = {};
+
+		console.log(
+			'total tables: ',
+			totalTables ? totalTables : 'not needed due to standardPairing'
+		);
+
+		movementOnly.forEach((movement, index) => {
+			const ns = pairsObject[movement.split(',')[0]];
+			let ew: any;
+			let pairNumString;
+			if (victorPairing) {
+				pairNumString = movement.split(',')[1];
+				const pairAsNum = Number(pairNumString);
+				const pairToFind = pairAsNum + Number(totalTables);
+				ew = pairsObject[pairToFind.toString()];
+			} else {
+				ew = pairsObject[movement.split(',')[1]];
+			}
+
+			tableConfig[`table_${index + 1}`] = [ns, ew];
+		});
+
+		return tableConfig;
+	}
+	retrievePairList(namestxt: string[], totalPairs): any {
+		const pairsArray: any[] = namestxt[0].trim().split('\n').splice(0, totalPairs);
+		// console.log('pairsArray: ', pairsArray);
+		let pairsObject: any = {};
+		pairsArray.forEach((pairElement, index) => {
+			let tempPairs = pairElement.split('&');
+			pairsObject[index + 1] = tempPairs;
+		});
+		console.log('pairObject: ', pairsObject);
+
+		return pairsObject;
+	}
+
+	determinePairNumberStyle(movementtxt) {
+		const movementLines: any[] = movementtxt[0].trim().split('\n');
+		console.log('movemenet lines: ', movementLines);
+
+		let movementAndPairs: any = {};
+		movementAndPairs.totalTables = movementLines[1].trim().split(',')[1];
+		const movementOnly = movementLines.slice(2, movementLines.length);
+
+		let nsPairs: any[] = [];
+		let ewPairs: any[] = [];
+
+		movementOnly.forEach((movement, index) => {
+			nsPairs.push(movement.split(',')[0]);
+			ewPairs.push(movement.split(',')[1]);
+		});
+		const ewSorted = ewPairs.slice().sort((a, b) => b - a);
+		const largestPairNumber = ewSorted[0];
+
+		let pairNumberingStyle: string = '';
+
+		movementAndPairs.northSouth = nsPairs;
+		movementAndPairs.eastWest = ewPairs;
+		movementAndPairs.eastWestSorted = ewSorted;
+		movementAndPairs.largestPairNumber = largestPairNumber;
+		movementAndPairs.movementOnly = movementOnly;
+
+		let totalPairs: number;
+		pairNumberingStyle =
+			largestPairNumber === movementAndPairs.totalTables
+				? 'victorPairing'
+				: 'standardPairing';
+
+		if (pairNumberingStyle === 'victorPairing') {
+			totalPairs = largestPairNumber * 2;
+		} else {
+			totalPairs = largestPairNumber;
+		}
+
+		movementAndPairs.pairNumberingStyle = pairNumberingStyle;
+		movementAndPairs.totalPairs = totalPairs;
+
+		console.log(
+			'movementAndPairs Object: ',
+			JSON.stringify(movementAndPairs, null, 2)
+		);
+
+		return movementAndPairs;
+	}
+
+	// END NEW CODE
 
 	private getPairNumbers(movementValue) {
 		const split = movementValue[0].split('\n');
@@ -134,30 +316,30 @@ export class ProcessCurrentDataService {
 		return data;
 	}
 
-	private assignPairNumbers(pairNumbers, tableConfig) {
-		let pairedTables = {};
-		const { northSouth, eastWest } = pairNumbers;
-		Object.keys(tableConfig).forEach((table, index) => {
-			const tablePlayers = tableConfig[table];
-			const pairs = {};
-			// console.log('tablePlayers in loop: ', index, tableConfig[table]);
+	// private assignPairNumbers(pairNumbers, tableConfig) {
+	// 	let pairedTables = {};
+	// 	const { northSouth, eastWest } = pairNumbers;
+	// 	Object.keys(tableConfig).forEach((table, index) => {
+	// 		const tablePlayers = tableConfig[table];
+	// 		const pairs = {};
+	// 		// console.log('tablePlayers in loop: ', index, tableConfig[table]);
 
-			for (let i = 0; i < tablePlayers.length; i += 4) {
-				const firstPairLabel = `${northSouth[index]}`;
-				const secondPairLabel = `${eastWest[index]}`;
-				// console.log('in nested loop iteration: ', i);
+	// 		for (let i = 0; i < tablePlayers.length; i += 4) {
+	// 			const firstPairLabel = `${northSouth[index]}`;
+	// 			const secondPairLabel = `${eastWest[index]}`;
+	// 			// console.log('in nested loop iteration: ', i);
 
-				console.log(tablePlayers[i], tablePlayers[i + 1]);
-				if (i + 3 < tablePlayers.length) {
-					// Ensure that indexing doesn't exceed array bounds
-					pairs[firstPairLabel] = [tablePlayers[i], tablePlayers[i + 1]];
-					pairs[secondPairLabel] = [tablePlayers[i + 2], tablePlayers[i + 3]];
-				}
-			}
-			pairedTables[table] = pairs;
-		});
-		return pairedTables;
-	}
+	// 			console.log(tablePlayers[i], tablePlayers[i + 1]);
+	// 			if (i + 3 < tablePlayers.length) {
+	// 				// Ensure that indexing doesn't exceed array bounds
+	// 				pairs[firstPairLabel] = [tablePlayers[i], tablePlayers[i + 1]];
+	// 				pairs[secondPairLabel] = [tablePlayers[i + 2], tablePlayers[i + 3]];
+	// 			}
+	// 		}
+	// 		pairedTables[table] = pairs;
+	// 	});
+	// 	return pairedTables;
+	// }
 
 	private splitUnevenArray(array) {
 		const half = Math.floor(array.length / 2);
@@ -185,210 +367,210 @@ export class ProcessCurrentDataService {
 	// 	}
 	// }
 
-	private buildCurrentGameObject(movement, people, teams, sides, matchTypeObject) {
-		let notUsebio = false;
-		let teamsOrPairs;
-		const cleanedMovement = this.processMovementText(movement);
-		const numOfTables = cleanedMovement[1][1];
-		console.log('number of tables: ', numOfTables);
+	// private buildCurrentGameObject(movement, people, teams, sides, matchTypeObject) {
+	// 	let notUsebio = false;
+	// 	let teamsOrPairs;
+	// 	const cleanedMovement = this.processMovementText(movement);
+	// 	const numOfTables = cleanedMovement[1][1];
+	// 	console.log('number of tables: ', numOfTables);
 
-		if (cleanedMovement[0][0] !== 'USEBIO2BRIAN') {
-			// work out usebio values
-			console.log('Normal detected, building tables appropriately ');
-			notUsebio = true;
-			teamsOrPairs = this.processNormalNames(people, numOfTables);
-		} else {
-			teamsOrPairs = this.processNamesText(people, numOfTables);
-		}
+	// 	if (cleanedMovement[0][0] !== 'USEBIO2BRIAN') {
+	// 		// work out usebio values
+	// 		console.log('Normal detected, building tables appropriately ');
+	// 		notUsebio = true;
+	// 		teamsOrPairs = this.processNormalNames(people, numOfTables);
+	// 	} else {
+	// 		teamsOrPairs = this.processNamesText(people, numOfTables);
+	// 	}
 
-		console.log('teams or pairs: ', teamsOrPairs);
-		if (notUsebio) {
-		}
+	// 	console.log('teams or pairs: ', teamsOrPairs);
+	// 	if (notUsebio) {
+	// 	}
 
-		let dataObj: any = {};
-		dataObj.rounds = cleanedMovement[1][4];
-		dataObj.players = this.splitUnevenArray(teamsOrPairs);
-		dataObj.rawPlayers = teamsOrPairs;
-		const tableNumbers = teamsOrPairs.length / 2;
-		dataObj.tableNumbers = tableNumbers;
-		console.log('data object before tables: ', dataObj);
-		const tableArray = [];
-		for (let i = 0; i < dataObj.players[0].length; i++) {
-			const team = [dataObj.players[0][i], dataObj.players[0][i + 1]];
-			tableArray.push(team);
-		}
-		const cardinalArrays = this.createCardinalArrays(dataObj.rawPlayers);
-		const pairNumbers: any = {};
-		for (let i = 0; i < dataObj.rawPlayers.length; i++) {
-			pairNumbers[i + 1] = dataObj.rawPlayers[i];
-		}
+	// 	let dataObj: any = {};
+	// 	dataObj.rounds = cleanedMovement[1][4];
+	// 	dataObj.players = this.splitUnevenArray(teamsOrPairs);
+	// 	dataObj.rawPlayers = teamsOrPairs;
+	// 	const tableNumbers = teamsOrPairs.length / 2;
+	// 	dataObj.tableNumbers = tableNumbers;
+	// 	console.log('data object before tables: ', dataObj);
+	// 	const tableArray = [];
+	// 	for (let i = 0; i < dataObj.players[0].length; i++) {
+	// 		const team = [dataObj.players[0][i], dataObj.players[0][i + 1]];
+	// 		tableArray.push(team);
+	// 	}
+	// 	const cardinalArrays = this.createCardinalArrays(dataObj.rawPlayers);
+	// 	const pairNumbers: any = {};
+	// 	for (let i = 0; i < dataObj.rawPlayers.length; i++) {
+	// 		pairNumbers[i + 1] = dataObj.rawPlayers[i];
+	// 	}
 
-		// console.log('tableArray: ', tableArray);
-		// console.log('data object after tables: ', dataObj);
+	// 	// console.log('tableArray: ', tableArray);
+	// 	// console.log('data object after tables: ', dataObj);
 
-		dataObj.tables = tableArray;
-		dataObj.playerConfig = this.extractPairs(dataObj.players);
+	// 	dataObj.tables = tableArray;
+	// 	dataObj.playerConfig = this.extractPairs(dataObj.players);
 
-		// console.log('data object after extractPairs: ', dataObj);
+	// 	// console.log('data object after extractPairs: ', dataObj);
 
-		const { north, south, east, west } = dataObj.playerConfig;
-		const currentGame: any = {
-			playerConfig: {
-				north: north,
-				south: south,
-				east: east,
-				west: west
-			}
-		};
-		currentGame.cardinalArrays = cardinalArrays;
-		currentGame.newPairNumbers = pairNumbers;
-		console.log('current game pairNumbers: ', currentGame.pairNumbers);
+	// 	const { north, south, east, west } = dataObj.playerConfig;
+	// 	const currentGame: any = {
+	// 		playerConfig: {
+	// 			north: north,
+	// 			south: south,
+	// 			east: east,
+	// 			west: west
+	// 		}
+	// 	};
+	// 	currentGame.cardinalArrays = cardinalArrays;
+	// 	currentGame.newPairNumbers = pairNumbers;
+	// 	console.log('current game pairNumbers: ', currentGame.pairNumbers);
 
-		const pairAndTablesObject = this.createNewPairAndTableConfig(
-			dataObj.rawPlayers
-		);
-		console.log('new pair and table object: ', pairAndTablesObject);
+	// 	const pairAndTablesObject = this.createNewPairAndTableConfig(
+	// 		dataObj.rawPlayers
+	// 	);
+	// 	console.log('new pair and table object: ', pairAndTablesObject);
 
-		currentGame.tables = pairAndTablesObject.tables;
-		currentGame.newPairConfig = pairAndTablesObject.pairConfig;
-		const index = currentGame.playerConfig.north.length;
-		teams.splice(index);
+	// 	currentGame.tables = pairAndTablesObject.tables;
+	// 	currentGame.newPairConfig = pairAndTablesObject.pairConfig;
+	// 	const index = currentGame.playerConfig.north.length;
+	// 	teams.splice(index);
 
-		currentGame.teamConfig = {};
+	// 	currentGame.teamConfig = {};
 
-		teams.forEach((team, index) => {
-			currentGame.teamConfig[index] = {};
-			currentGame.teamConfig[index].teamName = team;
-			// currentGame.teamConfig[team].tables
-			const tableArray = currentGame.tables[index + 1];
-			currentGame.teamConfig[index].tables = tableArray;
-		});
+	// 	teams.forEach((team, index) => {
+	// 		currentGame.teamConfig[index] = {};
+	// 		currentGame.teamConfig[index].teamName = team;
+	// 		// currentGame.teamConfig[team].tables
+	// 		const tableArray = currentGame.tables[index + 1];
+	// 		currentGame.teamConfig[index].tables = tableArray;
+	// 	});
 
-		currentGame.teams = teams;
-		currentGame.isTeams = true;
+	// 	currentGame.teams = teams;
+	// 	currentGame.isTeams = true;
 
-		const { matchType, sidesOf } = matchTypeObject;
-		currentGame.matchType = matchType;
-		currentGame.sidesOf = sidesOf;
+	// 	const { matchType, sidesOf } = matchTypeObject;
+	// 	currentGame.matchType = matchType;
+	// 	currentGame.sidesOf = sidesOf;
 
-		const extractedSides = this.extractSides(sides, teams, sidesOf);
+	// 	const extractedSides = this.extractSides(sides, teams, sidesOf);
 
-		const sideTeamMap = this.assignSideIndices(
-			currentGame.sidesOf,
-			currentGame.teams,
-			extractedSides,
-			tableNumbers
-		);
-		currentGame.sideTeamMap = sideTeamMap;
-		const { totalSides } = sideTeamMap;
-		if (extractedSides.length !== 0) {
-			currentGame.sides = extractedSides;
-			currentGame.isSides = true;
-		}
-		return currentGame;
-	}
+	// 	const sideTeamMap = this.assignSideIndices(
+	// 		currentGame.sidesOf,
+	// 		currentGame.teams,
+	// 		extractedSides,
+	// 		tableNumbers
+	// 	);
+	// 	currentGame.sideTeamMap = sideTeamMap;
+	// 	const { totalSides } = sideTeamMap;
+	// 	if (extractedSides.length !== 0) {
+	// 		currentGame.sides = extractedSides;
+	// 		currentGame.isSides = true;
+	// 	}
+	// 	return currentGame;
+	// }
 
-	private createCardinalArrays(rawPlayerData) {
-		let cardinalArays = {};
-		let northSide = [];
-		let eastSide = [];
-		let southSide = [];
-		let westSide = [];
-		// console.log('Raw player data: ', rawPlayerData);
+	// private createCardinalArrays(rawPlayerData) {
+	// 	let cardinalArays = {};
+	// 	let northSide = [];
+	// 	let eastSide = [];
+	// 	let southSide = [];
+	// 	let westSide = [];
+	// 	// console.log('Raw player data: ', rawPlayerData);
 
-		for (let i = 0; i < rawPlayerData.length; i++) {
-			console.log('i: ', i);
-			const pair = rawPlayerData[i];
-			const playerOne = pair[0];
-			const playerTwo = pair[1];
+	// 	for (let i = 0; i < rawPlayerData.length; i++) {
+	// 		console.log('i: ', i);
+	// 		const pair = rawPlayerData[i];
+	// 		const playerOne = pair[0];
+	// 		const playerTwo = pair[1];
 
-			if (i % 2 === 0) {
-				northSide.push(playerOne);
-				southSide.push(playerTwo);
-			} else {
-				eastSide.push(playerOne);
-				westSide.push(playerTwo);
-			}
-		}
+	// 		if (i % 2 === 0) {
+	// 			northSide.push(playerOne);
+	// 			southSide.push(playerTwo);
+	// 		} else {
+	// 			eastSide.push(playerOne);
+	// 			westSide.push(playerTwo);
+	// 		}
+	// 	}
 
-		cardinalArays = { northSide, southSide, eastSide, westSide };
-		return cardinalArays;
-	}
+	// 	cardinalArays = { northSide, southSide, eastSide, westSide };
+	// 	return cardinalArays;
+	// }
 
-	private extractSides(sides, teams, sidesOf) {
-		const playersPerSide = sidesOf / 4;
-		const totalSides = Math.floor(teams.length / playersPerSide);
-		return sides.slice(0, totalSides);
-	}
+	// private extractSides(sides, teams, sidesOf) {
+	// 	const playersPerSide = sidesOf / 4;
+	// 	const totalSides = Math.floor(teams.length / playersPerSide);
+	// 	return sides.slice(0, totalSides);
+	// }
 
-	private assignSideIndices(sidesOf, teams, extractedSides, tableNumbers) {
-		const playersPerSide = sidesOf / 4;
-		const sideTeamMap: any = {
-			totalSides: extractedSides.length
-		};
-		extractedSides.forEach((sideName, sideIndex) => {
-			sideTeamMap[sideIndex + 1] = {
-				name: sideName,
-				teams: []
-			};
-		});
+	// private assignSideIndices(sidesOf, teams, extractedSides, tableNumbers) {
+	// 	const playersPerSide = sidesOf / 4;
+	// 	const sideTeamMap: any = {
+	// 		totalSides: extractedSides.length
+	// 	};
+	// 	extractedSides.forEach((sideName, sideIndex) => {
+	// 		sideTeamMap[sideIndex + 1] = {
+	// 			name: sideName,
+	// 			teams: []
+	// 		};
+	// 	});
 
-		console.log('teams: ', teams);
-		for (let i = 0; i < tableNumbers.length; i++) {
-			const sideIndex = Math.floor(i / playersPerSide);
+	// 	console.log('teams: ', teams);
+	// 	for (let i = 0; i < tableNumbers.length; i++) {
+	// 		const sideIndex = Math.floor(i / playersPerSide);
 
-			sideTeamMap[sideIndex + 1].teams.push(teams[i]);
-		}
-		return sideTeamMap;
-	}
+	// 		sideTeamMap[sideIndex + 1].teams.push(teams[i]);
+	// 	}
+	// 	return sideTeamMap;
+	// }
 
-	private extractPairs(players) {
-		const north = [];
-		const south = [];
-		const east = [];
-		const west = [];
-		const playerArrayOne = players[0];
-		const playerArrayTwo = players[1];
-		for (const pair of playerArrayOne) {
-			// console.log('building pairs: arrayOne pair: ', pair);
+	// private extractPairs(players) {
+	// 	const north = [];
+	// 	const south = [];
+	// 	const east = [];
+	// 	const west = [];
+	// 	const playerArrayOne = players[0];
+	// 	const playerArrayTwo = players[1];
+	// 	for (const pair of playerArrayOne) {
+	// 		// console.log('building pairs: arrayOne pair: ', pair);
 
-			north.push(pair[0]);
-			south.push(pair[1]);
-			// console.log('north: ', north);
-			// console.log('south: ', south);
-		}
-		for (const pair of playerArrayTwo) {
-			// console.log('building pairs: arrayTwo pair: ', pair);
-			east.push(pair[0]);
-			west.push(pair[1]);
-			// console.log('east: ', east);
-			// console.log('west: ', west);
-		}
-		players.north = north;
-		players.south = south;
-		players.east = east;
-		players.west = west;
-		return players;
-	}
+	// 		north.push(pair[0]);
+	// 		south.push(pair[1]);
+	// 		// console.log('north: ', north);
+	// 		// console.log('south: ', south);
+	// 	}
+	// 	for (const pair of playerArrayTwo) {
+	// 		// console.log('building pairs: arrayTwo pair: ', pair);
+	// 		east.push(pair[0]);
+	// 		west.push(pair[1]);
+	// 		// console.log('east: ', east);
+	// 		// console.log('west: ', west);
+	// 	}
+	// 	players.north = north;
+	// 	players.south = south;
+	// 	players.east = east;
+	// 	players.west = west;
+	// 	return players;
+	// }
 
-	private createNewPairAndTableConfig(pairObject) {
-		let finalObject: any = {};
-		let tables = {};
-		let pairConfig: any = {};
-		for (let i = 0; i < Object.keys(pairObject).length; i += 2) {
-			const pairOne = pairObject[i];
-			const pairTwo = pairObject[i + 1];
-			const tableNumber = Math.ceil((i + 1) / 2);
-			pairConfig[tableNumber] = {
-				[i]: pairOne,
-				[i + 1]: pairTwo
-			};
-			tables[tableNumber] = [pairOne[0], pairOne[1], pairTwo[0], pairTwo[1]];
-		}
-		finalObject.pairConfig = pairConfig;
-		finalObject.tables = tables;
-		return finalObject;
-	}
+	// private createNewPairAndTableConfig(pairObject) {
+	// 	let finalObject: any = {};
+	// 	let tables = {};
+	// 	let pairConfig: any = {};
+	// 	for (let i = 0; i < Object.keys(pairObject).length; i += 2) {
+	// 		const pairOne = pairObject[i];
+	// 		const pairTwo = pairObject[i + 1];
+	// 		const tableNumber = Math.ceil((i + 1) / 2);
+	// 		pairConfig[tableNumber] = {
+	// 			[i]: pairOne,
+	// 			[i + 1]: pairTwo
+	// 		};
+	// 		tables[tableNumber] = [pairOne[0], pairOne[1], pairTwo[0], pairTwo[1]];
+	// 	}
+	// 	finalObject.pairConfig = pairConfig;
+	// 	finalObject.tables = tables;
+	// 	return finalObject;
+	// }
 
 	private destructureValue(object, string) {
 		// console.log('attempting to destructure: ', object);
@@ -415,97 +597,73 @@ export class ProcessCurrentDataService {
 		});
 		return trimmed;
 	}
-	private processMovementText(data) {
-		const movementText = data[0];
-		const splitLines = movementText
-			.split(/\r?\n/)
-			.filter(line => line.trim() !== '')
-			.map(line => line.trim())
-			.map(line => line.split(','));
+	// private processMovementText(data) {
+	// 	const movementText = data[0];
+	// 	const splitLines = movementText
+	// 		.split(/\r?\n/)
+	// 		.filter(line => line.trim() !== '')
+	// 		.map(line => line.trim())
+	// 		.map(line => line.split(','));
 
-		console.log('splitLines: ', splitLines);
-		return splitLines;
+	// 	console.log('splitLines: ', splitLines);
+	// 	return splitLines;
 
-		// return splitLines
-	}
+	// 	// return splitLines
+	// }
 
-	private processNormalNames(names, numOfTables) {
-		const namesInPlay = numOfTables * 2;
-
-		let namesArray = [];
-		console.log('names in process normal names: ', names);
-
-		const lines = names[0].split('\n').filter(line => line.trim() !== '');
-		// console.log('lines: ', lines);
-
-		const splitIndex = Math.ceil(numOfTables);
-		namesArray = namesInPlay !== -1 ? lines.slice(0, namesInPlay) : lines;
-		// console.log('namesArray: ', namesArray);
-
-		namesArray = namesArray.map(item => item.split(' & '));
-
-		// console.log('namesArray after split at "&": ', namesArray);
-
-		// console.log('split index: ', splitIndex);
-		const firstHalf = namesArray.slice(0, splitIndex);
-		const secondHalf = namesArray.slice(splitIndex);
-
-		console.log(firstHalf);
-		console.log(secondHalf);
-		let newArray = [];
-		for (let i = 0; i < firstHalf.length; i++) {
-			newArray.push(firstHalf[i]);
-			newArray.push(secondHalf[i]);
-		}
-		// console.log('new array: ', newArray);
-		return newArray;
-	}
-
-	// private processNonUsebioNames(value, numOfTables) {
-	// 	let ns: any[] = [];
-	// 	let ew: any[] = [];
-	// 	let namesArray: any[] = [];
+	// private processNormalNames(names, numOfTables) {
 	// 	const namesInPlay = numOfTables * 2;
+
+	// 	let namesArray = [];
+	// 	console.log('names in process normal names: ', names);
+
+	// 	const lines = names[0].split('\n').filter(line => line.trim() !== '');
+	// 	// console.log('lines: ', lines);
+
+	// 	const splitIndex = Math.ceil(numOfTables);
+	// 	namesArray = namesInPlay !== -1 ? lines.slice(0, namesInPlay) : lines;
+	// 	// console.log('namesArray: ', namesArray);
+
+	// 	namesArray = namesArray.map(item => item.split(' & '));
+
+	// 	// console.log('namesArray after split at "&": ', namesArray);
+
+	// 	// console.log('split index: ', splitIndex);
+	// 	const firstHalf = namesArray.slice(0, splitIndex);
+	// 	const secondHalf = namesArray.slice(splitIndex);
+
+	// 	console.log(firstHalf);
+	// 	console.log(secondHalf);
+	// 	let newArray = [];
+	// 	for (let i = 0; i < firstHalf.length; i++) {
+	// 		newArray.push(firstHalf[i]);
+	// 		newArray.push(secondHalf[i]);
+	// 	}
+	// 	// console.log('new array: ', newArray);
+	// 	return newArray;
+	// }
+
+
+
+	// private processNamesText(value, numOfTables) {
+	// 	let namesArray = [];
+	// 	const namesInPlay = numOfTables * 2;
+
 	// 	const lines = value[0]
 	// 		.split('\n')
 	// 		.filter(line => line.trim() !== '')
 	// 		.map(line => line.trim());
+	// 	const cleanedLines = lines.slice(1).map(line => line.trim());
+	// 	// console.log('cleaned lines: ', cleanedLines);
 
 	// 	namesArray = namesInPlay !== -1 ? lines.slice(0, namesInPlay) : lines;
+	// 	// console.log('After tapHereIndex: ', namesArray);
+	// 	// namesArray = value[0].split('\n').filter(name => name.trim()!== '').map(line=> line.trim(''))
 	// 	namesArray = namesArray.map(item => item.split(' & '));
-	// 	for (let i = 0; i < namesArray.length; i++) {
-	// 		console.log('pair in array: ', namesArray[i]);
-	// 		if (i % 2 === 0) {
-	// 			ns.push(namesArray[i]);
-	// 		} else {
-	// 			ew.push(namesArray[i]);
-	// 		}
-	// 	}
-	// 	const finalArray = ns.concat(ew);
-	// 	console.log('final array: ', finalArray);
 
+	// 	// console.log('procesNamesText namesArray: ', namesArray);
 	// 	return namesArray;
 	// }
-
-	private processNamesText(value, numOfTables) {
-		let namesArray = [];
-		const namesInPlay = numOfTables * 2;
-
-		const lines = value[0]
-			.split('\n')
-			.filter(line => line.trim() !== '')
-			.map(line => line.trim());
-		const cleanedLines = lines.slice(1).map(line => line.trim());
-		// console.log('cleaned lines: ', cleanedLines);
-
-		namesArray = namesInPlay !== -1 ? lines.slice(0, namesInPlay) : lines;
-		// console.log('After tapHereIndex: ', namesArray);
-		// namesArray = value[0].split('\n').filter(name => name.trim()!== '').map(line=> line.trim(''))
-		namesArray = namesArray.map(item => item.split(' & '));
-
-		// console.log('procesNamesText namesArray: ', namesArray);
-		return namesArray;
-	}
 
 	private extractOTH(string) {
 		return string.split(' ')[1].split('.');
