@@ -80,14 +80,15 @@ export class RevisedProcessCurrentDataService {
 
 			const currentGameConfig = await this.generateConfig(
 				movementValue,
-				peopleValue
+				peopleValue,
+				settingsText
 			);
 		} catch (error) {}
 	}
 
 	// START NEW CODE
 
-	async generateConfig(movementtxt, namestxt) {
+	async generateConfig(movementtxt, namestxt, settingstxt) {
 		try {
 			const movementAndPairs = await this.determinePairNumberStyle(movementtxt);
 
@@ -125,11 +126,13 @@ export class RevisedProcessCurrentDataService {
 			console.log('tableConfig: ', tableConfig);
 
 			const cardinals = await this.assignCardinalColumns(tableConfig);
+			const matchType = this.getMatchType(settingstxt);
 
 			console.log('cardinals: ', cardinals);
 
 			movementAndPairs.cardinals = cardinals;
 			movementAndPairs.tableConfig = tableConfig;
+			movementAndPairs.matchType = matchType;
 
 			console.log('final tableConfig: ', tableConfig);
 
@@ -268,6 +271,48 @@ export class RevisedProcessCurrentDataService {
 			// Handle the case where the data is missing or doesn't have the expected structure
 			// console.error('Invalid data structure:', object);
 			return null;
+		}
+	}
+	private extractOTH(string) {
+		return string.split(' ')[1].split('.');
+	}
+
+	getMatchType(settingsTxt: any): any {
+		const data: any = {};
+		if (!settingsTxt) {
+			return undefined;
+		} else {
+			const {
+				current_game_data: { value }
+			} = settingsTxt;
+			const settingsArray = value[0].split('\n');
+			// console.log('settings array: ', settingsArray);
+			const settingsDigits = this.extractOTH(settingsArray[6]);
+			// console.log('settings digits: ', settingsDigits);
+			const sidesOf = settingsDigits[34];
+			// console.log('settings txt: ', value);
+			const matchType: { pairs?: boolean; teams?: boolean; individual?: boolean } =
+				{};
+			for (const text of value) {
+				if (text.startsWith('MV I')) {
+					console.log('individual');
+					matchType.individual = true;
+				} else if (text.startsWith('MV T')) {
+					console.log('team');
+					matchType.teams = true;
+				} else if (text.startsWith('MV P') || text.startsWith('MV CPM')) {
+					console.log('pairs');
+					if (text.startsWith('MV CPM')) {
+						console.log('USEBIO Import');
+					}
+					matchType.pairs = true;
+				} else {
+					matchType.pairs = true;
+				}
+			}
+			data.matchType = matchType;
+			data.sidesOf = sidesOf;
+			return data;
 		}
 	}
 }
