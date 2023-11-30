@@ -14,7 +14,7 @@ import {
 import { DataService } from './data.service';
 import { ProcessHandsService } from '../../hands/services/process-hands.service';
 import { FetchCurrentDataService } from './fetch-current-data.service';
-import { ProcessCurrentDataService } from './process-current-data.service';
+import { RevisedProcessCurrentDataService } from './revised-process-current-data.service';
 import { IndexedDatabaseStatusService } from 'src/app/shared/services/indexed-database-status.service';
 import { SharedGameDataService } from './shared-game-data.service';
 import { tag } from 'rxjs-spy/operators';
@@ -39,7 +39,7 @@ export class CurrentGamesDatabaseServiceService {
 		private processHands: ProcessHandsService,
 		private fetchMatchData: FetchCurrentDataService,
 		private iDBStatus: IndexedDatabaseStatusService,
-		private processCurrentDataService: ProcessCurrentDataService,
+		private processCurrentDataService: RevisedProcessCurrentDataService,
 		private sharedGameData: SharedGameDataService
 	) {
 		this.iDBStatus.isInitialised$

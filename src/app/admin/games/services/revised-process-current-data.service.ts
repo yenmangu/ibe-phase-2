@@ -83,6 +83,7 @@ export class RevisedProcessCurrentDataService {
 				peopleValue,
 				settingsText
 			);
+			return currentGameConfig;
 		} catch (error) {}
 	}
 
@@ -314,5 +315,16 @@ export class RevisedProcessCurrentDataService {
 			data.sidesOf = sidesOf;
 			return data;
 		}
+	}
+
+	public processLock(lockData): any {
+		const value = lockData[0];
+		const { key, value: lock } = value;
+		// console.log('before processing: ', lock);
+		// console.log(lock['$'].tf);
+		const lockValue = lock['$'].tf === 'f' ? false : true;
+		console.log('lockValue in processing: ', lockValue);
+
+		return lockValue;
 	}
 }
