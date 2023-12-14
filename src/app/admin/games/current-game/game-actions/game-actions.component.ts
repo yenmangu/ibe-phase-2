@@ -204,7 +204,7 @@ export class GameActionsComponent implements OnInit, OnDestroy {
 		this.gameActions.setSimultaneous(data).subscribe(response => {
 			console.log(response);
 
-			if (response.success) {
+			if (response.successVal) {
 				this.simultaneousSuccess = true;
 				this.simultaneousClicked = true;
 				this.simultaneousButtonText = 'Game Merged';

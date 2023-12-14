@@ -27,7 +27,7 @@ class PermissionsService {
 	): Observable<boolean> {
 		const url = state.url;
 
-		console.log(state);
+		// console.log(state);
 		return this.authService.isAuthedSubject$.pipe(
 			take(1),
 			switchMap(isAuthed => {

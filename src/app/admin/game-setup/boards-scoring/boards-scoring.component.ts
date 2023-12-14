@@ -41,6 +41,18 @@ export class BoardsScoringComponent implements OnInit, OnChanges, OnDestroy {
 	ngOnInit(): void {
 		// console.log('checking data: ', this.scoringConfigForm);
 		// console.log('form controls: ', this.scoringDataArray.controls);
+		this.scoringConfigForm.valueChanges.subscribe((value)=> {
+			if(value){
+				this.clicked = true
+			}
+		})
+	}
+	getButtonMessage():boolean{
+		if(!this.clicked && this.successMessage){
+			return true
+		} else {
+			return false
+		}
 	}
 
 	ngOnChanges(changes: SimpleChanges): void {
@@ -86,7 +98,7 @@ export class BoardsScoringComponent implements OnInit, OnChanges, OnDestroy {
 		// console.log('scoring form: ', data);
 
 		this.boardScoringEmitter.emit(data);
-		this.clicked = true
+		this.clicked = false
 	}
 
 	getControl(i: number, controlName: string) {

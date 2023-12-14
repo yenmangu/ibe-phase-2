@@ -64,15 +64,18 @@ export class HandActionsHttpService {
 	}
 
 	fetchEBU(data): Observable<any> {
-		return this.http.post(`${this.apiUrl}/hand-actions/ebu`, data);
+		return this.http.post(`${this.apiUrl}/hand-actions/ebu/download`, data, {
+			responseType: 'blob'
+		});
 	}
 	sendEBU(data): Observable<any> {
-		return this.http.post(`${this.apiUrl}/hand-actions/ebu`, data);
+		return this.http.post(`${this.apiUrl}/hand-actions/ebu/upload`, data);
 	}
+
 	htmlPDF(data): Observable<any> {
 		const params = new HttpParams()
 			.append('gameCode', data.gameCode)
-			.append('TYPE', 'HTMLNEW')
+			.append('TYPE', 'HTMLNEW');
 		return this.http.post<Blob>(`${this.apiUrl}/hand-actions/html-pdf`, data, {
 			params,
 			responseType: 'blob' as 'json'

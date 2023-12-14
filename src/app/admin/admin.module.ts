@@ -25,7 +25,6 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { NavigationComponent } from './navigation/navigation.component';
 import { AdminComponent } from './admin.component';
 import { DashboardModule } from './dashboard/dashboard.module';
-import { GameActionsComponent } from './game-actions/game-actions.component';
 import { AccountSettingsComponent } from './account-settings/account-settings.component';
 import { GamesModule } from './games/games.module';
 import { GameSetupComponent } from './game-setup/game-setup.component';
@@ -41,12 +40,12 @@ import { HandRecordsLandingComponent } from './hands/hand-records-landing/hand-r
 import { HandTabComponent } from './hands/hand-tab/hand-tab.component';
 import { HandActionsComponent } from './hands/hand-actions/hand-actions.component';
 import { DeleteDialogComponent } from './hands/delete-dialog/delete-dialog.component';
+import { ReportingComponent } from './reporting/reporting.component';
 
 @NgModule({
 	declarations: [
 		NavigationComponent,
 		AdminComponent,
-		GameActionsComponent,
 		AccountSettingsComponent,
 		GameSetupComponent,
 		BoardsScoringComponent,
@@ -58,7 +57,8 @@ import { DeleteDialogComponent } from './hands/delete-dialog/delete-dialog.compo
 		HandRecordsLandingComponent,
 		HandTabComponent,
 		HandActionsComponent,
-		DeleteDialogComponent
+		DeleteDialogComponent,
+  ReportingComponent
 	],
 	imports: [
 		CommonModule,

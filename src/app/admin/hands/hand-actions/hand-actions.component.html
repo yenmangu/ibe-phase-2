@@ -28,13 +28,13 @@
 			class="tab-header">
 			Delete Hand
 		</div>
-		<!-- <div
+		<div
 			#ebu
 			(click)="selectTab('ebu')"
 			[class.selected]="selectedTab === 'ebu'"
 			class="tab-header">
 			EBU P2P
-		</div> -->
+		</div>
 		<!-- <div
 			#bridgenix
 			(click)="selectTab('bridgenix')"
@@ -198,42 +198,59 @@
 		</ng-container>
 		<!-- EBU -->
 		<ng-container *ngIf="selectedTab === 'ebu'">
-			<div class="container row">
+			<div class="container column ebu">
 				<div class="container column center">
-					<h3>Game P2P details</h3>
+					<!-- <h3>Game P2P details</h3>
 					<form [formGroup]="ebuDownloadForm">
-						<mat-form-field>
-							<mat-label>EBU Charge Code</mat-label>
-							<mat-select>
-								<mat-option
-									*ngFor="let code of chargeCodes; let i = index"
-									[value]="code.value"
-									>{{ code.display }}</mat-option
+						<div class="container column inner">
+							<mat-form-field>
+								<mat-label>EBU Charge Code</mat-label>
+								<mat-select formControlName="chargeCode">
+									<mat-option
+										*ngFor="let code of chargeCodes; let i = index"
+										[value]="code.value"
+										>{{ code.display }}</mat-option
+									>
+								</mat-select>
+								<mat-hint
+									><a
+										href="https://www.ebu.co.uk/documents/universal-membership/player-session-rates.pdf"
+										>See List</a
+									></mat-hint
 								>
-							</mat-select>
-							<mat-hint
-								><a
-									href="https://www.ebu.co.uk/documents/universal-membership/player-session-rates.pdf"
-									>See List</a
-								></mat-hint
+							</mat-form-field>
+							<mat-checkbox formControlName="masterpoints"
+								>Master Points?</mat-checkbox
 							>
-						</mat-form-field>
-						<mat-checkbox formControlName="masterpoints"
-							>Master Points?</mat-checkbox
-						>
-						<h3>Download P2P file to device</h3>
-						<div class="container row button-wrapper">
-							<button
-								mat-flat-button
-								color="primary"
-								(click)="(downloadEBU)">
-								Download
-							</button>
+							<ng-container *ngIf="showMasterpoints()">
+								<h3>MASTERPOINTS</h3>
+								<mat-form-field>
+									<mat-label>MP Type</mat-label>
+									<mat-select formControlName="mpType">
+										<mat-option value="Black">Black</mat-option>
+										<mat-option value="Blue">Blue</mat-option>
+										<mat-option value="Green">Green</mat-option>
+									</mat-select>
+								</mat-form-field>
+								<mat-form-field>
+									<mat-label>MP Scale</mat-label>
+									<mat-select formControlName="mpScale">
+										<mat-option
+											*ngFor="let mp of masterPointsScales"
+											[value]="mp.value"
+											>{{ mp.display }}</mat-option
+										>
+									</mat-select>
+								</mat-form-field>
+								<mat-checkbox formControlName="mpWon"
+									>MPs per match won</mat-checkbox
+								>
+							</ng-container>
 						</div>
-					</form>
+					</form> -->
 				</div>
 				<div class="container column center">
-					<h3>Upload session to the EBU</h3>
+					<!-- <h3>Upload session to the EBU</h3>
 					<form [formGroup]="ebuUploadForm">
 						<div class="container column center">
 							<mat-form-field>
@@ -272,17 +289,28 @@
 									matInput
 									formControlName="comment"></textarea>
 							</mat-form-field>
-							<h3>Upload</h3>
-							<div class="container button-wrapper">
-								<button
-									mat-flat-button
-									color="primary"
-									(click)="uploadEBU()">
-									Upload
-								</button>
-							</div>
 						</div>
-					</form>
+					</form> -->
+					<div class="container row button-wrapper">
+						<div class="container column button-column">
+							<h3>Download EBU P2P file to device</h3>
+							<button
+								mat-flat-button
+								color="primary"
+								(click)="downloadEBU()">
+								Download
+							</button>
+						</div>
+						<!-- <div class="container column button-column">
+							<h3>Upload P2P file to server</h3>
+							<button
+								mat-flat-button
+								color="primary"
+								(click)="uploadEBU()">
+								Upload
+							</button>
+						</div> -->
+					</div>
 				</div>
 			</div>
 		</ng-container>
@@ -390,7 +418,8 @@
 				<h2>Delete current hand record?</h2>
 				<button
 					mat-flat-button
-					color="warn" (click)="deleteHand()">
+					color="warn"
+					(click)="deleteHand()">
 					Delete
 				</button>
 			</div>

@@ -125,7 +125,8 @@ export class HttpService {
 	}
 
 	restoreHistoricGame(data): Observable<any> {
-		const body = {};
-		return this.http.post<any>(`${this.apiUrl}/current_game/restore-game`, body);
+		console.log('restore historic invoked');
+		
+		return this.http.post<any>(`${this.apiUrl}/historic-games/restore`, data);
 	}
 }

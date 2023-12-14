@@ -23,6 +23,7 @@ import { DownloadFileComponent } from './download-file/download-file.component';
 import { BboUploadComponent } from './bbo-upload/bbo-upload.component';
 import { UsebioComponent } from './usebio/usebio.component';
 import { DeleteRowDialogComponent } from './delete-row-dialog/delete-row-dialog.component';
+import { LoginDialogComponent } from './login-dialog/login-dialog.component';
 
 // Modules
 
@@ -42,7 +43,8 @@ import { DeleteRowDialogComponent } from './delete-row-dialog/delete-row-dialog.
 		DownloadFileComponent,
   BboUploadComponent,
   UsebioComponent,
-  DeleteRowDialogComponent
+  DeleteRowDialogComponent,
+  LoginDialogComponent
 	],
 	imports: [
 		CommonModule,

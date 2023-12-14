@@ -50,12 +50,11 @@
 		</mat-form-field>
 	</div>
 	<div class="container row button-wrapper">
-
 		<button
-		mat-flat-button
-		(click)="getNamingNumberingValues()"
-		color="primary">
-		{{ successMessage ? 'Success' : 'Save' }}
-	</button>
-</div>
+			mat-flat-button
+			(click)="getNamingNumberingValues()"
+			color="primary">
+			{{ getButtonMessage() ? 'Success' : 'Save' }}
+		</button>
+	</div>
 </div>

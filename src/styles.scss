@@ -136,8 +136,15 @@ mat-tab-body {
 .container.row {
 	flex-direction: row;
 }
+
+.container.center {
+	align-items: center;
+}
 .gap-1 {
 	gap: 1rem;
+}
+button.home-button .mdc-button__label {
+	font-size: 1rem;
 }
 
 app-root {

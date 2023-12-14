@@ -1,6 +1,8 @@
 :host {
 }
-
+table.main-table {
+	table-layout: auto;
+}
 .table-wrapper {
 	width: fit-content;
 	margin: auto;
@@ -18,11 +20,23 @@ td {
 	text-align: center;
 }
 
-tr.tables-row {
+tr.header-row{
+	th {
+		word-wrap: normal;
+		
+	}
+}
+
+tr.tables-row,
+tr.header-row {
 	td.divider,
 	th.divider {
 		width: 2rem;
 		text-align: center;
+	}
+	td.small,
+	th.small {
+		width: 4rem;
 	}
 	td.split {
 		padding: 0.4rem;
@@ -44,6 +58,10 @@ tr.tables-row {
 		padding: 0.2rem;
 		text-align: center;
 	}
+}
+
+input.table-input {
+	width: 100%;
 }
 
 @media screen and (max-width: 600px) {

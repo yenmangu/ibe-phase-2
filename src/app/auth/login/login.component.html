@@ -12,6 +12,7 @@
 			placeholder="Director Key" />
 	</mat-form-field>
 	<button
+	[disabled]="!loginForm.valid"
 	class="login"
 		mat-flat-button
 		color="accent"

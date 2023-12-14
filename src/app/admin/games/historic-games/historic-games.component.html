@@ -81,6 +81,7 @@
 					*matHeaderRowDef="displayedColumns"></tr>
 				<tr
 					mat-row
+					(click)="onRowClick(row)"
 					*matRowDef="let row; columns: displayedColumns"></tr>
 				<tr
 					mat-row

@@ -39,6 +39,7 @@ export class PairsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 	southSide: [] = [];
 	eastSide: [] = [];
 	westSide: [] = [];
+	individualNumbers: any = {};
 
 	originalFormValues: any;
 	changedFields: { [key: string]: { previousValue: any; newValue: any } } = {};
@@ -73,22 +74,24 @@ export class PairsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 	ngOnInit(): void {
 		console.log('initialTableData: ', this.initialTableData);
 
-
-		console.log('tables: ', this.initialTableData.tables);
+		// console.log('tables: ', this.initialTableData.tables);
+		this.matchType = this.initialTableData.matchString;
 		this.tableNumbers = Object.keys(this.initialTableData.tableConfig);
 		this.fromDataTableData = this.initialTableData.tables;
 		this.pairConfig = this.initialTableData.pairConfig;
-		console.log('pair config: ', this.pairConfig);
+		// console.log('pair config: ', this.pairConfig);
 
 		this.pairNumbers = this.initialTableData.pairNumbers;
 		this.pairsForm = this.createNewPairsForm();
 		const {
-			cardinals: { north, south,east, west }
+			cardinals: { north, south, east, west }
 		} = this.initialTableData;
 		this.northSide = north;
 		this.southSide = south;
 		this.eastSide = east;
 		this.westSide = west;
+		this.individualNumbers = this.initialTableData.individuals;
+		// console.log('\n ***************** \n individual numbers: ', this.individualNumbers);
 
 		if (this.pairsForm) {
 		} else {
@@ -131,7 +134,18 @@ export class PairsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 	): { [key: string]: any } {
 		const tableControls = {};
 		const namesArray = this.initialTableData.tables[tableNumber];
-		const initialArray = ['nsPairs', 'north', 'south', 'ewPairs', 'east', 'west'];
+		const initialArray = [
+			// 'northIndividual',
+			// 'southIndividual',
+			'nsPairs',
+			'north',
+			'south',
+			// 'eastIndividual',
+			// 'westIndividual',
+			'ewPairs',
+			'east',
+			'west'
+		];
 		const additionalArray = [
 			'venues',
 			'ns_stratification',
@@ -152,23 +166,21 @@ export class PairsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 			'lunch'
 		];
 
-
 		if (namesArray) {
-			console.log('in names array');
+			// console.log('in names array');
 
 			for (const field of initialArray) {
 				if (field === 'nsPairs' || field === 'ewPairs') {
 					const index = parseInt(tableNumber, 10) - 1;
-					console.log('tableNumber index: ', tableNumber);
-
+					// console.log('tableNumber index: ', tableNumber);
 
 					if (field === 'nsPairs') {
-						console.log('ns pair number: ', this.pairNumbers.northSouth[index]);
+						// console.log('ns pair number: ', this.pairNumbers.northSouth[index]);
 
 						// at table number [i]
 						tableControls[field] = this.pairNumbers.northSouth[index];
 					} else if (field === 'ewPairs') {
-						console.log('ew pair number: ', this.pairNumbers.eastWest[index]);
+						// console.log('ew pair number: ', this.pairNumbers.eastWest[index]);
 						tableControls[field] = this.pairNumbers.eastWest[index];
 					}
 				} else {
@@ -244,13 +256,15 @@ export class PairsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 	getPairsFormData() {
 		if (this.pairsForm.valid) {
 			const formData = this.pairsForm.value;
-			console.log('pairs form component form data: ', formData);
+			// console.log('pairs form component form data: ', formData);
 
 			const changedFields = this.changedFields;
 			return { formData, changedFields };
 		}
 		return null;
 	}
+
+	getPlayerNumber(players) {}
 
 	ngOnDestroy(): void {
 		this.destroy$.next();

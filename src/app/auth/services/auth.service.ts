@@ -107,19 +107,24 @@ export class AuthService {
 
 						console.log('User Authenticated');
 					}
-					if (response.status === 'ERRORNOUSER') {
-						this.isAuthedSubject.next(false);
-						this.statusSubject.next('NO_USER');
-						console.log('No User Found');
-					}
-					if (response.status === 'ERRORPASS') {
-						this.isAuthedSubject.next(false);
-						this.statusSubject.next('INCORRECT_PASS');
-						console.log('Incorrect Password');
-					}
 				}),
 				catchError(err => {
 					console.error('Error authenticating user', err);
+					console.log(err.error);
+					if (
+						(err.error && err.error.status === 'ERRORNOUSER') ||
+						err.error.status === 'ERRORPASS'
+					) {
+						this.isAuthedSubject.next(false);
+						if (err.error.status === 'ERRORNOUSER') {
+							this.statusSubject.next('NO_USER');
+						}
+						if (err.error.status === 'ERRORPASS') {
+							this.statusSubject.next('PASS_ERROR');
+						} else {
+							this.statusSubject.next(undefined);
+						}
+					}
 					return of(false);
 				})
 			);

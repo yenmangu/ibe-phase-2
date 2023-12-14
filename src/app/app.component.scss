@@ -5,7 +5,7 @@
 	display: block;
 	display: flex;
 	flex-direction: column;
-	justify-content: space-between;
+	// justify-content: space-between;
 	overflow: scroll;
 }
 .host::-webkit-scrollbar {
@@ -17,5 +17,14 @@ app-home {
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
+	order: 0;
 	// overflow: hidden;
+}
+
+router-outlet {
+	order: 1;
+}
+
+app-footer {
+	order: 3;
 }

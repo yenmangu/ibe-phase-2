@@ -96,12 +96,15 @@ export class RevisedProcessCurrentDataService {
 
 	async generateConfig(movementtxt, namestxt, settingstxt, teamsValue) {
 		try {
-			const { matchType, sidesOf } = this.getMatchType(settingstxt);
+			const { matchType, sidesOf, matchString } = this.getMatchType(settingstxt);
 			const sidesOfInt = Number(sidesOf);
 
 			console.log('\n\n\n match type: \n\n\n', matchType);
 
-			const movementAndPairs = await this.determinePairNumberStyle(movementtxt);
+			const movementAndPairs = await this.determinePairNumberStyle(
+				movementtxt,
+				matchType
+			);
 
 			const cleanedMovement = this.processMovementText(movementtxt);
 			const numOfTables = cleanedMovement[1][1];
@@ -125,64 +128,91 @@ export class RevisedProcessCurrentDataService {
 			const {
 				totalTables,
 				totalPairs,
-				northSouth,
-				eastWest,
-				eastWestSorted,
 				pairNumbers,
 				movementOnly,
-				pairNumberingStyle
+				pairNumberingStyle,
+				individuals,
+				isIndividuals
 			} = movementAndPairs;
 
 			let finalConfig: any = {};
 
+			console.log('namestext: ', namestxt);
+
 			const pairsObject = await this.retrievePairList(namestxt, totalPairs);
 
 			let tableConfig: any = {};
+			let wholeTeamConfig: any = {};
+			let sideTeamMap: any = {};
+			let assignedIndividuals: any = {};
+			let cardinals: any = {};
+			let tables: any = {};
+			if (!isIndividuals) {
+				console.log('is not individuals');
 
-			if (pairNumberingStyle === 'standardPairing') {
-				tableConfig = await this.assignStartingPositions(
-					pairsObject,
-					movementOnly,
-					undefined,
-					undefined
-				);
-			} else if (pairNumberingStyle === 'victorPairing') {
-				console.log('victorPairing detected... \n');
+				if (pairNumberingStyle === 'standardPairing') {
+					tableConfig = await this.assignStartingPositions(
+						pairsObject,
+						movementOnly,
+						undefined,
+						undefined
+					);
+				} else if (pairNumberingStyle === 'victorPairing') {
+					console.log('victorPairing detected... \n');
 
-				tableConfig = await this.assignStartingPositions(
-					pairsObject,
-					movementOnly,
-					true,
+					tableConfig = await this.assignStartingPositions(
+						pairsObject,
+						movementOnly,
+						true,
+						totalTables
+					);
+				}
+				wholeTeamConfig = await this.generateTeamConfig(
+					tableConfig,
+					teamsValue,
 					totalTables
 				);
+				console.log('TEAMS: ', wholeTeamConfig.teamConfig);
+				sideTeamMap = this.generateSideTeamMap(
+					sidesOfInt,
+					wholeTeamConfig.teamsInPlay
+				);
+				cardinals = await this.assignCardinalColumns(tableConfig);
+				tables = await this.generateTables(tableConfig);
+			} else {
+				assignedIndividuals = this.assignIndividualNumbers(
+					namestxt,
+					movementOnly,
+					totalTables
+				);
+
+				console.log('aassigned individuals: ', assignedIndividuals);
+
+				cardinals = this.assignIndividualStartingPositions(
+					individuals,
+					assignedIndividuals
+				);
+				tables = this.generateIndividualTables(cardinals, totalTables);
 			}
 
 			console.log('tableConfig: ', tableConfig);
-			const { teamConfig, teamsInPlay } = await this.generateTeamConfig(
-				tableConfig,
-				teamsValue,
-				totalTables
-			);
 
-			console.log('TEAMS: ', teamConfig);
-			const cardinals = await this.assignCardinalColumns(tableConfig);
-			const tables = await this.generateTables(tableConfig);
-
-			const sideTeamMap = this.generateSideTeamMap(sidesOfInt, teamsInPlay);
-
-			finalConfig.teamConfig = teamConfig;
-			finalConfig.teams = teamsInPlay;
+			finalConfig.teamConfig = !isIndividuals ? wholeTeamConfig.teamConfig : {};
+			finalConfig.teams = !isIndividuals ? wholeTeamConfig.teamsInPlay : {};
 			finalConfig.cardinals = cardinals;
 			finalConfig.tableConfig = tableConfig;
 			finalConfig.matchType = matchType;
+			finalConfig.matchString = matchString
 			finalConfig.tables = tables;
 			finalConfig.pairNumbers = pairNumbers;
 			finalConfig.sidesOf = sidesOf;
-			finalConfig.sideTeamMap = sideTeamMap;
+			finalConfig.sideTeamMap = !isIndividuals ? sideTeamMap : {};
+			finalConfig.assignedIndividuals = assignedIndividuals;
+			finalConfig.individuals = isIndividuals ? individuals : {};
 
-			console.log('final tableConfig: ', tableConfig);
+			// console.log('final tableConfig: ', tableConfig);
 
-			console.log('Final movement and pairs config: ', movementAndPairs);
+			// console.log('Final movement and pairs config: ', movementAndPairs);
 
 			return finalConfig;
 		} catch (error) {
@@ -190,18 +220,66 @@ export class RevisedProcessCurrentDataService {
 		}
 	}
 
+	generateIndividualTables(cardinals, totalTables: number) {
+		let tableConfig: any = {};
+		for (let i = 0; i < totalTables; i++) {
+			tableConfig[i + 1] = [
+				cardinals.north[i],
+				cardinals.south[i],
+				cardinals.east[i],
+				cardinals.west[i]
+			];
+		}
+		return tableConfig;
+	}
+
+	assignIndividualNumbers(namesxt, movementOnly, totalTables) {
+		const totalPairs = Number(totalTables) * 2;
+		const namesInPlay = namesxt[0].split('\n').slice(0, totalPairs);
+		let individualNames: any[] = [];
+
+		namesInPlay.forEach(name => {
+			const names = name.split('&').map(item => item.trim());
+			individualNames.push(names[0], names[1]);
+		});
+
+		let tableConfig: any = {};
+
+		let initialMovements: any[] = [];
+
+		movementOnly.forEach((movement, index) => {
+			const movementNumbers: any[] = movement.split(',').map(item => item.trim());
+			initialMovements.push(
+				[movementNumbers[0]],
+				movementNumbers[1],
+				movementNumbers[2],
+				movementNumbers[3]
+			);
+		});
+		const flattenedMovements = initialMovements.flat();
+
+		let assignedNames: any = {};
+
+		individualNames.forEach((name, index) => {
+			assignedNames[flattenedMovements[index]] = individualNames[index];
+		});
+
+		return assignedNames;
+	}
+
 	generateTeamConfig(tableConfig, teamsValue, totalTables: number) {
 		const teamsInPlay = teamsValue.slice(0, totalTables);
-		console.log('table config to work from: ', tableConfig);
+		// console.log('table config to work from: ', tableConfig);
 
 		let teamConfig: any = {};
 
 		teamsInPlay.forEach((team, index) => {
 			const table = tableConfig[index + 1];
-			console.log('table in question: ', table);
+			// console.log('table in question: ', table);
 
-			teamConfig[team] = {
+			teamConfig[index] = {
 				index: index,
+				teamName: team,
 				tables: [
 					table[0][0].trim(),
 					table[0][1].trim(),
@@ -222,10 +300,10 @@ export class RevisedProcessCurrentDataService {
 		} else {
 			const teamsPerSide: number = Number(sidesOfInt) / 4;
 
-			console.log('teamsPerSide: ', teamsPerSide);
+			// console.log('teamsPerSide: ', teamsPerSide);
 			const numOfSides: number = Number(teamsInPlay.length) / teamsPerSide;
 
-			console.log('Number of sides: ', numOfSides);
+			// console.log('Number of sides: ', numOfSides);
 			for (let i = 0; i < numOfSides; i++) {
 				const teamArray = teamsInPlay.splice(0, teamsPerSide);
 				sideTeamMap[i] = teamArray;
@@ -258,9 +336,13 @@ export class RevisedProcessCurrentDataService {
 		let east: any[] = [];
 		let west: any[] = [];
 
+		console.log('TABLE CONFIG: ', tableConfig);
+
 		for (const tableKey in tableConfig) {
 			if (Object.prototype.hasOwnProperty.call(tableConfig, tableKey)) {
 				const table: any = tableConfig[tableKey];
+				console.log('TABLE IN QUESTION: ', table);
+
 				north.push(table[0][0].trim());
 				south.push(table[0][1].trim());
 				east.push(table[1][0].trim());
@@ -270,6 +352,21 @@ export class RevisedProcessCurrentDataService {
 
 		const cardinals = { north, south, east, west };
 		return cardinals;
+	}
+
+	assignIndividualStartingPositions(individuals, assignedNames) {
+		let cardinalsWithNames: any = {};
+
+		for (const cardinal in individuals) {
+			console.log('cardinal: ', cardinal);
+
+			console.log('assignedNames: ', assignedNames);
+
+			cardinalsWithNames[cardinal] = individuals[cardinal].map(
+				number => assignedNames[Number(number)]
+			);
+		}
+		return cardinalsWithNames;
 	}
 
 	// The following works for both Victor and Standard pair numbering
@@ -296,6 +393,7 @@ export class RevisedProcessCurrentDataService {
 				const pairAsNum = Number(pairNumString);
 				const pairToFind = pairAsNum + Number(totalTables);
 				ew = pairsObject[pairToFind.toString().trim()];
+				console.log('eastWest pair: ', ew);
 			} else {
 				ew = pairsObject[movement.split(',')[1].trim()];
 			}
@@ -318,46 +416,74 @@ export class RevisedProcessCurrentDataService {
 		return pairsObject;
 	}
 
-	determinePairNumberStyle(movementtxt) {
+	determinePairNumberStyle(movementtxt, matchType) {
+		console.log('Match type in determine pair numbering: \n', matchType);
+
 		const movementLines: any[] = movementtxt[0].trim().split('\n');
-		console.log('movemenet lines: ', movementLines);
+		console.log('movement lines: ', movementLines);
 
 		let movementAndPairs: any = {};
-		movementAndPairs.totalTables = movementLines[1].trim().split(',')[1].trim();
+		const totalTables = movementLines[1].trim().split(',')[1].trim();
+		movementAndPairs.totalTables = totalTables;
+
 		const movementOnly = movementLines.slice(2, movementLines.length);
-
+		let north: any[] = [];
+		let south: any[] = [];
+		let east: any[] = [];
+		let west: any[] = [];
 		let nsPairs: any[] = [];
+		let tempEwPairs: any[] = [];
 		let ewPairs: any[] = [];
+		let individuals = false;
 
-		movementOnly.forEach((movement, index) => {
-			nsPairs.push(Number(movement.split(',')[0].trim()));
-			ewPairs.push(Number(movement.split(',')[1].trim()));
-		});
-		const ewSorted = ewPairs.slice().sort((a, b) => b - a);
-		const largestPairNumber = ewSorted[0];
-
+		let largestPairNumber: number;
 		let pairNumberingStyle: string = '';
-
-		movementAndPairs.northSouth = nsPairs;
-		movementAndPairs.eastWest = ewPairs;
-		movementAndPairs.eastWestSorted = ewSorted;
-		movementAndPairs.largestPairNumber = largestPairNumber;
-		movementAndPairs.movementOnly = movementOnly;
-		const { northSouth, eastWest } = movementAndPairs;
-		movementAndPairs.pairNumbers = { northSouth, eastWest };
-
 		let totalPairs: number;
-		pairNumberingStyle =
-			largestPairNumber === movementAndPairs.totalTables
-				? 'victorPairing'
-				: 'standardPairing';
 
-		if (pairNumberingStyle === 'victorPairing') {
-			totalPairs = largestPairNumber * 2;
+		if (!matchType.individual) {
+			movementOnly.forEach((movement, index) => {
+				nsPairs.push(Number(movement.split(',')[0].trim()));
+				tempEwPairs.push(Number(movement.split(',')[1].trim()));
+			});
+
+			const northSouthEastWest = nsPairs.concat(tempEwPairs);
+
+			const concatSorted = northSouthEastWest.sort((a, b) => b - a);
+
+			console.log('concat pairs sorted: ', concatSorted);
+
+			largestPairNumber = concatSorted[0];
+
+			totalPairs = Number(movementAndPairs.totalTables) * 2;
+			pairNumberingStyle =
+				largestPairNumber !== totalPairs ? 'victorPairing' : 'standardPairing';
+
+			tempEwPairs.forEach((pairNumber: number) => {
+				if (pairNumberingStyle === 'victorPairing') {
+					const newPairNumber = Number(pairNumber) + Number(totalTables);
+					ewPairs.push(newPairNumber);
+				} else {
+					ewPairs.push(pairNumber);
+				}
+			});
 		} else {
-			totalPairs = largestPairNumber;
+			// Individuals
+			console.log('Individuals detected, using individual sorting methods.');
+			individuals = true;
+
+			movementOnly.forEach((movement, index) => {
+				north.push(Number(movement.split(',')[0].trim()));
+				south.push(Number(movement.split(',')[1].trim()));
+				east.push(Number(movement.split(',')[2].trim()));
+				west.push(Number(movement.split(',')[3].trim()));
+			});
 		}
 
+		movementAndPairs.pairNumbers = { northSouth: nsPairs, eastWest: ewPairs };
+		movementAndPairs.isIndividuals = individuals ? true : false;
+		movementAndPairs.individuals = individuals ? { north, south, east, west } : {};
+		movementAndPairs.largestPairNumber = largestPairNumber;
+		movementAndPairs.movementOnly = movementOnly;
 		movementAndPairs.pairNumberingStyle = pairNumberingStyle;
 		movementAndPairs.totalPairs = totalPairs;
 
@@ -403,14 +529,18 @@ export class RevisedProcessCurrentDataService {
 			// console.log('settings txt: ', value);
 			const matchType: { pairs?: boolean; teams?: boolean; individual?: boolean } =
 				{};
+			let matchString = '';
 			for (const text of value) {
 				if (text.startsWith('MV I')) {
 					console.log('individual');
 					matchType.individual = true;
+					matchString = 'individual';
 				} else if (text.startsWith('MV T')) {
 					console.log('team');
+					matchString = 'team';
 					matchType.teams = true;
 				} else if (text.startsWith('MV P') || text.startsWith('MV CPM')) {
+					matchString = 'pairs';
 					console.log('pairs');
 					if (text.startsWith('MV CPM')) {
 						console.log('USEBIO Import');
@@ -422,6 +552,7 @@ export class RevisedProcessCurrentDataService {
 			}
 			data.matchType = matchType;
 			data.sidesOf = sidesOf;
+			data.matchString = matchString;
 			return data;
 		}
 	}

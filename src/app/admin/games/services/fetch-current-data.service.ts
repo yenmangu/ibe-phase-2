@@ -401,9 +401,11 @@ export class FetchCurrentDataService implements OnDestroy {
 			if (!data) {
 				throw new Error('No data in process match data deleteByKey()');
 			}
-			const type = data.value.$.type;
-			const storeName = `${type}`;
-			const key = data.key;
+			console.log('Data in delete by key: ', data);
+
+			const entryType = data['$'].type;
+			const storeName = `${entryType}`;
+			const key = data.newKey;
 			console.log(`storenName: ${storeName} and key: ${key}`);
 			const success = await this.indexedDB.delete(storeName, key);
 			if (success) {
@@ -415,7 +417,6 @@ export class FetchCurrentDataService implements OnDestroy {
 		}
 	}
 
-	private async updateEntry(newData): Promise<any> {}
 
 	private async getPlayerDataFromDB(): Promise<any> {
 		try {

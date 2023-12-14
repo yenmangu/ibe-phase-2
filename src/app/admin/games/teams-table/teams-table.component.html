@@ -8,6 +8,7 @@
 			<table *ngIf="!tableConfig.timesLunch">
 				<tr class="header-row">
 					<th>Table Number</th>
+					<th>Pair Number</th>
 					<th
 						class="conditional"
 						*ngIf="tableConfig.venues">
@@ -49,6 +50,7 @@
 						Abbreviations
 					</th>
 					<th class="split divider"></th>
+					<th>Pair Number</th>
 					<th class="east">East</th>
 					<th class="divider"></th>
 					<th class="west">West</th>
@@ -104,6 +106,10 @@
 						*ngIf="teamsForm?.get(tableNumber.toString())"
 						[formGroupName]="tableNumber.toString()">
 						<td>{{ i + 1 }}</td>
+						<!-- Pair Number -->
+						<td *ngFor="let column of ['nsPairs']">
+							<input [formControlName]="column" />
+						</td>
 						<!-- Venues -->
 						<ng-container *ngIf="tableConfig.venues">
 							<td
@@ -166,7 +172,11 @@
 								<input [formControlName]="column" />
 							</td>
 						</ng-container>
+
 						<td class="divider split"></td>
+						<td *ngFor="let column of ['ewPairs']">
+							<input [formControlName]="column" />
+						</td>
 						<td *ngFor="let column of ['east']">
 							<input [formControlName]="column" />
 						</td>

@@ -14,19 +14,35 @@
 					Table <br />
 					{{ currentBreakpoint === 'handset' ? 'No.' : 'Number' }}
 				</th>
-				<ng-container *ngIf="matchType === 'pairs'">
+				<ng-container *ngIf="matchType === 'teams'">
 					<th
-						class="pairs"
+						class="teams"
 						[ngClass]="currentBreakpoint">
-						Pair No.
+						Team Name
 					</th>
 				</ng-container>
-				<th [ngClass]="currentBreakpoint">North</th>
-				<th [ngClass]="currentBreakpoint">South</th>
-				<ng-container *ngIf="matchType === 'pairs'">
+				<ng-container *ngIf="matchType !== 'individual'">
 					<th>Pair No.</th>
 				</ng-container>
+				<ng-container *ngIf="matchType === 'individual'">
+					<th>Player Number</th>
+				</ng-container>
+
+				<th [ngClass]="currentBreakpoint">North</th>
+				<ng-container *ngIf="matchType === 'individual'">
+					<th>Player Number</th>
+				</ng-container>
+				<th [ngClass]="currentBreakpoint">South</th>
+				<ng-container *ngIf="matchType !== 'individual'">
+					<th>Pair No.</th>
+				</ng-container>
+				<ng-container *ngIf="matchType === 'individual'">
+					<th>Player Number</th>
+				</ng-container>
 				<th [ngClass]="currentBreakpoint">East</th>
+				<ng-container *ngIf="matchType === 'individual'">
+					<th>Player Number</th>
+				</ng-container>
 				<th [ngClass]="currentBreakpoint">West</th>
 			</tr>
 			<ng-container *ngFor="let table of north; let i = index">
@@ -36,35 +52,55 @@
 						class="table-number">
 						{{ i + 1 }}
 					</td>
-					<ng-container *ngIf="matchType === 'pairs'">
+					<ng-container *ngIf="matchType === 'teams'">
+						<td
+							[ngClass]="currentBreakpoint"
+							class="teams">
+							{{ teamConfig[i].teamName }}
+						</td>
+					</ng-container>
+					<ng-container *ngIf="matchType !== 'individual'">
 						<td
 							[ngClass]="currentBreakpoint"
 							class="pairs">
 							{{ pairNumbers.northSouth[i] }}
 						</td>
 					</ng-container>
+					<ng-container *ngIf="matchType === 'individual'"
+						><td>{{ individualNumbers.north[i] }}</td>
+					</ng-container>
+
 					<td
 						[ngClass]="currentBreakpoint"
 						class="north">
 						{{ north[i] }}
 					</td>
+					<ng-container *ngIf="matchType === 'individual'"
+						><td>{{ individualNumbers.south[i] }}</td>
+					</ng-container>
 					<td
 						[ngClass]="currentBreakpoint"
 						class="north">
 						{{ south[i] }}
 					</td>
-					<ng-container *ngIf="matchType === 'pairs'">
+					<ng-container *ngIf="matchType !== 'individual'">
 						<td
 							[ngClass]="currentBreakpoint"
 							class="pairs">
 							{{ pairNumbers.eastWest[i] }}
 						</td>
 					</ng-container>
+					<ng-container *ngIf="matchType === 'individual'"
+						><td>{{ individualNumbers.east[i] }}</td>
+					</ng-container>
 					<td
 						[ngClass]="currentBreakpoint"
 						class="north">
 						{{ east[i] }}
 					</td>
+					<ng-container *ngIf="matchType === 'individual'"
+						><td>{{ individualNumbers.west[i] }}</td>
+					</ng-container>
 					<td
 						[ngClass]="currentBreakpoint"
 						class="north">
@@ -80,23 +116,51 @@
 			<table>
 				<tr>
 					<th>Table No.</th>
-					<ng-container *ngIf="matchType === 'pairs'">
+					<ng-container *ngIf="matchType === 'teams'">
+						<th
+							class="teams"
+							[ngClass]="currentBreakpoint">
+							Team Name
+						</th>
+					</ng-container>
+					<ng-container *ngIf="matchType !== 'individual'">
 						<th>Pair No.</th>
 					</ng-container>
+					<ng-container *ngIf="matchType === 'individual'">
+						<th>Player Number</th>
+					</ng-container>
+
 					<th>North</th>
+					<ng-container *ngIf="matchType === 'individual'">
+						<th>Player Number</th>
+					</ng-container>
 					<th>South</th>
 				</tr>
 				<ng-container *ngFor="let table of north; let i = index">
 					<tr>
 						<td [ngClass]="currentBreakpoint">{{ i + 1 }}</td>
-						<ng-container *ngIf="matchType === 'pairs'">
+						<ng-container *ngIf="matchType === 'teams'">
+							<td
+								[ngClass]="currentBreakpoint"
+								class="teams">
+								{{ teamConfig[i].teamName }}
+							</td>
+						</ng-container>
+						<ng-container *ngIf="matchType !== 'individual'">
 							<td
 								[ngClass]="currentBreakpoint"
 								class="pairs">
 								{{ pairNumbers.northSouth[i] }}
 							</td>
 						</ng-container>
+						<ng-container *ngIf="matchType === 'individual'">
+							<td>{{ individualNumbers.north[i] }}</td>
+						</ng-container>
 						<td [ngClass]="currentBreakpoint">{{ north[i] }}</td>
+						<ng-container *ngIf="matchType === 'individual'">
+							<td>{{ individualNumbers.south[i] }}</td>
+						</ng-container>
+
 						<td [ngClass]="currentBreakpoint">{{ south[i] }}</td>
 					</tr>
 				</ng-container>
@@ -104,23 +168,52 @@
 			<table>
 				<tr>
 					<th>Table No</th>
-					<ng-container *ngIf="matchType === 'pairs'">
+					<ng-container *ngIf="matchType === 'teams'">
+						<th
+							class="teams"
+							[ngClass]="currentBreakpoint">
+							Team Name
+						</th>
+					</ng-container>
+					<ng-container *ngIf="matchType !== 'individual'">
 						<th>Pair No.</th>
 					</ng-container>
+
+					<ng-container *ngIf="matchType === 'individual'">
+						<th>Player Number</th>
+					</ng-container>
 					<th>East</th>
+					<ng-container *ngIf="matchType === 'individual'">
+						<th>Player Number</th>
+					</ng-container>
 					<th>West</th>
 				</tr>
 				<ng-container *ngFor="let table of north; let i = index">
 					<tr>
 						<td [ngClass]="currentBreakpoint">{{ i + 1 }}</td>
-						<ng-container *ngIf="matchType === 'pairs'">
+						<ng-container *ngIf="matchType === 'teams'">
+							<td
+								[ngClass]="currentBreakpoint"
+								class="teams">
+								{{ teamConfig[i].teamName }}
+							</td>
+						</ng-container>
+						<ng-container *ngIf="matchType !== 'individual'">
 							<td
 								[ngClass]="currentBreakpoint"
 								class="pairs">
 								{{ pairNumbers.eastWest[i] }}
 							</td>
 						</ng-container>
+						<ng-container *ngIf="matchType === 'individual'">
+							<td>{{ individualNumbers.east[i] }}</td>
+						</ng-container>
 						<td [ngClass]="currentBreakpoint">{{ east[i] }}</td>
+						<ng-container *ngIf="matchType === 'individual'">
+							<td>
+								{{ individualNumbers.west[i] }}
+							</td>
+						</ng-container>
 						<td [ngClass]="currentBreakpoint">{{ west[i] }}</td>
 					</tr>
 				</ng-container>

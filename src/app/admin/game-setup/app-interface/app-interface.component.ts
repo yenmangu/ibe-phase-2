@@ -88,11 +88,22 @@ export class AppInterfaceComponent implements OnInit, AfterViewInit, OnDestroy {
 		// console.log('app-interface form: ', this.appInterfaceForm.controls);
 		this.appInterfaceForm.valueChanges.subscribe(data => {
 			// console.log('app intfc val change: ', data);
+			if(data){
+				this.clicked = true
+			}
 		});
 		console.log('appInterfaceForm initiated');
 	}
 
 	ngAfterViewInit(): void {}
+
+	getButtonMessage():boolean{
+		if(!this.clicked && this.successMessage){
+			return true
+		} else {
+			return false
+		}
+	}
 
 	checkEmpty(obj) {
 		for (var i in obj) return false;
@@ -228,7 +239,7 @@ export class AppInterfaceComponent implements OnInit, AfterViewInit, OnDestroy {
 		};
 		// console.log('app-interface data: ', data);
 		this.appInterfaceEmitter.emit(data);
-		this.clicked = true;
+		this.clicked = false;
 	}
 	ngOnDestroy(): void {
 		this.successMessage = false;

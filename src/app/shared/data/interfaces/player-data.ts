@@ -8,7 +8,7 @@ export interface Player {
 		};
 		name: string[] | string;
 		email?: string[] | string;
-		telephone?: string[] | string;
+		phone?: string[] | string;
 		id?: {
 			$: {
 				type: string;

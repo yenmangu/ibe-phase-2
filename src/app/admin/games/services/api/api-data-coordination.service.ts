@@ -66,6 +66,8 @@ export class ApiDataCoordinationService {
 	}
 
 	private sendToHttp(databaseData): Observable<any> {
+		console.log('Database data: ', databaseData);
+		
 		if (databaseData.data.isNew) {
 			return this.httpService.addNewEntry(databaseData);
 		} else {

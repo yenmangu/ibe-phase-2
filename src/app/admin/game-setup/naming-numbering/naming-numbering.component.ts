@@ -46,6 +46,9 @@ export class NamingNumberingComponent implements OnInit, OnDestroy {
 	namingNumberingForm: FormGroup;
 	clicked: boolean = false;
 
+	buttonShowSuccess: boolean = false
+
+
 	constructor(private fb: FormBuilder) {
 		this.namingNumberingForm = new FormGroup(this.createFormControls());
 	}
@@ -59,7 +62,25 @@ export class NamingNumberingComponent implements OnInit, OnDestroy {
 			// this.namingNumberingForm.setValue(this.namingNumberingSettings);
 			this.populateForm();
 		}
+
+		this.namingNumberingForm.valueChanges.subscribe(value => {
+			if (value) {
+				this.clicked = true;
+				this.buttonShowSuccess = false;
+				console.log('form clicked: ', this.clicked);
+			}
+		});
 	}
+
+	getButtonMessage():boolean{
+		if(!this.clicked && this.successMessage){
+			return true
+		} else {
+			return false
+		}
+	}
+
+
 	checkEmpty(obj) {
 		for (var i in obj) return false;
 		return true;
@@ -112,7 +133,8 @@ export class NamingNumberingComponent implements OnInit, OnDestroy {
 		// const data = this.namingNumberingForm.value;
 		// console.log('naming numbering values: ', this.namingNumberingForm.value);
 		this.namingNumberingEmitter.emit(data);
-		this.clicked = true;
+		this.clicked = false;
+
 	}
 	ngOnDestroy(): void {
 		this.successMessage = false;

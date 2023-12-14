@@ -1,11 +1,14 @@
 <mat-toolbar
 	color="accent"
 	class="toolbar">
-	<ng-container *ngIf="authService.isAuthedSubject$ | async">
-		<button
-			mat-mini-fab
+	<div class="container row view">
+
+		<ng-container *ngIf="authService.isAuthedSubject$ | async">
+			<button
+			mat-flat-button
 			(click)="toggleSidenav()">
-			<mat-icon>menu</mat-icon>
+			<!-- <mat-icon>menu</mat-icon> -->
+			Menu
 		</button>
 	</ng-container>
 
@@ -44,4 +47,5 @@
 			logout
 		</button>
 	</div>
+</div>
 </mat-toolbar>

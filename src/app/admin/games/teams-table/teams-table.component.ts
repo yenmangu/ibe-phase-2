@@ -28,16 +28,22 @@ export class TeamsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 	@Input() loadingStatus: boolean = true;
 	@Output() teamFormData: EventEmitter<any> = new EventEmitter<any>();
 	teamsForm: FormGroup;
+	pairConfig: any = {};
 	tableConfig: any;
 	tableConfiguration: string[];
 	formData: any = {};
 	matchType: string;
 	currentBreakpoint: string = '';
 	teamsPerSide: number = null;
+	pairNumbers: any = {};
 	currentShownCols: number;
 	sideLabels: FormArray;
 	numberOfSides: number;
 	sideTeamMap: any = {};
+	northSide: [] = [];
+	southSide: [] = [];
+	eastSide: [] = [];
+	westSide: [] = [];
 
 	originalFormValues: any;
 	changedFields: { [key: string]: { previousValue: any; newValue: any } } = {};
@@ -72,20 +78,30 @@ export class TeamsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 			const { tables, sideTeamMap, teams, sidesOf } = this.initialTableData;
 			this.sideTeamMap = sideTeamMap;
 			console.log('tables: ', this.initialTableData.tables);
-			this.tableNumbers = Object.keys(this.initialTableData.tables);
+			this.tableNumbers = Object.keys(this.initialTableData.tableConfig);
 			this.tableData = this.initialTableData.tables;
+			this.pairConfig = this.initialTableData.pairConfig;
+			this.pairNumbers = this.initialTableData.pairNumbers;
 			this.teamsPerSide = teams.length / sideTeamMap.totalSides;
 			this.numberOfSides = sideTeamMap.totalSides;
 			console.log('total sides: ', sideTeamMap.totalSides);
 			// this.createSideLabelsFormArray(this.numberOfSides);
 			this.teamsForm = this.createNewTeamsForm();
 		}
+		const {
+			cardinals: { north, south, east, west }
+		} = this.initialTableData;
+		this.northSide = north;
+		this.southSide = south;
+		this.eastSide = east;
+		this.westSide = west;
+
 		if (this.teamsForm) {
 			console.log('teams form: ', this.teamsForm);
 		}
 		this.originalFormValues = this.teamsForm.value;
 		this.teamsForm.valueChanges.subscribe(changedValues => {
-			console.log('changed value: ', changedValues)
+			console.log('changed value: ', changedValues);
 			this.changedFields = {};
 			for (const key in changedValues) {
 				if (changedValues.hasOwnProperty(key)) {
@@ -132,7 +148,9 @@ export class TeamsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 		const tableControls = {};
 		const namesArray = this.initialTableData.tables[tableNumber];
 		const teamsArray = this.initialTableData.teams;
-		const initialArray = ['north', 'south', 'east', 'west'];
+		// console.log('teams array: ', teamsArray);
+
+		const initialArray = ['nsPairs', 'north', 'south', 'ewPairs', 'east', 'west'];
 		const additionalArray = [
 			'team_name',
 			'venues',
@@ -164,9 +182,25 @@ export class TeamsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 			// 		tableControls[field] = [null];
 			// 	}
 			// }
-			for (const field of additionalArray) {
-				const controlName = `${field}`;
-				tableControls[field] = [null];
+			for (const field of initialArray) {
+				if (field === 'nsPairs' || field === 'ewPairs') {
+					const index = parseInt(tableNumber, 10) - 1;
+					// console.log('tableNumber index: ', tableNumber);
+
+					if (field === 'nsPairs') {
+						// console.log('ns pair number: ', this.pairNumbers.northSouth[index]);
+
+						// at table number [i]
+						tableControls[field] = this.pairNumbers.northSouth[index];
+					} else if (field === 'ewPairs') {
+						// console.log('ew pair number: ', this.pairNumbers.eastWest[index]);
+						tableControls[field] = this.pairNumbers.eastWest[index];
+					}
+				} else {
+					const controlName = `${field}`;
+					const initialValue = this.getInitialValue(namesArray, field);
+					tableControls[field] = [initialValue, Validators.required];
+				}
 			}
 			const teamIndex = Number(tableNumber) - 1;
 			const teamName = this.initialTableData.teamConfig[teamIndex]?.teamName || '';
@@ -238,7 +272,7 @@ export class TeamsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 	getTeamFormData() {
 		if (this.teamsForm.valid) {
 			const formData = this.teamsForm.value;
-			const changedFields = this.changedFields
+			const changedFields = this.changedFields;
 			return { formData, changedFields };
 		}
 		return null;

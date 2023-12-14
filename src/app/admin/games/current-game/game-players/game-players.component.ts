@@ -224,8 +224,9 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 			pairConfig,
 			pairNumbers,
 			cardinals: { north:northSide, south:southSide, east:eastSide, west:westSide },
-			tables
+			tables, teamConfig, individuals,
 		} = this.initialTableData;
+
 		// const tablesLength = Object.keys(tables).length
 		console.log(tables);
 		const eventName = this.eventName;
@@ -245,6 +246,8 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 			sitters?: [];
 			tableConfig: any;
 			eventName?: string;
+			teamConfig;
+			individuals: any
 		} = {
 			pairConfig,
 			pairNumbers,
@@ -255,7 +258,9 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 			west: westSide,
 			tables: Object.keys(tables).length,
 			tableConfig: tables,
-			eventName
+			eventName,
+			teamConfig,
+			individuals
 		};
 		console.log('gameConfig: ', gameConfig);
 		data.gameConfig = gameConfig;

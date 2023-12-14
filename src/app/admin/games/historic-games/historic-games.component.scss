@@ -1,11 +1,12 @@
 @import '../../../../styles.scss';
 @import url('../../../../table-styles.scss');
+:host {
+	margin: auto;
+}
 
-.delete mat-icon{
+.delete mat-icon {
 	transition: opactiy 200ms ease-out;
 
 	&:hover {
-
 	}
-	
 }

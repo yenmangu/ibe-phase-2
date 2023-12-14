@@ -13,6 +13,46 @@ export const dialogData: DialogModel[] = [
 		}
 	},
 	{
+		dialogName: 'passFail',
+		width: '400px',
+		data: {
+			code: 'PASS',
+			title: 'Incorrect Director Key',
+			message:'Please check your details and try again',
+			gameCode: ''
+		}
+	},
+	{
+		dialogName: 'emailFail',
+		width: '400px',
+		data: {
+			code: 'EMAIL',
+			title: 'Email not found',
+			message:'Please check your email and try again',
+			gameCode: ''
+		}
+	},
+	{
+		dialogName: 'generalFail',
+		width: '400px',
+		data: {
+			code: 'EMAIL',
+			title: 'Error Logging In',
+			message:'Please contact admin@ibescore.com',
+			gameCode: ''
+		}
+	},
+	{
+		dialogName: 'userFail',
+		width: '400px',
+		data: {
+			code: 'USER',
+			title: 'User not found',
+			message:'Please check your email and try again',
+			gameCode: ''
+		}
+	},
+	{
 		dialogName: 'registrationFail',
 		width: '400px',
 		data: {

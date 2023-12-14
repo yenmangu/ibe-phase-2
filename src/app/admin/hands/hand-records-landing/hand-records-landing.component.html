@@ -1,13 +1,13 @@
+<!--
 <div class="container column main">
 	<mat-tab-group
 		animationDuration="0s"
 		[selectedIndex]="selectedTabIndex">
-		<!-- <mat-tab label="Hand Records">
+		 <mat-tab label="Hand Records">
 			<app-hand-tab></app-hand-tab>
-		</mat-tab> -->
+		</mat-tab>
 		<mat-tab label="Hand Actions">
 			<app-hand-actions></app-hand-actions>
-			
 		</mat-tab>
 		<mat-tab label="Upload">
 			<h2>Upload Hand Record Files</h2>
@@ -52,5 +52,53 @@
 			</ng-container>
 			<ng-container></ng-container>
 		</mat-tab>
+	-->
+<!--
 	</mat-tab-group>
+</div> -->
+<div class="container column center main">
+	<div class="container row main">
+		<div class="container column center">
+			<h3>Upload Hand Record Files</h3>
+
+			<div class="container column upload">
+				<h4>Upload single hand files (.dlm, .dup or .pbn format)</h4>
+				<app-upload-file
+					[uploadSuccess]="uploadSuccess"
+					[isLoading]="isLoading"
+					(upload)="handleFiles($event)"
+					(signalAgain)="resetStatus()"></app-upload-file>
+			</div>
+		</div>
+		<div class="container column center">
+			<h3>Download Current</h3>
+			<div class="container column center upload download">
+				<h4>Download the current deal file as .pbn</h4>
+				<ng-container *ngIf="!isLoading">
+					<button
+						class="download"
+						mat-flat-button
+						color="accent"
+						(click)="handleDownload()">
+						Download current deal file
+					</button>
+				</ng-container>
+				<ng-container *ngIf="isLoading">
+					<mat-spinner></mat-spinner>
+				</ng-container>
+			</div>
+			<ng-container *ngIf="downloadError">
+				<div class="container column center download-error">
+					<h3>There has been an error downloading the latest deal file.</h3>
+					<h3>click the button below to try again</h3>
+					<button
+						mat-flat-button
+						color="primary"
+						(click)="tryAgain()">
+						Try Again
+					</button>
+				</div>
+			</ng-container>
+		</div>
+	</div>
 </div>

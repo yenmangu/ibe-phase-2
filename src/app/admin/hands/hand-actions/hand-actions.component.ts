@@ -6,6 +6,7 @@ import { BreakpointService } from 'src/app/shared/services/breakpoint.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component';
+import { saveAs } from 'file-saver';
 
 @Component({
 	selector: 'app-hand-actions',
@@ -25,6 +26,21 @@ export class HandActionsComponent implements OnInit, AfterViewInit {
 
 	// Masterpoints
 	masterpointsForm: FormGroup;
+	masterPointsScales = [
+		{ display: 'Club', value: 'Club' },
+		{ display: 'District', value: 'District' },
+		{ display: 'County', value: 'County' },
+		{ display: 'Regional', value: 'Regional' },
+		{ display: 'National', value: 'National' },
+		{ display: 'Individual', value: 'Individual' },
+		{ display: 'County assoc.', value: 'County assoc.' },
+		{ display: 'Club qualif.', value: 'Club quali-final' },
+		{ display: 'District qualif.', value: 'District quali-final' },
+		{ display: 'County qualif.', value: 'County quali-final' },
+		{ display: 'Regional qualif', value: 'Regional quali-final' },
+		{ display: 'National qualif', value: 'National quali-final' },
+		{ display: 'Special qualif', value: 'Special quali-final' }
+	];
 
 	// HTML/PDF
 	htmlPdfForm: FormGroup;
@@ -64,6 +80,15 @@ export class HandActionsComponent implements OnInit, AfterViewInit {
 		setTimeout(() => {
 			this.selectedTab = tabName;
 		}, 0);
+	}
+
+	showMasterpoints() {
+		const masterpoints = this.ebuDownloadForm.get('masterpoints').value;
+		if (masterpoints) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	buildMasterpointsForm() {
@@ -132,8 +157,11 @@ export class HandActionsComponent implements OnInit, AfterViewInit {
 
 	buildEbuForm() {
 		this.ebuDownloadForm = this.fb.group({
-			chargeCode: [''],
-			masterpoints: ['']
+			chargeCode: ['10'],
+			masterpoints: [false],
+			mpType: [''],
+			mpScale: ['club'],
+			mpWon: [false]
 		});
 		this.ebuUploadForm = this.fb.group({
 			eventName: [''],
@@ -209,10 +237,44 @@ export class HandActionsComponent implements OnInit, AfterViewInit {
 			});
 		}
 	}
-	downloadEBU() {}
+	downloadEBU() {
+		console.log('download ebu invoked');
+		// if (this.ebuDownloadForm.valid) {
+		const ebuValues = {
+			gameCode: this.gameCode,
+			type: 'EBUP2PXML',
+			action: 'download'
+		};
+		console.log('ebu download values: ', ebuValues);
+		this.handActionsHttp.fetchEBU(ebuValues).subscribe({
+			next: (response: Blob) => {
+				if (response) {
+					const blob = new Blob([response], { type: 'application/xml' });
+					saveAs(blob, `${this.gameCode}.xml`);
+				}
+			},
+			error: error => {
+				console.error('error fetching EBU', error);
+			}
+		});
+		// }
+	}
 	uploadEBU() {
 		if (this.ebuUploadForm.valid) {
-			const values = { ...this.ebuUploadForm.value };
+			const values = {
+				...this.ebuUploadForm.value,
+				gameCode: this.gameCode,
+				type: 'EBU',
+				action: 'upload'
+			};
+
+			console.log('EBU Form Values: ', values);
+
+			this.handActionsHttp.sendEBU(values).subscribe({
+				next: response => {
+					console.log('response from sending ebu: ', response);
+				}
+			});
 		}
 	}
 	uploadEcats() {

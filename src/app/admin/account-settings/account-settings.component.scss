@@ -1,5 +1,9 @@
 @import '../../../colours.styles.scss';
 
+:host{
+	margin: auto
+}
+
 h2 {
 	text-align: center;
 }

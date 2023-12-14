@@ -30,6 +30,11 @@
 					},
 					"configurations": {
 						"production": {
+							"sourceMap": {
+								"scripts": true,
+								"vendor": true,
+								"styles": true
+							},
 							"budgets": [
 								{
 									"type": "initial",

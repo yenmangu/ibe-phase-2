@@ -13,7 +13,7 @@
 				(click)="onFinalise()">
 				{{ finaliseSuccess === true ? 'Game Finalised' : 'Finalise Game' }}
 			</button>
-			<ng-container *ngIf="finalising">
+			<ng-container class="container column center" *ngIf="finalising">
 				<mat-spinner class="finalise"></mat-spinner>
 			</ng-container>
 

@@ -2,19 +2,13 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AdminComponent } from './admin.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { GamesModule } from './games/games.module';
 import { GameSetupComponent } from './game-setup/game-setup.component';
-import { GameActionsComponent } from './game-actions/game-actions.component';
 import { GameSettingsComponent } from './game-settings/game-settings.component';
 import { AccountSettingsComponent } from './account-settings/account-settings.component';
 import { GamesComponent } from './games/games.component';
-import { UploadDownloadComponent } from './upload-download/upload-download.component';
 import { HandRecordsLandingComponent } from './hands/hand-records-landing/hand-records-landing.component';
-// dev
-import { PairsTableComponent } from './games/pairs-table/pairs-table.component';
-import { CurrentGameComponent } from './games/current-game/current-game.component';
 import { HistoricGamesComponent } from './games/historic-games/historic-games.component';
-import { PlayerDatabaseComponent } from './games/database-landing/player-database/player-database.component';
+import { ReportingComponent } from './reporting/reporting.component'; // dev
 
 const routes: Routes = [
 	{
@@ -24,13 +18,34 @@ const routes: Routes = [
 			{
 				path: 'games',
 				component: GamesComponent,
+				data: { menuLabel: 'Game In Progress' },
 				loadChildren: () => import('./games/games.module').then(m => m.GamesModule)
 			},
-			{ path: 'game-setup', component: GameSetupComponent },
-			{ path: 'hand-records', component: HandRecordsLandingComponent },
-			{ path: 'game-actions', component: GameActionsComponent },
-			{ path: 'game-settings', component: GameSettingsComponent },
-			{ path: 'account', component: AccountSettingsComponent },
+			{
+				path: 'game-setup',
+				component: GameSetupComponent,
+				data: { menuLabel: 'Game Code Settings' }
+			},
+			{
+				path: 'hand-records',
+				component: HandRecordsLandingComponent,
+				data: { menuLabel: 'Hand Records' }
+			},
+			{
+				path: 'reporting',
+				component: ReportingComponent,
+				data: { menuLabel: 'Reporting' }
+			},
+			{
+				path: 'historic-games',
+				component: HistoricGamesComponent,
+				data: { menuLabel: 'Historic Games' }
+			},
+			{
+				path: 'account',
+				component: AccountSettingsComponent,
+				data: { menuLabel: 'Account Settings' }
+			},
 			{ path: 'dashboard', component: DashboardComponent },
 			// Additional admin routes
 			{ path: '', pathMatch: 'full', redirectTo: 'games' }

@@ -1,4 +1,4 @@
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable, OnInit, OnDestroy } from '@angular/core';
 import { MatDialog, MatDialogRef, MatDialogConfig } from '@angular/material/dialog';
 import { DialogComponent } from '../dialog/dialog.component';
 import { PlayerTableDialogComponent } from '../player-table-dialog/player-table-dialog.component';
@@ -12,7 +12,7 @@ import { AdvancedOptionsDialogComponent } from 'src/app/admin/games/database-lan
 @Injectable({
 	providedIn: 'root'
 })
-export class DialogService implements OnInit {
+export class DialogService implements OnInit, OnDestroy {
 	public dialogs: DialogModel[] = dialogData;
 	public gameCode: string;
 	constructor(
@@ -117,8 +117,7 @@ export class DialogService implements OnInit {
 			data: {
 				existingRowData: data,
 				type: type ? type : undefined,
-				searchTerm: searchTerm && searchTerm !== undefined ? searchTerm : undefined,
-
+				searchTerm: searchTerm && searchTerm !== undefined ? searchTerm : undefined
 			}
 		};
 		console.log('dialog service config: ', matDialogConfig);
@@ -156,9 +155,23 @@ export class DialogService implements OnInit {
 	}
 
 	closeDialog(): void {
+		console.log('closeDialog invoked');
 		if (this.dialogRef) {
 			this.dialogRef.close();
 			this.dialogRef = null;
 		}
+	}
+
+	public closeAllDialogs(): void {
+		console.log('closeAllDialogs invoked');
+		if (this.dialogRef) {
+			this.dialogRef.close();
+			this.dialog.closeAll();
+			this.dialogRef = null;
+		}
+	}
+
+	ngOnDestroy(): void {
+		this.closeAllDialogs();
 	}
 }

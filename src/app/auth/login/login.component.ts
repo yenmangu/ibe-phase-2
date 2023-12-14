@@ -45,26 +45,40 @@ export class LoginComponent implements OnInit {
 		console.log('Submit Button Clicked');
 		this.authService.login(formData).subscribe({
 			next: response => {
-				console.log('response from authService: ', response);
-				// this.sharedDataService.updateUserData(
-				// 	response.directorSlot,
-				// 	dirKey,
-				// 	response.directorEmail
-				// );
-				this.userDetailsService.updateEmail(response.directorEmail);
-				this.userDetailsService.updateGameCode(gameCode);
-				this.userDetailsService.updateDirectorKey(dirKey);
-				this.userDetailsService.updateLoggedIn(true);
-				localStorage.setItem('LOGGED_IN', 'true');
-				localStorage.setItem('GAME_CODE', gameCode);
-				localStorage.setItem('DIR_KEY', dirKey);
-				localStorage.setItem('EMAIL', response.directorEmail);
-				this.IDBStatus.resetProgress();
-				this.router.navigate(['/admin']);
-				this.dialogService.closeDialog();
+				console.log('Response from auth Service: ', response);
+				if (response === false) {
+					console.log('in "response === false" path');
+
+					this.authService.statusSubject$.subscribe(status => {
+						console.log('auth service status subject: ', status);
+						if (!status || status === undefined) {
+							this.dialogService.openDialog('generalFail');
+						}
+						if (status === 'NO_USER') {
+							this.dialogService.openDialog('userFail');
+						} else if (status === 'PASS_ERROR') {
+							this.dialogService.openDialog('passFail');
+						}
+					});
+				} else if (response) {
+					console.log('response from authService: ', response);
+					this.userDetailsService.updateEmail(response.directorEmail);
+					this.userDetailsService.updateGameCode(gameCode);
+					this.userDetailsService.updateDirectorKey(dirKey);
+					this.userDetailsService.updateLoggedIn(true);
+					this.dialogService.closeAllDialogs();
+					localStorage.setItem('LOGGED_IN', 'true');
+					localStorage.setItem('GAME_CODE', gameCode);
+					localStorage.setItem('DIR_KEY', dirKey);
+					localStorage.setItem('EMAIL', response.directorEmail);
+					this.IDBStatus.resetProgress();
+					this.router.navigate(['/admin']);
+				}
 			}
 		});
 	}
+
+	openFailDialog() {}
 
 	openRegistrationSuccessDialog() {
 		return this.dialogService.openDialog('registrationSuccess');

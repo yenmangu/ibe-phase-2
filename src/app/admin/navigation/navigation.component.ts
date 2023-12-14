@@ -13,17 +13,22 @@ import {
 	Subscription,
 	catchError,
 	distinctUntilChanged,
-	startWith
+	startWith,
+	filter,
+	map,
+	mergeMap
 } from 'rxjs';
 import { MatIconRegistry } from '@angular/material/icon';
 import { IconRegistryService } from 'src/app/shared/services/icon-registry.service';
 import { UserDetailsComponent } from 'src/app/shared/header/user-details/user-details.component';
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 // Dev
 import { SharedDataService } from 'src/app/shared/services/shared-data.service';
 import { CurrentEventService } from '../games/services/current-event.service';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { BreakpointService } from 'src/app/shared/services/breakpoint.service';
 import { UserDetailsService } from 'src/app/shared/services/user-details.service';
+import { NavigationService } from './navigation.service';
 @Component({
 	selector: 'app-navigation',
 	templateUrl: './navigation.component.html',
@@ -36,22 +41,26 @@ export class NavigationComponent
 	isOpen$ = this._sidenavService.isOpen$;
 	private subscription: Subscription;
 	contentClass: string = 'shrink';
-	isOpen: boolean = false
-	gameCode: string = ''
-	email: string = ''
+	isOpen: boolean = false;
+	gameCode: string = '';
+	email: string = '';
 	//
 	// Dev - used to update match type across the app
 	matchTypeControl: FormControl;
 	selectedMatchType$: any = '';
 	currentBreakpoint;
+	currentLabel: string = ''
 	// End dev
 	//
 	constructor(
+		private router: Router,
+		private activatedRoute: ActivatedRoute,
 		private _sidenavService: SidenavService,
 		private _iconRegistry: IconRegistryService,
 		private _matIconRegistry: MatIconRegistry,
 		private breakpointService: BreakpointService,
 		private userDetailsService: UserDetailsService,
+		private navigationService: NavigationService,
 
 		// dev
 		private fb: FormBuilder,
@@ -70,37 +79,66 @@ export class NavigationComponent
 	}
 
 	ngOnInit(): void {
-		this.subscription = this.isOpen$.subscribe((isOpen: boolean) => {
-			this.isOpen = isOpen
-			if (this.drawer) {
-				if (isOpen) {
-					this.drawer.open();
-					this.contentClass = 'shrink';
-				} else {
-					this.drawer.close();
-					this.contentClass = 'full';
-				}
-			}
-		});
+
+		console.log('\n\nNAVIGATION COMPONENT\n\n');
+
+		this.router.events
+			.pipe(filter(event => event instanceof NavigationEnd))
+			.subscribe(() => {
+				this.setMenuLabel();
+			});
+		if (this.router.url === '/admin/games') {
+			this.setMenuLabel();
+		}
 		this.breakpointService.currentBreakpoint$.subscribe(breakpoint => {
 			this.currentBreakpoint = breakpoint;
 			if (this.currentBreakpoint === 'handset' && this.isOpen) {
-				this._sidenavService.toggle()
+				this._sidenavService.toggle();
 			}
 		});
-		this.userDetailsService.email$.subscribe(email=> this.email = email)
-		this.userDetailsService.gameCode$.subscribe(gamecode => this.gameCode = gamecode)
-
+		this.userDetailsService.email$.subscribe(email => (this.email = email));
+		this.userDetailsService.gameCode$.subscribe(
+			gamecode => (this.gameCode = gamecode)
+		);
 	}
 
 	ngAfterViewInit(): void {
 		// console.log('navigation loaded');
 		// this.getMatchData(this.matchTypeControl.value);
+		if (this.drawer) {
+			this.drawer.openedChange.subscribe(state => {
+				console.log(`current drawer state: ${state}`);
+				this._sidenavService.isOpenSubject.next(state);
+			});
+			this._sidenavService.isOpen$.subscribe((isOpen: boolean) => {
+				if (this.drawer) {
+					if (isOpen) {
+						this.drawer.open();
+					} else {
+						this.drawer.close();
+					}
+				}
+			});
+		}
 	}
 
 	ngAfterContentInit(): void {
 		// this.selectedMatchType$.subscribe({
 		// })
+	}
+
+	setMenuLabel() {
+		let route = this.router.routerState.root;
+		while (route.firstChild) {
+			route = route.firstChild;
+		}
+		const currentLabel = route.snapshot.data?.menuLabel || '';
+		this.currentLabel = currentLabel
+		this.navigationService.setSelected(currentLabel);
+	}
+
+	handleLinkClick(selected: string) {
+		this.navigationService.setSelected(selected);
 	}
 
 	toggleSidenav(): void {

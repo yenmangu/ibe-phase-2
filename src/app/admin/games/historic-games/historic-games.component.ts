@@ -14,7 +14,8 @@ import { IndexedDatabaseStatusService } from 'src/app/shared/services/indexed-da
 import { MatDialog } from '@angular/material/dialog';
 import { RestoreDialogComponent } from './restore-dialog/restore-dialog.component';
 import { HttpService } from 'src/app/shared/services/http.service';
-import { UserDetailsService } from 'src/app/shared/services/user-details.service';
+import { SharedGameDataService } from '../services/shared-game-data.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 @Component({
 	selector: 'app-historic-games',
 	templateUrl: './historic-games.component.html',
@@ -35,6 +36,8 @@ export class HistoricGamesComponent implements OnInit, AfterViewInit, OnDestroy 
 	isDBInit: boolean = false;
 	IDBStatusSubscription = new Subscription();
 	zip: string = '';
+	gameCode: string = '';
+	dirKey: string = '';
 
 	private destroy$ = new Subject<void>();
 
@@ -43,7 +46,8 @@ export class HistoricGamesComponent implements OnInit, AfterViewInit, OnDestroy 
 		private IDBStatus: IndexedDatabaseStatusService,
 		private dialog: MatDialog,
 		private httpService: HttpService,
-		private userDetails: UserDetailsService
+		private sharedGameDataService: SharedGameDataService,
+		private snackbar: MatSnackBar
 	) {}
 
 	ngOnInit(): void {
@@ -73,6 +77,8 @@ export class HistoricGamesComponent implements OnInit, AfterViewInit, OnDestroy 
 			);
 		}
 		this.fetchData();
+		this.gameCode = localStorage.getItem('GAME_CODE');
+		this.dirKey = localStorage.getItem('DIR_KEY');
 	}
 
 	ngAfterViewInit(): void {
@@ -121,6 +127,7 @@ export class HistoricGamesComponent implements OnInit, AfterViewInit, OnDestroy 
 	onRowClick(row): void {
 		console.log('row: ', row);
 		this.zip = row.zipname[0];
+		this.openDialog();
 	}
 
 	private openDialog() {
@@ -130,15 +137,37 @@ export class HistoricGamesComponent implements OnInit, AfterViewInit, OnDestroy 
 				title: 'Restore this game?',
 				message:
 					'Restoring this game will overwrite the current game, which will be achived and may be restored later',
-				zip: this.zip
+				zip: this.zip,
+				gameCode: this.gameCode,
+				dirKey: this.dirKey
 			}
 		});
 		dialogRef.afterClosed().subscribe(result => {
 			if (result === true) {
-				const gameCode = localStorage.getItem('GAME_CODE');
-				const dirKeky = localStorage.getItem('DIR_KEY');
-				const data = { gameCode, dirKeky, zip: this.zip };
+				console.log('dialog response: ', result);
 
+				const payload = {
+					gameCode: this.gameCode,
+					dirKey: this.dirKey,
+					zipName: this.zip
+				};
+				this.httpService.restoreHistoricGame(payload).subscribe({
+					next: response => {
+						console.log('response from api: ', response);
+						if (response.result.success) {
+							console.log('Success restoring game');
+
+							this.sharedGameDataService.triggerRefreshDatabase();
+						}
+					},
+					error: error => {
+						console.log('error from api: ', error);
+						this.snackbar.open(
+							'Error restoring game, please try again, or try restoring a different game',
+							'Dismiss'
+						);
+					}
+				});
 				//
 			}
 		});

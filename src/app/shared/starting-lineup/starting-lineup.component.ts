@@ -23,6 +23,8 @@ export class StartingLineupComponent implements OnInit {
 	pairConfig: any;
 	pairNumbers: any;
 	matchType: string;
+	teamConfig: any = {};
+	individualNumbers: any = {};
 
 	currentBreakpoint = '';
 
@@ -48,6 +50,7 @@ export class StartingLineupComponent implements OnInit {
 
 	getPublicData(data) {
 		this.apiCoordinationService.getPublicGame(data).subscribe(data => {
+			// prettier-ignore
 			if (data) {
 				this.startingLineupData = data;
 				console.log('starting line up: ', data);
@@ -62,19 +65,22 @@ export class StartingLineupComponent implements OnInit {
 						eventName,
 						pairNumbers,
 						pairConfig,
-						matchType
+						matchType,
+						teamConfig,
+						individuals
 					}
 				} = this.startingLineupData;
 				console.log('match type: ', matchType);
-
 				this.matchType = matchType;
 				this.north = north;
 				this.south = south;
 				this.east = east;
 				this.west = west;
-				(this.eventName = eventName),
-					(this.pairConfig = pairConfig),
-					(this.pairNumbers = pairNumbers);
+				this.eventName = eventName,
+				this.pairConfig = pairConfig,
+				this.pairNumbers = pairNumbers;
+				this.teamConfig = teamConfig;
+				this.individualNumbers = individuals
 			}
 			console.log(this.tablesArray);
 

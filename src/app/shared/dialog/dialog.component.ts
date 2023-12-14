@@ -1,4 +1,6 @@
 import {
+	OnInit,
+	OnDestroy,
 	Component,
 	Input,
 	Output,
@@ -11,13 +13,14 @@ import {
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 import { UploadFileComponent } from '../upload-file/upload-file.component';
+import { AuthService } from 'src/app/auth/services/auth.service';
 
 @Component({
 	selector: 'app-dialog',
 	templateUrl: './dialog.component.html',
 	styleUrls: ['./dialog.component.scss']
 })
-export class DialogComponent {
+export class DialogComponent implements OnInit, OnDestroy{
 	@ViewChild('registerComponent', { read: ViewContainerRef })
 	registerContainer: ViewContainerRef;
 	@ViewChild('uploadFileComponent') uploadFileComponent: UploadFileComponent;
@@ -33,12 +36,17 @@ export class DialogComponent {
 	constructor(
 		public dialogRef: MatDialogRef<DialogComponent>,
 		private vcRef: ViewContainerRef,
+		private authService: AuthService,
 		@Inject(MAT_DIALOG_DATA) public data: any
 	) {
 		if (data && data.component) {
 			const factory = this.vcRef.createComponent(data.component);
 			this.componentRef = factory;
 		}
+	}
+
+	ngOnInit(): void {
+
 	}
 
 	onConfirm(): void {
@@ -50,6 +58,7 @@ export class DialogComponent {
 		this.dialogRef.close('success');
 	}
 
+
 	sendDataToComponent(data: any) {
 		this.dataEmitter.emit(data);
 	}
@@ -60,5 +69,9 @@ export class DialogComponent {
 		}
 		this.cancel.emit();
 		this.dialogRef.close();
+	}
+
+	ngOnDestroy(): void {
+		
 	}
 }

@@ -27,7 +27,6 @@ export class RestoreDialogComponent implements OnInit {
 		this.dialogRef.close(false);
 	}
 	onRestore() {
-		const data = { zip: this.zip, gameCode: this.gameCode, dirKey: this.dirKey };
-		this.httpService.restoreHistoricGame(data);
+		this.dialogRef.close(true)
 	}
 }

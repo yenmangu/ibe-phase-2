@@ -15,7 +15,7 @@ export class PlayerTableDialogComponent implements OnInit, AfterViewInit {
 	bboChecked: boolean = false;
 	playerName: string[] | string = '';
 	playerEmail: string = '';
-	playerTelephone: string = '';
+	playerPhone: string = '';
 	playerNumber: string | null = '';
 	ebuId: string;
 	bboId: string;
@@ -59,7 +59,7 @@ export class PlayerTableDialogComponent implements OnInit, AfterViewInit {
 			this.existingName = existingRowData.value.name || '';
 			this.playerName = existingRowData.value.name || '';
 			this.playerEmail = existingRowData?.value?.email || undefined;
-			this.playerTelephone = existingRowData?.value?.telephone || undefined;
+			this.playerPhone = existingRowData?.value?.phone || undefined;
 			this.dateAdded = existingRowData.value?.$?.adddate || '';
 			if (existingRowData.lastplay) {
 				this.lastPlay = existingRowData?.value?.lastplay[0]?.date || '';
@@ -113,7 +113,7 @@ export class PlayerTableDialogComponent implements OnInit, AfterViewInit {
 			const updatedPlayer = { ...this.data.existingRowData };
 			updatedPlayer.value.name = this.playerName;
 			updatedPlayer.value.email = this.playerEmail;
-			updatedPlayer.value.telephone = this.playerTelephone;
+			updatedPlayer.value.phone = this.playerPhone;
 			console.log('seeing how the data looks: ', updatedPlayer);
 			let idArray = []
 			if (this.ebuChecked && this.ebuId) {
@@ -150,8 +150,8 @@ export class PlayerTableDialogComponent implements OnInit, AfterViewInit {
 			if (this.playerEmail) {
 				newPlayer.value.email = [this.playerEmail];
 			}
-			if (this.playerTelephone) {
-				newPlayer.value.telephone = [this.playerTelephone];
+			if (this.playerPhone) {
+				newPlayer.value.phone = [this.playerPhone];
 			}
 			if (this.ebuChecked && this.ebuId) {
 				newPlayer.value.id = [];

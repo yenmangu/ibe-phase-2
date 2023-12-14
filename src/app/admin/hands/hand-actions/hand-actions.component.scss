@@ -57,5 +57,11 @@ h3.movement {
 	justify-content: center;
 }
 .delete {
-	padding: 4rem
+	padding: 4rem;
+}
+.ebu {
+	gap: 3rem;
+	.inner {
+		gap: 1rem;
+	}
 }
