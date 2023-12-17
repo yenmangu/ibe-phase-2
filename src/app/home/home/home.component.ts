@@ -5,6 +5,7 @@ import { RegisterComponent } from 'src/app/auth/register/register.component';
 import { DialogService } from 'src/app/shared/services/dialog.service';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { IndexedDatabaseStatusService } from 'src/app/shared/services/indexed-database-status.service';
+import { BreakpointService } from 'src/app/shared/services/breakpoint.service';
 
 @Component({
 	selector: 'app-home',
@@ -13,13 +14,19 @@ import { IndexedDatabaseStatusService } from 'src/app/shared/services/indexed-da
 })
 export class HomeComponent implements OnInit {
 	isAuthenticated: boolean = false;
+	currentBreakpoint: string = '';
+
 	constructor(
 		private authService: AuthService,
 		private dialogService: DialogService,
-		private IDBStatus: IndexedDatabaseStatusService
+		private IDBStatus: IndexedDatabaseStatusService,
+		private breakpointService: BreakpointService
 	) {}
 
 	ngOnInit(): void {
+		this.breakpointService.currentBreakpoint$.subscribe(breakpoint => {
+			this.currentBreakpoint = breakpoint;
+		});
 		this.authService.isAuthedSubject$.subscribe(authStatus => {
 			this.isAuthenticated = authStatus;
 		});

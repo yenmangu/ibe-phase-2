@@ -1,3 +1,8 @@
+@import '../../../../colours.styles.scss';
+
+:host {
+	padding: 2rem;
+}
 .button-wrapper {
 	justify-content: flex-start;
 	align-items: center;

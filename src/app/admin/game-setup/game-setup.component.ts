@@ -5,7 +5,11 @@ import {
 	AfterViewInit,
 	Output,
 	OnDestroy,
-	ViewChild
+	ViewChild,
+	ViewChildren,
+	ChangeDetectorRef,
+	ElementRef,
+	QueryList
 } from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { BreakpointService } from 'src/app/shared/services/breakpoint.service';
@@ -19,6 +23,8 @@ import { SharedSettingsService } from '../services/shared-settings.service';
 import { tag } from 'rxjs-spy/cjs/operators';
 import { DataService } from '../games/services/data.service';
 import { PlayerIdentificationComponent } from './player-identification/player-identification.component';
+import { ThemePalette } from '@angular/material/core';
+
 @Component({
 	selector: 'app-game-setup',
 	templateUrl: './game-setup.component.html',
@@ -26,6 +32,16 @@ import { PlayerIdentificationComponent } from './player-identification/player-id
 })
 export class GameSetupComponent implements OnInit, AfterViewInit, OnDestroy {
 	@ViewChild('playerIdentification', { static: false })
+	@ViewChildren('signInTab', { read: ElementRef })
+	signInTab: QueryList<ElementRef>;
+	@ViewChildren('securityTab', { read: ElementRef })
+	securityTab: QueryList<ElementRef>;
+	@ViewChildren('movementTab', { read: ElementRef })
+	movementTab: QueryList<ElementRef>;
+	@ViewChildren('interfaceTab', { read: ElementRef })
+	interfaceTab: QueryList<ElementRef>;
+	@ViewChildren('namingTab', { read: ElementRef }) namingTab: QueryList<ElementRef>;
+
 	playerIdentification: PlayerIdentificationComponent;
 	setupForm: FormGroup;
 	securityForm: FormGroup;
@@ -64,11 +80,9 @@ export class GameSetupComponent implements OnInit, AfterViewInit, OnDestroy {
 		private fb: FormBuilder,
 		private apiCoordinationService: ApiDataCoordinationService,
 		private userDetailsService: UserDetailsService,
-		private sharedGameData: SharedGameDataService,
 		private gameSettingsService: GameSettingsService,
 		private IDBstatusService: IndexedDatabaseStatusService,
-		private sharedSettingsService: SharedSettingsService,
-		private dataService: DataService
+		private sharedSettingsService: SharedSettingsService
 	) {}
 
 	ngOnInit(): void {
@@ -135,7 +149,9 @@ export class GameSetupComponent implements OnInit, AfterViewInit, OnDestroy {
 
 		console.log('player id values: ', this.initialPlayerIdValues);
 	}
-	ngAfterViewInit(): void {}
+	ngAfterViewInit(): void {
+		this.simMouseDown('.sign-in-label');
+	}
 
 	checkEmpty(obj) {
 		for (var i in obj) return false;
@@ -255,5 +271,18 @@ export class GameSetupComponent implements OnInit, AfterViewInit, OnDestroy {
 
 	resetButtons() {
 		this.successMessage = false;
+	}
+
+	simMouseDown(selector: string): void {
+		const el = document.querySelector(selector) as HTMLElement;
+		if (el) {
+			const event = new MouseEvent('mousedown', {
+				bubbles: true,
+				
+				cancelable: true,
+				view: window
+			});
+			el.dispatchEvent(event);
+		}
 	}
 }

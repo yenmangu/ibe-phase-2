@@ -38,8 +38,12 @@
 					<!-- How To Use Tab -->
 					<!--  -->
 					<!-- Player Sign In Tab -->
-					<mat-tab label="Player Sign-In">
-						<div class="container column">
+					<mat-tab
+						#signInTab
+						labelClass="sign-in-label"
+						label="Player Sign-In"
+						class="sign-in-tab tab-header">
+						<div class="container column sign-in content">
 							<h3>Startup Interface</h3>
 							<mat-checkbox formControlName="twoPageStartup"
 								>Two-Page startup</mat-checkbox
@@ -96,10 +100,14 @@
 					<!--  -->
 					<!-- Security Tab -->
 
-					<mat-tab label="Security">
-						<div class="container column">
+					<mat-tab
+						#securityTab
+						labelClass="security-label"
+						label="Security"
+						class="security-tab tab-header">
+						<div class="container column security content">
 							<h3>Security</h3>
-							<mat-form-field>
+							<mat-form-field class="on-lock">
 								<mat-label>On Game Creation</mat-label>
 								<mat-select formControlName="onGameCreation">
 									<mat-option value="lock-event">Lock Event</mat-option>
@@ -160,8 +168,12 @@
 					<!--  -->
 					<!-- Movement/ Scoring Tab In Tab -->
 
-					<mat-tab label="Movement/ Scoring">
-						<ng-container *ngIf="scoringSettings && !checkEmpty(scoringSettings)">
+					<mat-tab
+						#movementTab
+						labelClass="movement-label"
+						label="Movement & Scoring"
+						class="movement-tab tab-header">
+						<ng-container *ngIf="scoringSettings && !checkEmpty(scoringSettings)" class="movement">
 							<app-boards-scoring
 								[successMessage]="successMessage"
 								[scoringSettings]="scoringSettings"
@@ -173,9 +185,13 @@
 					<!--  -->
 					<!-- App Interface Tab -->
 
-					<mat-tab label="App Interface">
+					<mat-tab
+						#interfaceTab
+						labelClass="interface-label"
+						label="App Interface"
+						class="interface-tab tab-header">
 						<ng-container
-							*ngIf="appInterfaceSettings && !checkEmpty(appInterfaceSettings)">
+							*ngIf="appInterfaceSettings && !checkEmpty(appInterfaceSettings)" class="interface">
 							<app-app-interface
 								[successMessage]="successMessage"
 								[appInterfaceSettings]="appInterfaceSettings"
@@ -187,11 +203,15 @@
 					<!--  -->
 					<!-- Naming Numbering Tab -->
 
-					<mat-tab label="Naming Numbering">
+					<mat-tab
+						#namingTab
+						labelClass="naming-label"
+						label="Naming & Numbering"
+						class="naming-tab tab-header">
 						<ng-container
 							*ngIf="
 								namingNumberingSettings && !checkEmpty(namingNumberingSettings)
-							">
+							" class="naming">
 							<app-naming-numbering
 								[successMessage]="successMessage"
 								[namingNumberingSettings]="namingNumberingSettings"

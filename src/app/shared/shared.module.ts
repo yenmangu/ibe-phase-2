@@ -24,6 +24,7 @@ import { BboUploadComponent } from './bbo-upload/bbo-upload.component';
 import { UsebioComponent } from './usebio/usebio.component';
 import { DeleteRowDialogComponent } from './delete-row-dialog/delete-row-dialog.component';
 import { LoginDialogComponent } from './login-dialog/login-dialog.component';
+import { SpectateComponent } from './spectate/spectate.component';
 
 // Modules
 
@@ -44,7 +45,8 @@ import { LoginDialogComponent } from './login-dialog/login-dialog.component';
   BboUploadComponent,
   UsebioComponent,
   DeleteRowDialogComponent,
-  LoginDialogComponent
+  LoginDialogComponent,
+  SpectateComponent
 	],
 	imports: [
 		CommonModule,

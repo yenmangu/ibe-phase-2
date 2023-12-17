@@ -1,6 +1,7 @@
 @import '../../../colours.styles.scss';
 :host {
 	height: 100%;
+	min-height: calc(100vh - 144px);
 }
 
 .container {
@@ -25,8 +26,9 @@
 }
 mat-drawer-content.mat-drawer-content {
 	// min-height: 81.8vh !important;
-	height: 100%;
+	height: calc(100vh - 144px);
 	flex-direction: column;
+	justify-content: flex-start;
 }
 
 .drawer .mat-drawer-inner-container {
@@ -71,8 +73,8 @@ mat-drawer-content.mat-drawer-content {
 }
 
 .container.current-label {
-	height: fit-content;
-	margin: auto;
+	height: 60px;
+	margin: 0 auto;
 }
 
 .content {

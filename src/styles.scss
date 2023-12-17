@@ -22,6 +22,18 @@ $ibe-warn: mat.define-palette($ibe-pumpkin-palette, 900, 800, 900);
 $ibe-alert: mat.define-palette($ibe-red-alert-palette, 900, 700, 900);
 $ibe-whitesmoke: mat.define-palette($ibe-whitesmoke-palette, 100, 100, 100);
 
+$player-sign-in-color: #ff44cc;
+$security-color: #99cc33;
+$movement-scoring-color: #e97451;
+$app-interface-color: #005e79;
+$naming-numbering-color: #714e8c;
+
+$player-sign-in-map: mat.define-palette($player-sign-in-palette, 300, 300, 300);
+$security-map: mat.define-palette($security-palette, 500, 500, 500);
+$movement-scoring-map: mat.define-palette($movement-palette, 400, 400, 400);
+$app-interface-map: mat.define-palette($interface-palette, 700, 700, 700);
+$naming-numbering-map: mat.define-palette($naming-palette, 400, 400, 400);
+
 $ibescore-theme: mat.define-light-theme(
 	(
 		color: (
@@ -64,34 +76,80 @@ $magenta-grey-theme: mat.define-light-theme(
 		)
 	)
 );
-/*
-$custom-colors: mat.define-light-theme(
+
+$sign-in-theme: mat.define-light-theme(
 	(
 		color: (
-			primary: $ibe-primary,
-			accent: $grey-accent,
-			warn: $ibe-accent,
-			alert: $ibe-warn
+			primary: $player-sign-in-map,
+			accent: $ibe-teal
 		)
 	)
 );
-*/
+
+$security-theme: mat.define-light-theme(
+	(
+		color: (
+			primary: $security-map,
+			accent: $ibe-teal
+		)
+	)
+);
+
+$movement-theme: mat.define-light-theme(
+	(
+		color: (
+			primary: $movement-scoring-map,
+			accent: $ibe-teal
+		)
+	)
+);
+
+$interface-theme: mat.define-light-theme(
+	(
+		color: (
+			primary: $app-interface-map,
+			accent: $ibe-whitesmoke
+		)
+	)
+);
+
+$naming-theme: mat.define-light-theme(
+	(
+		color: (
+			primary: $naming-numbering-map,
+			accent: $ibe-teal
+		)
+	)
+);
+
 @include mat.all-component-themes($ibescore-theme);
 
-// Custom Component Themes
 
 .grey-magenta-theme {
 	@include mat.all-component-colors($magenta-grey-theme);
 }
-/*
-.ibescore-theme {
-	@include mat.all-component-colors($new-theme);
+
+.sign-in-tab {
+	@include mat.all-component-colors($sign-in-theme);
 }
 
-.green-grey-theme {
-	@include mat.all-component-colors($custom-colors);
+.security-tab {
+	@include mat.all-component-colors($security-theme);
 }
-*/
+
+.movement-tab {
+	@include mat.all-component-colors($movement-theme);
+}
+
+.interface-tab {
+	@include mat.all-component-colors($interface-theme);
+}
+
+.naming-tab {
+	@include mat.all-component-colors($naming-theme);
+}
+
+
 /* You can add global styles to this file, and also import other style files */
 * {
 	--webkit-font-smoothing: subpixel-antialiased;
@@ -114,8 +172,12 @@ body {
 	color: #005e75 !important;
 	font-weight: 600;
 }
+.mat-drawer-content.content {
+	overflow-y: auto;
+}
+
 .mat-drawer-content.content.shrink {
-	overflow-y: hidden;
+	overflow-y: auto;
 }
 
 mat-tab-body {
@@ -149,9 +211,8 @@ button.home-button .mdc-button__label {
 
 app-root {
 	display: block;
-
 }
-app-root::-webkit-scrollbar{
+app-root::-webkit-scrollbar {
 	display: none;
 }
 
@@ -230,6 +291,17 @@ mat-spinner.finalise {
 	height: 40px !important;
 }
 
+// Game SetUp Styling
+
+// mat-tab-header.sign-in
+// 	.mat-mdc-tab
+// 	span.mdc-tab-indicator
+// 	span.mdc-tab-indicator.mdc-tab-indicator__content--underline {
+// 	border-color: $player-sign-in !important;
+// }
+// mat-tab-header.sign-in .mat-mdc-tab .mdc-tab-indicator__content--underline {
+// 	border-color: $player-sign-in !important;
+// }
 // Mobile Global Styles
 
 // .row.handset

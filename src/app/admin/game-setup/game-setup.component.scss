@@ -1,3 +1,5 @@
+@import '../../../colours.styles.scss';
+
 :host {
 	width: 100%;
 	height: 100%;
@@ -21,4 +23,142 @@
 }
 .bottom-row {
 	margin-top: 2rem;
+}
+.on-lock {
+	width: fit-content;
+}
+
+::ng-deep .mat-mdc-tab-header {
+	margin-bottom: 1.4rem !important;
+}
+
+// Individual tabs styling
+// Player Sign-In
+:host ::ng-deep .sign-in-label {
+	> .mdc-tab-indicator {
+		> .mdc-tab-indicator__content--underline {
+			border-color: $player-sign-in !important;
+		}
+	}
+	> .mdc-tab__content {
+		.mdc-tab__text-label {
+			color: $player-sign-in !important;
+		}
+	}
+	> .mdc-tab__ripple::before {
+		background-color: $player-sign-in !important;
+	}
+	> .mat-ripple > * {
+		background-color: $player-sign-in !important;
+	}
+	+ .mat-mdc-tab-body {
+		background-color: rgba($player-sign-in, 0.2) !important;
+	}
+}
+
+// Security
+:host ::ng-deep .security-label {
+	> .mdc-tab-indicator {
+		> .mdc-tab-indicator__content--underline {
+			border-color: $security !important;
+		}
+	}
+	> .mdc-tab__content {
+		.mdc-tab__text-label {
+			color: $security !important;
+		}
+	}
+	> .mdc-tab__ripple::before {
+		background-color: $security !important;
+	}
+	> .mat-ripple > * {
+		background-color: $security !important;
+	}
+}
+
+// Movement
+:host ::ng-deep .movement-label {
+	> .mdc-tab-indicator {
+		> .mdc-tab-indicator__content--underline {
+			border-color: $movement-scoring !important;
+		}
+	}
+	> .mdc-tab__content {
+		.mdc-tab__text-label {
+			color: $movement-scoring !important;
+		}
+	}
+	> .mdc-tab__ripple::before {
+		background-color: $movement-scoring !important;
+	}
+	> .mat-ripple > * {
+		background-color: $movement-scoring !important;
+	}
+}
+
+// App-Interface
+:host ::ng-deep .interface-label {
+	> .mdc-tab-indicator {
+		> .mdc-tab-indicator__content--underline {
+			border-color: $app-interface !important;
+		}
+	}
+	> .mdc-tab__content {
+		.mdc-tab__text-label {
+			color: $app-interface !important;
+		}
+	}
+	> .mdc-tab__ripple::before {
+		background-color: $app-interface !important;
+	}
+	> .mat-ripple > * {
+		background-color: $app-interface !important;
+	}
+}
+
+// Naming & Numbering
+:host ::ng-deep .naming-label {
+	> .mdc-tab-indicator {
+		> .mdc-tab-indicator__content--underline {
+			border-color: $naming-numbering !important;
+		}
+	}
+	> .mdc-tab__content {
+		.mdc-tab__text-label {
+			color: $naming-numbering !important;
+		}
+	}
+	> .mdc-tab__ripple::before {
+		background-color: $naming-numbering !important;
+	}
+	> .mat-ripple > * {
+		background-color: $naming-numbering !important;
+	}
+}
+
+.sign-in,
+.security {
+	padding: 2rem;
+}
+
+.sign-in {
+	background-color: rgba($player-sign-in, 0.08) !important;
+}
+.security {
+	background-color: rgba($security, 0.08) !important;
+}
+.movement,
+app-boards-scoring {
+	display: block;
+	background-color: rgba($movement-scoring, 0.08) !important;
+}
+.interface,
+app-app-interface {
+	display: block;
+	background-color: rgba($app-interface, 0.08) !important;
+}
+.naming,
+app-naming-numbering {
+	display: block;
+	background-color: rgba($naming-numbering, 0.08) !important;
 }

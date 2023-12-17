@@ -122,3 +122,38 @@ $ibe-whitesmoke-palette: (
 		100: #3c3c3c
 	)
 );
+
+$player-sign-in-palette: (
+	300: #ff44cc,
+	contrast: (
+		300: whitesmoke
+	)
+);
+
+$security-palette: (
+	500: #99cc33,
+	contrast: (
+		500: whitesmoke
+	)
+);
+
+$movement-palette: (
+	400: #e97451,
+	contrast: (
+		400: whitesmoke
+	)
+);
+
+$interface-palette: (
+	700: #005e79,
+	contrast: (
+		700: whitesmoke
+	)
+);
+
+$naming-palette: (
+	400: #714e8c,
+	contrast: (
+		400: whitesmoke
+	)
+);

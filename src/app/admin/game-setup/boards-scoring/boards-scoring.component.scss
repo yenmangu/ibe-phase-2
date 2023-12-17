@@ -1,14 +1,18 @@
+@import '../../../../colours.styles.scss';
+
 :host {
 	padding: 2rem;
-	// overflow-y: hidden;
 }
 form {
-	padding: 2rem 4rem;
+	// padding: 2rem 4rem;
 	width: max-content;
 }
 
 .grid-container {
 	// overflow-y: hidden;
+}
+.header-row {
+	margin-bottom: 1rem;
 }
 
 .grid-item.header {
