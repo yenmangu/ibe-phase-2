@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DialogService } from 'src/app/shared/services/dialog.service';
 import { HttpService } from 'src/app/shared/services/http.service';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
 	selector: 'app-password-recover',
@@ -18,7 +19,8 @@ export class PasswordRecoverComponent {
 	constructor(
 		private fb: FormBuilder,
 		private httpService: HttpService,
-		private dialogService: DialogService
+		private dialogService: DialogService,
+		private dialogRef: MatDialogRef<PasswordRecoverComponent>
 	) {
 		this.directorKeyForm = this.fb.group({
 			gameCode: ['', [Validators.required]],
@@ -27,9 +29,9 @@ export class PasswordRecoverComponent {
 	}
 
 	onSubmit(): void {
-    if (this.directorKeyForm.valid) {
-      const formData = this.directorKeyForm.value;
-      console.log('form: ', formData);
+		if (this.directorKeyForm.valid) {
+			const formData = this.directorKeyForm.value;
+			console.log('form: ', formData);
 			const originalForm = { ...formData };
 			this.httpService.requestPassword(formData).subscribe({
 				next: response => {
@@ -47,7 +49,10 @@ export class PasswordRecoverComponent {
 			});
 		}
 	}
-  onClose(){
-    this.dialogService.closeDialog()
-  }
+	onClose() {
+		if (this.success) {
+			this.dialogRef.close(this.success);
+		}
+		this.dialogRef.close();
+	}
 }

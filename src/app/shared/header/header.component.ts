@@ -3,21 +3,20 @@ import {
 	OnInit,
 	AfterViewInit,
 	OnDestroy,
-	ChangeDetectorRef,
-	ChangeDetectionStrategy
+	ChangeDetectorRef
 } from '@angular/core';
-import { trigger, state, style, animate, transition } from '@angular/animations';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { SharedDataService } from '../services/shared-data.service';
 import { SidenavService } from '../services/sidenav.service';
-import { Subject, Subscription, startWith, takeUntil } from 'rxjs';
+import { Subscription, filter } from 'rxjs';
 import { UserDetailsService } from '../services/user-details.service';
 import { IndexedDatabaseStatusService } from '../services/indexed-database-status.service';
 import { SharedGameDataService } from 'src/app/admin/games/services/shared-game-data.service';
 import { BreakpointService } from '../services/breakpoint.service';
 import { DialogService } from '../services/dialog.service';
 import { PasswordRecoverComponent } from 'src/app/auth/password-recover/password-recover.component';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 @Component({
 	selector: 'app-header',
 	templateUrl: './header.component.html',
@@ -34,10 +33,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 	emailSubscription = new Subscription();
 	userLoggedOut: boolean = false;
 	currentBreakpoint;
+	isPublicLink: boolean = false;
 
 	private sidenavSubscription: Subscription;
 	constructor(
 		private router: Router,
+		private activatedRoute: ActivatedRoute,
 		public authService: AuthService,
 		public sharedDataService: SharedDataService,
 		private sidenavService: SidenavService,
@@ -46,10 +47,17 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 		private IDBStatus: IndexedDatabaseStatusService,
 		private sharedGameDataService: SharedGameDataService,
 		private breakpointService: BreakpointService,
-		private dialogService: DialogService
+		private dialogService: DialogService,
+		private dialog: MatDialog
 	) {}
 
 	ngOnInit(): void {
+		this.router.events
+			.pipe(filter(event => event instanceof NavigationEnd))
+			.subscribe(() => {
+				this.isPublicLink = this.checkRoute();
+			});
+
 		this.userDetailsService.updateFromLocalStorage();
 		this.cdr.detectChanges();
 
@@ -60,6 +68,18 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 	}
 
 	ngAfterViewInit(): void {}
+
+	checkRoute(): boolean {
+		const urlSegments = this.router.url.split('/');
+		const firstPath = urlSegments.length > 1 && urlSegments[1];
+		console.log('first path: ', firstPath);
+
+		if (firstPath.startsWith('starting-lineup')) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
 	toggleSidenav(): void {
 		this.sidenavService.toggle();
@@ -85,7 +105,22 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 
 	forgotPassword(): void {
 		console.log('Forgot password clicked');
-		this.dialogService.openDialog('forgotPASSWORD',undefined,undefined,undefined,undefined,PasswordRecoverComponent)
+		const dialogRef = this.dialog
+			.open(PasswordRecoverComponent, {
+				width: '400px',
+				data: {}
+			})
+			.afterClosed()
+			.subscribe({
+				next: success => {
+					if (success) {
+						console.log('Success resetting password');
+					}
+				},
+				error: error => {
+					console.error('Error resetting password');
+				}
+			});
 	}
 
 	ngOnDestroy(): void {

@@ -2,50 +2,49 @@
 	color="accent"
 	class="toolbar">
 	<div class="container row view">
-
 		<ng-container *ngIf="authService.isAuthedSubject$ | async">
 			<button
-			mat-flat-button
-			(click)="toggleSidenav()">
-			<!-- <mat-icon>menu</mat-icon> -->
-			Menu
-		</button>
-	</ng-container>
-
-	<span>IBEScore Companion</span>
-
-	<div class="header-right container">
-		<button
-			*ngIf="authService.isAuthedSubject$ | async"
-			class="button-white"
-			mat-flat-button
-			color="primary"
-			(click)="refreshDatabase()">
-			Refresh Database
-		</button>
-		<button
-			mat-flat-button
-			color="warn"
-			routerLink="/forgot-password"
-			*ngIf="!(authService.isAuthedSubject$ | async)"
-			(click)="forgotPassword()">
-			Forgot Password
-		</button>
-		<ng-container
-			*ngIf="
-				(authService.isAuthedSubject$ | async) && currentBreakpoint !== 'handset'
-			">
-			<app-user-details></app-user-details>
+				mat-flat-button
+				(click)="toggleSidenav()">
+				<!-- <mat-icon>menu</mat-icon> -->
+				Menu
+			</button>
 		</ng-container>
 
-		<button
-			mat-flat-button
-			color="warn"
-			routerLink="/auth/logout"
-			*ngIf="authService.isAuthedSubject$ | async"
-			(click)="logout()">
-			logout
-		</button>
+		<span>IBEScore Companion</span>
+
+		<div class="header-right container">
+			<button
+				*ngIf="authService.isAuthedSubject$ | async"
+				class="button-white"
+				mat-flat-button
+				color="primary"
+				(click)="refreshDatabase()">
+				Refresh Database
+			</button>
+			<button
+				mat-flat-button
+				color="warn"
+				routerLink="/forgot-password"
+				*ngIf="!(authService.isAuthedSubject$ | async) && !isPublicLink"
+				(click)="forgotPassword()">
+				Forgot Password
+			</button>
+			<ng-container
+				*ngIf="
+					(authService.isAuthedSubject$ | async) && currentBreakpoint !== 'handset'
+				">
+				<app-user-details></app-user-details>
+			</ng-container>
+
+			<button
+				mat-flat-button
+				color="warn"
+				routerLink="/auth/logout"
+				*ngIf="authService.isAuthedSubject$ | async"
+				(click)="logout()">
+				logout
+			</button>
+		</div>
 	</div>
-</div>
 </mat-toolbar>

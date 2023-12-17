@@ -1,36 +1,48 @@
 <div class="container column">
-	<button
-		id="login"
-		mat-flat-button
-		color="primary"
-		class="login home-button"
-		(click)="openDialog('login')"
-		*ngIf="!isLoggedIn()">
-		Log In
-	</button>
-	<button
-		id="register"
-		mat-flat-button
-		color="primary"
-		class="register home-button"
-		(click)="openDialog('register')"
-		*ngIf="!isLoggedIn()">
-		Register
-	</button>
-	<!-- <h2>Spectate</h2>
+	<h2>Login / Register</h2>
 	<div
-		class="container row spectate"
+		class="container button-wrapper row"
 		[ngClass]="currentBreakpoint">
-		<mat-form-field>
-			<mat-label> Enter Game Code </mat-label>
-			<input matInput />
-		</mat-form-field>
 		<button
-			id="spectate"
+			id="login"
 			mat-flat-button
 			color="primary"
-			class="home-button">
-			Spectate
+			class="login home-button"
+			(click)="openDialog('login')"
+			*ngIf="!isLoggedIn()">
+			Log In
 		</button>
-	</div> -->
+		<button
+			id="register"
+			mat-flat-button
+			color="primary"
+			class="register home-button"
+			(click)="openDialog('register')"
+			*ngIf="!isLoggedIn()">
+			Register
+		</button>
+	</div>
+	<div class="container column center spectate-column">
+		<h2>Spectate</h2>
+		<div
+			class="container row spectate"
+			[ngClass]="currentBreakpoint">
+			<mat-form-field>
+				<mat-label> Enter Game Code </mat-label>
+				<input
+					matInput
+					[(ngModel)]="gameCode"
+					name="gameCode" />
+			</mat-form-field>
+			<button
+				[disabled]="!gameCode"
+				id="spectate"
+				mat-flat-button
+				color="primary"
+				class="home-button"
+				(click)="openSpectate()">
+				Spectate
+			</button>
+		</div>
+	</div>
 </div>

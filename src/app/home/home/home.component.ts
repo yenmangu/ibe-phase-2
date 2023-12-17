@@ -6,7 +6,6 @@ import { DialogService } from 'src/app/shared/services/dialog.service';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { IndexedDatabaseStatusService } from 'src/app/shared/services/indexed-database-status.service';
 import { BreakpointService } from 'src/app/shared/services/breakpoint.service';
-
 @Component({
 	selector: 'app-home',
 	templateUrl: './home.component.html',
@@ -15,6 +14,8 @@ import { BreakpointService } from 'src/app/shared/services/breakpoint.service';
 export class HomeComponent implements OnInit {
 	isAuthenticated: boolean = false;
 	currentBreakpoint: string = '';
+
+	gameCode: string = '';
 
 	constructor(
 		private authService: AuthService,
@@ -59,6 +60,13 @@ export class HomeComponent implements OnInit {
 			dialogRef.afterClosed().subscribe(result => {
 				console.log('dialog result: ', result);
 			});
+		}
+	}
+
+	openSpectate() {
+		if (this.gameCode) {
+			const url = `https://www.brianbridge.net/ibescore/ibescore.html?SLOT=${this.gameCode}&ACTION=SPECTATE`;
+			window.open(url, '_blank');
 		}
 	}
 }

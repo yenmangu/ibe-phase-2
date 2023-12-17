@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { NgModel } from '@angular/forms';
 
 @Component({
   selector: 'app-spectate',
@@ -6,5 +7,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./spectate.component.scss']
 })
 export class SpectateComponent {
+
+  gameCode: string = ''
 
 }

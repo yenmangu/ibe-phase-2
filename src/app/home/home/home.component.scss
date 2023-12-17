@@ -1,3 +1,8 @@
+:host {
+	height: 100%;
+	min-height: calc(100vh - 144px);
+}
+
 .container {
 	width: 80%;
 	height: 60%;
@@ -8,7 +13,10 @@
 
 	// height:
 }
-
+.button-wrapper {
+	justify-content: center;
+	gap: 1rem;
+}
 button {
 	width: 8em;
 	max-width: 100px;
@@ -19,6 +27,11 @@ button {
 	height: 4rem;
 }
 
+.spectate-column {
+	justify-content: center;
+	gap: 1rem;
+}
+
 .spectate {
 	justify-content: center;
 	gap: 2rem;
@@ -27,9 +40,9 @@ button {
 #spectate.mdc-button {
 	height: 3.2rem;
 	position: relative;
-	bottom: 9px
+	bottom: 9px;
 }
+
 .handset {
 	flex-direction: column;
-	
 }
