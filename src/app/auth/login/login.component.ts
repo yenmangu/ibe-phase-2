@@ -13,6 +13,9 @@ import { IndexedDatabaseStatusService } from 'src/app/shared/services/indexed-da
 })
 export class LoginComponent implements OnInit {
 	loginForm: FormGroup;
+	hide = true
+	hidePassword: boolean = true
+
 
 	constructor(
 		private fb: FormBuilder,
@@ -82,6 +85,10 @@ export class LoginComponent implements OnInit {
 
 	openRegistrationSuccessDialog() {
 		return this.dialogService.openDialog('registrationSuccess');
+	}
+
+	toggleVisibility(){
+		this.hidePassword = !this.hidePassword
 	}
 }
 
