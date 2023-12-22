@@ -322,6 +322,8 @@ export class PlayerIdentificationComponent implements OnInit, AfterViewInit {
 
 	savePlayerIdValues() {
 		console.log('save player id values invoked');
+		console.log('Values in international organisation form: ', this.internationalOrganisationForm.value);
+		
 
 		const data = this.getPlayerIdValues();
 		console.log('data in player id form component: ', data);

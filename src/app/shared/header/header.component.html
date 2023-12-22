@@ -4,6 +4,7 @@
 	<div class="container row view">
 		<ng-container *ngIf="authService.isAuthedSubject$ | async">
 			<button
+				class="menu"
 				mat-flat-button
 				(click)="toggleSidenav()">
 				<!-- <mat-icon>menu</mat-icon> -->
@@ -11,7 +12,7 @@
 			</button>
 		</ng-container>
 
-		<span>IBEScore Companion</span>
+		<span class="header-text">IBEScore Companion</span>
 
 		<div class="header-right container">
 			<button
@@ -36,15 +37,16 @@
 				">
 				<app-user-details></app-user-details>
 			</ng-container>
-
-			<button
-				mat-flat-button
-				color="warn"
-				routerLink="/auth/logout"
-				*ngIf="authService.isAuthedSubject$ | async"
-				(click)="logout()">
-				logout
-			</button>
+			<ng-container *ngIf="currentBreakpoint !== 'handset'">
+				<button
+					mat-flat-button
+					color="warn"
+					routerLink="/auth/logout"
+					*ngIf="authService.isAuthedSubject$ | async"
+					(click)="logout()">
+					Logout
+				</button>
+			</ng-container>
 		</div>
 	</div>
 </mat-toolbar>

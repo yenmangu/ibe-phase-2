@@ -28,7 +28,6 @@ import { SharedDataService } from 'src/app/shared/services/shared-data.service';
 	styleUrls: ['./game-players.component.scss']
 })
 export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
-	@Input() eventName: string;
 	@Input() initialTableData: any;
 	@Input() isLoading: boolean = true;
 	@ViewChild(PairsTableComponent) pairsForm: PairsTableComponent;
@@ -45,6 +44,10 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 	publicLink: string;
 	origin: string;
 
+	eventName: string = '';
+
+	clicked: boolean = false;
+	successMessage: string = '';
 	matchTypeSubscription: Subscription;
 	matchType: string = '';
 
@@ -122,6 +125,7 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 						// console.log('initialTableData: ', JSON.stringify(data, null, 2));
 						console.log('initialTableData in gamePlayers: ', data);
 						this.initialTableData = data;
+						this.eventName = data.eventName
 						const { matchType } = data;
 						matchType.pairs
 							? (this.matchType = 'pairs')
@@ -153,6 +157,9 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 		this.teamsTableFormData = formData;
 	}
 
+	onSave() {
+		this.captureFormData();
+	}
 	captureFormData() {
 		let tableFormData: any = {};
 		let dateFormData: any | null = {};
@@ -223,8 +230,15 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 		const {
 			pairConfig,
 			pairNumbers,
-			cardinals: { north:northSide, south:southSide, east:eastSide, west:westSide },
-			tables, teamConfig, individuals,
+			cardinals: {
+				north: northSide,
+				south: southSide,
+				east: eastSide,
+				west: westSide
+			},
+			tables,
+			teamConfig,
+			individuals
 		} = this.initialTableData;
 
 		// const tablesLength = Object.keys(tables).length
@@ -232,9 +246,8 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 		const eventName = this.eventName;
 
 		console.log(northSide, southSide, eastSide, westSide);
-		const matchType = this.matchType
+		const matchType = this.matchType;
 		const gameConfig: {
-
 			pairConfig;
 			pairNumbers;
 			matchType;
@@ -247,7 +260,7 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 			tableConfig: any;
 			eventName?: string;
 			teamConfig;
-			individuals: any
+			individuals: any;
 		} = {
 			pairConfig,
 			pairNumbers,
@@ -264,7 +277,7 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 		};
 		console.log('gameConfig: ', gameConfig);
 		data.gameConfig = gameConfig;
-		data.matchType = this.matchType
+		data.matchType = this.matchType;
 		console.log(data);
 
 		// const gameConfig =
@@ -303,6 +316,14 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 
 	openCopySuccess() {
 		this.snackbar.open('Link copied!', 'Dismiss');
+	}
+
+	getButtonMessage(): boolean {
+		if (!this.clicked && this.successMessage) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	ngOnDestroy(): void {

@@ -35,7 +35,7 @@ function keyMatchValidator(): ValidatorFn {
 	styleUrls: ['./account-settings.component.scss']
 })
 export class AccountSettingsComponent implements OnInit, OnDestroy {
-  applyMagentaGreyTheme = true
+	applyMagentaGreyTheme = true;
 	emailForm: FormGroup;
 	directorKeyForm: FormGroup;
 	currentBreakpoint: string;
@@ -122,6 +122,8 @@ export class AccountSettingsComponent implements OnInit, OnDestroy {
 
 	getNewDirectorKey() {
 		const formData = this.directorKeyForm.value;
+		console.log('formData: ', formData);
+
 		const data = {
 			gameCode: this.gameCode,
 			currentKey: this.directorKey,
@@ -135,6 +137,8 @@ export class AccountSettingsComponent implements OnInit, OnDestroy {
 			.subscribe({
 				next: response => {
 					console.log('repsonse data: ', response);
+					
+					
 					if (response.success && response.updated) {
 						this.successMessage = true;
 						this.dialogService

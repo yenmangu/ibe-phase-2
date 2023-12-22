@@ -23,7 +23,7 @@
 					routerLink="/admin/games"
 					[routerLinkActive]="['active-link']"
 					class="nav-link"
-					>Game In Progresss</a
+					>Game In Progress</a
 				>
 				<a
 					routerLink="/admin/account"
@@ -51,9 +51,15 @@
 				>
 			</div>
 			<ng-container *ngIf="currentBreakpoint === 'handset'">
-				<div class="container column user-details">
+				<div class="container column center user-details">
 					<h3>Game Code</h3>
 					<span class="gamecode">{{ gameCode }}</span>
+					<button
+						mat-flat-button
+						color="warn"
+						(click)="handleLogout()">
+						Logout
+					</button>
 				</div>
 			</ng-container>
 		</mat-drawer>

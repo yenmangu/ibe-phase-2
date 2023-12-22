@@ -2,7 +2,7 @@
 	class="container row top"
 	[ngClass]="currentBreakpoint">
 	<div
-		class="container row top"
+		class="container row top details"
 		[ngClass]="currentBreakpoint">
 		<mat-form-field [ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }">
 			<mat-label [ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }"
@@ -26,6 +26,24 @@
 				>
 			</mat-select>
 		</mat-form-field>
+		<div class="container row event-name-row">
+			<mat-form-field class="event-name-field">
+				<mat-label>Event Name</mat-label>
+				<input
+					type="text"
+					[(ngModel)]="eventName"
+					matInput />
+			</mat-form-field>
+
+			<button
+				class="main-save"
+				mat-flat-button
+				matSuffix
+				color="primary"
+				(click)="captureFormData()">
+				{{ getButtonMessage() ? 'Success' : 'Save' }}
+			</button>
+		</div>
 	</div>
 </div>
 <div class="container row table">
@@ -108,7 +126,7 @@
 			mat-flat-button
 			color="primary"
 			(click)="captureFormData()">
-			SAVE
+			{{ getButtonMessage() ? 'Success' : 'Save' }}
 		</button>
 	</div>
 </div>

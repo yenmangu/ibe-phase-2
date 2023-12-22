@@ -1,6 +1,9 @@
 :host {
 	height: 100%;
-	min-height: calc(100vh - 144px);
+	min-height: calc(100vh - 124px);
+}
+h2 {
+	text-align: center;
 }
 
 .container {
@@ -16,6 +19,7 @@
 .button-wrapper {
 	justify-content: center;
 	gap: 1rem;
+	margin-top: -1rem;
 }
 button {
 	width: 8em;
@@ -45,4 +49,5 @@ button {
 
 .handset {
 	flex-direction: column;
+	gap: 0.6rem;
 }

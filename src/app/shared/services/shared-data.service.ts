@@ -16,10 +16,13 @@ export class SharedDataService {
 	public dirKeySubject = new Subject<string>();
 	public TabChangeSubject = new BehaviorSubject<number>(undefined);
 
+	public logoutSubject = new Subject<boolean>();
+
 	email$: Observable<string> = this.emailSubject.asObservable();
 	gameCode$: Observable<string> = this.gameCodeSubject.asObservable();
 	tabChange$: Observable<number> = this.TabChangeSubject.asObservable();
 	dirKey$: Observable<string> = this.dirKeySubject.asObservable();
+	logout$: Observable<boolean> = this.logoutSubject.asObservable();
 
 	public userDataReadySubject = new BehaviorSubject<boolean>(false);
 	userDataReady$: Observable<boolean> = this.userDataReadySubject.asObservable();

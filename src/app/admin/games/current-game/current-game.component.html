@@ -1,22 +1,4 @@
 <div class="tab container column">
-	<div class="tab container row">
-		<div class="container row input-row">
-			<mat-form-field>
-				<mat-label>Event Name</mat-label>
-				<input
-					type="text"
-					[(ngModel)]="eventName"
-					matInput />
-			</mat-form-field>
-			<!-- <button
-				class="save"
-				mat-flat-button
-				matSuffix
-				color="primary">
-				SAVE
-			</button> -->
-		</div>
-	</div>
 	<div class="container column actions-row">
 		<mat-tab-group
 			animationDuration="200ms"
@@ -25,9 +7,7 @@
 			mat-align-tabs="start">
 			<mat-tab label="Names">
 				<ng-container *ngIf="IDB_DataStatus">
-					<app-game-players
-						[eventName]="eventName"
-						[isLoading]="isLoading"></app-game-players>
+					<app-game-players [isLoading]="isLoading"></app-game-players>
 				</ng-container>
 			</mat-tab>
 			<mat-tab label="Game Actions">

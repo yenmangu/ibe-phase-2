@@ -47,7 +47,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 		private IDBStatus: IndexedDatabaseStatusService,
 		private sharedGameDataService: SharedGameDataService,
 		private breakpointService: BreakpointService,
-		private dialogService: DialogService,
 		private dialog: MatDialog
 	) {}
 
@@ -60,6 +59,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 
 		this.userDetailsService.updateFromLocalStorage();
 		this.cdr.detectChanges();
+		this.sharedDataService.logout$.subscribe(logout => {
+			if (logout) {
+				this.logout();
+			}
+		});
 
 		this.breakpointService.currentBreakpoint$.subscribe(breakpoint => {
 			this.currentBreakpoint = breakpoint;

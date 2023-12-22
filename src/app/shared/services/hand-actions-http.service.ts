@@ -58,9 +58,17 @@ export class HandActionsHttpService {
 		const payload = { ...data, upload: true };
 		return this.http.post(`${this.apiUrl}/hand-actions/masterpoints`, payload);
 	}
+
 	downloadBridgeWebs(data) {
+		console.log('Data in download bridgewebs: ', data);
+		const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 		const payload = { ...data, download: true };
-		return this.http.post(`${this.apiUrl}/hand-actions/masterpoints`, payload);
+		console.log('payload: ', payload);
+
+		return this.http.post<Blob>(`${this.apiUrl}/hand-actions/bridgewebs`, payload, {
+			headers,
+			responseType: 'blob' as 'json'
+		});
 	}
 
 	fetchEBU(data): Observable<any> {

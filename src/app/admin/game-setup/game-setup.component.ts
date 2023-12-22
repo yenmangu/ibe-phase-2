@@ -1,13 +1,10 @@
 import {
 	Component,
-	EventEmitter,
 	OnInit,
 	AfterViewInit,
-	Output,
 	OnDestroy,
 	ViewChild,
 	ViewChildren,
-	ChangeDetectorRef,
 	ElementRef,
 	QueryList
 } from '@angular/core';
@@ -16,14 +13,11 @@ import { BreakpointService } from 'src/app/shared/services/breakpoint.service';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { ApiDataCoordinationService } from '../games/services/api/api-data-coordination.service';
 import { UserDetailsService } from 'src/app/shared/services/user-details.service';
-import { SharedGameDataService } from '../games/services/shared-game-data.service';
 import { GameSettingsService } from '../services/game-settings.service';
 import { IndexedDatabaseStatusService } from 'src/app/shared/services/indexed-database-status.service';
 import { SharedSettingsService } from '../services/shared-settings.service';
 import { tag } from 'rxjs-spy/cjs/operators';
-import { DataService } from '../games/services/data.service';
 import { PlayerIdentificationComponent } from './player-identification/player-identification.component';
-import { ThemePalette } from '@angular/material/core';
 
 @Component({
 	selector: 'app-game-setup',
@@ -32,6 +26,9 @@ import { ThemePalette } from '@angular/material/core';
 })
 export class GameSetupComponent implements OnInit, AfterViewInit, OnDestroy {
 	@ViewChild('playerIdentification', { static: false })
+	playerIdentification: PlayerIdentificationComponent;
+	// Do NOT split the preceeding two lines
+
 	@ViewChildren('signInTab', { read: ElementRef })
 	signInTab: QueryList<ElementRef>;
 	@ViewChildren('securityTab', { read: ElementRef })
@@ -42,7 +39,6 @@ export class GameSetupComponent implements OnInit, AfterViewInit, OnDestroy {
 	interfaceTab: QueryList<ElementRef>;
 	@ViewChildren('namingTab', { read: ElementRef }) namingTab: QueryList<ElementRef>;
 
-	playerIdentification: PlayerIdentificationComponent;
 	setupForm: FormGroup;
 	securityForm: FormGroup;
 	scoringForm: any;
@@ -75,6 +71,8 @@ export class GameSetupComponent implements OnInit, AfterViewInit, OnDestroy {
 	tabChanged: boolean = false;
 
 	applyMagentaGreyTheme = true;
+	currentBreakpoint: string = '';
+	clicked: boolean = false;
 	constructor(
 		private breakpointService: BreakpointService,
 		private fb: FormBuilder,
@@ -86,6 +84,10 @@ export class GameSetupComponent implements OnInit, AfterViewInit, OnDestroy {
 	) {}
 
 	ngOnInit(): void {
+		this.breakpointService.currentBreakpoint$.subscribe(breakpoint => {
+			this.currentBreakpoint = breakpoint;
+		});
+
 		this.IDBstatusService.isInitialised$.subscribe(init => {
 			if (init) {
 				this.dbInit = init;
@@ -139,6 +141,7 @@ export class GameSetupComponent implements OnInit, AfterViewInit, OnDestroy {
 
 		this.setupForm.valueChanges.subscribe(values => {
 			// console.log('form values: ', values);
+			this.clicked = true;
 		});
 		this.userDetailsService.directorKey$.subscribe(key => (this.directorKey = key));
 		this.userDetailsService.gameCode$.subscribe(code => (this.gameCode = code));
@@ -206,6 +209,7 @@ export class GameSetupComponent implements OnInit, AfterViewInit, OnDestroy {
 			playerIdForm: this.receivedPlayerIdValues ? this.receivedPlayerIdValues : null
 		};
 		this.savedData = data;
+		this.clicked = false;
 		console.log('data in form: ', data);
 
 		// data.setupForm = this.setupForm.value;
@@ -278,11 +282,19 @@ export class GameSetupComponent implements OnInit, AfterViewInit, OnDestroy {
 		if (el) {
 			const event = new MouseEvent('mousedown', {
 				bubbles: true,
-				
+
 				cancelable: true,
 				view: window
 			});
 			el.dispatchEvent(event);
+		}
+	}
+
+	getButtonMessage(): boolean {
+		if (!this.clicked && this.successMessage) {
+			return true;
+		} else {
+			return false;
 		}
 	}
 }

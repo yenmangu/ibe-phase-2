@@ -49,7 +49,7 @@ export class NavigationComponent
 	matchTypeControl: FormControl;
 	selectedMatchType$: any = '';
 	currentBreakpoint;
-	currentLabel: string = ''
+	currentLabel: string = '';
 	// End dev
 	//
 	constructor(
@@ -61,10 +61,10 @@ export class NavigationComponent
 		private breakpointService: BreakpointService,
 		private userDetailsService: UserDetailsService,
 		private navigationService: NavigationService,
+		private sharedDataService: SharedDataService,
 
 		// dev
 		private fb: FormBuilder,
-		private sharedDataService: SharedDataService,
 		private currentEventService: CurrentEventService
 	) {
 		this.matchTypeControl = this.fb.control('pairs'); // default value
@@ -79,7 +79,6 @@ export class NavigationComponent
 	}
 
 	ngOnInit(): void {
-
 		console.log('\n\nNAVIGATION COMPONENT\n\n');
 
 		this.router.events
@@ -133,7 +132,7 @@ export class NavigationComponent
 			route = route.firstChild;
 		}
 		const currentLabel = route.snapshot.data?.menuLabel || '';
-		this.currentLabel = currentLabel
+		this.currentLabel = currentLabel;
 		this.navigationService.setSelected(currentLabel);
 	}
 
@@ -147,6 +146,9 @@ export class NavigationComponent
 
 	ngOnDestroy(): void {
 		this.subscription.unsubscribe();
+	}
+	handleLogout(): void {
+		this.sharedDataService.logoutSubject.next(true);
 	}
 
 	private getMatchData(type): Observable<any> {

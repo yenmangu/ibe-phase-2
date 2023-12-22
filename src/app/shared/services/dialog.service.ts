@@ -56,23 +56,53 @@ export class DialogService implements OnInit, OnDestroy {
 	): MatDialogRef<any> | undefined {
 		const dialogConfig = this.findDialog(dialogName);
 		let matDialogConfig: MatDialogConfig | undefined;
+
+		// Dialog Debugging
+		// const logParams: Record<string, any> = {
+		// 	dialogName
+		// };
+
+		// if (error !== undefined) {
+		// 	logParams.error = error;
+		// }
+		// if (email !== undefined) {
+		// 	logParams.email = email;
+		// }
+		// if (dirKey !== undefined) {
+		// 	logParams.dirKey = dirKey;
+		// }
+		// if (values !== undefined) {
+		// 	logParams.values = values;
+		// }
+		// if (component !== undefined) {
+		// 	logParams.component = component;
+		// }
+		// if (data !== undefined) {
+		// 	logParams.data = data;
+		// }
+
+		// console.log('Open dialog called with: ', logParams);
 		if (dialogConfig) {
 			matDialogConfig = {
 				width: dialogConfig.width,
 				data: { ...dialogConfig.data }
 			};
 
+
+
 			if (error) {
-				dialogConfig.data.error = error;
+				matDialogConfig.data.error = error;
 			}
 			if (email) {
-				dialogConfig.data.email = email;
+				matDialogConfig.data.email = email;
 			}
 			if (dirKey) {
-				dialogConfig.data.dirKey = dirKey;
+				matDialogConfig.data.dirKey = dirKey;
 			}
 		}
 		if (matDialogConfig) {
+			console.log('Mat dialog config: ', matDialogConfig);
+
 			this.dialogRef = this.dialog.open(DialogComponent, matDialogConfig);
 			return this.dialogRef;
 		}

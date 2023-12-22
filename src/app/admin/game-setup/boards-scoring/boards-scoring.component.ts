@@ -1,4 +1,13 @@
-import { OnInit, Component, Input, Output, EventEmitter, OnChanges, SimpleChanges , OnDestroy} from '@angular/core';
+import {
+	OnInit,
+	Component,
+	Input,
+	Output,
+	EventEmitter,
+	OnChanges,
+	SimpleChanges,
+	OnDestroy
+} from '@angular/core';
 import {
 	FormBuilder,
 	FormGroup,
@@ -10,6 +19,7 @@ import {
 } from '@angular/forms';
 import { BoardsScoringInterface } from '../../games/data/boards-scoring';
 import { boardsScoringData } from '../../games/data/data-store/boards-scoring-data';
+import { BreakpointService } from 'src/app/shared/services/breakpoint.service';
 
 @Component({
 	selector: 'app-boards-scoring',
@@ -18,20 +28,22 @@ import { boardsScoringData } from '../../games/data/data-store/boards-scoring-da
 })
 export class BoardsScoringComponent implements OnInit, OnChanges, OnDestroy {
 	@Input() scoringSettings: any;
-	@Input() successMessage: boolean
+	@Input() successMessage: boolean;
 	@Output() boardScoringEmitter: EventEmitter<any> = new EventEmitter<any>();
 
 	scoringData: BoardsScoringInterface[] = boardsScoringData;
 	scoringConfigForm: FormGroup;
-	clicked: boolean = false
-
-	constructor(private fb: FormBuilder) {
+	clicked: boolean = false;
+	currentBreakpoint: string = '';
+	constructor(
+		private fb: FormBuilder,
+		private breakpointService: BreakpointService
+	) {
 		this.scoringConfigForm = this.fb.group({
 			scoringDataArray: this.fb.array([]),
 			neuberg: null,
 			tables: null
 		});
-
 
 		boardsScoringData.forEach((item: BoardsScoringInterface, index: number) => {
 			this.addScoringDataItem(item, index);
@@ -41,52 +53,49 @@ export class BoardsScoringComponent implements OnInit, OnChanges, OnDestroy {
 	ngOnInit(): void {
 		// console.log('checking data: ', this.scoringConfigForm);
 		// console.log('form controls: ', this.scoringDataArray.controls);
-		this.scoringConfigForm.valueChanges.subscribe((value)=> {
-			if(value){
-				this.clicked = true
+		this.scoringConfigForm.valueChanges.subscribe(value => {
+			if (value) {
+				this.clicked = true;
 			}
-		})
+		});
 	}
-	getButtonMessage():boolean{
-		if(!this.clicked && this.successMessage){
-			return true
+	getButtonMessage(): boolean {
+		if (!this.clicked && this.successMessage) {
+			return true;
 		} else {
-			return false
+			return false;
 		}
 	}
 
 	ngOnChanges(changes: SimpleChanges): void {
-		if(changes.scoringSettings && this.scoringSettings.scoringConfigArray){
+		if (changes.scoringSettings && this.scoringSettings.scoringConfigArray) {
 			// console.log('scoring component ngOnChanges: ', this.scoringSettings)
-			this.populateForm(this.scoringSettings)
+			this.populateForm(this.scoringSettings);
 		}
 	}
 
-	populateForm(scoringSettings):void {
-		const scoringConfigArray = scoringSettings.scoringConfigArray
-		if(scoringConfigArray){
+	populateForm(scoringSettings): void {
+		const scoringConfigArray = scoringSettings.scoringConfigArray;
+		if (scoringConfigArray) {
 			// console.log('in populate form: ', scoringConfigArray);
-
 		}
 
-
-		scoringConfigArray.forEach((item, index)=> {
-			const control = this.getControl(index,'defaultSelected');
-			if(control){
-				control.setValue(item.defaultSelected)
+		scoringConfigArray.forEach((item, index) => {
+			const control = this.getControl(index, 'defaultSelected');
+			if (control) {
+				control.setValue(item.defaultSelected);
 			}
-			const preferredDurationControl = this.getControl(index,'preferredDuration')
-			if(preferredDurationControl){
-				preferredDurationControl.setValue(item.preferredDuration)
+			const preferredDurationControl = this.getControl(index, 'preferredDuration');
+			if (preferredDurationControl) {
+				preferredDurationControl.setValue(item.preferredDuration);
 			}
-			const scoringMethodsControl = this.getControl(index,'scoringMethods');
-			if(scoringMethodsControl){
-				scoringMethodsControl.setValue(item.scoringMethods)
+			const scoringMethodsControl = this.getControl(index, 'scoringMethods');
+			if (scoringMethodsControl) {
+				scoringMethodsControl.setValue(item.scoringMethods);
 			}
-
-		})
-		this.scoringConfigForm.get('neuberg').setValue(this.scoringSettings.neuberg)
-		this.scoringConfigForm.get('tables').setValue(this.scoringSettings.tables)
+		});
+		this.scoringConfigForm.get('neuberg').setValue(this.scoringSettings.neuberg);
+		this.scoringConfigForm.get('tables').setValue(this.scoringSettings.tables);
 	}
 
 	getBoardsScoringValues(): void {
@@ -98,7 +107,7 @@ export class BoardsScoringComponent implements OnInit, OnChanges, OnDestroy {
 		// console.log('scoring form: ', data);
 
 		this.boardScoringEmitter.emit(data);
-		this.clicked = false
+		this.clicked = false;
 	}
 
 	getControl(i: number, controlName: string) {
@@ -108,7 +117,6 @@ export class BoardsScoringComponent implements OnInit, OnChanges, OnDestroy {
 	get scoringDataArray(): FormArray {
 		return this.scoringConfigForm.get('scoringDataArray') as FormArray;
 	}
-
 
 	addScoringDataItem(data: BoardsScoringInterface, index: number): void {
 		const newGroup = this.fb.group({

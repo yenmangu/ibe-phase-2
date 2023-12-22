@@ -1,4 +1,9 @@
 @import '../../../styles.scss';
+@import '../../../colours.styles.scss';
+
+:host {
+	background-color: $app-interface;
+}
 
 .footer {
 	width: 100%;
@@ -12,8 +17,11 @@
 	flex-direction: column;
 	justify-content: center;
 	margin: auto;
+	span {
+		color: whitesmoke;
+	}
 }
 
-.tester{
-	color: rgba(0,93,117);
+.tester {
+	color: rgba(0, 93, 117);
 }

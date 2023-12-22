@@ -2,14 +2,22 @@
 
 :host {
 	width: 100%;
+	max-width: 1440px;
 	height: 100%;
 	display: flex;
 	flex-direction: column;
+	align-items: center;
+	align-self: center;
 	overflow-y: auto;
 }
+.view {
+	width: 100%;
+	max-width: 1440px;
+}
 .main {
-	padding: 2rem;
+	padding: 0;
 	align-items: stretch;
+	width: 100%;
 }
 
 .pin-column {
@@ -26,6 +34,17 @@
 }
 .on-lock {
 	width: fit-content;
+}
+
+.sign-in {
+	justify-content: center;
+	// gap: 1rem;
+	width: 100%;
+}
+
+.row.content {
+	gap: 2rem;
+	justify-content: space-around;
 }
 
 ::ng-deep .mat-mdc-tab-header {
@@ -138,7 +157,12 @@
 
 .sign-in,
 .security {
-	padding: 2rem;
+	padding: 1rem;
+}
+
+.row.security {
+	justify-content: center;
+	gap: 2rem;
 }
 
 .sign-in {
@@ -149,16 +173,28 @@
 }
 .movement,
 app-boards-scoring {
-	display: block;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 	background-color: rgba($movement-scoring, 0.08) !important;
 }
 .interface,
 app-app-interface {
-	display: block;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 	background-color: rgba($app-interface, 0.08) !important;
 }
 .naming,
 app-naming-numbering {
-	display: block;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 	background-color: rgba($naming-numbering, 0.08) !important;
+}
+
+.container.row.handset {
+	flex-direction: column;
+	align-items: center;
+	gap: 1rem
 }

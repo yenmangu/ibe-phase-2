@@ -125,6 +125,9 @@ export class RevisedProcessCurrentDataService {
 				movementAndPairs
 			);
 
+			const eventName = this.getEventName(settingstxt);
+			console.log('eventName: ', eventName);
+
 			const {
 				totalTables,
 				totalPairs,
@@ -202,13 +205,14 @@ export class RevisedProcessCurrentDataService {
 			finalConfig.cardinals = cardinals;
 			finalConfig.tableConfig = tableConfig;
 			finalConfig.matchType = matchType;
-			finalConfig.matchString = matchString
+			finalConfig.matchString = matchString;
 			finalConfig.tables = tables;
 			finalConfig.pairNumbers = pairNumbers;
 			finalConfig.sidesOf = sidesOf;
 			finalConfig.sideTeamMap = !isIndividuals ? sideTeamMap : {};
 			finalConfig.assignedIndividuals = assignedIndividuals;
 			finalConfig.individuals = isIndividuals ? individuals : {};
+			finalConfig.eventName = eventName;
 
 			// console.log('final tableConfig: ', tableConfig);
 
@@ -511,6 +515,21 @@ export class RevisedProcessCurrentDataService {
 	}
 	private extractOTH(string) {
 		return string.split(' ')[1].split('.');
+	}
+
+	getEventName(settingsTxt: any): any {
+		if (!settingsTxt) {
+			return undefined;
+		}
+		const {
+			current_game_data: { value }
+		} = settingsTxt;
+		console.log('SETTINGS TEXT: ', value);
+
+		const eventLine: string = value[0].split('\n')[4];
+		const eventName: string = eventLine.replace('EN ', '');
+		// console.log('SETTINGS LINES: ', eventName);
+		return eventName;
 	}
 
 	getMatchType(settingsTxt: any): any {

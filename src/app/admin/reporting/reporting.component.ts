@@ -2,6 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { HandActionsHttpService } from 'src/app/shared/services/hand-actions-http.service';
 import { BreakpointService } from 'src/app/shared/services/breakpoint.service';
 import { saveAs } from 'file-saver';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
 	selector: 'app-reporting',
@@ -11,10 +13,14 @@ import { saveAs } from 'file-saver';
 export class ReportingComponent implements OnInit, OnDestroy {
 	currentBreakpoint: string = '';
 	gameCode: string = '';
+	bridgewebsForm: FormGroup;
+	bridgeWebsMasterPoints: boolean = false;
 
 	constructor(
 		private handActionsHttp: HandActionsHttpService,
-		private breakpointService: BreakpointService
+		private breakpointService: BreakpointService,
+		private fb: FormBuilder,
+		private snackbar: MatSnackBar
 	) {}
 
 	ngOnInit(): void {
@@ -22,9 +28,43 @@ export class ReportingComponent implements OnInit, OnDestroy {
 			this.currentBreakpoint = breakpoint;
 		});
 		this.gameCode = localStorage.getItem('GAME_CODE');
+		// this.buildBridgeWebsForm();
+		// this.bridgewebsForm.get('masterpoints').valueChanges.subscribe(value => {
+		// 	this.bridgeWebsMasterPoints = value;
+		// });
 	}
 
-  downloadEBU() {
+	// buildBridgeWebsForm() {
+	// 	this.bridgewebsForm = this.fb.group({
+	// 		eventName: [''],
+	// 		directorName: ['', [Validators.pattern('^[a-zA-Z]+$')]],
+	// 		scorerName: [''],
+	// 		bridgeWebsAccount: [''],
+	// 		masterpoints: [false],
+	// 		masterpointsMatchWon: [false],
+	// 		password: ['']
+	// 	});
+	// }
+
+	uploadBridgeWebs() {}
+	downloadBridgeWebs() {
+		console.log('download bridgewebs invoked');
+		const payload = { gameCode: this.gameCode };
+		this.handActionsHttp.downloadBridgeWebs(payload).subscribe({
+			next: (response: Blob) => {
+				if (response) {
+					const blob = new Blob([response], { type: 'text/csv' });
+					saveAs(blob, `${this.gameCode}.csv`);
+				}
+			},
+			error: error => {
+				console.error('Error fetching bridgewebs CSV');
+				this.snackbar.open('Error fetching CSV data, please try again.', 'Dismiss');
+			}
+		});
+	}
+
+	downloadEBU() {
 		console.log('download ebu invoked');
 		// if (this.ebuDownloadForm.valid) {
 		const ebuValues = {
@@ -42,6 +82,7 @@ export class ReportingComponent implements OnInit, OnDestroy {
 			},
 			error: error => {
 				console.error('error fetching EBU', error);
+				this.snackbar.open('Error fetching XML data, please try again.', 'Dismiss');
 			}
 		});
 		// }

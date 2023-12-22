@@ -20,7 +20,7 @@ import { AuthService } from 'src/app/auth/services/auth.service';
 	templateUrl: './dialog.component.html',
 	styleUrls: ['./dialog.component.scss']
 })
-export class DialogComponent implements OnInit, OnDestroy{
+export class DialogComponent implements OnInit, OnDestroy {
 	@ViewChild('registerComponent', { read: ViewContainerRef })
 	registerContainer: ViewContainerRef;
 	@ViewChild('uploadFileComponent') uploadFileComponent: UploadFileComponent;
@@ -46,7 +46,7 @@ export class DialogComponent implements OnInit, OnDestroy{
 	}
 
 	ngOnInit(): void {
-
+		console.log('Data in dialog: ', this.data);
 	}
 
 	onConfirm(): void {
@@ -57,7 +57,6 @@ export class DialogComponent implements OnInit, OnDestroy{
 	emitSuccess(): void {
 		this.dialogRef.close('success');
 	}
-
 
 	sendDataToComponent(data: any) {
 		this.dataEmitter.emit(data);
@@ -71,7 +70,5 @@ export class DialogComponent implements OnInit, OnDestroy{
 		this.dialogRef.close();
 	}
 
-	ngOnDestroy(): void {
-		
-	}
+	ngOnDestroy(): void {}
 }

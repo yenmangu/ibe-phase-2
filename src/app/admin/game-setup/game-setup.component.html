@@ -10,27 +10,6 @@
 	<div class="container column main">
 		<ng-container *ngIf="initialSettingsData">
 			<form [formGroup]="setupForm">
-				<div class="container row gap-1">
-					<h3>Settings for new events:</h3>
-					<mat-form-field>
-						<mat-label for="newEvent">New event uses:</mat-label>
-						<mat-select
-							id="newEvent"
-							formControlName="newEventUses"
-							(selectionChange)="onNewEventChange()">
-							<mat-option value="previous">Settings from previous event</mat-option>
-							<mat-option value="current">These base settings</mat-option>
-						</mat-select>
-					</mat-form-field>
-					<button
-						mat-flat-button
-						(click)="save()"
-						(click)="newEvent()"
-						color="primary">
-						{{ successMessage && newEventClicked ? 'Success' : 'Save' }}
-					</button>
-				</div>
-				<div class="container row bottom-row"></div>
 				<mat-tab-group
 					animationDuration="0s"
 					(selectedTabChange)="onTabChange($event)">
@@ -43,47 +22,77 @@
 						labelClass="sign-in-label"
 						label="Player Sign-In"
 						class="sign-in-tab tab-header">
-						<div class="container column sign-in content">
-							<h3>Startup Interface</h3>
-							<mat-checkbox formControlName="twoPageStartup"
-								>Two-Page startup</mat-checkbox
-							>
-							<mat-checkbox
-								*ngIf="twoPageStartup"
-								formControlName="tdEntersNames"
-								>TD enters names</mat-checkbox
-							>
-							<mat-checkbox
-								*ngIf="twoPageStartup"
-								formControlName="requireAllNames"
-								>Require all names</mat-checkbox
-							>
-							<mat-checkbox
-								*ngIf="twoPageStartup"
-								formControlName="teamSignIn"
-								>Team sign-in</mat-checkbox
-							>
-							<!-- To Be Re Added Once the player ID has been reworked server side -->
-							<ng-container *ngIf="initialPlayerIdValues">
-								<app-player-identification
-									#playerIdentification
-									[initialPlayerIdValues]="initialPlayerIdValues"
-									(savePlayerIdForm)="onSavePlayerIdForm($event)"
-									(formDirty)="idFormChange($event)">
-								</app-player-identification>
-							</ng-container>
-							<!-- <app-player-identification
+						<div
+							class="container column center view sign-in"
+							[ngClass]="currentBreakpoint">
+							<div class="container row gap-1">
+								<h3>Settings for new events:</h3>
+								<mat-form-field>
+									<mat-label for="newEvent">New event uses:</mat-label>
+									<mat-select
+										id="newEvent"
+										formControlName="newEventUses"
+										(selectionChange)="onNewEventChange()">
+										<mat-option value="previous"
+											>Settings from previous event</mat-option
+										>
+										<mat-option value="current">These base settings</mat-option>
+									</mat-select>
+								</mat-form-field>
+								<button
+									mat-flat-button
+									(click)="save()"
+									(click)="newEvent()"
+									color="primary">
+									{{ getButtonMessage() ? 'Success' : 'Save' }}
+								</button>
+							</div>
+							<div
+								class="container row content"
+								[ngClass]="currentBreakpoint">
+								<div class="container column">
+									<h3>Startup Interface</h3>
+									<mat-checkbox formControlName="twoPageStartup"
+										>Two-Page startup</mat-checkbox
+									>
+									<mat-checkbox
+										*ngIf="twoPageStartup"
+										formControlName="tdEntersNames"
+										>TD enters names</mat-checkbox
+									>
+									<mat-checkbox
+										*ngIf="twoPageStartup"
+										formControlName="requireAllNames"
+										>Require all names</mat-checkbox
+									>
+									<mat-checkbox
+										*ngIf="twoPageStartup"
+										formControlName="teamSignIn"
+										>Team sign-in</mat-checkbox
+									>
+								</div>
+								<!-- To Be Re Added Once the player ID has been reworked server side -->
+								<ng-container *ngIf="initialPlayerIdValues">
+									<app-player-identification
+										#playerIdentification
+										[initialPlayerIdValues]="initialPlayerIdValues"
+										(savePlayerIdForm)="onSavePlayerIdForm($event)"
+										(formDirty)="idFormChange($event)">
+									</app-player-identification>
+								</ng-container>
+								<!-- <app-player-identification
 						[hidden]="!twoPageStartup"
 						(idFormEmitter)="onPlayerIdForm($event)"
 						(idFormEmitter)="onChildForm($event)">
 					</app-player-identification> -->
+							</div>
 							<div class="container row bottom-row">
 								<button
 									(click)="setup()"
 									(click)="save()"
 									mat-flat-button
 									color="primary">
-									{{ successMessage ? 'Success' : 'Save' }}
+									{{ getButtonMessage() ? 'Success' : 'Save' }}
 								</button>
 							</div>
 						</div>
@@ -105,62 +114,70 @@
 						labelClass="security-label"
 						label="Security"
 						class="security-tab tab-header">
-						<div class="container column security content">
-							<h3>Security</h3>
-							<mat-form-field class="on-lock">
-								<mat-label>On Game Creation</mat-label>
-								<mat-select formControlName="onGameCreation">
-									<mat-option value="lock-event">Lock Event</mat-option>
-									<mat-option value="release-lock">Release Lock</mat-option>
-									<mat-option value="no-lock-change">No Lock Change</mat-option>
-								</mat-select>
-							</mat-form-field>
-							<h3>PIN Code</h3>
-							<mat-checkbox formControlName="usePin">Use Pin</mat-checkbox>
-							<div
-								class="container column pin-column"
-								*ngIf="setupForm.get('usePin').value === true">
-								<mat-form-field>
-									<mat-label>Pin Length</mat-label>
-									<input
-										matInput
-										formControlName="pinLength"
-										min="1"
-										max="10"
-										type="number" />
-								</mat-form-field>
-
-								<mat-form-field>
-									<mat-label>Type</mat-label>
-									<mat-select formControlName="pinType">
-										<mat-option value="numeric">Numeric</mat-option>
-										<mat-option value="alphabetic">Alphabetic</mat-option>
-										<mat-option value="alphanumeric">Alphanumeric</mat-option>
+						<div
+							class="container row security content"
+							[ngClass]="currentBreakpoint">
+							<div class="container column on-lock">
+								<h3>Security</h3>
+								<mat-form-field class="on-lock">
+									<mat-label>On Game Creation</mat-label>
+									<mat-select formControlName="onGameCreation">
+										<mat-option value="lock-event">Lock Event</mat-option>
+										<mat-option value="release-lock">Release Lock</mat-option>
+										<mat-option value="no-lock-change">No Lock Change</mat-option>
 									</mat-select>
 								</mat-form-field>
-								<div *ngIf="setupForm.get('pinType').value !== 'numeric'">
+							</div>
+							<div class="container column pin-code">
+								<h3>PIN Code</h3>
+								<mat-checkbox formControlName="usePin">Use Pin</mat-checkbox>
+								<div
+									class="container column pin-column"
+									*ngIf="setupForm.get('usePin').value === true">
 									<mat-form-field>
-										<mat-label>Case</mat-label>
-										<mat-select formControlName="pinCase">
-											<mat-option value="s">Lowercase only</mat-option>
-											<mat-option value="c">Uppercase only</mat-option>
-											<mat-option value="m"
-												>Both uppercase and lowercase</mat-option
-											>
+										<mat-label>Pin Length</mat-label>
+										<input
+											matInput
+											formControlName="pinLength"
+											min="1"
+											max="10"
+											type="number" />
+									</mat-form-field>
+
+									<mat-form-field>
+										<mat-label>Type</mat-label>
+										<mat-select formControlName="pinType">
+											<mat-option value="numeric">Numeric</mat-option>
+											<mat-option value="alphabetic">Alphabetic</mat-option>
+											<mat-option value="alphanumeric">Alphanumeric</mat-option>
 										</mat-select>
 									</mat-form-field>
+									<div *ngIf="setupForm.get('pinType').value !== 'numeric'">
+										<mat-form-field>
+											<mat-label>Case</mat-label>
+											<mat-select formControlName="pinCase">
+												<mat-option value="s">Lowercase only</mat-option>
+												<mat-option value="c">Uppercase only</mat-option>
+												<mat-option value="m"
+													>Both uppercase and lowercase</mat-option
+												>
+											</mat-select>
+										</mat-form-field>
+									</div>
 								</div>
 							</div>
-							<h3>Spectating</h3>
-							<mat-checkbox formControlName="spectateApp">App</mat-checkbox>
-							<mat-checkbox formControlName="spectateWeb">Website</mat-checkbox>
-							<div class="container row bottom-row">
-								<button
-									mat-flat-button
-									(click)="save()"
-									color="primary">
-									{{ successMessage ? 'Success' : 'Save' }}
-								</button>
+							<div class="container column spectating">
+								<h3>Spectating</h3>
+								<mat-checkbox formControlName="spectateApp">App</mat-checkbox>
+								<mat-checkbox formControlName="spectateWeb">Website</mat-checkbox>
+								<div class="container row bottom-row">
+									<button
+										mat-flat-button
+										(click)="save()"
+										color="primary">
+										{{ successMessage ? 'Success' : 'Save' }}
+									</button>
+								</div>
 							</div>
 						</div>
 					</mat-tab>
@@ -173,7 +190,9 @@
 						labelClass="movement-label"
 						label="Movement & Scoring"
 						class="movement-tab tab-header">
-						<ng-container *ngIf="scoringSettings && !checkEmpty(scoringSettings)" class="movement">
+						<ng-container
+							*ngIf="scoringSettings && !checkEmpty(scoringSettings)"
+							class="movement">
 							<app-boards-scoring
 								[successMessage]="successMessage"
 								[scoringSettings]="scoringSettings"
@@ -191,7 +210,8 @@
 						label="App Interface"
 						class="interface-tab tab-header">
 						<ng-container
-							*ngIf="appInterfaceSettings && !checkEmpty(appInterfaceSettings)" class="interface">
+							*ngIf="appInterfaceSettings && !checkEmpty(appInterfaceSettings)"
+							class="interface">
 							<app-app-interface
 								[successMessage]="successMessage"
 								[appInterfaceSettings]="appInterfaceSettings"
@@ -211,7 +231,8 @@
 						<ng-container
 							*ngIf="
 								namingNumberingSettings && !checkEmpty(namingNumberingSettings)
-							" class="naming">
+							"
+							class="naming">
 							<app-naming-numbering
 								[successMessage]="successMessage"
 								[namingNumberingSettings]="namingNumberingSettings"

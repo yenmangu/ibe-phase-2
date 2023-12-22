@@ -23,6 +23,7 @@ import { HandComponent } from './dev/hand/hand.component';
 import { HandDisplayComponent } from './dev/hand/hand-display/hand-display.component';
 import { PaginationComponent } from './dev/hand/pagination/pagination.component';
 import { IconRegistryService } from './shared/services/icon-registry.service';
+import { FontSizeDirective } from './font-size.directive';
 
 // Pipes
 // import { KeysPipe } from './shared/pipes/keys.pipe';
@@ -32,7 +33,8 @@ import { IconRegistryService } from './shared/services/icon-registry.service';
 		AppComponent,
 		HandComponent,
 		HandDisplayComponent,
-		PaginationComponent
+		PaginationComponent,
+  FontSizeDirective
 	],
 	imports: [
 		BrowserModule,

@@ -24,6 +24,7 @@ export class PairsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 	@Input() initialTableData: any;
 	@Input() loadingStatus: boolean = true;
 	@Output() formValuesChanged = new EventEmitter<any>();
+	eventName: string = ''
 	pairConfig: any = {};
 	pairNumbers: any = {};
 	tableConfig: any;
@@ -66,8 +67,8 @@ export class PairsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 		});
 		this.isLoading$ = true;
 		this.breakpointService.currentBreakpoint$.subscribe(breakpoint => {
-			this.breakpoint = breakpoint;
-			console.log('breakpoint: ', this.breakpoint);
+			this.currentBreakpoint = breakpoint;
+			console.log('current breakpoint: ', this.currentBreakpoint);
 		});
 	}
 

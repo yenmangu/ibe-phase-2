@@ -1,4 +1,5 @@
-<div class="main">
+<div class="container column main">
+	
 	<form
 		[formGroup]="pairsForm"
 		(ngSubmit)="onSubmit()">
@@ -25,13 +26,17 @@
 							Colours
 						</th>
 						<ng-container *ngIf="matchType === 'individual'">
-							<th>Player Number</th>
+							<th>
+								{{ currentBreakpoint === 'handset' ? 'Player No.' : 'Player No.' }}
+							</th>
 						</ng-container>
 						<th class="north">North</th>
 
 						<th class="divider"></th>
 						<ng-container *ngIf="matchType === 'individual'">
-							<th>Player Number</th>
+							<th>
+								{{ currentBreakpoint === 'handset' ? 'Player No.' : 'Player No.' }}
+							</th>
 						</ng-container>
 
 						<th class="south">South</th>
@@ -72,12 +77,16 @@
 						</ng-container>
 						<!-- <div class="east-west"> -->
 						<ng-container *ngIf="matchType === 'individual'">
-							<th>Player Number</th>
+							<th>
+								{{ currentBreakpoint === 'handset' ? 'Player No.' : 'Player No.' }}
+							</th>
 						</ng-container>
 						<th class="east">East</th>
 						<th class="divider"></th>
 						<ng-container *ngIf="matchType === 'individual'">
-							<th>Player Number</th>
+							<th>
+								{{ currentBreakpoint === 'handset' ? 'Player No.' : 'Player No.' }}
+							</th>
 						</ng-container>
 						<th class="west">West</th>
 						<th
@@ -324,7 +333,7 @@
 				</tbody>
 				<!-- </div> -->
 			</table>
-			<ng-container *ngIf="currentBreakpoint === 'handset'">
+			<!-- <ng-container *ngIf="currentBreakpoint === 'handset'">
 				<div class="mobile-only">
 					<table>
 						<tr>
@@ -345,7 +354,7 @@
 						</tr>
 					</table>
 				</div>
-			</ng-container>
+			</ng-container> -->
 			<table *ngIf="tableConfig.timesLunch">
 				<tr>
 					<th>Table Number</th>

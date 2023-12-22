@@ -1,11 +1,100 @@
-<div class="container column">
-	<div class="container column button-column">
-		<h3>Download EBU P2P file to device</h3>
+<div
+	class="container column center"
+	[ngClass]="currentBreakpoint">
+	<h3>Download the game file to device</h3>
+	<div class="container row button-container">
 		<button
 			mat-flat-button
 			color="primary"
 			(click)="downloadEBU()">
-			Download
+			XML
+		</button>
+
+		<button
+			mat-flat-button
+			color="primary"
+			(click)="downloadBridgeWebs()">
+			CSV
 		</button>
 	</div>
+	<div class="container column center"></div>
 </div>
+
+<!-- <ng-container *ngIf="currentBreakpoint !== 'handset'">
+	<div class="container row main">
+		<div class="container column bridgewebs">
+			<h3>BridgeWebs</h3>
+			<form [formGroup]="bridgewebsForm">
+				<div class="container column form">
+					<h3>Upload to BridgeWebs</h3>
+					<mat-form-field>
+						<mat-label>Event Name:</mat-label>
+						<input
+							matInput
+							formControlName="eventName" />
+					</mat-form-field>
+					<mat-form-field>
+						<mat-label>Director Name:</mat-label>
+						<input
+							matInput
+							formControlName="directorName" />
+					</mat-form-field>
+					<mat-form-field>
+						<mat-label>Scorer Name:</mat-label>
+						<input
+							matInput
+							formControlName="scorerName" />
+					</mat-form-field>
+					<mat-checkbox formControlName="masterpoints">Master points?</mat-checkbox>
+					<ng-container *ngIf="bridgeWebsMasterPoints">
+						<mat-checkbox formControlName="masterpointsMatchwon"
+							>Master points per match won</mat-checkbox
+						>
+					</ng-container>
+
+					<mat-form-field>
+						<mat-label>BridgeWebs Account:</mat-label>
+						<input
+							matInput
+							formControlName="bridgeWebsAccount" />
+					</mat-form-field>
+					<mat-form-field>
+						<mat-label>Password:</mat-label>
+						<input
+							matInput
+							formControlName="password" />
+					</mat-form-field>
+					<div class="container column button-wrapper">
+						<button
+							mat-flat-button
+							color="primary"
+							(click)="uploadBridgeWebs()">
+							Upload
+						</button>
+					</div>
+					<div class="container column button-wrapper">
+						<h3>Download BridgeWebs file to your device</h3>
+						<button
+							mat-flat-button
+							color="accent"
+							(click)="downloadBridgeWebs()">
+							Download
+						</button>
+					</div>
+				</div>
+			</form>
+		</div>
+		<div class="container column ebu">
+			<h3>P2P</h3>
+			<form formGroupName="P2PForm">
+				<mat-form-field>
+					<mat-label> </mat-label>
+					<input
+						matInput
+						formControlName="" />
+				</mat-form-field>
+			</form>
+		</div>
+	</div>
+</ng-container>
+<ng-container *ngIf="currentBreakpoint === 'handset'"> </ng-container> -->
