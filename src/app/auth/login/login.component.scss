@@ -10,5 +10,11 @@ form {
 	align-items: center;
 }
 mat-form-field {
-	width: 100%
+	width: 100%;
 }
+
+mat-spinner.login-spinner {
+	width: 40px !important;
+	height: 40px !important;
+}
+

@@ -52,6 +52,27 @@
 }
 
 // Individual tabs styling
+
+// Movement
+:host ::ng-deep .these-settings-label {
+	> .mdc-tab-indicator {
+		> .mdc-tab-indicator__content--underline {
+			border-color: #333 !important;
+		}
+	}
+	> .mdc-tab__content {
+		.mdc-tab__text-label {
+			color: #333 !important;
+		}
+	}
+	> .mdc-tab__ripple::before {
+		background-color: #333 !important;
+	}
+	> .mat-ripple > * {
+		background-color: #333 !important;
+	}
+}
+
 // Player Sign-In
 :host ::ng-deep .sign-in-label {
 	> .mdc-tab-indicator {
@@ -169,28 +190,28 @@
 	background-color: rgba($player-sign-in, 0.08) !important;
 }
 .security {
-	background-color: rgba($security, 0.08) !important;
+	background-color: rgba($security, 0.22) !important;
 }
 .movement,
 app-boards-scoring {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	background-color: rgba($movement-scoring, 0.08) !important;
+	background-color: rgba($movement-scoring, 0.18) !important;
 }
 .interface,
 app-app-interface {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	background-color: rgba($app-interface, 0.08) !important;
+	background-color: rgba($app-interface, 0.18) !important;
 }
 .naming,
 app-naming-numbering {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	background-color: rgba($naming-numbering, 0.08) !important;
+	background-color: rgba($naming-numbering, 0.28) !important;
 }
 
 .container.row.handset {

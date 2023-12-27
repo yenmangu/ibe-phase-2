@@ -1,74 +1,95 @@
-<div
-	class="container row user-settings"
-	[ngClass]="currentBreakpoint">
-	<div class="container column">
-		<h3>Change Email</h3>
+<div class="container column center">
+	<div
+		class="container row user-settings"
+		[ngClass]="currentBreakpoint">
+		<div class="container column">
+			<form [formGroup]="emailForm">
+				<div class="container column form-column">
+					<h3>Change Email</h3>
+					<mat-form-field
+						[ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }">
+						<mat-label>Email</mat-label>
+						<input
+							matInput
+							formControlName="email" />
+						<mat-hint align="end"></mat-hint>
+						<mat-error *ngIf="emailForm.get('email').invalid"
+							>Email is invalid</mat-error
+						>
+					</mat-form-field>
+					<button
+						mat-flat-button
+						color="primary"
+						[disabled]="
+							emailForm.pristine && emailClicked && directorKeyForm.invalid
+						"
+						(click)="getEmail()">
+						{{ successMessage && emailClicked ? 'Success' : 'Update Email' }}
+					</button>
+				</div>
+			</form>
+		</div>
+		<div class="container column center">
+			<form [formGroup]="directorKeyForm">
+				<div class="container column form-column">
+					<h3>Change Director Key</h3>
+					<div class="container column director-key">
+						<mat-form-field
+							[ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }">
+							<mat-label>New Director Key</mat-label>
+							<input
+								#directorKey
+								matInput
+								formControlName="newKey" />
+							<mat-hint align="end"
+								>characters: {{ directorKey.value.length }}</mat-hint
+							>
+							<mat-error *ngIf="directorKeyForm.get('newKey').invalid"></mat-error>
+						</mat-form-field>
+						<mat-form-field
+							[ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }">
+							<mat-label>Confirm new director key</mat-label>
+							<input
+								#confirmKey
+								matInput
+								formControlName="confirmKey" />
+							<mat-hint align="end"></mat-hint>
+							<mat-error *ngIf="directorKeyForm.get('confirmKey').invalid"
+								>Invalid Key</mat-error
+							>
+							<mat-error *ngIf="directorKeyForm.hasError('keyMatch', 'confirmKey')"
+								>Keys do not match</mat-error
+							>
+						</mat-form-field>
+						<button
+							mat-flat-button
+							color="primary"
+							[disabled]="
+								directorKeyForm.pristine &&
+								updateDirectorKeyClicked &&
+								directorKeyForm.valid
+							"
+							(click)="getNewDirectorKey()">
+							{{
+								successMessage && updateDirectorKeyClicked
+									? 'Success'
+									: 'Update Key'
+							}}
+						</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
 
-		<form [formGroup]="emailForm">
-			<div class="container column form-column">
-				<mat-form-field [ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }">
-					<mat-label>Email</mat-label>
-					<input
-						matInput
-						formControlName="email" />
-					<mat-hint align="end"></mat-hint>
-					<mat-error *ngIf="emailForm.get('email').invalid"
-						>Email is invalid</mat-error
-					>
-				</mat-form-field>
-				<button
-					mat-flat-button
-					color="primary"
-					[disabled]="emailForm.pristine && emailClicked && directorKeyForm.invalid"
-					(click)="getEmail()">
-					{{ successMessage && emailClicked ? 'Success' : 'Update Email' }}
-				</button>
-			</div>
-		</form>
-	</div>
-	<div class="container column form-column">
-		<h3>Change Director Key</h3>
-		<form [formGroup]="directorKeyForm">
-			<div class="container column director-key">
-				<mat-form-field [ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }">
-					<mat-label>Director Key</mat-label>
-					<input
-						#directorKey
-						matInput
-						formControlName="newKey" />
-					<mat-hint align="end"
-						>characters: {{ directorKey.value.length }}</mat-hint
-					>
-					<mat-error *ngIf="directorKeyForm.get('newKey').invalid"></mat-error>
-				</mat-form-field>
-				<mat-form-field [ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }">
-					<mat-label>Confirm director key</mat-label>
-					<input
-						#confirmKey
-						matInput
-						formControlName="confirmKey" />
-					<mat-hint align="end"></mat-hint>
-					<mat-error *ngIf="directorKeyForm.get('confirmKey').invalid"
-						>Invalid Key</mat-error
-					>
-					<mat-error *ngIf="directorKeyForm.hasError('keyMatch', 'confirmKey')"
-						>Keys do not match</mat-error
-					>
-				</mat-form-field>
-				<button
-					mat-flat-button
-					color="primary"
-					[disabled]="
-						directorKeyForm.pristine &&
-						updateDirectorKeyClicked &&
-						directorKeyForm.valid
-					"
-					(click)="getNewDirectorKey()">
-					{{
-						successMessage && updateDirectorKeyClicked ? 'Success' : 'Update Key'
-					}}
-				</button>
-			</div>
-		</form>
-	</div>
+	<h3>Changing Game Code</h3>
+	<span
+		>Please contact
+		<a
+			href="mailto:admin@ibescore.com"
+			class="email-link"
+			>admin@ibescore.com
+		</a>
+		to change a game code.</span
+	>
 </div>

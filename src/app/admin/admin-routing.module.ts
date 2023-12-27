@@ -9,6 +9,7 @@ import { GamesComponent } from './games/games.component';
 import { HandRecordsLandingComponent } from './hands/hand-records-landing/hand-records-landing.component';
 import { HistoricGamesComponent } from './games/historic-games/historic-games.component';
 import { ReportingComponent } from './reporting/reporting.component'; // dev
+import { DatabaseLandingComponent } from './games/database-landing/database-landing.component';
 
 const routes: Routes = [
 	{
@@ -45,6 +46,11 @@ const routes: Routes = [
 				path: 'account',
 				component: AccountSettingsComponent,
 				data: { menuLabel: 'Account Settings' }
+			},
+			{
+				path: 'player-database',
+				component: DatabaseLandingComponent,
+				data: { menuLabel: 'Player Database' }
 			},
 			{ path: 'dashboard', component: DashboardComponent },
 			// Additional admin routes

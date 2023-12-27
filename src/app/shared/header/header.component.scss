@@ -37,3 +37,21 @@ button.menu {
 .user-data {
 	gap: 1em;
 }
+.public-view {
+	width: 100%;
+	justify-content: center;
+	align-items: center;
+	gap: 2rem;
+}
+.logo-container {
+	width: auto;
+	height: auto;
+	display: grid;
+	place-items: center;
+}
+
+img.logo {
+	display: block;
+	height: 40px;
+	width: 40px;
+}

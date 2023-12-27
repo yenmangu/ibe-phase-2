@@ -16,14 +16,13 @@
 					<!--  -->
 					<!-- How To Use Tab -->
 					<!--  -->
-					<!-- Player Sign In Tab -->
 					<mat-tab
-						#signInTab
-						labelClass="sign-in-label"
-						label="Player Sign-In"
-						class="sign-in-tab tab-header">
+						#theseSettingsTab
+						labelClass="these-settings-label"
+						label="New Event Settings"
+						class="these-settings-tab tab-header">
 						<div
-							class="container column center view sign-in"
+							class="container column center view these-settings"
 							[ngClass]="currentBreakpoint">
 							<div class="container row gap-1">
 								<h3>Settings for new events:</h3>
@@ -47,8 +46,19 @@
 									{{ getButtonMessage() ? 'Success' : 'Save' }}
 								</button>
 							</div>
+						</div>
+					</mat-tab>
+					<!-- Player Sign In Tab -->
+					<mat-tab
+						#signInTab
+						labelClass="sign-in-label"
+						label="Player Sign-In"
+						class="sign-in-tab tab-header">
+						<div
+							class="container column center view sign-in"
+							[ngClass]="currentBreakpoint">
 							<div
-								class="container row content"
+								class="container column content"
 								[ngClass]="currentBreakpoint">
 								<div class="container column">
 									<h3>Startup Interface</h3>

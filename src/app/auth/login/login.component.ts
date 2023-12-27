@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DialogService } from 'src/app/shared/services/dialog.service';
@@ -11,11 +11,11 @@ import { IndexedDatabaseStatusService } from 'src/app/shared/services/indexed-da
 	templateUrl: './login.component.html',
 	styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
 	loginForm: FormGroup;
-	hide = true
-	hidePassword: boolean = true
-
+	hide = true;
+	hidePassword: boolean = true;
+	loginClicked: boolean = false;
 
 	constructor(
 		private fb: FormBuilder,
@@ -28,6 +28,7 @@ export class LoginComponent implements OnInit {
 	) {}
 
 	ngOnInit(): void {
+		this.loginClicked = false;
 		this.loginForm = this.fb.group({
 			gameCode: ['', Validators.required],
 			key: ['', Validators.required]
@@ -36,6 +37,9 @@ export class LoginComponent implements OnInit {
 
 	onSubmit(): void {
 		// const formData = { ...this.loginForm.value };
+		setTimeout(() => {
+			this.loginClicked = true;
+		}, 50);
 		const gameCode = this.loginForm.get('gameCode').value;
 		const dirKey = this.loginForm.get('key').value;
 		const formData = {
@@ -51,16 +55,20 @@ export class LoginComponent implements OnInit {
 				console.log('Response from auth Service: ', response);
 				if (response === false) {
 					console.log('in "response === false" path');
+					this.loginClicked = false;
 
 					this.authService.statusSubject$.subscribe(status => {
 						console.log('auth service status subject: ', status);
 						if (!status || status === undefined) {
 							this.dialogService.openDialog('generalFail');
+							return;
 						}
 						if (status === 'NO_USER') {
 							this.dialogService.openDialog('userFail');
+							return;
 						} else if (status === 'PASS_ERROR') {
 							this.dialogService.openDialog('passFail');
+							return;
 						}
 					});
 				} else if (response) {
@@ -87,8 +95,12 @@ export class LoginComponent implements OnInit {
 		return this.dialogService.openDialog('registrationSuccess');
 	}
 
-	toggleVisibility(){
-		this.hidePassword = !this.hidePassword
+	toggleVisibility() {
+		this.hidePassword = !this.hidePassword;
+	}
+
+	ngOnDestroy(): void {
+		this.loginClicked = false;
 	}
 }
 

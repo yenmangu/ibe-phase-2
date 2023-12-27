@@ -18,6 +18,7 @@
 		</mat-icon>
 	</mat-form-field>
 	<button
+		*ngIf="!loginClicked"
 		[disabled]="!loginForm.valid"
 		class="login"
 		mat-flat-button
@@ -25,4 +26,7 @@
 		(click)="onSubmit()">
 		Login
 	</button>
+	<ng-container *ngIf="loginClicked">
+		<mat-spinner class="login-spinner"></mat-spinner>
+	</ng-container>
 </form>

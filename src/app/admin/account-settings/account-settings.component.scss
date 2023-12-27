@@ -1,7 +1,7 @@
 @import '../../../colours.styles.scss';
 
-:host{
-	margin: 0 auto
+:host {
+	margin: 0 auto;
 }
 
 h2 {
@@ -34,4 +34,8 @@ mat-hint {
 }
 mat-error {
 	color: $ibe-alert-single;
+}
+.form-column {
+	border: 2px solid $app-interface;
+	padding: 2rem;
 }

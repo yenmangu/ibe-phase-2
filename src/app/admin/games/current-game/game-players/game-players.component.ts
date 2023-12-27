@@ -109,6 +109,7 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 		this.userDetailService.directorKey$.subscribe(key => {
 			this.dirKey = key;
 		});
+		
 		this.origin = window.location.href;
 		// console.log('game-players initialTableData: ', this.initialTableData);
 	}
@@ -161,6 +162,7 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 		this.captureFormData();
 	}
 	captureFormData() {
+		this.successMessage = ''
 		let tableFormData: any = {};
 		let dateFormData: any | null = {};
 		let combinedFormData: any = {};
@@ -201,6 +203,7 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 			.subscribe({
 				next: response => {
 					console.log('response from http services: ', response);
+					this.successMessage = 'success'
 				},
 				error: error => {
 					console.error('error in the response from http service: ', error);

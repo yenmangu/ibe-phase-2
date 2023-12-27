@@ -1,52 +1,66 @@
 <mat-toolbar
 	color="accent"
 	class="toolbar">
-	<div class="container row view">
-		<ng-container *ngIf="authService.isAuthedSubject$ | async">
-			<button
-				class="menu"
-				mat-flat-button
-				(click)="toggleSidenav()">
-				<!-- <mat-icon>menu</mat-icon> -->
-				Menu
-			</button>
-		</ng-container>
-
-		<span class="header-text">IBEScore Companion</span>
-
-		<div class="header-right container">
-			<button
-				*ngIf="authService.isAuthedSubject$ | async"
-				class="button-white"
-				mat-flat-button
-				color="primary"
-				(click)="refreshDatabase()">
-				Refresh Database
-			</button>
-			<button
-				mat-flat-button
-				color="warn"
-				routerLink="/forgot-password"
-				*ngIf="!(authService.isAuthedSubject$ | async) && !isPublicLink"
-				(click)="forgotPassword()">
-				Forgot Password
-			</button>
-			<ng-container
-				*ngIf="
-					(authService.isAuthedSubject$ | async) && currentBreakpoint !== 'handset'
-				">
-				<app-user-details></app-user-details>
+	<ng-container *ngIf="isPublicLink">
+		<div class="container row public-view">
+			<span class="header-text">IBEScore Companion</span>
+			<div class="logo-container">
+				<img
+					class="logo"
+					src="assets/images/logo/globe-cards-icon.png"
+					alt="Globe cards icon." />
+			</div>
+		</div>
+	</ng-container>
+	<ng-container *ngIf="!isPublicLink">
+		<div class="container row view">
+			<ng-container *ngIf="authService.isAuthedSubject$ | async">
+				<button
+					class="menu"
+					mat-flat-button
+					(click)="toggleSidenav()">
+					<!-- <mat-icon>menu</mat-icon> -->
+					Menu
+				</button>
 			</ng-container>
-			<ng-container *ngIf="currentBreakpoint !== 'handset'">
+
+			<span class="header-text">IBEScore Companion</span>
+
+			<div class="header-right container">
+				<button
+					*ngIf="authService.isAuthedSubject$ | async"
+					class="button-white"
+					mat-flat-button
+					color="primary"
+					(click)="refreshDatabase()">
+					Refresh Database
+				</button>
 				<button
 					mat-flat-button
 					color="warn"
-					routerLink="/auth/logout"
-					*ngIf="authService.isAuthedSubject$ | async"
-					(click)="logout()">
-					Logout
+					routerLink="/forgot-password"
+					*ngIf="!(authService.isAuthedSubject$ | async) && !isPublicLink"
+					(click)="forgotPassword()">
+					Forgot Password
 				</button>
-			</ng-container>
+				<ng-container
+					*ngIf="
+						(authService.isAuthedSubject$ | async) &&
+						currentBreakpoint !== 'handset'
+					">
+					<app-user-details></app-user-details>
+				</ng-container>
+				<ng-container *ngIf="currentBreakpoint !== 'handset'">
+					<button
+						mat-flat-button
+						color="warn"
+						routerLink="/auth/logout"
+						*ngIf="authService.isAuthedSubject$ | async"
+						(click)="logout()">
+						Logout
+					</button>
+				</ng-container>
+			</div>
 		</div>
-	</div>
+	</ng-container>
 </mat-toolbar>

@@ -17,6 +17,7 @@ import { BreakpointService } from '../services/breakpoint.service';
 import { DialogService } from '../services/dialog.service';
 import { PasswordRecoverComponent } from 'src/app/auth/password-recover/password-recover.component';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { IconRegistryService } from '../services/icon-registry.service';
 @Component({
 	selector: 'app-header',
 	templateUrl: './header.component.html',
