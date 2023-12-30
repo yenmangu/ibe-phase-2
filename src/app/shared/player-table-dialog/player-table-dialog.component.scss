@@ -3,8 +3,11 @@
 	flex-direction: column;
 	align-items: center;
 	gap: 1rem;
-	padding-top: 2rem;
+	height: auto !important;
+	// padding-top: 2rem;
+	overflow-y: scroll !important;
 }
+
 .checkbox-row {
 	gap: 1rem;
 	align-items: center;

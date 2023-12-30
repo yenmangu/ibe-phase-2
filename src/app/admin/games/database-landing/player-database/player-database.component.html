@@ -1,7 +1,9 @@
 <div class="main container column">
 	<div class="container row head">
 		<div class="container row search">
-			<mat-form-field [ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }">
+			<mat-form-field
+				class="search-row"
+				[ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }">
 				<mat-label>Type to search players</mat-label>
 				<input
 					#input
@@ -17,7 +19,7 @@
 				Clear
 			</button>
 			<button
-			[ngClass]="{'ibescore-theme': applyIbescoreTheme}"
+				[ngClass]="{ 'ibescore-theme': applyIbescoreTheme }"
 				class="add-row"
 				mat-flat-button
 				color="primary"
@@ -147,7 +149,9 @@
 					class="delete"
 					mat-cell
 					*matCellDef="let player">
-					<mat-icon (click)="onDelete(player); $event.stopPropagation()">delete</mat-icon>
+					<mat-icon (click)="onDelete(player); $event.stopPropagation()"
+						>delete</mat-icon
+					>
 				</td>
 			</ng-container>
 
@@ -184,5 +188,4 @@
 	<ng-container *ngIf="tabSelected && isLoading">
 		<mat-spinner></mat-spinner
 	></ng-container>
-
 </div>

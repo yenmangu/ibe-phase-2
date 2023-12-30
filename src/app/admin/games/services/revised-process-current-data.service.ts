@@ -75,10 +75,24 @@ export class RevisedProcessCurrentDataService {
 
 			const sides = await this.indexedDB.readFromDB([store], 'sidenamestxt');
 			const settingsText = await this.indexedDB.readFromDB([store], 'settingstxt');
+
+			const sitText = await this.indexedDB.readFromDB([store], 'sittxt');
+			const handicapText = await this.indexedDB.readFromDB([store], 'handitxt');
+			const labelsText = await this.indexedDB.readFromDB([store], 'tagstxt');
+
+			console.log('Sitters Text: ', sitText);
+
 			const movementValue = this.destructureValue(movement, 'current_game_data');
 			const peopleValue = this.destructureValue(people, 'current_game_data');
 			const teamsValue = this.destructureAndSplitTeams(teams);
 			const sidesValue = this.destructureAndSplitTeams(sides);
+			const sittersValue = this.destructureValue(sitText, 'current_game_data');
+			const handicapValue = this.destructureValue(
+				handicapText,
+				'current_game_data'
+			);
+			const labelsValue = this.destructureValue(labelsText, 'current_game_data');
+			// console.log('Sitters Value: ', sittersValue);
 
 			console.log('\n\n\n teamsValue: ', teamsValue);
 
@@ -86,7 +100,10 @@ export class RevisedProcessCurrentDataService {
 				movementValue,
 				peopleValue,
 				settingsText,
-				teamsValue
+				teamsValue,
+				sittersValue,
+				handicapValue,
+				labelsValue
 			);
 			return currentGameConfig;
 		} catch (error) {}
@@ -94,7 +111,15 @@ export class RevisedProcessCurrentDataService {
 
 	// START NEW CODE
 
-	async generateConfig(movementtxt, namestxt, settingstxt, teamsValue) {
+	async generateConfig(
+		movementtxt,
+		namestxt,
+		settingstxt,
+		teamsValue,
+		sittersValue,
+		handicapValue,
+		labelsValue
+	) {
 		try {
 			const { matchType, sidesOf, matchString } = this.getMatchType(settingstxt);
 			const sidesOfInt = Number(sidesOf);
@@ -200,6 +225,19 @@ export class RevisedProcessCurrentDataService {
 
 			console.log('tableConfig: ', tableConfig);
 
+			const sittersObj = this.processExtras(
+				matchType,
+				totalTables,
+				sittersValue,
+				undefined
+			);
+			const labelsObject = this.processExtras(
+				matchType,
+				totalTables,
+				undefined,
+				labelsValue
+			);
+
 			finalConfig.teamConfig = !isIndividuals ? wholeTeamConfig.teamConfig : {};
 			finalConfig.teams = !isIndividuals ? wholeTeamConfig.teamsInPlay : {};
 			finalConfig.cardinals = cardinals;
@@ -213,6 +251,8 @@ export class RevisedProcessCurrentDataService {
 			finalConfig.assignedIndividuals = assignedIndividuals;
 			finalConfig.individuals = isIndividuals ? individuals : {};
 			finalConfig.eventName = eventName;
+			finalConfig.sitters = sittersObj;
+			finalConfig.labels = labelsObject;
 
 			// console.log('final tableConfig: ', tableConfig);
 
@@ -609,5 +649,85 @@ export class RevisedProcessCurrentDataService {
 		console.log('lockValue in processing: ', lockValue);
 
 		return lockValue;
+	}
+
+	private processExtras(matchType, totalTables, sittersValue?, labelsValue?) {
+		const totalPairs = totalTables * 2;
+		let dataString: string;
+		let replacedArray: any[];
+		if (sittersValue) {
+			dataString = sittersValue[0];
+			replacedArray = dataString
+				.split(/\n/)
+				.map(value => (value === 'y' ? true : false));
+		}
+		if (labelsValue) {
+			dataString = labelsValue[0];
+			replacedArray = dataString.split(/\n/);
+			console.log('');
+		}
+
+		console.log('replaced array after processing: ', replacedArray);
+
+		const emptyToAdd = totalPairs - replacedArray.length;
+		// console.log('replaced array: ', replacedArray);
+		// console.log('empty to add: ', emptyToAdd);
+
+		if (emptyToAdd > 0) {
+			for (let i = 0; i < emptyToAdd; i++) {
+				replacedArray.push(false);
+			}
+		}
+
+		// console.log('After pushing, replacedArray: ', replacedArray);
+		// console.log(
+		// 	`sanity check: replacedArray should have length of ${totalPairs}. \nreplacedArray length: ${replacedArray.length}`
+		// );
+		let half: number;
+		let dataObj: any;
+		let nsPairs: any[];
+		let ewPairs: any[];
+		let teamData: any = [];
+
+		if (replacedArray.length !== totalPairs) {
+			console.error(
+				'Error processing sitters, array length does not equal total pairs. please check xml and json'
+			);
+		} else {
+			if (matchType.pairs) {
+				const replacedLength = replacedArray.length;
+				if (replacedLength % 2 !== 0) {
+					console.error('Error dividing sitters array in two. Check XML and JSON');
+				} else {
+					half = replacedArray.length / 2;
+					nsPairs = replacedArray.slice(0, half);
+					ewPairs = replacedArray.slice(half);
+				}
+				if (sittersValue) {
+					dataObj = { nsSitters: nsPairs, ewSitters: ewPairs };
+				}
+
+				if (labelsValue) {
+					dataObj = { nsLabels: nsPairs, ewLabels: ewPairs };
+				}
+			}
+			if (matchType.teams) {
+				teamData = replacedArray;
+				dataObj = { teamData };
+			}
+		}
+
+		console.log('data object: ', dataObj);
+		return dataObj;
+	}
+
+	private processHandicap(handicapValue, totalTables) {
+		console.log('handicap value: ', handicapValue);
+		return handicapValue;
+	}
+	private processLabels(labelsValue, totalTables) {
+		console.log('labels value: ', labelsValue);
+		// const labels
+		return labelsValue;
 	}
 }

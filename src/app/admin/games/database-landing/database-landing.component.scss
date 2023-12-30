@@ -1,7 +1,7 @@
 :host {
 	width: 100%;
 	max-width: 1440px;
-	// padding: 0 2rem;
+	padding: 0 1rem;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -16,4 +16,15 @@
 }
 .container.row.options {
 	padding-left: 2rem;
+}
+
+@media only screen and (max-width: 500px){
+
+	.container.row.search {
+		justify-content: space-between;
+	}
+
+	button.add-row {
+		height: 46px !important
+	}
 }

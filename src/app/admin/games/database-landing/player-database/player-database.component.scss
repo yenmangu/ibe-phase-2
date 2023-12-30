@@ -9,12 +9,25 @@
 	gap: 0;
 }
 
+.head {
+	justify-content: center;
+}
+
 .table-wrapper {
-	margin-top: 1rem;
+	// margin-top: 1rem;
 	overflow-y: auto;
-	height: 400px;
+	height: auto;
 }
 
 .options {
 	margin-top: 2rem;
+}
+
+@media only screen and (max-width: 500px) {
+	mat-form-field.search-row {
+		height: 66px;
+	}
+	.mdc-button.add-row {
+		height: 46px;
+	}
 }

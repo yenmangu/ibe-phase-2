@@ -10,7 +10,7 @@ import { Clipboard } from '@angular/cdk/clipboard';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Subject, takeUntil, Subscription, takeLast } from 'rxjs';
+import { Subject, takeUntil, Subscription, takeLast, timer, take } from 'rxjs';
 import { BreakpointService } from 'src/app/shared/services/breakpoint.service';
 import { EventDetailModel, EventDetails } from '../../data/event.options';
 import { TablesService } from '../../services/tables.service';
@@ -43,6 +43,9 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 	routerLink: string;
 	publicLink: string;
 	origin: string;
+
+	timerSubscription: Subscription | undefined;
+	buttonText: string = 'Save';
 
 	eventName: string = '';
 
@@ -109,9 +112,14 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 		this.userDetailService.directorKey$.subscribe(key => {
 			this.dirKey = key;
 		});
-		
+
 		this.origin = window.location.href;
 		// console.log('game-players initialTableData: ', this.initialTableData);
+		this.pairsForm.formValuesChanged.subscribe(value => {
+			console.log('formValues changed detected in parent component: ', value);
+		});
+
+		this.updateButtonAfterDelay();
 	}
 
 	ngAfterViewInit(): void {}
@@ -126,7 +134,7 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 						// console.log('initialTableData: ', JSON.stringify(data, null, 2));
 						console.log('initialTableData in gamePlayers: ', data);
 						this.initialTableData = data;
-						this.eventName = data.eventName
+						this.eventName = data.eventName;
 						const { matchType } = data;
 						matchType.pairs
 							? (this.matchType = 'pairs')
@@ -146,6 +154,11 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 			});
 	}
 
+	onFormFieldChange(event) {
+		// console.log('form field changed: ', event);
+		this.successMessage = '';
+	}
+
 	onOptionSelected(selctedOption: string) {
 		this.tableOption = selctedOption;
 		this.tablesService.updateTableConfig(selctedOption);
@@ -162,7 +175,7 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 		this.captureFormData();
 	}
 	captureFormData() {
-		this.successMessage = ''
+		this.successMessage = '';
 		let tableFormData: any = {};
 		let dateFormData: any | null = {};
 		let combinedFormData: any = {};
@@ -203,7 +216,7 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 			.subscribe({
 				next: response => {
 					console.log('response from http services: ', response);
-					this.successMessage = 'success'
+					this.successMessage = 'success';
 				},
 				error: error => {
 					console.error('error in the response from http service: ', error);
@@ -321,6 +334,19 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 		this.snackbar.open('Link copied!', 'Dismiss');
 	}
 
+	updateButtonAfterDelay(): void {
+		if (this.timerSubscription) {
+			this.timerSubscription.unsubscribe();
+		}
+		this.buttonText = this.getButtonMessage() ? 'Success' : 'Save';
+
+		this.timerSubscription = timer(10000)
+			.pipe(take(1))
+			.subscribe(() => {
+				this.buttonText = 'Save';
+			});
+	}
+
 	getButtonMessage(): boolean {
 		if (!this.clicked && this.successMessage) {
 			return true;
@@ -329,8 +355,15 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 		}
 	}
 
+	// getButtonMessage(): boolean {
+	// 	return !this.clicked && this.successMessage;
+	// }
+
 	ngOnDestroy(): void {
 		this.destroy$.next();
 		this.destroy$.complete();
+		if (this.timerSubscription) {
+			this.timerSubscription.unsubscribe();
+		}
 	}
 }

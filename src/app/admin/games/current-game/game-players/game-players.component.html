@@ -32,6 +32,7 @@
 				<input
 					type="text"
 					[(ngModel)]="eventName"
+					(ngModelChange)="onFormFieldChange($event)"
 					matInput />
 			</mat-form-field>
 
@@ -41,7 +42,8 @@
 				matSuffix
 				color="primary"
 				(click)="captureFormData()">
-				{{ getButtonMessage() ? 'Success' : 'Save' }}
+				<!-- {{ getButtonMessage() ? 'Success' : 'Save' }} -->
+				{{ buttonText }}
 			</button>
 		</div>
 	</div>
@@ -68,6 +70,16 @@
 	</ng-container>
 	<!-- <app-match-tables [initialTableData]="initialTableData"
 		(formValuesChanged)="(onTeamTableValueChanged)"></app-match-tables> -->
+</div>
+<div class="container row main-save-container">
+	<h4>Save Line Up</h4>
+	<button
+		class="main-save"
+		mat-flat-button
+		color="primary"
+		(click)="captureFormData()">
+		{{ getButtonMessage() ? 'Success' : 'Save' }}
+	</button>
 </div>
 <div class="container row download">
 	<div class="container row link-wrapper">
@@ -100,6 +112,7 @@
 			</div>
 		</ng-container>
 	</div>
+
 	<div class="container row date-wrapper">
 		<mat-form-field
 			class="date-picker"
@@ -109,6 +122,7 @@
 				[ngClass]="{ 'grey-magenta-theme:': applyMagentaGreyTheme }"
 				type="text"
 				[(ngModel)]="forwardDate"
+				(ngModelChange)="onFormFieldChange($event)"
 				matInput
 				[matDatepicker]="date" />
 			<mat-datepicker-toggle
@@ -121,12 +135,14 @@
 					'grey-magenta-theme': applyMagentaGreyTheme
 				}"></mat-datepicker>
 		</mat-form-field>
+
 		<button
 			class="main-save"
 			mat-flat-button
 			color="primary"
 			(click)="captureFormData()">
 			{{ getButtonMessage() ? 'Success' : 'Save' }}
+			<!-- {{ buttonText }} -->
 		</button>
 	</div>
 </div>

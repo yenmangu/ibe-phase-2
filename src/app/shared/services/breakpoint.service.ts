@@ -14,17 +14,20 @@ export class BreakpointService {
 		return this.breakpointObserver.observe(Object.values(Breakpoints)).pipe(
 			map(state => {
 				// console.log('BREAKPOINT: ',state);
+				let size = ''
+				let width = 0
 
 				if (state.breakpoints[Breakpoints.Large]) {
-					return 'large';
+					size = 'large';
 				} else if (state.breakpoints[Breakpoints.Tablet]) {
-					return 'tablet';
+					size = 'tablet';
 				} else if (state.breakpoints[Breakpoints.Medium]) {
-					return 'medium';
+					size = 'medium';
 
 				} else {
-					return 'handset';
+					size = 'handset';
 				}
+				return size
 			}),
       // Debugging
 			// tap(value => console.log(value)),

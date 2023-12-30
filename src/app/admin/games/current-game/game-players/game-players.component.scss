@@ -17,7 +17,7 @@
 	flex: 1;
 	.event-name-field {
 		margin-right: auto;
-		height: 70px !important
+		height: 70px !important;
 	}
 }
 
@@ -43,7 +43,7 @@ button.main-save {
 }
 .download.row {
 	display: flex;
-	margin-top: 3rem;
+	margin-top: 1rem;
 	width: 100%;
 	gap: 2rem;
 	flex: 1;
@@ -53,6 +53,7 @@ button.main-save {
 
 	.date-picker {
 		margin-right: auto;
+		height: 70px;
 	}
 }
 
@@ -90,14 +91,28 @@ a.public-link-text:hover {
 .link-wrapper {
 	flex-wrap: wrap;
 	gap: 1rem;
+	// align-items: flex-end;
 }
+
 .copy {
 	display: flex;
 	align-items: center;
 	gap: 0.4rem;
 	cursor: pointer;
 }
-
+.two-save {
+	gap: 2rem;
+}
+.main-save-container {
+	align-items: center;
+	justify-content: flex-end;
+	margin-top: 1rem;
+	gap: 1rem;
+	button {
+		height: 50px;
+		margin: 0;
+	}
+}
 .link-text-wrapper:hover {
 	cursor: pointer;
 }

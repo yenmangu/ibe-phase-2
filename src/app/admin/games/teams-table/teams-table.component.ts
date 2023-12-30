@@ -44,6 +44,8 @@ export class TeamsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 	southSide: [] = [];
 	eastSide: [] = [];
 	westSide: [] = [];
+	sitters: any[] = [];
+	// ewSitters: any[] = [];
 
 	originalFormValues: any;
 	changedFields: { [key: string]: { previousValue: any; newValue: any } } = {};
@@ -85,6 +87,7 @@ export class TeamsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 			this.teamsPerSide = teams.length / sideTeamMap.totalSides;
 			this.numberOfSides = sideTeamMap.totalSides;
 			console.log('total sides: ', sideTeamMap.totalSides);
+
 			// this.createSideLabelsFormArray(this.numberOfSides);
 			this.teamsForm = this.createNewTeamsForm();
 		}
@@ -150,7 +153,13 @@ export class TeamsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 		const teamsArray = this.initialTableData.teams;
 		// console.log('teams array: ', teamsArray);
 
-		const initialArray = ['nsPairs', 'north', 'south', 'ewPairs', 'east', 'west'];
+		const initialArray = [
+			// 'nsPairs',
+			'north',
+			'south',
+			// 'ewPairs',
+			'east',
+			'west'];
 		const additionalArray = [
 			'team_name',
 			'venues',
@@ -171,37 +180,52 @@ export class TeamsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 			'lunch'
 		];
 		if (namesArray) {
+			const index = parseInt(tableNumber, 10) - 1;
 			for (const field of initialArray) {
-				const controlName = `${field}`;
-				const initialValue = this.getInitialValue(namesArray, field);
-				tableControls[field] = [initialValue, Validators.required];
+				// if (field === 'nsPairs' || field === 'ewPairs') {
+				// 	if (field === 'nsPairs') {
+				// 		tableControls[field] = this.pairNumbers.northSouth[index];
+				// 	}
+				// 	if (field === 'ewPairs') {
+				// 		tableControls[field] = this.pairNumbers.eastWest[index];
+				// 	}
+				// } else {
+					const controlName = `${field}`;
+					const initialValue = this.getInitialValue(namesArray, field);
+					tableControls[field] = [initialValue, Validators.required];
+				// }
 			}
-			// for (const field of teamsArray) {
-			// 	if (field !== 'team_name') {
-			// 		const controlName = `${field}`;
-			// 		tableControls[field] = [null];
-			// 	}
-			// }
-			for (const field of initialArray) {
-				if (field === 'nsPairs' || field === 'ewPairs') {
-					const index = parseInt(tableNumber, 10) - 1;
-					// console.log('tableNumber index: ', tableNumber);
+			for (const field of additionalArray) {
+				if (field === 'ns_sitters' || field === 'ew_sitters') {
+					console.log('in sitters: ');
 
-					if (field === 'nsPairs') {
-						// console.log('ns pair number: ', this.pairNumbers.northSouth[index]);
 
-						// at table number [i]
-						tableControls[field] = this.pairNumbers.northSouth[index];
-					} else if (field === 'ewPairs') {
-						// console.log('ew pair number: ', this.pairNumbers.eastWest[index]);
-						tableControls[field] = this.pairNumbers.eastWest[index];
+					const index = parseInt(tableNumber, 10);
+					if (field === 'ns_sitters' ) {
+						// console.log('index: ', index);
+
+						tableControls[field] = null
+						// console.log('tableControl for ns_sitters: ', tableControls[field]);
+					}
+					if (field === 'ew_sitters' && this.sitters) {
+						// console.log('index: ', index);
+						tableControls[field] = this.sitters[index] || false;
+						// console.log('tableControl for ew_sitters: ', tableControls[field]);
+					}
+
+				} else if (field === 'ns_labels' || field === 'ew_labels'){
+					if(field === 'ns_labels'){
+						tableControls[field] = null
+					}
+					if(field === 'ew_labels'){
+						tableControls[field]
 					}
 				} else {
 					const controlName = `${field}`;
 					const initialValue = this.getInitialValue(namesArray, field);
-					tableControls[field] = [initialValue, Validators.required];
 				}
 			}
+
 			const teamIndex = Number(tableNumber) - 1;
 			const teamName = this.initialTableData.teamConfig[teamIndex]?.teamName || '';
 			tableControls['team_name'] = [teamName];

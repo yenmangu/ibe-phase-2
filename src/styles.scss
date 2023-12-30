@@ -124,7 +124,6 @@ $naming-theme: mat.define-light-theme(
 
 @include mat.all-component-themes($ibescore-theme);
 
-
 .grey-magenta-theme {
 	@include mat.all-component-colors($magenta-grey-theme);
 }
@@ -149,7 +148,6 @@ $naming-theme: mat.define-light-theme(
 	@include mat.all-component-colors($naming-theme);
 }
 
-
 /* You can add global styles to this file, and also import other style files */
 * {
 	--webkit-font-smoothing: subpixel-antialiased;
@@ -165,6 +163,10 @@ body {
 body {
 	margin: 0;
 	font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
+
+body.mat-dialog-open {
+	overflow: auto;
 }
 
 .mat-mdc-unelevated-button.button-white:not(:disabled) {
@@ -305,3 +307,15 @@ mat-spinner.finalise {
 // Mobile Global Styles
 
 // .row.handset
+
+@media only screen and (max-width: 500px) {
+	mat-tab-header .mat-mdc-tab-labels .mdc-tab {
+		font-size: 0.8rem !important;
+		padding: 0 16px;
+		min-width: fit-content;
+	}
+	mat-form-field .mat-mdc-text-field-wrapper {
+		padding: 0;
+		min-width: fit-content;
+	}
+}

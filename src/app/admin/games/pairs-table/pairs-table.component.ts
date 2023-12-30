@@ -24,7 +24,7 @@ export class PairsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 	@Input() initialTableData: any;
 	@Input() loadingStatus: boolean = true;
 	@Output() formValuesChanged = new EventEmitter<any>();
-	eventName: string = ''
+	eventName: string = '';
 	pairConfig: any = {};
 	pairNumbers: any = {};
 	tableConfig: any;
@@ -41,6 +41,8 @@ export class PairsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 	eastSide: [] = [];
 	westSide: [] = [];
 	individualNumbers: any = {};
+	nsSitters: any[] = [];
+	ewSitters: any = [];
 
 	originalFormValues: any;
 	changedFields: { [key: string]: { previousValue: any; newValue: any } } = {};
@@ -83,6 +85,8 @@ export class PairsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 		// console.log('pair config: ', this.pairConfig);
 
 		this.pairNumbers = this.initialTableData.pairNumbers;
+		this.nsSitters = this.initialTableData.sitters.nsSitters;
+		this.ewSitters = this.initialTableData.sitters.ewSitters;
 		this.pairsForm = this.createNewPairsForm();
 		const {
 			cardinals: { north, south, east, west }
@@ -92,6 +96,9 @@ export class PairsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 		this.eastSide = east;
 		this.westSide = west;
 		this.individualNumbers = this.initialTableData.individuals;
+
+		console.log('Sitters Array in  pairsTable: ', this.nsSitters, this.ewSitters);
+
 		// console.log('\n ***************** \n individual numbers: ', this.individualNumbers);
 
 		if (this.pairsForm) {
@@ -102,6 +109,7 @@ export class PairsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 		this.originalFormValues = this.pairsForm.value;
 		this.pairsForm.valueChanges.subscribe(changedValues => {
 			this.changedFields = {};
+			this.formValuesChanged.emit('changed');
 			for (const key in changedValues) {
 				if (changedValues.hasOwnProperty(key)) {
 					if (changedValues[key] !== this.originalFormValues[key]) {
@@ -169,10 +177,10 @@ export class PairsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 
 		if (namesArray) {
 			// console.log('in names array');
+			const index = parseInt(tableNumber, 10) - 1;
 
 			for (const field of initialArray) {
 				if (field === 'nsPairs' || field === 'ewPairs') {
-					const index = parseInt(tableNumber, 10) - 1;
 					// console.log('tableNumber index: ', tableNumber);
 
 					if (field === 'nsPairs') {
@@ -187,14 +195,37 @@ export class PairsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 				} else {
 					const controlName = `${field}`;
 					const initialValue = this.getInitialValue(namesArray, field);
+					// console.log('Initial value: ', initialValue);
+
 					tableControls[field] = [initialValue, Validators.required];
 				}
 			}
 			for (const field of additionalArray) {
-				const controlName = `${field}`;
-				tableControls[field] = [null];
+				if (field === 'ns_sitters' || field === 'ew_sitters') {
+					// console.log('in sitters: ');
+
+					// const index = parseInt(tableNumber, 10);
+					if (field === 'ns_sitters' && this.nsSitters) {
+						// console.log('index: ', index);
+
+						tableControls[field] = this.nsSitters[index] || false;
+						// console.log('tableControl for ns_sitters: ', tableControls[field]);
+					}
+					if (field === 'ew_sitters' && this.ewSitters) {
+						// console.log('index: ', index);
+						tableControls[field] = this.ewSitters[index] || false;
+						// console.log('tableControl for ew_sitters: ', tableControls[field]);
+					}
+				} else {
+					const controlName = `${field}`;
+					// console.log('Control Name: ', controlName);
+
+					tableControls[field] = [null];
+				}
 			}
 		}
+		console.log('Table controls after populating: ', tableControls);
+
 		return tableControls;
 	}
 
