@@ -1,2 +1,12 @@
-<p>demo-page works!</p>
-<app-upload-file (selectedFilesChange)="onFileListChange($event)"></app-upload-file>
+<p>
+	Try selecting various options and mappings and pressing save. Reselecting an
+	option will re enable the button
+</p>
+<ng-container *ngIf="!readyForMapping">
+	<app-upload-file
+		(selectedFilesChange)="onFileListChange($event)"
+		(signalUpload)="receiveFile($event)"></app-upload-file>
+</ng-container>
+<ng-container *ngIf="readyForMapping">
+	<app-csv-mapping [uploadedFile]="fileToMap"></app-csv-mapping>
+</ng-container>

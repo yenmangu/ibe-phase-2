@@ -1,1 +1,92 @@
-<p>csv-mapping works!</p>
+<h3>
+	{{ uploadedFile ? uploadedFile.name : 'FileName' }}
+</h3>
+
+<div class="container row main">
+	<div class="container column">
+		<h3>Mapped Header (Our database)</h3>
+		<ul>
+			<li *ngFor="let header of testOurHeaders; let i = index">
+				<select
+					[(ngModel)]="outputSelectedHeaders[i]"
+					(ngModelChange)="onOutputSelectionChange($event, i)"
+					name="outputSelectedHeader{{ i }}"
+					id="">
+					<option
+						*ngFor="let headerItem of testOurHeaders"
+						[value]="headerItem.name"
+						[disabled]="headerItem.selected">
+						{{
+							headerItem.name === 'Name'
+								? 'Name (FIRST NAME + SURNAME)'
+								: headerItem.name
+						}}
+					</option>
+				</select>
+			</li>
+		</ul>
+	</div>
+	<div class="container column">
+		<h3 class="arrow">-></h3>
+		<ul class="map-to">
+			<li
+				class="map-to"
+				*ngFor="let header of testHeaders">
+				Map to
+			</li>
+		</ul>
+	</div>
+	<div
+		*ngIf="headers.length > 0"
+		class="container column">
+		<h3>{{ uploadedFile ? uploadedFile.name : 'FileName' }} Headers</h3>
+		<ul>
+			<li *ngFor="let header of testHeaders; let i = index">
+				Column {{ i }}
+				<select
+					name="inputSelectedHeader{{ i }}"
+					id=""
+					[(ngModel)]="inputSelectedHeaders[i]"
+					(ngModelChange)="onInputSelectionChange($event, i)">
+					<option
+						*ngFor="let headerItem of testHeaders"
+						[value]="headerItem.name"
+						[disabled]="
+							headerItem.selected && headerItem.name !== inputSelectedHeaders[i]
+						">
+						{{ headerItem.name }}
+					</option>
+				</select>
+			</li>
+		</ul>
+	</div>
+
+	<div class="container column">
+		<h3>Save the mapping</h3>
+		<ul class="save-column">
+			<li *ngFor="let header of testOurHeaders; let i = index">
+				<button
+					#saveMappingButton
+					mat-flat-button
+					color="primary"
+					(click)="saveMapping(i)">
+					Save
+				</button>
+			</li>
+		</ul>
+	</div>
+	<div class="container column dev show">
+		<h3>Selected Mapping</h3>
+		<ul class="dev display">
+			<li class="display" *ngFor="let header of testHeaders; let i = index">
+				<span class="left">
+					{{ outputSelectedHeaders[i] }}
+				</span>
+				<span class="map" *ngIf="outputSelectedHeaders[i]"> &nbsp; mapped to: &nbsp; </span>
+				<span class="right">
+					{{ inputSelectedHeaders[i] }}
+				</span>
+			</li>
+		</ul>
+	</div>
+</div>

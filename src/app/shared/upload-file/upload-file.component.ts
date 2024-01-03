@@ -64,6 +64,7 @@ export class UploadFileComponent implements OnInit, AfterViewInit {
 		if (input.files) {
 			this.selectedFiles = Array.from(input.files);
 			this.selectedFilesChange.emit(this.selectedFiles);
+			
 		}
 	}
 

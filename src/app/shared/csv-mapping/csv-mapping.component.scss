@@ -1,0 +1,64 @@
+:host {
+	display: block;
+}
+.main {
+	gap: 2rem;
+}
+
+h3 {
+	text-align: center;
+	width: 100%;
+}
+
+ul {
+	list-style: none;
+	display: flex;
+	flex-direction: column;
+	gap: 2rem;
+	li {
+		height: 36px;
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		margin-top: 0.2rem;
+		align-items: center;
+		justify-content: flex-start;
+	}
+}
+
+ul.map-to {
+	padding: 0;
+	li.map-to {
+		text-align: center;
+		width: 100%;
+	}
+}
+
+ul.save-column {
+	li {
+		align-items: flex-start;
+	}
+	button {
+	}
+}
+
+ul.display {
+	width: 100%;
+	li.display {
+		position: relative;
+		display: flex;
+		width: 100%;
+		flex-direction: row;
+		align-items: center;
+		.left {
+			position: relative;
+			left: 0;
+			justify-self: flex-start;
+		}
+		.right {
+			position: relative;
+			right: 0;
+			justify-self: flex-end;
+		}
+	}
+}
