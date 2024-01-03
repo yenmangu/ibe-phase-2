@@ -82,7 +82,7 @@ export class HandRecordsLandingComponent implements OnInit {
 			},
 			error: error => {
 				this.snackbar.open(
-					'Error downloading deal file, please try again. If the error persists please contact "..."',
+					'Error downloading deal file, please try again. If the error persists please contact admin@ibescore.com',
 					'Dismiss'
 				);
 				console.error('Error creating download: ', error);

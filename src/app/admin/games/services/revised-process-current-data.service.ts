@@ -380,12 +380,12 @@ export class RevisedProcessCurrentDataService {
 		let east: any[] = [];
 		let west: any[] = [];
 
-		console.log('TABLE CONFIG: ', tableConfig);
+		// console.log('TABLE CONFIG: ', tableConfig);
 
 		for (const tableKey in tableConfig) {
 			if (Object.prototype.hasOwnProperty.call(tableConfig, tableKey)) {
 				const table: any = tableConfig[tableKey];
-				console.log('TABLE IN QUESTION: ', table);
+				// console.log('TABLE IN QUESTION: ', table);
 
 				north.push(table[0][0].trim());
 				south.push(table[0][1].trim());
@@ -402,9 +402,9 @@ export class RevisedProcessCurrentDataService {
 		let cardinalsWithNames: any = {};
 
 		for (const cardinal in individuals) {
-			console.log('cardinal: ', cardinal);
+			// console.log('cardinal: ', cardinal);
 
-			console.log('assignedNames: ', assignedNames);
+			// console.log('assignedNames: ', assignedNames);
 
 			cardinalsWithNames[cardinal] = individuals[cardinal].map(
 				number => assignedNames[Number(number)]
@@ -455,7 +455,7 @@ export class RevisedProcessCurrentDataService {
 			let tempPairs = pairElement.split('&');
 			pairsObject[index + 1] = tempPairs;
 		});
-		console.log('pairObject: ', pairsObject);
+		// console.log('pairObject: ', pairsObject);
 
 		return pairsObject;
 	}
@@ -464,7 +464,7 @@ export class RevisedProcessCurrentDataService {
 		console.log('Match type in determine pair numbering: \n', matchType);
 
 		const movementLines: any[] = movementtxt[0].trim().split('\n');
-		console.log('movement lines: ', movementLines);
+		// console.log('movement lines: ', movementLines);
 
 		let movementAndPairs: any = {};
 		const totalTables = movementLines[1].trim().split(',')[1].trim();
@@ -494,7 +494,7 @@ export class RevisedProcessCurrentDataService {
 
 			const concatSorted = northSouthEastWest.sort((a, b) => b - a);
 
-			console.log('concat pairs sorted: ', concatSorted);
+			// console.log('concat pairs sorted: ', concatSorted);
 
 			largestPairNumber = concatSorted[0];
 
@@ -531,10 +531,10 @@ export class RevisedProcessCurrentDataService {
 		movementAndPairs.pairNumberingStyle = pairNumberingStyle;
 		movementAndPairs.totalPairs = totalPairs;
 
-		console.log(
-			'movementAndPairs Object: ',
-			JSON.stringify(movementAndPairs, null, 2)
-		);
+		// console.log(
+		// 	'movementAndPairs Object: ',
+		// 	JSON.stringify(movementAndPairs, null, 2)
+		// );
 
 		return movementAndPairs;
 	}
@@ -564,7 +564,7 @@ export class RevisedProcessCurrentDataService {
 		const {
 			current_game_data: { value }
 		} = settingsTxt;
-		console.log('SETTINGS TEXT: ', value);
+		// console.log('SETTINGS TEXT: ', value);
 
 		const eventLine: string = value[0].split('\n')[4];
 		const eventName: string = eventLine.replace('EN ', '');
@@ -652,6 +652,13 @@ export class RevisedProcessCurrentDataService {
 	}
 
 	private processExtras(matchType, totalTables, sittersValue?, labelsValue?) {
+		// Dev statements and logging
+		if (labelsValue) {
+			console.log('labels value: ', labelsValue);
+			console.log('Total tables: ', totalTables);
+
+		}
+
 		const totalPairs = totalTables * 2;
 		let dataString: string;
 		let replacedArray: any[];
@@ -664,18 +671,18 @@ export class RevisedProcessCurrentDataService {
 		if (labelsValue) {
 			dataString = labelsValue[0];
 			replacedArray = dataString.split(/\n/);
-			console.log('');
 		}
 
 		console.log('replaced array after processing: ', replacedArray);
-
-		const emptyToAdd = totalPairs - replacedArray.length;
+		const pairsMissing = totalPairs - replacedArray.length;
+		const teamsMissing = totalTables - replacedArray.length
+		const emptyToAdd = matchType.pairs === true ? pairsMissing : teamsMissing
 		// console.log('replaced array: ', replacedArray);
 		// console.log('empty to add: ', emptyToAdd);
 
 		if (emptyToAdd > 0) {
 			for (let i = 0; i < emptyToAdd; i++) {
-				replacedArray.push(false);
+				replacedArray.push(sittersValue ? false : '\n');
 			}
 		}
 
@@ -689,9 +696,12 @@ export class RevisedProcessCurrentDataService {
 		let ewPairs: any[];
 		let teamData: any = [];
 
-		if (replacedArray.length !== totalPairs) {
+		let expectedTotal = matchType.teams === true ? totalTables : totalPairs;
+		expectedTotal = parseInt(expectedTotal,10)
+
+		if (replacedArray.length !== expectedTotal) {
 			console.error(
-				'Error processing sitters, array length does not equal total pairs. please check xml and json'
+				`Error processing sitters, array length does not equal total pairs. please check xml and json \nExpected total: ${expectedTotal} and actual total: ${replacedArray.length}`
 			);
 		} else {
 			if (matchType.pairs) {

@@ -45,6 +45,7 @@ export class TeamsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 	eastSide: [] = [];
 	westSide: [] = [];
 	sitters: any[] = [];
+	labels: any = [];
 	// ewSitters: any[] = [];
 
 	originalFormValues: any;
@@ -79,7 +80,7 @@ export class TeamsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 		if (this.initialTableData) {
 			const { tables, sideTeamMap, teams, sidesOf } = this.initialTableData;
 			this.sideTeamMap = sideTeamMap;
-			console.log('tables: ', this.initialTableData.tables);
+			console.log('Initial table data in teams tables component: ', this.initialTableData);
 			this.tableNumbers = Object.keys(this.initialTableData.tableConfig);
 			this.tableData = this.initialTableData.tables;
 			this.pairConfig = this.initialTableData.pairConfig;
@@ -87,6 +88,8 @@ export class TeamsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 			this.teamsPerSide = teams.length / sideTeamMap.totalSides;
 			this.numberOfSides = sideTeamMap.totalSides;
 			console.log('total sides: ', sideTeamMap.totalSides);
+			this.sitters = this.initialTableData.sitters.teamData;
+			this.labels = this.initialTableData.labels.teamData;
 
 			// this.createSideLabelsFormArray(this.numberOfSides);
 			this.teamsForm = this.createNewTeamsForm();
@@ -159,20 +162,21 @@ export class TeamsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 			'south',
 			// 'ewPairs',
 			'east',
-			'west'];
+			'west'
+		];
 		const additionalArray = [
 			'team_name',
 			'venues',
-			'ns_stratification',
+			// 'ns_stratification',
 			'ew_stratification',
 			'ew_sitters',
-			'ns_adjustments',
+			// 'ns_adjustments',
 			'ew_adjustments',
-			'ns_handicaps',
+			// 'ns_handicaps',
 			'ew_handicaps',
-			'ns_labels',
+			// 'ns_labels',
 			'ew_labels',
-			'ns_abbrev',
+			// 'ns_abbrev',
 			'ew_abbrev',
 			'boardCol',
 			'time_from',
@@ -190,39 +194,38 @@ export class TeamsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 				// 		tableControls[field] = this.pairNumbers.eastWest[index];
 				// 	}
 				// } else {
-					const controlName = `${field}`;
-					const initialValue = this.getInitialValue(namesArray, field);
-					tableControls[field] = [initialValue, Validators.required];
+				const controlName = `${field}`;
+				const initialValue = this.getInitialValue(namesArray, field);
+				tableControls[field] = [initialValue, Validators.required];
 				// }
 			}
 			for (const field of additionalArray) {
 				if (field === 'ns_sitters' || field === 'ew_sitters') {
-					console.log('in sitters: ');
-
+					// console.log('in sitters: ');
 
 					const index = parseInt(tableNumber, 10);
-					if (field === 'ns_sitters' ) {
-						// console.log('index: ', index);
+					// if (field === 'ns_sitters' ) {
+					// 	// console.log('index: ', index);
 
-						tableControls[field] = null
-						// console.log('tableControl for ns_sitters: ', tableControls[field]);
-					}
+					// 	tableControls[field] = null
+					// 	// console.log('tableControl for ns_sitters: ', tableControls[field]);
+					// }
 					if (field === 'ew_sitters' && this.sitters) {
 						// console.log('index: ', index);
 						tableControls[field] = this.sitters[index] || false;
 						// console.log('tableControl for ew_sitters: ', tableControls[field]);
 					}
-
-				} else if (field === 'ns_labels' || field === 'ew_labels'){
-					if(field === 'ns_labels'){
-						tableControls[field] = null
-					}
-					if(field === 'ew_labels'){
-						tableControls[field]
+				} else if (field === 'ns_labels' || field === 'ew_labels') {
+					// if (field === 'ns_labels') {
+					// 	tableControls[field] = null;
+					// }
+					if (field === 'ew_labels') {
+						tableControls[field] = this.labels[index];
 					}
 				} else {
 					const controlName = `${field}`;
 					const initialValue = this.getInitialValue(namesArray, field);
+					tableControls[field] = null;
 				}
 			}
 

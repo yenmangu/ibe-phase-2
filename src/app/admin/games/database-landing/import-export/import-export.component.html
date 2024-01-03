@@ -1,0 +1,107 @@
+<div class="container column main center">
+	<h2>Database Operations</h2>
+	<h4>Update to and from BridgeWebs or your computer/device</h4>
+
+	<div class="container column center database-operations">
+		<div class="container column center bridgewebs">
+			<h3>BridgeWebs</h3>
+			<div
+				class="container row inner"
+				[ngClass]="currentBreakpoint">
+				<form
+					[formGroup]="bwUpdateForm"
+					class="bridgewebs-form">
+					<div class="container column form-inner">
+						<h4>Update From BridgeWebs</h4>
+						<mat-checkbox formControlName="contactInfo"
+							>Include contact info</mat-checkbox
+						>
+						<mat-checkbox formControlName="excludePlayers"
+							>Do not include players not found on BridgeWebs</mat-checkbox
+						>
+						<mat-form-field class="bridgewebs account-no">
+							<mat-label>Account Name</mat-label>
+							<input
+								matInput
+								formControlName="bwAccount" />
+						</mat-form-field>
+						<mat-form-field class="bridgewebs pass">
+							<mat-label>Password</mat-label>
+							<input
+								[type]="hide ? 'password' : 'text'"
+								matInput
+								formControlName="bwPass" />
+							<mat-icon
+								matSuffix
+								(click)="hide = !hide"
+								>{{ hide ? 'visibility_off' : 'visbility_on' }}</mat-icon
+							>
+						</mat-form-field>
+						<button
+							class="form-button upload"
+							[disabled]="bwUpdateForm.invalid"
+							mat-flat-button
+							color="primary"
+							(click)="bridgeWebsUpdateFrom()">
+							Upload
+						</button>
+					</div>
+				</form>
+				<!-- <form [formGroup]="bwDownloadForm">
+					<div class="container column form-inner">
+						<h4>Update To BridgeWebs</h4>
+						<mat-form-field class="bridgewebs account-no">
+							<mat-label>Account Name</mat-label>
+							<input
+								matInput
+								formControlName="bwAccount" />
+						</mat-form-field>
+						<mat-form-field class="bridgewebs pass">
+							<mat-label>Password</mat-label>
+							<input
+								[type]="hide ? 'password' : 'text'"
+								matInput
+								formControlName="bwPass" />
+							<mat-icon
+								matSuffix
+								(click)="hide = !hide"
+								>{{ hide ? 'visibility_off' : 'visbility_on' }}</mat-icon
+							>
+						</mat-form-field>
+						<button
+							class="form-button download"
+							[disabled]="bwDownloadForm.invalid"
+							mat-flat-button
+							color="primary"
+							(click)="bridgeWebsDownload()">
+							Download
+						</button>
+					</div>
+				</form> -->
+			</div>
+		</div>
+		<div class="container column center import-export">
+			<h3 class="import-export">Import / Export to and from file</h3>
+			<div
+				class="container row inner"
+				[ngClass]="currentBreakpoint">
+				<div class="container column center">
+					<h4>Upload from disk</h4>
+					<app-upload-file
+						(selectedFilesChange)="onFileListChange($event)"
+						(upload)="(selectedFile)"></app-upload-file>
+				</div>
+				<div class="container download column center">
+					<h4>Download to computer / device</h4>
+					<button
+						class="form-button download"
+						color="primary"
+						mat-flat-button
+						(click)="onDatabaseExport()">
+						Download
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

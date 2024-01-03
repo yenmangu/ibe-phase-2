@@ -42,7 +42,9 @@ export class PairsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 	westSide: [] = [];
 	individualNumbers: any = {};
 	nsSitters: any[] = [];
-	ewSitters: any = [];
+	ewSitters: any[] = [];
+	nsLabels: any[] = [];
+	ewLabels: any[] = [];
 
 	originalFormValues: any;
 	changedFields: { [key: string]: { previousValue: any; newValue: any } } = {};
@@ -87,6 +89,8 @@ export class PairsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 		this.pairNumbers = this.initialTableData.pairNumbers;
 		this.nsSitters = this.initialTableData.sitters.nsSitters;
 		this.ewSitters = this.initialTableData.sitters.ewSitters;
+		this.nsLabels = this.initialTableData.labels.nsLabels;
+		this.ewLabels = this.initialTableData.labels.ewLabels;
 		this.pairsForm = this.createNewPairsForm();
 		const {
 			cardinals: { north, south, east, west }
@@ -201,25 +205,26 @@ export class PairsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 				}
 			}
 			for (const field of additionalArray) {
-				if (field === 'ns_sitters' || field === 'ew_sitters') {
-					// console.log('in sitters: ');
-
-					// const index = parseInt(tableNumber, 10);
+				if (
+					field === 'ns_sitters' ||
+					field === 'ew_sitters' ||
+					field === 'ns_labels' ||
+					field === 'ew_labels'
+				) {
 					if (field === 'ns_sitters' && this.nsSitters) {
-						// console.log('index: ', index);
-
 						tableControls[field] = this.nsSitters[index] || false;
-						// console.log('tableControl for ns_sitters: ', tableControls[field]);
 					}
 					if (field === 'ew_sitters' && this.ewSitters) {
-						// console.log('index: ', index);
 						tableControls[field] = this.ewSitters[index] || false;
-						// console.log('tableControl for ew_sitters: ', tableControls[field]);
+					}
+					if (field === 'ns_labels' && this.nsLabels) {
+						tableControls[field] = this.nsLabels[index] || '';
+					}
+					if (field === 'ew_labels' && this.ewLabels) {
+						tableControls[field] = this.ewLabels[index] || '';
 					}
 				} else {
 					const controlName = `${field}`;
-					// console.log('Control Name: ', controlName);
-
 					tableControls[field] = [null];
 				}
 			}

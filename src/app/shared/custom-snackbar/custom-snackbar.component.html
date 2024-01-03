@@ -1,0 +1,18 @@
+<div class="container row">
+	<div class="inner">
+		<span
+			>{{ message }} <span *ngIf="data.error">Error: {{ error }}</span>
+			<span *ngIf="!noContact">
+				Please contact
+				<span><a href="mailto:admin@ibescore.com"> admin@ibescore.com</a></span>
+			</span></span
+		>\
+		
+	</div>
+	<button
+		mat-flat-button
+		color="primary"
+		(click)="close()">
+		Dismiss
+	</button>
+</div>

@@ -1,0 +1,57 @@
+:host {
+	max-width: 1440px;
+}
+
+// .bridgewebs {
+// 	gap: 1rem;
+// }
+
+.database-operations {
+	gap: 1rem;
+}
+
+.container.bridgewebs,
+.container.import-export {
+	padding: 0 2rem;
+	gap: 1rem;
+}
+
+.inner {
+	gap: 6rem;
+}
+
+h4 {
+	margin: 0 auto;
+	margin-bottom: 2rem;
+
+}
+h3 {
+	text-decoration: underline;
+	text-underline-offset: 6px;
+	text-decoration-thickness: 2px;
+}
+.bridgewebs-form {
+	max-width: 300px;
+}
+
+.container.handset {
+	flex-direction: column;
+	justify-content: center;
+	gap: 1rem;
+}
+.form-inner {
+	gap: 0.4rem;
+}
+.form-button {
+	width: fit-content;
+	margin: 0 auto;
+}
+h3.import-export {
+	margin-top: 1rem;
+}
+.container.download {
+	gap: 2rem;
+}
+app-upload-file {
+	max-width: 300px;
+}

@@ -23,32 +23,32 @@
 					<th class="north">North</th>
 					<th class="divider"></th>
 					<th class="south">South</th>
-					<th
+					<!-- <th
 						*ngIf="tableConfig.stratification"
 						class="conditional empty">
 						Stratification
-					</th>
+					</th> -->
 
-					<th
+					<!-- <th
 						*ngIf="tableConfig.adjustments"
 						class="conditional empty">
 						Adjust
-					</th>
-					<th
+					</th> -->
+					<!-- <th
 						*ngIf="tableConfig.handicaps"
 						class="conditional empty">
 						Handicap
-					</th>
-					<th
+					</th> -->
+					<!-- <th
 						*ngIf="tableConfig.labels"
 						class="conditional empty">
 						Labels
-					</th>
-					<th
+					</th> -->
+					<!-- <th
 						*ngIf="tableConfig.abbrev"
 						class="conditional empty">
 						Abbreviations
-					</th>
+					</th> -->
 					<th class="split divider"></th>
 					<!-- <th>Pair Number</th> -->
 					<th class="east">East</th>
@@ -72,7 +72,7 @@
 					<th
 						*ngIf="tableConfig.handicaps"
 						class="conditional empty">
-						Handicap
+						Handicaps
 					</th>
 					<th
 						*ngIf="tableConfig.labels"
@@ -136,42 +136,42 @@
 						<td *ngFor="let column of ['south']">
 							<input [formControlName]="column" />
 						</td>
-						<ng-container *ngIf="tableConfig.stratification">
+						<!-- <ng-container *ngIf="tableConfig.stratification">
 							<td
 								class="conditional"
 								*ngFor="let column of ['ns_stratification']">
 								<input [formControlName]="column" />
 							</td>
-						</ng-container>
+						</ng-container> -->
 
-						<ng-container *ngIf="tableConfig.adjustments">
+						<!-- <ng-container *ngIf="tableConfig.adjustments">
 							<td
 								class="conditional"
 								*ngFor="let column of ['ns_adjustments']">
 								<input [formControlName]="column" />
 							</td>
-						</ng-container>
-						<ng-container *ngIf="tableConfig.handicaps">
+						</ng-container> -->
+						<!-- <ng-container *ngIf="tableConfig.handicaps">
 							<td
 								class="conditional"
 								*ngFor="let column of ['ns_handicaps']">
 								<input [formControlName]="column" />
 							</td>
-						</ng-container>
-						<ng-container *ngIf="tableConfig.labels">
+						</ng-container> -->
+						<!-- <ng-container *ngIf="tableConfig.labels">
 							<td
 								class="conditional"
 								*ngFor="let column of ['ns_labels']">
 								<input [formControlName]="column" />
 							</td>
-						</ng-container>
-						<ng-container *ngIf="tableConfig.abbrev">
+						</ng-container> -->
+						<!-- <ng-container *ngIf="tableConfig.abbrev">
 							<td
 								class="conditional"
 								*ngFor="let column of ['ns_abbrev']">
 								<input [formControlName]="column" />
 							</td>
-						</ng-container>
+						</ng-container> -->
 
 						<td class="divider split"></td>
 						<!-- <td *ngFor="let column of ['ewPairs']">

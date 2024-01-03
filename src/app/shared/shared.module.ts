@@ -25,6 +25,9 @@ import { UsebioComponent } from './usebio/usebio.component';
 import { DeleteRowDialogComponent } from './delete-row-dialog/delete-row-dialog.component';
 import { LoginDialogComponent } from './login-dialog/login-dialog.component';
 import { SpectateComponent } from './spectate/spectate.component';
+import { CustomSnackbarComponent } from './custom-snackbar/custom-snackbar.component';
+import { CsvMappingComponent } from './csv-mapping/csv-mapping.component';
+import { DemoPageComponent } from './demo-page/demo-page.component';
 
 // Modules
 
@@ -42,11 +45,14 @@ import { SpectateComponent } from './spectate/spectate.component';
 		StartingLineupComponent,
 		UploadFileComponent,
 		DownloadFileComponent,
-  BboUploadComponent,
-  UsebioComponent,
-  DeleteRowDialogComponent,
-  LoginDialogComponent,
-  SpectateComponent
+		BboUploadComponent,
+		UsebioComponent,
+		DeleteRowDialogComponent,
+		LoginDialogComponent,
+		SpectateComponent,
+		CustomSnackbarComponent,
+  CsvMappingComponent,
+  DemoPageComponent
 	],
 	imports: [
 		CommonModule,
@@ -60,8 +66,10 @@ import { SpectateComponent } from './spectate/spectate.component';
 		FooterComponent,
 		UploadFileComponent,
 		DownloadFileComponent,
-		UserDetailsComponent
+		UserDetailsComponent,
+		CustomSnackbarComponent
 	],
+
 	providers: [
 		{ provide: MatDialogModule, useValue: {} },
 		{ provide: MatDialogRef, useValue: {} }

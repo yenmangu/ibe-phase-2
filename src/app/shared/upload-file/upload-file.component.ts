@@ -28,11 +28,16 @@ export class UploadFileComponent implements OnInit, AfterViewInit {
 	@Output() upload = new EventEmitter<any>();
 	@Output() signalUpload = new EventEmitter<boolean>();
 	@Output() signalAgain = new EventEmitter<boolean>();
+	@Output() selectedFilesChange = new EventEmitter<any[]>();
 	selectedFiles: any[] = [];
 
 	constructor(private elementRef: ElementRef, private renderer: Renderer2) {}
 
-	ngOnInit(): void {}
+	ngOnInit(): void {
+		if (this.selectedFiles.length > 0) {
+			console.log('files in the import export component: ', this.selectedFiles);
+		}
+	}
 
 	ngAfterViewInit(): void {
 		// this.trackSelectedFiles();
@@ -58,6 +63,7 @@ export class UploadFileComponent implements OnInit, AfterViewInit {
 		const input = event.target as HTMLInputElement;
 		if (input.files) {
 			this.selectedFiles = Array.from(input.files);
+			this.selectedFilesChange.emit(this.selectedFiles);
 		}
 	}
 
@@ -91,21 +97,13 @@ export class UploadFileComponent implements OnInit, AfterViewInit {
 		});
 	}
 
-	private get selectedFilesChange() {
-		return new Observable(observer => {
-			Object.defineProperty(this, 'selectedFiles', {
-				get: () => this.selectedFiles,
-				set: value => {
-					this.selectedFiles = value;
-					observer.next(value);
-				}
-			});
-		});
-	}
-
 	private emitFiles(fileArray) {
 		console.log('emitFiles invoked with: ', fileArray);
 
 		this.upload.emit(fileArray);
+	}
+
+	clearFiles() {
+		this.selectedFiles = [];
 	}
 }

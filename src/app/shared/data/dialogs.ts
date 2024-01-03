@@ -18,7 +18,7 @@ export const dialogData: DialogModel[] = [
 		data: {
 			code: 'PASS',
 			title: 'Incorrect Director Key',
-			message:'Please check your details and try again',
+			message: 'Please check your details and try again',
 			gameCode: ''
 		}
 	},
@@ -28,7 +28,7 @@ export const dialogData: DialogModel[] = [
 		data: {
 			code: 'EMAIL',
 			title: 'Email not found',
-			message:'Please check your email and try again',
+			message: 'Please check your email and try again',
 			gameCode: ''
 		}
 	},
@@ -38,7 +38,7 @@ export const dialogData: DialogModel[] = [
 		data: {
 			code: 'EMAIL',
 			title: 'Error Logging In',
-			message:'Please contact admin@ibescore.com',
+			message: 'Please contact admin@ibescore.com',
 			gameCode: ''
 		}
 	},
@@ -48,7 +48,7 @@ export const dialogData: DialogModel[] = [
 		data: {
 			code: 'USER',
 			title: 'User not found',
-			message:'Please check your email and try again',
+			message: 'Please check your email and try again',
 			gameCode: ''
 		}
 	},
@@ -57,7 +57,7 @@ export const dialogData: DialogModel[] = [
 		width: '400px',
 		data: {
 			title: 'REGISTRATION FAILED',
-			message: `It seems there has been an error registering. Please try again or contact <a href="mailto:admin@ibescore.com">admin@ibescore.com</a>`,
+			message: `It seems there has been an error registering. Please try again or contact admin@ibescore.com`,
 			gameCode: ''
 		}
 	},

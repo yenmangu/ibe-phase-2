@@ -53,6 +53,9 @@ import { HandDisplayComponent } from '../hands/hand-display/hand-display.compone
 import { PdfGenerationComponent } from './current-game/game-players/pdf-generation/pdf-generation.component';
 import { CreateGameComponent } from './current-game/game-players/create-game/create-game.component';
 import { RestoreDialogComponent } from './historic-games/restore-dialog/restore-dialog.component';
+import { ImportExportComponent } from './database-landing/import-export/import-export.component';
+
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
 	declarations: [
@@ -77,7 +80,8 @@ import { RestoreDialogComponent } from './historic-games/restore-dialog/restore-
 		HandDisplayComponent,
 		PdfGenerationComponent,
 		CreateGameComponent,
-		RestoreDialogComponent
+		RestoreDialogComponent,
+		ImportExportComponent
 	],
 	imports: [
 		CommonModule,
@@ -102,8 +106,10 @@ import { RestoreDialogComponent } from './historic-games/restore-dialog/restore-
 		MatProgressBarModule,
 		MatDialogModule,
 		// Other UI
-		NgxMaterialTimepickerModule
+		NgxMaterialTimepickerModule,
 		// Clarity
+		// Modules
+		SharedModule
 	],
 	exports: [HandDisplayComponent, HandPaginationComponent],
 	providers: [DataService, CdkColumnDef, DatePipe]

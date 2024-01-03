@@ -9,27 +9,23 @@
 		(dragover)="onDragOver($event)"
 		(drop)="onDrop($event)"
 		(dragleave)="onDragLeave($event)">
-		<div
-			class="custom-file"
-			(click)="customFileClick()">
-			<ng-container *ngIf="!data">
-				<label for="upload"
-					>Drag or drop file here for upload, or click to browse</label
-				>
-			</ng-container>
-			<br />
+		<label
+			for="upload"
+			class="custom-file">
+			<span>Drag or drop file here for upload, or click to browse</span>
+			<input
+				id="upload"
+				multiple
+				#fileInput
+				name="upload"
+				color="primary"
+				type="file"
+				(change)="onChange($event)"
+				(click)="fileInput.value = null"
+				style="display: none" />
 			<mat-icon>cloud_upload</mat-icon>
-		</div>
+		</label>
 
-		<input
-			id="upload"
-			multiple
-			#fileInput
-			name="upload"
-			color="primary"
-			type="file"
-			(click)="onChange($event)"
-			style="display: none" />
 		<div class="container column file-list">
 			<ul>
 				<li *ngFor="let file of selectedFiles">{{ file.name }}</li>
@@ -48,8 +44,15 @@
 					*ngIf="selectedFiles.length > 0"
 					mat-flat-button
 					color="primary"
-					(click)="onUpload()">
+					(change)="onUpload()">
 					Upload
+				</button>
+				<button
+					*ngIf="selectedFiles.length > 0"
+					mat-flat-button
+					color="warn"
+					(click)="clearFiles()">
+					Clear
 				</button>
 			</div>
 		</ng-container>

@@ -1,0 +1,10 @@
+@import '../../../colours.styles.scss';
+.container {
+	width: 100%;
+	align-items: center;
+	justify-content: space-between;
+	gap: 2rem;
+}
+a {
+	color: $security;
+}

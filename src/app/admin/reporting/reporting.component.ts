@@ -59,7 +59,7 @@ export class ReportingComponent implements OnInit, OnDestroy {
 			},
 			error: error => {
 				console.error('Error fetching bridgewebs CSV');
-				this.snackbar.open('Error fetching CSV data, please try again.', 'Dismiss');
+				this.snackbar.open('Error fetching CSV data, please try again. If the issue persists, please contact admin@ibescore.com', 'Dismiss');
 			}
 		});
 	}
@@ -82,7 +82,7 @@ export class ReportingComponent implements OnInit, OnDestroy {
 			},
 			error: error => {
 				console.error('error fetching EBU', error);
-				this.snackbar.open('Error fetching XML data, please try again.', 'Dismiss');
+				this.snackbar.open('Error fetching XML data, please try again. If the issue persists, please contact admin@ibescore.com', 'Dismiss');
 			}
 		});
 		// }

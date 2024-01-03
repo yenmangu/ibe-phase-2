@@ -1,6 +1,11 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable, catchError, tap } from 'rxjs';
+import {
+	HttpClient,
+	HttpHeaders,
+	HttpParams,
+	HttpResponse
+} from '@angular/common/http';
+import { Observable, catchError, tap, map } from 'rxjs';
 import { environment } from 'src/environments/environment';
 @Injectable({
 	providedIn: 'root'
@@ -48,7 +53,7 @@ export class HttpService {
 	// Data routes
 
 	updateEntry(data): Observable<any> {
-		return this.http.post<any>(`${this.apiUrl}/player_database/update`, data).pipe(
+		return this.http.post<any>(`${this.apiUrl}/player-database/update`, data).pipe(
 			tap(response => {
 				console.log('response from updateEntry: ', response);
 			}),
@@ -61,7 +66,7 @@ export class HttpService {
 	addNewEntry(data): Observable<any> {
 		console.log('post data invoked');
 
-		return this.http.post<any>(`${this.apiUrl}/player_database/new`, data).pipe(
+		return this.http.post<any>(`${this.apiUrl}/player-database/new`, data).pipe(
 			tap(response => {
 				console.log('response from postData: ', response);
 			}),
@@ -69,6 +74,28 @@ export class HttpService {
 				throw err;
 			})
 		);
+	}
+
+	exportPlayerDB(data): Observable<any> {
+		const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+		return this.http
+			.post<any>(`${this.apiUrl}/player-database/download`, data, {
+				headers,
+				observe: 'response',
+				responseType: 'blob' as 'json'
+			})
+			.pipe(
+				map((response: HttpResponse<Blob>) => {
+					const filename = response.headers.get('X-Filename');
+					console.log('Filename: ', filename);
+
+					return { filename, fileBlob: response.body };
+				})
+			);
+	}
+
+	dbBwFrom(data):Observable<any>{
+		return this.http.post<any>(`${this.apiUrl}/player-database/bridgewebs/from`,data)
 	}
 
 	postCurrent(data, gamecode, dir_key): Observable<any> {
@@ -126,7 +153,7 @@ export class HttpService {
 
 	restoreHistoricGame(data): Observable<any> {
 		console.log('restore historic invoked');
-		
+
 		return this.http.post<any>(`${this.apiUrl}/historic-games/restore`, data);
 	}
 }

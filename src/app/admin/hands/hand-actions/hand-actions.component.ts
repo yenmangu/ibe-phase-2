@@ -131,7 +131,7 @@ export class HandActionsComponent implements OnInit, AfterViewInit {
 			},
 			error: error => {
 				this.snackbar.open(
-					'Error creating PDF, please try again. If the error persists please contact "..."',
+					'Error creating PDF, please try again. If the error persists please contact admin@ibescore.com',
 					'Dismiss'
 				);
 				console.error('Error creating PDF: ', error);
