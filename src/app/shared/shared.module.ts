@@ -52,7 +52,8 @@ import { DemoPageComponent } from './demo-page/demo-page.component';
 		SpectateComponent,
 		CustomSnackbarComponent,
   CsvMappingComponent,
-  DemoPageComponent
+  DemoPageComponent,
+  
 	],
 	imports: [
 		CommonModule,

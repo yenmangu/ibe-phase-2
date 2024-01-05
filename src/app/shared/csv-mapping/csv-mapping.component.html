@@ -1,92 +1,188 @@
-<h3>
-	{{ uploadedFile ? uploadedFile.name : 'FileName' }}
-</h3>
+<h2 class="file-name">
+	Uploaded File: {{ uploadedFile ? uploadedFile.name : 'FileName' }}
+</h2>
+<div class="container column main-wrapper">
+	<div class="container row main">
+		<div class="container column">
+			<div class="container header-wrapper">
+				<h3>Clear Mapping</h3>
+			</div>
+			<ul class="clear-list">
+				<li *ngFor="let header of testOurHeaders; let i = index">
+					<button
+						#clearButton
+						class="clear-button"
+						mat-flat-button
+						[disabled]="inputSelectedHeaders[i] === undefined"
+						color="warn"
+						(click)="clearMapping(i)">
+						Clear
+					</button>
+				</li>
+			</ul>
+		</div>
+		<div
+			*ngIf="inputFileHeaders.length > 0"
+			class="container column">
+			<div class="container header-wrapper">
+				<h3>Your File Columns</h3>
+			</div>
+			<ul>
+				<li *ngFor="let header of testOurHeaders; let i = index">
+					<select
+						name="inputSelectedHeader{{ i }}"
+						id=""
+						[(ngModel)]="inputSelectedHeaders[i]"
+						(ngModelChange)="onInputSelectionChange($event, i)">
+						<option
+							*ngFor="let headerItem of inputFileHeaders"
+							[value]="headerItem.name"
+							[disabled]="
+								headerItem.selected && headerItem.name !== inputSelectedHeaders[i]
+							">
+							{{ headerItem.name }}
+						</option>
+					</select>
+				</li>
+			</ul>
+		</div>
 
-<div class="container row main">
-	<div class="container column">
-		<h3>Mapped Header (Our database)</h3>
-		<ul>
-			<li *ngFor="let header of testOurHeaders; let i = index">
-				<select
-					[(ngModel)]="outputSelectedHeaders[i]"
-					(ngModelChange)="onOutputSelectionChange($event, i)"
-					name="outputSelectedHeader{{ i }}"
-					id="">
-					<option
-						*ngFor="let headerItem of testOurHeaders"
-						[value]="headerItem.name"
-						[disabled]="headerItem.selected">
-						{{
-							headerItem.name === 'Name'
-								? 'Name (FIRST NAME + SURNAME)'
-								: headerItem.name
-						}}
-					</option>
-				</select>
-			</li>
-		</ul>
-	</div>
-	<div class="container column">
-		<h3 class="arrow">-></h3>
-		<ul class="map-to">
-			<li
-				class="map-to"
-				*ngFor="let header of testHeaders">
-				Map to
-			</li>
-		</ul>
-	</div>
-	<div
-		*ngIf="headers.length > 0"
-		class="container column">
-		<h3>{{ uploadedFile ? uploadedFile.name : 'FileName' }} Headers</h3>
-		<ul>
-			<li *ngFor="let header of testHeaders; let i = index">
-				Column {{ i }}
-				<select
-					name="inputSelectedHeader{{ i }}"
-					id=""
-					[(ngModel)]="inputSelectedHeaders[i]"
-					(ngModelChange)="onInputSelectionChange($event, i)">
-					<option
-						*ngFor="let headerItem of testHeaders"
-						[value]="headerItem.name"
-						[disabled]="
-							headerItem.selected && headerItem.name !== inputSelectedHeaders[i]
-						">
-						{{ headerItem.name }}
-					</option>
-				</select>
-			</li>
-		</ul>
-	</div>
+		<div
+			class="container column checkbox-col"
+			*ngIf="inputFileHeaders.length > 0">
+			<div class="container header-wrapper">
+				<h3 class="join header">Join with column?</h3>
+			</div>
+			<ul>
+				<li *ngFor="let header of testOurHeaders; let i = index">
+					<mat-checkbox
+						#joinColumnCheckbox
+						[(ngModel)]="columnsToJoin[i]"
+						[disabled]="inputSelectedHeaders[i] === undefined"></mat-checkbox>
+				</li>
+			</ul>
+		</div>
 
-	<div class="container column">
-		<h3>Save the mapping</h3>
-		<ul class="save-column">
-			<li *ngFor="let header of testOurHeaders; let i = index">
-				<button
-					#saveMappingButton
-					mat-flat-button
-					color="primary"
-					(click)="saveMapping(i)">
-					Save
-				</button>
-			</li>
-		</ul>
+		<div
+			*ngIf="inputFileHeaders.length > 0 && columnsToJoin"
+			class="container column">
+			<div class="container header-wrapper">
+				<h3>Your File Columns</h3>
+			</div>
+			<ul>
+				<li *ngFor="let header of testOurHeaders; let i = index">
+					<select
+						[disabled]="!columnsToJoin[i]"
+						name="inputSelectedHeader{{ i }}"
+						id=""
+						[(ngModel)]="inputJoinedHeaders[i]"
+						(ngModelChange)="onInputJoinedSelectionChange($event, i)">
+						<option
+							*ngFor="let headerItem of inputFileHeaders; let j = index"
+							[value]="headerItem.name"
+							[disabled]="columnsToJoin[i] === columnsToJoin[j] || i === j">
+							{{ headerItem.name }}
+						</option>
+					</select>
+				</li>
+			</ul>
+		</div>
+
+		<div
+			class="container column"
+			*ngIf="inputFileHeaders.length > 0">
+			<div class="container header-wrapper">
+				<h3 class="arrow">-></h3>
+			</div>
+			<ul class="map-to">
+				<li
+					class="map-to"
+					*ngFor="let header of testOurHeaders">
+					Map to
+				</li>
+			</ul>
+		</div>
+
+		<div class="container column">
+			<div class="container header-wrapper">
+				<h3>Target Columns To Map To</h3>
+			</div>
+			<ul>
+				<li *ngFor="let header of testOurHeaders; let i = index">
+					<select
+						[(ngModel)]="outputSelectedHeaders[i]"
+						(ngModelChange)="onOutputSelectionChange($event, i)"
+						name="outputSelectedHeader{{ i }}"
+						id="">
+						<option
+							*ngFor="let headerItem of testOurHeaders"
+							[value]="headerItem.name"
+							[disabled]="headerItem.selected">
+							{{
+								headerItem.name === 'Name'
+									? 'Name (FIRST NAME + SURNAME)'
+									: headerItem.name
+							}}
+						</option>
+					</select>
+				</li>
+			</ul>
+		</div>
+
+		<div class="container column">
+			<div class="container header-wrapper">
+				<h3>Save the mapping</h3>
+			</div>
+			<ul class="save-column">
+				<li *ngFor="let header of testOurHeaders; let i = index">
+					<button
+						#saveMappingButton
+						mat-flat-button
+						color="primary"
+						(click)="saveMapping(i)">
+						Save
+					</button>
+				</li>
+			</ul>
+		</div>
+		<!-- <div class="container column dev show">
+			<div class="container header-wrapper">
+				<h3>Selected Mapping</h3>
+			</div>
+			<ul class="dev display">
+				<li
+					class="display"
+					*ngFor="let header of inputFileHeaders; let i = index">
+					<span class="right">
+						{{ inputSelectedHeaders[i] }}
+					</span>
+					<span
+						class="and"
+						*ngIf="inputJoinedHeaders[i]">
+						&nbsp; &amp; &nbsp;{{ inputJoinedHeaders[i] }}</span
+					>
+					<span
+						class="map"
+						*ngIf="outputSelectedHeaders[i]">
+						&nbsp; mapped to: &nbsp;
+					</span>
+					<span class="left">
+						{{ outputSelectedHeaders[i] }}
+					</span>
+				</li>
+			</ul>
+		</div> -->
 	</div>
-	<div class="container column dev show">
-		<h3>Selected Mapping</h3>
-		<ul class="dev display">
-			<li class="display" *ngFor="let header of testHeaders; let i = index">
-				<span class="left">
-					{{ outputSelectedHeaders[i] }}
-				</span>
-				<span class="map" *ngIf="outputSelectedHeaders[i]"> &nbsp; mapped to: &nbsp; </span>
-				<span class="right">
-					{{ inputSelectedHeaders[i] }}
-				</span>
-			</li>
-		</ul>
+	<div class="final-display">
+		{{ selectedMapping | json }}
+	</div>
+	<div class="container column center import-all">
+		<button
+			mat-flat-button
+			color="primary"
+			[disabled]="!finalSaveEnabled"
+			(click)="onImportClick()">
+			Import Database
+		</button>
 	</div>
 </div>

@@ -1,0 +1,20 @@
+:host {
+	display: block;
+	max-width: 1440px;
+	margin: 0 auto;
+	app-upload-file {
+		height: 220px !important;
+	}
+
+}
+
+.wrapper {
+	display: block;
+	width: fit-content;
+	margin: 0 auto;
+}
+
+button.simulate {
+	margin: 1rem auto;
+}
+
