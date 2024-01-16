@@ -94,8 +94,11 @@ export class HttpService {
 			);
 	}
 
-	dbBwFrom(data):Observable<any>{
-		return this.http.post<any>(`${this.apiUrl}/player-database/bridgewebs/from`,data)
+	dbBwFrom(data): Observable<any> {
+		return this.http.post<any>(
+			`${this.apiUrl}/player-database/bridgewebs/from`,
+			data
+		);
 	}
 
 	postCurrent(data, gamecode, dir_key): Observable<any> {
@@ -155,5 +158,13 @@ export class HttpService {
 		console.log('restore historic invoked');
 
 		return this.http.post<any>(`${this.apiUrl}/historic-games/restore`, data);
+	}
+
+	importPlayerDatabase(payload): Observable<any> {
+		console.log('payload: ', payload);
+		return this.http.post<any>(
+			`${this.apiUrl}/player-database/import-new`,
+			payload
+		);
 	}
 }

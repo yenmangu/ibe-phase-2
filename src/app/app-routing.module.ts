@@ -7,7 +7,7 @@ import { PairsTableComponent } from './admin/games/pairs-table/pairs-table.compo
 import { GamesComponent } from './admin/games/games.component';
 import { StartingLineupComponent } from './shared/starting-lineup/starting-lineup.component';
 import { HandComponent } from './dev/hand/hand.component';
-import { DemoPageComponent } from './shared/demo-page/demo-page.component';
+import { DatabaseImportComponent } from './shared/database-import/database-import.component';
 
 const routes: Routes = [
 	{ path: 'dev', component: GamesComponent },
@@ -27,7 +27,7 @@ const routes: Routes = [
 		component: StartingLineupComponent
 	},
 	{ path: 'dev/hand', component: HandComponent },
-	{ path: 'dev/demo', component: DemoPageComponent },
+	{ path: 'dev/demo', component: DatabaseImportComponent },
 	{
 		path: '',
 		pathMatch: 'full',

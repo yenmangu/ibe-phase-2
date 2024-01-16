@@ -1,12 +1,27 @@
 :host {
+	display: block;
 	width: 100%;
+	max-width: 1440px;
+	margin: 0 auto;
 }
 h2,
 h4 {
 	text-align: center;
 }
 
-.container.upload {
+.main {
+	justify-content: center;
+	gap: 2rem;
+}
+
+.left,
+.middle,
+.right {
+	width: 300px;
+}
+
+.container.upload,
+.container.delete {
 	width: 100%;
 	padding-left: 1rem;
 	padding-right: 1rem;

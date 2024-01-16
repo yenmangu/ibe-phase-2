@@ -1,0 +1,51 @@
+<p>
+	Try selecting various options and mappings and pressing save. Reselecting an
+	option will re enable the button
+</p>
+<ng-container *ngIf="!selectedMapping && !importStart">
+	<app-upload-file
+		(selectedFilesChange)="onFileListChange($event)"
+		(signalUpload)="receiveFile($event)"></app-upload-file>
+</ng-container>
+<div
+	class="wrapper"
+	*ngIf="!importStart">
+	<button
+		class="simulate"
+		mat-flat-button
+		color="primary"
+		(click)="simulateFile()">
+		Simulate uploaded file
+	</button>
+</div>
+
+<ng-container *ngIf="importStart && !importSuccess">
+	<mat-spinner class="import-spinner"></mat-spinner>
+</ng-container>
+
+<ng-container *ngIf="importSuccess">
+	<h4>
+		Success uploading database. Please refresh database to see the latest import.
+	</h4>
+</ng-container>
+
+<ng-container
+	*ngIf="readyForMapping && uploadedHeaders.length > 0 && !selectedMapping">
+	<app-csv-mapping
+		[uploadedHeaders]="uploadedHeaders"
+		[uploadedFile]="fileToMap"
+		(headerEmitter)="handleImport($event)"></app-csv-mapping>
+</ng-container>
+<div
+	class="wrapper"
+	*ngIf="!importStart">
+	<button
+		mat-flat-button
+		color="primary"
+		(click)="dbImportTest()">
+		Simulate database import
+	</button>
+</div>
+<div class="display">
+	{{ trandsformedCSV }}
+</div>

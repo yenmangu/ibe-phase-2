@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { catchError, tap } from 'rxjs';
 import { HandActionsHttpService } from 'src/app/shared/services/hand-actions-http.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
+import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component';
 @Component({
 	selector: 'app-hand-records-landing',
 	templateUrl: './hand-records-landing.component.html',
@@ -20,7 +22,8 @@ export class HandRecordsLandingComponent implements OnInit {
 
 	constructor(
 		private handActions: HandActionsHttpService,
-		private snackbar: MatSnackBar
+		private snackbar: MatSnackBar,
+		private dialog: MatDialog
 	) {}
 
 	ngOnInit(): void {
@@ -95,5 +98,24 @@ export class HandRecordsLandingComponent implements OnInit {
 		if (this.downloadError) {
 			this.downloadError = false;
 		}
+	}
+	deleteHand() {
+		const dialogRef = this.dialog.open(DeleteDialogComponent, {
+			width: '360px'
+		});
+		dialogRef.afterClosed().subscribe(result => {
+			if (result) {
+				this.handActions.deleteHandRecord({ gameCode: this.gameCode }).subscribe({
+					next: response => {
+						if (response.success === true) {
+							this.snackbar.open(
+								'Hand config deleted. please refresh the database to see the latest changes',
+								'Dismiss'
+							);
+						}
+					}
+				});
+			}
+		});
 	}
 }

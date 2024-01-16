@@ -1,5 +1,5 @@
 <h3>App Interface Settings</h3>
-<ng-container *ngIf="formPopulated">
+<ng-container *ngIf="formPopulated && breakpoint !== 'handset'">
 	<form [formGroup]="appInterfaceForm">
 		<div class="grid-container container column">
 			<div class="grid-row players-see">
@@ -135,4 +135,119 @@
 			{{ getButtonMessage() ? 'Success' : 'Save' }}
 		</button>
 	</form>
+</ng-container>
+<ng-container *ngIf="breakpoint === 'handset' && formPopulated">
+	<div class="container column center">
+		<form [formGroup]="appInterfaceForm">
+			<div class="form-section container column mobile">
+				<h4>Players Can See:</h4>
+				<div class="container row">
+					<mat-checkbox
+						formControlName="handDiagrams"
+						value="false"
+						>Hand Diagrams</mat-checkbox
+					>
+					<mat-checkbox
+						formControlName="ownResults"
+						value="false"
+						>Own Results</mat-checkbox
+					>
+				</div>
+				<div class="container row">
+					<mat-checkbox
+						*ngIf="appInterfaceForm.get('ownResults').value === true"
+						formControlName="othersResults"
+						value="false"
+						>Others Results</mat-checkbox
+					>
+					<mat-checkbox
+						formControlName="rankings"
+						value="false"
+						>Rankings</mat-checkbox
+					>
+				</div>
+			</div>
+			<div class="form-section container column mobile">
+				<h4>Players Can Change:</h4>
+				<div
+					class="container row mobile"
+					formArrayName="playersChange">
+					<div
+						*ngFor="let configItem of playersChangeConfig; let i = index"
+						[formGroupName]="i">
+						<mat-checkbox
+							[formControlName]="'control' + i"
+							[checked]="configItem.value"
+							>{{ configItem.name }}</mat-checkbox
+						>
+					</div>
+				</div>
+			</div>
+			<div class="form-section container column mobile">
+				<h4>Players Can Input:</h4>
+				<div
+					class="container row mobile"
+					formArrayName="playersInput">
+					<div
+						*ngFor="let configItem of playersInputConfig; let i = index"
+						[formGroupName]="i">
+						<mat-form-field
+							><mat-label>{{ configItem.name }}</mat-label>
+							<mat-select [formControlName]="'control' + i">
+								<mat-option
+									*ngFor="let value of configItem.values"
+									[value]="value"
+									>{{ value }}</mat-option
+								>
+							</mat-select></mat-form-field
+						>
+					</div>
+				</div>
+			</div>
+			<div class="form-section container column mobile">
+				<h4>Show:</h4>
+				<div class="container row mobile">
+					<mat-checkbox
+						formControlName="flash"
+						value="false"
+						>Flash Scores</mat-checkbox
+					>
+					<mat-checkbox
+						formControlName="qaba"
+						value="false"
+						>Quick-adjust button</mat-checkbox
+					>
+					<mat-checkbox
+						formControlName="scov"
+						value="false"
+						>Opps Verification</mat-checkbox
+					>
+				</div>
+			</div>
+			<div class="form-section container column mobile">
+				<h4>Warn Players On:</h4>
+				<div
+					class="container row mobile"
+					formArrayName="warnPlayers">
+					<div
+						*ngFor="let option of warnPlayersConfig; let i = index"
+						[formGroupName]="i">
+						<mat-checkbox
+							[formControlName]="'control' + i"
+							[checked]="option.value"
+							>{{ option.name }}</mat-checkbox
+						>
+					</div>
+				</div>
+			</div>
+			<div class="button-wrapper mobile column center">
+				<button
+					mat-flat-button
+					(click)="getAppInterfaceValues()"
+					color="primary">
+					{{ getButtonMessage() ? 'Success' : 'Save' }}
+				</button>
+			</div>
+		</form>
+	</div>
 </ng-container>

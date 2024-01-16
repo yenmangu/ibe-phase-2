@@ -8,12 +8,11 @@
 				<h3>Clear Mapping</h3>
 			</div>
 			<ul class="clear-list">
-				<li *ngFor="let header of testOurHeaders; let i = index">
+				<li *ngFor="let header of finalOurHeaders; let i = index">
 					<button
 						#clearButton
 						class="clear-button"
 						mat-flat-button
-						[disabled]="inputSelectedHeaders[i] === undefined"
 						color="warn"
 						(click)="clearMapping(i)">
 						Clear
@@ -28,7 +27,7 @@
 				<h3>Your File Columns</h3>
 			</div>
 			<ul>
-				<li *ngFor="let header of testOurHeaders; let i = index">
+				<li *ngFor="let header of finalOurHeaders; let i = index">
 					<select
 						name="inputSelectedHeader{{ i }}"
 						id=""
@@ -54,7 +53,7 @@
 				<h3 class="join header">Join with column?</h3>
 			</div>
 			<ul>
-				<li *ngFor="let header of testOurHeaders; let i = index">
+				<li *ngFor="let header of finalOurHeaders; let i = index">
 					<mat-checkbox
 						#joinColumnCheckbox
 						[(ngModel)]="columnsToJoin[i]"
@@ -70,7 +69,7 @@
 				<h3>Your File Columns</h3>
 			</div>
 			<ul>
-				<li *ngFor="let header of testOurHeaders; let i = index">
+				<li *ngFor="let header of finalOurHeaders; let i = index">
 					<select
 						[disabled]="!columnsToJoin[i]"
 						name="inputSelectedHeader{{ i }}"
@@ -97,7 +96,7 @@
 			<ul class="map-to">
 				<li
 					class="map-to"
-					*ngFor="let header of testOurHeaders">
+					*ngFor="let header of finalOurHeaders">
 					Map to
 				</li>
 			</ul>
@@ -108,14 +107,14 @@
 				<h3>Target Columns To Map To</h3>
 			</div>
 			<ul>
-				<li *ngFor="let header of testOurHeaders; let i = index">
+				<li *ngFor="let header of finalOurHeaders; let i = index">
 					<select
 						[(ngModel)]="outputSelectedHeaders[i]"
 						(ngModelChange)="onOutputSelectionChange($event, i)"
 						name="outputSelectedHeader{{ i }}"
 						id="">
 						<option
-							*ngFor="let headerItem of testOurHeaders"
+							*ngFor="let headerItem of finalOurHeaders; let j = index"
 							[value]="headerItem.name"
 							[disabled]="headerItem.selected">
 							{{
@@ -134,7 +133,7 @@
 				<h3>Save the mapping</h3>
 			</div>
 			<ul class="save-column">
-				<li *ngFor="let header of testOurHeaders; let i = index">
+				<li *ngFor="let header of finalOurHeaders; let i = index">
 					<button
 						#saveMappingButton
 						mat-flat-button

@@ -32,3 +32,16 @@
 }
 .results {
 }
+
+.row.mobile {
+	flex-wrap: wrap;
+	gap: 0.4rem;
+}
+.button-wrapper.mobile {
+	width: fit-content;
+	margin: auto;
+	margin-top: 2rem;
+	button {
+		margin: auto;
+	}
+}

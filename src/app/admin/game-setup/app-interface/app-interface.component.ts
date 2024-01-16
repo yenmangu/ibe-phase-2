@@ -9,6 +9,7 @@ import {
 	OnDestroy
 } from '@angular/core';
 import { FormGroup, FormArray, FormBuilder, FormControl } from '@angular/forms';
+import { BreakpointService } from 'src/app/shared/services/breakpoint.service';
 
 @Component({
 	selector: 'app-app-interface',
@@ -58,8 +59,13 @@ export class AppInterfaceComponent implements OnInit, AfterViewInit, OnDestroy {
 	appInterfaceForm: FormGroup;
 	formPopulated: boolean = false;
 	clicked: boolean = false;
+	breakpoint: string = '';
 
-	constructor(private fb: FormBuilder, private cd: ChangeDetectorRef) {
+	constructor(
+		private fb: FormBuilder,
+		private cd: ChangeDetectorRef,
+		private breakpointService: BreakpointService
+	) {
 		this.appInterfaceForm = this.createFormGroup();
 
 		this.createFormControls();
@@ -71,7 +77,9 @@ export class AppInterfaceComponent implements OnInit, AfterViewInit, OnDestroy {
 		// 	JSON.stringify(this.appInterfaceSettings, null, 2)
 		// );
 		// console.log('app interface form: ', this.appInterfaceForm.controls);
-
+		this.breakpointService.currentBreakpoint$.subscribe(breakpoint => {
+			this.breakpoint = breakpoint;
+		});
 		if (this.appInterfaceForm && this.appInterfaceSettings) {
 			this.cd.detectChanges();
 			console.log('form and app interface settings are present. Populating form: ');
@@ -88,8 +96,8 @@ export class AppInterfaceComponent implements OnInit, AfterViewInit, OnDestroy {
 		// console.log('app-interface form: ', this.appInterfaceForm.controls);
 		this.appInterfaceForm.valueChanges.subscribe(data => {
 			// console.log('app intfc val change: ', data);
-			if(data){
-				this.clicked = true
+			if (data) {
+				this.clicked = true;
 			}
 		});
 		console.log('appInterfaceForm initiated');
@@ -97,11 +105,11 @@ export class AppInterfaceComponent implements OnInit, AfterViewInit, OnDestroy {
 
 	ngAfterViewInit(): void {}
 
-	getButtonMessage():boolean{
-		if(!this.clicked && this.successMessage){
-			return true
+	getButtonMessage(): boolean {
+		if (!this.clicked && this.successMessage) {
+			return true;
 		} else {
-			return false
+			return false;
 		}
 	}
 

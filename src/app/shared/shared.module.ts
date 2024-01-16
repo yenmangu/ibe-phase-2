@@ -27,7 +27,7 @@ import { LoginDialogComponent } from './login-dialog/login-dialog.component';
 import { SpectateComponent } from './spectate/spectate.component';
 import { CustomSnackbarComponent } from './custom-snackbar/custom-snackbar.component';
 import { CsvMappingComponent } from './csv-mapping/csv-mapping.component';
-import { DemoPageComponent } from './demo-page/demo-page.component';
+import { DatabaseImportComponent } from './database-import/database-import.component';
 
 // Modules
 
@@ -52,7 +52,7 @@ import { DemoPageComponent } from './demo-page/demo-page.component';
 		SpectateComponent,
 		CustomSnackbarComponent,
   CsvMappingComponent,
-  DemoPageComponent,
+  DatabaseImportComponent,
   
 	],
 	imports: [

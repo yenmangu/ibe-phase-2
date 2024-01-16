@@ -287,7 +287,6 @@ export class HandActionsComponent implements OnInit, AfterViewInit {
 			const values = { ...this.ecatsForm.value };
 		}
 	}
-
 	deleteHand() {
 		const dialogRef = this.dialog.open(DeleteDialogComponent, {
 			width: '360px'
@@ -299,10 +298,7 @@ export class HandActionsComponent implements OnInit, AfterViewInit {
 					.subscribe({
 						next: response => {
 							if (response.success === true) {
-								this.snackbar.open(
-									'Hand config deleted. please refresh the database to see the latest changes',
-									'Dismiss'
-								);
+								this.snackbar.open('Hand config deleted.', 'Dismiss');
 							}
 						}
 					});

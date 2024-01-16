@@ -37,11 +37,7 @@ export class CsvMappingComponent implements OnInit, AfterViewInit, OnChanges {
 
 	// Input here represents the input file header
 	// Output here represents 'our' database headers
-	selectedMapping: { [key: number]: { input: string; output: string } } = {};
-
-	inputSelectedHeaders: string[] = [];
-	outputSelectedHeaders: string[] = [];
-	inputJoinedHeaders: string[] = [];
+	selectedMapping: { [key: number]: { input: string[]; output: string[] } } = {};
 
 	finalSaveEnabled: boolean = false;
 
@@ -80,16 +76,21 @@ export class CsvMappingComponent implements OnInit, AfterViewInit, OnChanges {
 		{ name: 'BBOUSERNAME', selected: false }
 	];
 
-	testOurHeaders: any[] = [
+	finalOurHeaders: any[] = [
 		{ name: 'Name (First Name + Surname)', selected: false },
 		{ name: 'Email', selected: false },
 		{ name: 'Phone', selected: false },
+		{ name: 'Handicap', selected: false },
 		{ name: 'EBU', selected: false },
 		{ name: 'BBO Username', selected: false }
 	];
 
 	ourHeaders: string[] = ['Name', 'Email', 'Phone', 'EBU', 'BBO User Name'];
 	columnsToJoin: boolean[] = new Array(this.inputFileHeaders.length).fill(false);
+
+	inputSelectedHeaders: string[] = [];
+	outputSelectedHeaders: string[] = this.finalOurHeaders.map(header => header.name);
+	inputJoinedHeaders: string[] = [];
 
 	ngOnInit(): void {
 		if (this.uploadedFile) {
@@ -99,15 +100,17 @@ export class CsvMappingComponent implements OnInit, AfterViewInit, OnChanges {
 
 	ngAfterViewInit(): void {
 		console.log('Save buttons: ', this.saveMappingButtons);
-		this.saveMappingButtons.changes
-			.pipe(
-				startWith(null),
-				map(() => this.saveMappingButtons.toArray())
-			)
-			.subscribe(buttons => {
-				console.log('Save Buttons: ', buttons);
-			});
-
+		// this.saveMappingButtons.changes
+		// 	.pipe(
+		// 		startWith(null),
+		// 		map(() => this.saveMappingButtons.toArray())
+		// 	)
+		// 	.subscribe(buttons => {
+		// 		console.log('Save Buttons: ', buttons);
+		// 	});
+		this.saveMappingButtons.forEach(button => {
+			this.buttonsArray.push(button);
+		});
 		this.clearButtons.forEach(button => {
 			this.clearButtonsArray.push(button);
 		});
@@ -136,6 +139,7 @@ export class CsvMappingComponent implements OnInit, AfterViewInit, OnChanges {
 			headerItem.selected = false;
 			if (this.inputSelectedHeaders.includes(headerItem.name)) {
 				headerItem.selected = true;
+				this.clearButtonsArray[i].disabled = false;
 			}
 		}
 	}
@@ -148,6 +152,7 @@ export class CsvMappingComponent implements OnInit, AfterViewInit, OnChanges {
 				this.inputJoinedHeaders.includes(headerItem.name)
 			) {
 				headerItem.selected = true;
+				this.clearButtonsArray[i].disabled = false;
 			}
 		}
 	}
@@ -155,10 +160,11 @@ export class CsvMappingComponent implements OnInit, AfterViewInit, OnChanges {
 	onOutputSelectionChange(newValue: string, i: number) {
 		this.outputSelectedHeaders[i] = newValue;
 		this.enableButton(i);
-		for (const headerItem of this.testOurHeaders) {
+		for (const headerItem of this.finalOurHeaders) {
 			headerItem.selected = false;
 			if (this.outputSelectedHeaders.includes(headerItem.name)) {
 				headerItem.selected = true;
+				this.clearButtonsArray[i].disabled = false;
 			}
 		}
 	}
@@ -168,14 +174,40 @@ export class CsvMappingComponent implements OnInit, AfterViewInit, OnChanges {
 	}
 
 	private enableButton(index: number) {
-		if (index >= 0 && index < this.buttonsArray.length) {
-			const buttonAtIndex: MatButton = this.buttonsArray[index];
-			if (buttonAtIndex) {
-				buttonAtIndex.disabled = false;
-			}
-		} else {
-			console.log('Invalid index or button not found');
+		const buttonAtIndex: MatButton = this.buttonsArray[index];
+		if (buttonAtIndex) {
+			buttonAtIndex.disabled = false;
 		}
+	}
+
+	public getDefaultValue(index) {
+		console.log('getDefaultValue called with index:', index);
+
+		// console.log('default value: ', this.finalOurHeaders[index].name);
+		if (index >= 0 && index < this.finalOurHeaders.length) {
+			console.log('passed boundary check');
+
+			const defaultValue = this.finalOurHeaders[index].name;
+			console.log('Returning defaultValue:', defaultValue);
+			return defaultValue;
+		}
+		return '';
+		// switch (index) {
+		// 	case 0:
+		// 		return 'Name (First Name + Surname)';
+		// 	case 1:
+		// 		return 'Email';
+		// 	case 2:
+		// 		return 'Phone';
+		// 	case 3:
+		// 		return 'Handicap';
+		// 	case 4:
+		// 		return 'EBU';
+		// 	case 5:
+		// 		return 'BBO Username';
+		// 	default:
+		// 		return ''; // Provide a default value or handle other cases
+		// }
 	}
 
 	public saveMapping(index: number) {
@@ -191,16 +223,19 @@ export class CsvMappingComponent implements OnInit, AfterViewInit, OnChanges {
 			if (buttonAtIndex) {
 				// Save the mapping
 				this.selectedMapping[index] = {
-					input: this.inputSelectedHeaders[index],
-					output: this.outputSelectedHeaders[index]
+					input: [this.inputSelectedHeaders[index]],
+					output: [this.outputSelectedHeaders[index]]
 				};
+				if (this.inputJoinedHeaders[index]) {
+					this.selectedMapping[index].input.push(this.inputJoinedHeaders[index]);
+				}
 				buttonAtIndex.disabled = true;
 				this.checkAllButtons();
 			} else {
 				console.log('Button at index is undefined or has no nativeElement');
 			}
 		} else {
-			console.log('Invalid index or button not found');
+			console.log('Invalid index or button not found (saveMapping)');
 		}
 	}
 
@@ -208,7 +243,9 @@ export class CsvMappingComponent implements OnInit, AfterViewInit, OnChanges {
 		const clearButtonAtIndex: MatButton = this.clearButtonsArray[index];
 		const saveButtonAtIndex: MatButton = this.buttonsArray[index];
 		if (clearButtonAtIndex) {
+			this.finalOurHeaders[index].selected = false;
 			this.inputSelectedHeaders[index] = null;
+			this.outputSelectedHeaders[index] = null;
 			this.selectedMapping[index] = null;
 			saveButtonAtIndex.disabled = false;
 			clearButtonAtIndex.disabled = true;

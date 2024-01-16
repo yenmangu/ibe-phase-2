@@ -33,7 +33,7 @@
 					mat-flat-button
 					color="primary"
 					(click)="refreshDatabase()">
-					Refresh Database
+					{{ currentBreakpoint === 'handset' ? 'Refresh' : 'Refresh Database' }}
 				</button>
 				<button
 					mat-flat-button

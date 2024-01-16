@@ -58,7 +58,7 @@
 </div> -->
 <div class="container column center main">
 	<div class="container row main">
-		<div class="container column center">
+		<div class="container column center left">
 			<h3>Upload Hand Record Files</h3>
 
 			<div class="container column upload">
@@ -70,7 +70,7 @@
 					(signalAgain)="resetStatus()"></app-upload-file>
 			</div>
 		</div>
-		<div class="container column center">
+		<div class="container column center middle">
 			<h3>Download Current</h3>
 			<div class="container column center upload download">
 				<h4>Download the current deal file as .pbn</h4>
@@ -99,6 +99,21 @@
 					</button>
 				</div>
 			</ng-container>
+		</div>
+		<div class="container column center right">
+			<h3>Delete Current</h3>
+			<div class="container column center delete">
+				<h4>
+					Delete the current hand record file. This will clear all current hand
+					records.
+				</h4>
+				<button
+					mat-flat-button
+					color="warn"
+					(click)="deleteHand()">
+					Delete
+				</button>
+			</div>
 		</div>
 	</div>
 </div>
