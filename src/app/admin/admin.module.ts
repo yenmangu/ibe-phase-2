@@ -15,11 +15,10 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatInput, MatInputModule } from '@angular/material/input';
+import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 //  Custom
 import { NavigationComponent } from './navigation/navigation.component';
@@ -58,7 +57,7 @@ import { ReportingComponent } from './reporting/reporting.component';
 		HandTabComponent,
 		HandActionsComponent,
 		DeleteDialogComponent,
-  ReportingComponent
+		ReportingComponent
 	],
 	imports: [
 		CommonModule,

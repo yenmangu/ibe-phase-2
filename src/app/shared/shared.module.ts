@@ -28,6 +28,7 @@ import { SpectateComponent } from './spectate/spectate.component';
 import { CustomSnackbarComponent } from './custom-snackbar/custom-snackbar.component';
 import { CsvMappingComponent } from './csv-mapping/csv-mapping.component';
 import { DatabaseImportComponent } from './database-import/database-import.component';
+import { LinExtractionComponent } from './lin-extraction/lin-extraction.component';
 
 // Modules
 
@@ -51,9 +52,9 @@ import { DatabaseImportComponent } from './database-import/database-import.compo
 		LoginDialogComponent,
 		SpectateComponent,
 		CustomSnackbarComponent,
-  CsvMappingComponent,
-  DatabaseImportComponent,
-  
+		CsvMappingComponent,
+		DatabaseImportComponent,
+  LinExtractionComponent
 	],
 	imports: [
 		CommonModule,

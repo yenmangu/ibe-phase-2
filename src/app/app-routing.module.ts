@@ -8,6 +8,7 @@ import { GamesComponent } from './admin/games/games.component';
 import { StartingLineupComponent } from './shared/starting-lineup/starting-lineup.component';
 import { HandComponent } from './dev/hand/hand.component';
 import { DatabaseImportComponent } from './shared/database-import/database-import.component';
+import { LinExtractionComponent } from './shared/lin-extraction/lin-extraction.component';
 
 const routes: Routes = [
 	{ path: 'dev', component: GamesComponent },
@@ -28,6 +29,7 @@ const routes: Routes = [
 	},
 	{ path: 'dev/hand', component: HandComponent },
 	{ path: 'dev/demo', component: DatabaseImportComponent },
+	{ path: 'dev/lin', component: LinExtractionComponent },
 	{
 		path: '',
 		pathMatch: 'full',

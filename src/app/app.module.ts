@@ -34,7 +34,7 @@ import { FontSizeDirective } from './font-size.directive';
 		HandComponent,
 		HandDisplayComponent,
 		PaginationComponent,
-  FontSizeDirective
+		FontSizeDirective
 	],
 	imports: [
 		BrowserModule,
