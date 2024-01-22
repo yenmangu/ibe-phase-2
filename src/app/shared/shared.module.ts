@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 // Material
 // import { MatToolbarModule } from '@angular/material/toolbar';
 import { MaterialModule } from '../material/material.module';
@@ -54,12 +54,13 @@ import { LinExtractionComponent } from './lin-extraction/lin-extraction.componen
 		CustomSnackbarComponent,
 		CsvMappingComponent,
 		DatabaseImportComponent,
-  LinExtractionComponent
+		LinExtractionComponent
 	],
 	imports: [
 		CommonModule,
 		MaterialModule,
 		FormsModule,
+		ReactiveFormsModule,
 		MatFormFieldModule,
 		MatDialogModule
 	],
@@ -69,7 +70,8 @@ import { LinExtractionComponent } from './lin-extraction/lin-extraction.componen
 		UploadFileComponent,
 		DownloadFileComponent,
 		UserDetailsComponent,
-		CustomSnackbarComponent
+		CustomSnackbarComponent,
+		LinExtractionComponent
 	],
 
 	providers: [

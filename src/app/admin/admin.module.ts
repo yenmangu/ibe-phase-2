@@ -40,6 +40,7 @@ import { HandTabComponent } from './hands/hand-tab/hand-tab.component';
 import { HandActionsComponent } from './hands/hand-actions/hand-actions.component';
 import { DeleteDialogComponent } from './hands/delete-dialog/delete-dialog.component';
 import { ReportingComponent } from './reporting/reporting.component';
+import { AdminToolsComponent } from './admin-tools/admin-tools.component';
 
 @NgModule({
 	declarations: [
@@ -57,7 +58,8 @@ import { ReportingComponent } from './reporting/reporting.component';
 		HandTabComponent,
 		HandActionsComponent,
 		DeleteDialogComponent,
-		ReportingComponent
+		ReportingComponent,
+  AdminToolsComponent
 	],
 	imports: [
 		CommonModule,

@@ -10,12 +10,19 @@ import { HandRecordsLandingComponent } from './hands/hand-records-landing/hand-r
 import { HistoricGamesComponent } from './games/historic-games/historic-games.component';
 import { ReportingComponent } from './reporting/reporting.component'; // dev
 import { DatabaseLandingComponent } from './games/database-landing/database-landing.component';
-
+import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.component';
+import { LinExtractionComponent } from '../shared/lin-extraction/lin-extraction.component';
+import { AdminToolsComponent } from './admin-tools/admin-tools.component';
 const routes: Routes = [
 	{
 		path: '',
 		component: AdminComponent,
 		children: [
+			{
+				path: 'welcome-members',
+				component: WelcomeScreenComponent,
+				data: { menuLabel: 'Welcome' }
+			},
 			{
 				path: 'games',
 				component: GamesComponent,
@@ -52,9 +59,14 @@ const routes: Routes = [
 				component: DatabaseLandingComponent,
 				data: { menuLabel: 'Player Database' }
 			},
+			{
+				path: 'admin-tools',
+				component: AdminToolsComponent,
+				data: { menuLabel: 'Admin Tools' }
+			},
 			{ path: 'dashboard', component: DashboardComponent },
 			// Additional admin routes
-			{ path: '', pathMatch: 'full', redirectTo: 'games' }
+			{ path: '', pathMatch: 'full', redirectTo: 'welcome-members' }
 		]
 	}
 ];

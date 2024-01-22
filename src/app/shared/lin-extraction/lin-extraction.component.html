@@ -1,9 +1,48 @@
 <div class="container column main">
 	<h3>Enter Lin string to add to google sheet</h3>
-	<mat-form-field class="lin-text-field">
-		<mat-label>LIN String</mat-label>
-		<textarea
-			[(ngModel)]="linString"
-			matInput></textarea>
-	</mat-form-field>
+	<form
+		class="container column center"
+		[formGroup]="linForm"
+		(ngSubmit)="onSubmit()">
+		<div
+			class="container column form-container"
+			formArrayName="linStringArray">
+			<div
+				*ngFor="let linStringGroup of linStrings.controls; let i = index"
+				class="container row field-row">
+				<mat-form-field
+					class="lin-text-field grey-magenta-theme"
+					[formGroup]="getLinStringsFormGroup(i)">
+					<mat-label>LIN String</mat-label>
+					<textarea
+						formControlName="linString"
+						matInput></textarea>
+				</mat-form-field>
+				<div class="container row input-control-buttons">
+					<button
+						*ngIf="i !== 0"
+						color="warn"
+						mat-flat-button
+						class="minus"
+						(click)="removeLinInput(i)">
+						-
+					</button>
+					<button
+						*ngIf="i === linStrings.length - 1"
+						color="accent"
+						mat-flat-button
+						class="add"
+						(click)="addLinInput()">
+						+
+					</button>
+				</div>
+			</div>
+		</div>
+		<button
+			mat-flat-button
+			color="primary"
+			type="submit">
+			Submit
+		</button>
+	</form>
 </div>

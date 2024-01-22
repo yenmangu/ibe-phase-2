@@ -169,6 +169,13 @@ body.mat-dialog-open {
 	overflow: auto;
 }
 
+// app-welcome-screen {
+// 	width: 100%;
+// }
+app-welcome-screen iframe {
+	height: 500px;
+}
+
 .mat-mdc-unelevated-button.button-white:not(:disabled) {
 	background-color: whitesmoke !important;
 	color: #005e75 !important;
