@@ -21,10 +21,9 @@ export class AdminToolsService {
 		});
 	}
 
-	sendWebhookRequest(data): Observable<any> {
-		const headers = this.getHeaders();
-		return this.http.post<any>(`${this.apiUrl}/admin-tools/extract-lin`, data, {
-			headers
-		});
+	sendUrls(data): Observable<Blob> {
+		return this.http.post(`${this.apiUrl}/admin-tools/extract-lin`, data, {
+			responseType: 'blob'
+		}) as Observable<Blob>;
 	}
 }

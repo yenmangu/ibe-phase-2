@@ -71,8 +71,18 @@ export class LinExtractionComponent implements OnInit {
 			const linFormValues = this.getValues();
 			console.log('Lin form values: ', linFormValues);
 
-			this.webhook.sendWebhookRequest(linFormValues).subscribe({
-				next: response => {},
+			this.webhook.sendUrls(linFormValues).subscribe({
+				next: (response: Blob) => {
+					const blob = new Blob([response], { type: 'text/plain' });
+					const blobURL = window.URL.createObjectURL(blob);
+
+					const link = document.createElement('a');
+					link.href = blobURL;
+					link.download = 'extracted-lin-strings.txt';
+					document.body.appendChild(link);
+					link.click();
+					document.body.removeChild(link);
+				},
 				error: error => {}
 			});
 		}
