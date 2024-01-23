@@ -3,6 +3,29 @@
 	<h4>Update to and from BridgeWebs or your computer/device</h4>
 
 	<div class="container column center database-operations">
+		<div class="container column center import-export">
+			<h3 class="import-export">Import / Export to and from file</h3>
+			<div
+				class="container row inner"
+				[ngClass]="currentBreakpoint">
+				<div class="container column center">
+					<h4>Upload from disk</h4>
+					<app-upload-file
+						(selectedFilesChange)="onFileListChange($event)"
+						(upload)="(selectedFile)"></app-upload-file>
+				</div>
+				<div class="container download column center">
+					<h4>Download to computer / device</h4>
+					<button
+						class="form-button download"
+						color="primary"
+						mat-flat-button
+						(click)="onDatabaseExport()">
+						Download
+					</button>
+				</div>
+			</div>
+		</div>
 		<div class="container column center bridgewebs">
 			<h3>BridgeWebs</h3>
 			<div
@@ -78,29 +101,6 @@
 						</button>
 					</div>
 				</form> -->
-			</div>
-		</div>
-		<div class="container column center import-export">
-			<h3 class="import-export">Import / Export to and from file</h3>
-			<div
-				class="container row inner"
-				[ngClass]="currentBreakpoint">
-				<div class="container column center">
-					<h4>Upload from disk</h4>
-					<app-upload-file
-						(selectedFilesChange)="onFileListChange($event)"
-						(upload)="(selectedFile)"></app-upload-file>
-				</div>
-				<div class="container download column center">
-					<h4>Download to computer / device</h4>
-					<button
-						class="form-button download"
-						color="primary"
-						mat-flat-button
-						(click)="onDatabaseExport()">
-						Download
-					</button>
-				</div>
 			</div>
 		</div>
 	</div>

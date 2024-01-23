@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { WebhookService } from '../services/webhook.service';
+import { AdminToolsService } from '../services/admin-tools.service';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
@@ -14,7 +14,7 @@ export class LinExtractionComponent implements OnInit {
 
 	stringArray: any[] = [];
 
-	constructor(private webhook: WebhookService, private fb: FormBuilder) {}
+	constructor(private webhook: AdminToolsService, private fb: FormBuilder) {}
 
 	ngOnInit(): void {
 		this.initLinForm();
@@ -54,9 +54,24 @@ export class LinExtractionComponent implements OnInit {
 		return this.linStrings.at(index) as FormGroup;
 	}
 
+	getValues() {
+		const values = { ...this.linForm.value };
+		const valueObject: any = {};
+		const valueArray: any[] = [];
+		values.linStringArray.forEach((value, i) => {
+			const urlObject = { url: value.linString };
+			valueArray.push(urlObject);
+		});
+		console.log('values from lin form: ', values);
+		return valueArray;
+	}
+
 	triggerSheetWebhook() {
-		if (this.linString) {
-			this.webhook.sendWebhookRequest(this.linString).subscribe({
+		if (this.linForm) {
+			const linFormValues = this.getValues();
+			console.log('Lin form values: ', linFormValues);
+
+			this.webhook.sendWebhookRequest(linFormValues).subscribe({
 				next: response => {},
 				error: error => {}
 			});

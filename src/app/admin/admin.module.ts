@@ -59,7 +59,7 @@ import { AdminToolsComponent } from './admin-tools/admin-tools.component';
 		HandActionsComponent,
 		DeleteDialogComponent,
 		ReportingComponent,
-  AdminToolsComponent
+		AdminToolsComponent
 	],
 	imports: [
 		CommonModule,
