@@ -167,4 +167,12 @@ export class HttpService {
 			payload
 		);
 	}
+
+	deletePlayerDatabase(data): Observable<any> {
+		const params = {
+			gameCode: data.game_code,
+			dirKey: data.dir_key
+		};
+		return this.http.get(`${this.apiUrl}/player-database/delete`, { params });
+	}
 }

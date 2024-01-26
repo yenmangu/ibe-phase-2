@@ -23,6 +23,7 @@ import { MatCheckbox } from '@angular/material/checkbox';
 export class CsvMappingComponent implements OnInit, AfterViewInit, OnChanges {
 	@Input() uploadedFile: any | null = null;
 	@Input() uploadedHeaders: any | null = null;
+
 	@Output() headerEmitter: EventEmitter<any> = new EventEmitter<any>();
 	@ViewChildren('saveMappingButton') saveMappingButtons: QueryList<MatButton>;
 	buttonsArray: MatButton[] = [];

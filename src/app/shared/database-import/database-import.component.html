@@ -1,13 +1,14 @@
-<p>
+<!-- <p>
 	Try selecting various options and mappings and pressing save. Reselecting an
 	option will re enable the button
-</p>
+</p> -->
 <ng-container *ngIf="!selectedMapping && !importStart">
 	<app-upload-file
 		(selectedFilesChange)="onFileListChange($event)"
-		(signalUpload)="receiveFile($event)"></app-upload-file>
+		(signalUpload)="receiveFile($event)"
+		(cancelSignal)="receiveCancel($event)"></app-upload-file>
 </ng-container>
-<div
+<!-- <div
 	class="wrapper"
 	*ngIf="!importStart">
 	<button
@@ -17,7 +18,7 @@
 		(click)="simulateFile()">
 		Simulate uploaded file
 	</button>
-</div>
+</div> -->
 
 <ng-container *ngIf="importStart && !importSuccess">
 	<mat-spinner class="import-spinner"></mat-spinner>
@@ -30,13 +31,18 @@
 </ng-container>
 
 <ng-container
-	*ngIf="readyForMapping && uploadedHeaders.length > 0 && !selectedMapping">
+	*ngIf="
+		readyForMapping &&
+		uploadedHeaders.length > 0 &&
+		!selectedMapping &&
+		!clearImport
+	">
 	<app-csv-mapping
 		[uploadedHeaders]="uploadedHeaders"
 		[uploadedFile]="fileToMap"
 		(headerEmitter)="handleImport($event)"></app-csv-mapping>
 </ng-container>
-<div
+<!-- <div
 	class="wrapper"
 	*ngIf="!importStart">
 	<button
@@ -45,7 +51,7 @@
 		(click)="dbImportTest()">
 		Simulate database import
 	</button>
-</div>
+</div> -->
 <!-- <div class="display">
 	{{ trandsformedCSV }}
 </div> -->

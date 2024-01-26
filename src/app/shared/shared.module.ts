@@ -71,7 +71,9 @@ import { LinExtractionComponent } from './lin-extraction/lin-extraction.componen
 		DownloadFileComponent,
 		UserDetailsComponent,
 		CustomSnackbarComponent,
-		LinExtractionComponent
+		LinExtractionComponent,
+		DatabaseImportComponent,
+		CsvMappingComponent
 	],
 
 	providers: [

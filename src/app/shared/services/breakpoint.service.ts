@@ -6,16 +6,14 @@ import { Observable, map, tap, distinctUntilChanged } from 'rxjs';
 	providedIn: 'root'
 })
 export class BreakpointService {
-	constructor(private breakpointObserver: BreakpointObserver) {
-
-	}
+	constructor(private breakpointObserver: BreakpointObserver) {}
 
 	get currentBreakpoint$(): Observable<string> {
 		return this.breakpointObserver.observe(Object.values(Breakpoints)).pipe(
 			map(state => {
 				// console.log('BREAKPOINT: ',state);
-				let size = ''
-				let width = 0
+				let size = '';
+				let width = 0;
 
 				if (state.breakpoints[Breakpoints.Large]) {
 					size = 'large';
@@ -23,15 +21,15 @@ export class BreakpointService {
 					size = 'tablet';
 				} else if (state.breakpoints[Breakpoints.Medium]) {
 					size = 'medium';
-
 				} else {
 					size = 'handset';
 				}
-				return size
+				console.log('breakpoint size as determined by the bp service: ', size);
+				return size;
 			}),
-      // Debugging
+			// Debugging
 			// tap(value => console.log(value)),
-      // Necessary
+			// Necessary
 			distinctUntilChanged()
 		);
 	}

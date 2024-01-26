@@ -1,6 +1,8 @@
 :host {
 	display: block;
-	margin: 0 auto;
+	margin: 0 auto 2rem auto;
+	width: 100%;
+	max-width: 1440px;
 }
 
 .main-wrapper {
@@ -11,9 +13,13 @@
 	gap: 0.8rem;
 	margin: 0 auto;
 	justify-content: center;
-	width: calc(100vw - 2rem);
+	width: 100%;
 	max-width: 1440px;
 	padding: 0 2rem;
+}
+
+h2 {
+	text-align: center;
 }
 
 .checkbox-col {

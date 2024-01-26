@@ -1,16 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BreakpointService } from 'src/app/shared/services/breakpoint.service';
 import { HttpService } from 'src/app/shared/services/http.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CustomSnackbarComponent } from '../../../../shared/custom-snackbar/custom-snackbar.component';
-
+import { MatDialog } from '@angular/material/dialog';
 @Component({
 	selector: 'app-import-export',
 	templateUrl: './import-export.component.html',
 	styleUrls: ['./import-export.component.scss']
 })
 export class ImportExportComponent implements OnInit {
+	@ViewChild('deleteDialog') deleteDialog: TemplateRef<any>;
 	currentBreakpoint: string = '';
 	hide: boolean = true;
 	// bridgeWebs
@@ -25,14 +26,18 @@ export class ImportExportComponent implements OnInit {
 	filesDetected: boolean = false;
 	uploadDetected: boolean = false;
 
+	csvMapping: boolean | null = null;
 	gameCode: string = '';
 	dirKey: string = '';
+
+	deleteSuccess: boolean | null = null;
 
 	constructor(
 		private fb: FormBuilder,
 		private breakpointService: BreakpointService,
 		private httpService: HttpService,
-		private snackbar: MatSnackBar
+		private snackbar: MatSnackBar,
+		private dialog: MatDialog
 	) {}
 
 	ngOnInit(): void {
@@ -43,7 +48,6 @@ export class ImportExportComponent implements OnInit {
 		this.buildBwDownloadForm();
 		this.gameCode = localStorage.getItem('GAME_CODE');
 		this.dirKey = localStorage.getItem('DIR_KEY');
-		
 	}
 
 	openSnackbar(message: string, noContact?, error?): void {
@@ -101,6 +105,11 @@ export class ImportExportComponent implements OnInit {
 			}
 		});
 	}
+
+	triggerMappingContainer(event) {
+		this.csvMapping = true;
+	}
+
 	public bridgeWebsDownload() {
 		if (this.bwDownloadForm.valid) {
 			const formData = { ...this.bwDownloadForm.value };
@@ -129,5 +138,40 @@ export class ImportExportComponent implements OnInit {
 				this.openSnackbar('Error generating the XML file.');
 			}
 		});
+	}
+
+	private openDeleteDialog() {
+		this.dialog
+			.open(this.deleteDialog)
+			.afterClosed()
+			.subscribe(result => {
+				if (result) {
+					console.log(result);
+					const data = { gameCode: this.gameCode, dirKey: this.dirKey };
+					this.httpService.deletePlayerDatabase(data).subscribe({
+						next: response => {
+							if (response.success) {
+								this.snackbar.open(
+									'Success deleting database. Please refresh database to see latest changes.',
+									'Dismiss'
+								);
+							}
+						},
+						error: error => {
+							this.snackbar.openFromComponent(CustomSnackbarComponent, {
+								data: { error: error }
+							});
+						}
+					});
+				}
+			});
+	}
+
+	closeDeleteDialog() {
+		this.dialog.closeAll();
+	}
+
+	public onDelete() {
+		this.openDeleteDialog();
 	}
 }

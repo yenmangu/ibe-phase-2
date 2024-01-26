@@ -18,13 +18,12 @@
 	padding-left: 2rem;
 }
 
-@media only screen and (max-width: 500px){
-
+@media only screen and (max-width: 500px) {
 	.container.row.search {
 		justify-content: space-between;
 	}
 
 	button.add-row {
-		height: 46px !important
+		height: 46px !important;
 	}
 }

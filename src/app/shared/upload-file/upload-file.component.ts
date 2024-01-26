@@ -29,6 +29,7 @@ export class UploadFileComponent implements OnInit, AfterViewInit {
 	@Output() signalUpload = new EventEmitter<boolean>();
 	@Output() signalAgain = new EventEmitter<boolean>();
 	@Output() selectedFilesChange = new EventEmitter<any[]>();
+	@Output() cancelSignal = new EventEmitter<any>();
 	selectedFiles: any[] = [];
 
 	constructor(private elementRef: ElementRef, private renderer: Renderer2) {}
@@ -64,7 +65,6 @@ export class UploadFileComponent implements OnInit, AfterViewInit {
 		if (input.files) {
 			this.selectedFiles = Array.from(input.files);
 			this.selectedFilesChange.emit(this.selectedFiles);
-			
 		}
 	}
 
@@ -106,5 +106,6 @@ export class UploadFileComponent implements OnInit, AfterViewInit {
 
 	clearFiles() {
 		this.selectedFiles = [];
+		this.cancelSignal.emit(true);
 	}
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { CsvService } from '../services/csv.service';
 import { HeaderMapping } from '../services/csv.service';
 import { HttpService } from '../services/http.service';
@@ -11,6 +11,8 @@ import { CustomSnackbarComponent } from '../custom-snackbar/custom-snackbar.comp
 	styleUrls: ['./database-import.component.scss']
 })
 export class DatabaseImportComponent implements OnInit {
+	@Output() signalMapping: EventEmitter<boolean> = new EventEmitter<boolean>();
+
 	selectedFiles: any[] = [];
 	uploaded: boolean = false;
 	fileToMap: any | null = null;
@@ -19,7 +21,7 @@ export class DatabaseImportComponent implements OnInit {
 	uploadedHeaders: any[] = [];
 	selectedMapping: { [key: string]: HeaderMapping } | null = null;
 	detectedDelimiter: string = '';
-
+	clearImport: boolean = false;
 	fileAsString: string = '';
 	csvFile: any = '';
 
@@ -30,7 +32,7 @@ export class DatabaseImportComponent implements OnInit {
 
 	meta: any = {};
 	importStart: boolean = false;
-	importSuccess: boolean = false;
+	importSuccess: boolean | null = false;
 
 	testMapping: { [key: string]: HeaderMapping } = {
 		'0': {
@@ -55,7 +57,10 @@ export class DatabaseImportComponent implements OnInit {
 	}
 
 	onFileListChange(files: any[]) {
+		this.clearImport = false;
 		this.selectedFiles = files;
+		this.signalMapping.emit(true);
+		this.uploadedHeaders = [];
 		console.log('File list: ', this.selectedFiles);
 	}
 
@@ -164,9 +169,20 @@ export class DatabaseImportComponent implements OnInit {
 	}
 
 	openSnackbar(message: string, noContact?, error?): void {
-		this.snackbar.openFromComponent(CustomSnackbarComponent, {
-			data: { message, error, noContact }
-		});
+		this.snackbar
+			.openFromComponent(CustomSnackbarComponent, {
+				data: { message, error, noContact }
+			})
+			.afterDismissed()
+			.subscribe({
+				next: () => {
+					this.importStart = false;
+					this.importSuccess = null;
+				},
+				error: error => {
+					console.error(error);
+				}
+			});
 	}
 
 	importToRemote(importData): Observable<any> {
@@ -176,8 +192,13 @@ export class DatabaseImportComponent implements OnInit {
 			importData,
 			meta: this.meta
 		};
+		console.log(JSON.stringify(payload, null, 2));
 
 		return this.httpService.importPlayerDatabase(payload);
+	}
+
+	receiveCancel(signal) {
+		this.clearImport = true;
 	}
 
 	async dbImportTest() {
@@ -204,6 +225,8 @@ export class DatabaseImportComponent implements OnInit {
 								if (response.serverResponse.success) {
 									this.importSuccess = true;
 									console.log('SUCCESS');
+								} else {
+									this.importSuccess = false;
 								}
 							}),
 							catchError(error => {

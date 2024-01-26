@@ -1,5 +1,9 @@
+@import '../../../../../colours.styles.scss';
+
 :host {
+	display: block;
 	max-width: 1440px;
+	padding-bottom: 2rem;
 }
 
 // .bridgewebs {
@@ -7,7 +11,7 @@
 // }
 
 .database-operations {
-	gap: 1rem;
+	gap: 2rem;
 }
 
 .container.bridgewebs,
@@ -16,23 +20,57 @@
 	gap: 1rem;
 }
 
+.block {
+	display: block;
+	width: 100%;
+	height: auto;
+	padding: 1rem;
+	border: 2px solid black;
+	h3 {
+		margin: 0 auto;
+		text-align: center;
+		margin-block-end: 2rem;
+	}
+	.container {
+		margin: 0 auto;
+	}
+}
+
+.container.row.inner {
+	align-items: flex-start;
+}
+
 .inner {
 	gap: 6rem;
+	width: 600px;
+	max-width: 600px;
+	height: auto;
+}
+
+.inner.expand {
+	width: 100%;
+	max-width: none;
 }
 
 h4 {
 	margin-block-start: 0;
 	margin: 0 auto;
 	margin-bottom: 2rem;
-}
-h3 {
-	margin-block-start: 0;
 	text-decoration: underline;
 	text-underline-offset: 6px;
 	text-decoration-thickness: 2px;
 }
+h3 {
+	margin-block-start: 0;
+	// text-decoration: underline;
+}
+
+.bridgewebs .inner {
+	justify-content: center;
+}
+
 .bridgewebs-form {
-	max-width: 300px;
+	max-width: 100%;
 }
 
 .container.handset {
@@ -52,7 +90,25 @@ h3.import-export {
 }
 .container.download {
 	gap: 2rem;
+	height: 100%;
 }
 app-upload-file {
 	max-width: 300px;
+}
+app-database-import {
+	margin: 0 auto;
+}
+.container.delete {
+	margin-top: 2rem;
+	.block {
+		border-color: $ibe-alert-single;
+	}
+}
+
+.database-operations.large {
+	// flex-direction: row;
+	// align-items: flex-start;
+	.inner {
+		min-height: 360px;
+	}
 }
