@@ -81,7 +81,7 @@ export class CsvMappingComponent implements OnInit, AfterViewInit, OnChanges {
 		{ name: 'Name (First Name + Surname)', selected: false },
 		{ name: 'Email', selected: false },
 		{ name: 'Phone', selected: false },
-		{ name: 'Handicap', selected: false },
+		// { name: 'Handicap', selected: false },
 		{ name: 'EBU', selected: false },
 		{ name: 'BBO Username', selected: false }
 	];
