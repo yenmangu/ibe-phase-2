@@ -1,0 +1,59 @@
+<div class="container column center">
+	<h3>Download HTML / PDF</h3>
+	<form [formGroup]="htmlPdfForm">
+		<div class="form container column center">
+			<mat-form-field>
+				<mat-label>Event Name</mat-label>
+				<input
+					matInput
+					formControlName="eventName" />
+			</mat-form-field>
+			<mat-form-field>
+				<mat-label>Director Name</mat-label>
+				<input
+					matInput
+					formControlName="directorName" />
+			</mat-form-field>
+			<mat-form-field>
+				<mat-label>Comments</mat-label>
+				<input
+					matInput
+					formControlName="comments" />
+			</mat-form-field>
+			<div class="radio container row">
+				<mat-radio-group
+					formControlName="fileType"
+					aria-label="Select a file type option">
+					<mat-radio-button value="html">HTML</mat-radio-button>
+					<mat-radio-button value="pdf">PDF</mat-radio-button>
+				</mat-radio-group>
+			</div>
+			<div class="checkbox container column">
+				<mat-checkbox formControlName="rankings">Rankings</mat-checkbox>
+				<mat-checkbox formControlName="matrix">Matrix</mat-checkbox>
+				<mat-checkbox formControlName="hands">Hands</mat-checkbox>
+				<mat-checkbox formControlName="scorecards">Scorecards</mat-checkbox>
+			</div>
+			<div class="button-wrapper container row">
+				<button
+					mat-flat-button
+					color="accent"
+					(click)="handleHtmlPdf({ preview: true })">
+					Preview
+				</button>
+				<button
+					mat-flat-button
+					color="primary"
+					(click)="handleHtmlPdf({ download: true })">
+					Download
+				</button>
+			</div>
+		</div>
+	</form>
+	<button
+		mat-flat-button
+		color="warn"
+		(click)="closeDialog()">
+		Cancel
+	</button>
+</div>
