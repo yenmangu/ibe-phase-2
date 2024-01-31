@@ -81,6 +81,7 @@ export class NavigationComponent
 
 	ngOnInit(): void {
 		console.log('\n\nNAVIGATION COMPONENT\n\n');
+		this.navigationService.setLoaded(true);
 		this.setMenuLabel();
 		this.router.events
 			.pipe(filter(event => event instanceof NavigationEnd))
@@ -137,12 +138,15 @@ export class NavigationComponent
 		this.navigationService.setSelected(currentLabel);
 	}
 
-	handleLinkClick(selected: string) {
-		this.navigationService.setSelected(selected);
+	handleLinkClick() {
+		console.log('HandleLinkClick');
+		this.toggleSidenav();
 	}
 
 	toggleSidenav(): void {
-		this.drawer.toggle();
+		if (this.drawer) {
+			this.drawer.toggle();
+		}
 	}
 
 	handleLogout(): void {

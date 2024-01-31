@@ -17,62 +17,57 @@
 					routerLink="/admin/welcome-members"
 					[routerLinkActive]="['active-link']"
 					class="nav-link"
+					(click)="handleLinkClick()"
 					>Members Area</a
 				>
 				<a
 					routerLink="/admin/game-setup"
 					[routerLinkActive]="['active-link']"
 					class="nav-link"
+					(click)="handleLinkClick()"
 					>Game Code Settings</a
 				>
 				<a
 					routerLink="/admin/games"
 					[routerLinkActive]="['active-link']"
 					class="nav-link"
+					(click)="handleLinkClick()"
 					>Game In Progress</a
 				>
 				<a
 					routerLink="/admin/account"
 					[routerLinkActive]="['active-link']"
 					class="nav-link"
+					(click)="handleLinkClick()"
 					>Account Settings</a
 				>
 				<a
 					routerLink="/admin/hand-records"
 					[routerLinkActive]="['active-link']"
 					class="nav-link"
+					(click)="handleLinkClick()"
 					>Hand Records</a
 				>
 				<a
 					routerLink="/admin/reporting"
 					[routerLinkActive]="['active-link']"
 					class="nav-link"
+					(click)="handleLinkClick()"
 					>Reporting</a
 				>
 				<a
 					routerLink="/admin/historic-games"
 					[routerLinkActive]="['active-link']"
 					class="nav-link"
+					(click)="handleLinkClick()"
 					>Historic Games</a
 				>
 				<a
 					routerLink="/admin/player-database"
 					[routerLinkActive]="['active-link']"
 					class="nav-link"
+					(click)="handleLinkClick()"
 					>Player Database</a
-				>
-				<a
-					routerLink="/admin/database-admin"
-					[routerLinkActive]="['active-link']"
-					class="nav-link"
-					>Database Admin</a
-				>
-
-				<a
-					routerLink="/admin/admin-tools"
-					[routerLinkActive]="['active-link']"
-					class="nav-link"
-					>Admin Tools</a
 				>
 			</div>
 			<ng-container *ngIf="currentBreakpoint === 'handset'">

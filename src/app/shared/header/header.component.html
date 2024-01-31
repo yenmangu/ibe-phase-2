@@ -13,11 +13,10 @@
 		</div>
 	</ng-container>
 	<ng-container *ngIf="!isPublicLink">
-		<div
-			class="container row view"
-			[ngClass]="currentBreakpoint + (authed ? ' authed' : '')">
+		<div class="container row view">
 			<ng-container *ngIf="authService.isAuthedSubject$ | async">
 				<button
+					[disabled]="!this.isNavLoaded"
 					class="menu"
 					mat-flat-button
 					(click)="toggleSidenav()">

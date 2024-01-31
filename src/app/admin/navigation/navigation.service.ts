@@ -7,6 +7,9 @@ import { BehaviorSubject, Subject } from 'rxjs';
 export class NavigationService {
 	private readonly STORAGE_KEY = 'menuLabel';
 
+	navLoadedSubject = new Subject<boolean>();
+	navLoaded$ = this.navLoadedSubject.asObservable();
+
 	isSelectedSubject = new Subject<boolean>();
 	isSelected$ = this.isSelectedSubject.asObservable();
 
@@ -31,5 +34,12 @@ export class NavigationService {
 	}
 	private getSelectedFromStorage(): string {
 		return sessionStorage.getItem(this.STORAGE_KEY) || '';
+	}
+
+	setLoaded(isLoaded: boolean) {
+		this.navLoadedSubject.next(isLoaded);
+	}
+	getLoaded() {
+		return this.navLoadedSubject;
 	}
 }
