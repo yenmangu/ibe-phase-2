@@ -2,30 +2,68 @@
 
 :host {
 	display: block;
+	width: 100%;
 	max-width: 1440px;
 	padding-bottom: 2rem;
+	margin: 0 auto;
 }
-
+.main {
+	margin: 0 auto;
+	h2 {
+		text-align: center;
+	}
+}
 // .bridgewebs {
 // 	gap: 1rem;
 // }
 
 .database-operations {
-	gap: 2rem;
+	// gap: 2rem;
+}
+
+.container.import-export,
+.container.download,
+.container.delete,
+.container.bridgewebs {
+	width: 100vw;
+	padding: 2rem;
 }
 
 .container.bridgewebs,
 .container.import-export {
-	padding: 0 2rem;
 	gap: 1rem;
+}
+
+.container.import-export {
+	background-color: rgba($app-interface, 0.2);
+	// width: 100vw;
+	// padding: 2rem;
+}
+
+.container.download {
+	background-color: rgba($naming-numbering, 0.2);
+}
+
+.container.delete {
+	background-color: rgba($ibe-alert-single, 0.2);
+}
+
+.container.bridgewebs {
+	background-color: rgba($player-sign-in, 0.2);
+}
+
+.container.import-export.expand {
+	width: fit-content;
+	max-width: max-content;
 }
 
 .block {
 	display: block;
 	width: 100%;
+	max-width: 1440px;
 	height: auto;
 	padding: 1rem;
-	border: 2px solid black;
+	// border: 2px solid $ibe-teal-single;
 	h3 {
 		margin: 0 auto;
 		text-align: center;
@@ -36,12 +74,16 @@
 	}
 }
 
+// .main.handset {
+// 	max-width: calc(100vw - 2rem);
+// }
+
 .container.row.inner {
 	align-items: flex-start;
 }
 
 .inner {
-	gap: 6rem;
+	gap: 2rem;
 	width: 600px;
 	max-width: 600px;
 	height: auto;
@@ -56,9 +98,10 @@ h4 {
 	margin-block-start: 0;
 	margin: 0 auto;
 	margin-bottom: 2rem;
-	text-decoration: underline;
-	text-underline-offset: 6px;
-	text-decoration-thickness: 2px;
+	// text-decoration: underline;
+	// text-underline-offset: 6px;
+	// text-decoration-thickness: 2px;
+	// text-decoration-color: $ibe-teal-single;
 }
 h3 {
 	margin-block-start: 0;
@@ -71,12 +114,13 @@ h3 {
 
 .bridgewebs-form {
 	max-width: 100%;
+	margin: 0 auto;
 }
 
 .container.handset {
 	flex-direction: column;
 	justify-content: center;
-	gap: 1rem;
+	gap: 2rem;
 }
 .form-inner {
 	gap: 0.4rem;
@@ -99,16 +143,68 @@ app-database-import {
 	margin: 0 auto;
 }
 .container.delete {
-	margin-top: 2rem;
+	// margin-top: 2rem;
 	.block {
-		border-color: $ibe-alert-single;
+		// border-color: $ibe-alert-single;
+		.inner {
+			gap: 2rem;
+		}
 	}
 }
 
-.database-operations.large {
-	// flex-direction: row;
-	// align-items: flex-start;
-	.inner {
-		min-height: 360px;
+.delete-dialog {
+	padding: 2rem;
+	.button-wrapper {
+		align-items: center;
+		justify-content: center;
+		gap: 1rem;
 	}
+}
+
+// .database-operations.large {
+// 	// flex-direction: row;
+// 	// align-items: flex-start;
+// 	.inner {
+// 		min-height: 360px;
+// 	}
+// }
+
+.main.handset {
+	gap: 1rem;
+	h4 {
+		text-align: center;
+		text-underline-offset: 2px;
+	}
+	.database-operations.handset {
+		width: 100%;
+		max-width: 100%;
+		gap: 0;
+
+		.container.import-export,
+		.container.container.download,
+		.container.delete,
+		.container.bridgewebs {
+			width: 100%;
+			// max-width: 100%;
+			padding: 0;
+		}
+		.container.import-export.handset.expand {
+			overflow-x: scroll;
+			width: 100%;
+			min-width: 100vw;
+			// max-width: fit-content;
+			align-items: flex-start;
+
+			.block.expand {
+				width: 100%;
+				// min-width: 100vw;
+				margin: 0 auto;
+			}
+		}
+	}
+}
+
+.inner.handset {
+	width: 100%;
+	max-width: 100%;
 }

@@ -41,7 +41,7 @@ import { HandActionsComponent } from './hands/hand-actions/hand-actions.componen
 import { DeleteDialogComponent } from './hands/delete-dialog/delete-dialog.component';
 import { ReportingComponent } from './reporting/reporting.component';
 import { AdminToolsComponent } from './admin-tools/admin-tools.component';
-
+import { HtmlPdfDialogComponent } from './reporting/html-pdf-dialog/html-pdf-dialog.component';
 @NgModule({
 	declarations: [
 		NavigationComponent,
@@ -59,7 +59,8 @@ import { AdminToolsComponent } from './admin-tools/admin-tools.component';
 		HandActionsComponent,
 		DeleteDialogComponent,
 		ReportingComponent,
-		AdminToolsComponent
+		AdminToolsComponent,
+		HtmlPdfDialogComponent
 	],
 	imports: [
 		CommonModule,

@@ -4,14 +4,14 @@ import { BreakpointService } from 'src/app/shared/services/breakpoint.service';
 import { HttpService } from 'src/app/shared/services/http.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CustomSnackbarComponent } from '../../../../shared/custom-snackbar/custom-snackbar.component';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 @Component({
 	selector: 'app-import-export',
 	templateUrl: './import-export.component.html',
 	styleUrls: ['./import-export.component.scss']
 })
 export class ImportExportComponent implements OnInit {
-	@ViewChild('deleteDialog') deleteDialog: TemplateRef<any>;
+	@ViewChild('deleteDialog') deleteDialog: TemplateRef<MatDialog>;
 	currentBreakpoint: string = '';
 	hide: boolean = true;
 	// bridgeWebs
@@ -31,6 +31,8 @@ export class ImportExportComponent implements OnInit {
 	dirKey: string = '';
 
 	deleteSuccess: boolean | null = null;
+
+	dialogRef: MatDialogRef<any> | null = null;
 
 	constructor(
 		private fb: FormBuilder,
@@ -141,34 +143,38 @@ export class ImportExportComponent implements OnInit {
 	}
 
 	private openDeleteDialog() {
-		this.dialog
-			.open(this.deleteDialog)
-			.afterClosed()
-			.subscribe(result => {
-				if (result) {
-					console.log(result);
-					const data = { gameCode: this.gameCode, dirKey: this.dirKey };
-					this.httpService.deletePlayerDatabase(data).subscribe({
-						next: response => {
-							if (response.success) {
-								this.snackbar.open(
-									'Success deleting database. Please refresh database to see latest changes.',
-									'Dismiss'
-								);
-							}
-						},
-						error: error => {
-							this.snackbar.openFromComponent(CustomSnackbarComponent, {
-								data: { error: error }
-							});
+		this.dialogRef = this.dialog.open(this.deleteDialog);
+		this.dialogRef.afterClosed().subscribe((result: boolean) => {
+			if (result) {
+				// console.log('dialogResult: ', result);
+				const data = { gameCode: this.gameCode, dirKey: this.dirKey };
+				console.log('Data: ', data);
+
+				this.httpService.deletePlayerDatabase(data).subscribe({
+					next: response => {
+						// console.log('Response: ', response);
+
+						if (response.serverResponse.success) {
+							this.snackbar.open(
+								'Success deleting database. Please refresh database to see latest changes.',
+								'Dismiss'
+							);
 						}
-					});
-				}
-			});
+					},
+					error: error => {
+						this.snackbar.openFromComponent(CustomSnackbarComponent, {
+							data: { error: error }
+						});
+					}
+				});
+			} else {
+				this.dialogRef.close();
+			}
+		});
 	}
 
-	closeDeleteDialog() {
-		this.dialog.closeAll();
+	closeDeleteDialog(shouldDelete: boolean) {
+		this.dialogRef.close(shouldDelete);
 	}
 
 	public onDelete() {

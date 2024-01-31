@@ -78,19 +78,21 @@ export class CsvMappingComponent implements OnInit, AfterViewInit, OnChanges {
 	];
 
 	finalOurHeaders: any[] = [
-		{ name: 'Name (First Name + Surname)', selected: false },
-		{ name: 'Email', selected: false },
-		{ name: 'Phone', selected: false },
-		// { name: 'Handicap', selected: false },
-		{ name: 'EBU', selected: false },
-		{ name: 'BBO Username', selected: false }
+		{ name: 'Name (First Name + Surname)', selected: false, value: 'name' },
+		{ name: 'Email', selected: false, value: 'email' },
+		{ name: 'Phone', selected: false, value: 'phone' },
+		// { name: 'Handicap', selected: false, val:'handi' },
+		{ name: 'EBU', selected: false, value: 'EBU' },
+		{ name: 'BBO Username', selected: false, value: 'BBO' }
 	];
 
 	ourHeaders: string[] = ['Name', 'Email', 'Phone', 'EBU', 'BBO User Name'];
 	columnsToJoin: boolean[] = new Array(this.inputFileHeaders.length).fill(false);
 
 	inputSelectedHeaders: string[] = [];
-	outputSelectedHeaders: string[] = this.finalOurHeaders.map(header => header.name);
+	outputSelectedHeaders: string[] = this.finalOurHeaders.map(
+		header => header.value
+	);
 	inputJoinedHeaders: string[] = [];
 
 	ngOnInit(): void {
@@ -163,7 +165,7 @@ export class CsvMappingComponent implements OnInit, AfterViewInit, OnChanges {
 		this.enableButton(i);
 		for (const headerItem of this.finalOurHeaders) {
 			headerItem.selected = false;
-			if (this.outputSelectedHeaders.includes(headerItem.name)) {
+			if (this.outputSelectedHeaders.includes(headerItem.value)) {
 				headerItem.selected = true;
 				this.clearButtonsArray[i].disabled = false;
 			}

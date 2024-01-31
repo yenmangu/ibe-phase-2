@@ -4,6 +4,8 @@ import { BreakpointService } from 'src/app/shared/services/breakpoint.service';
 import { saveAs } from 'file-saver';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
+import { HtmlPdfDialogComponent } from './html-pdf-dialog/html-pdf-dialog.component';
 
 @Component({
 	selector: 'app-reporting',
@@ -20,7 +22,8 @@ export class ReportingComponent implements OnInit, OnDestroy {
 		private handActionsHttp: HandActionsHttpService,
 		private breakpointService: BreakpointService,
 		private fb: FormBuilder,
-		private snackbar: MatSnackBar
+		private snackbar: MatSnackBar,
+		private dialog: MatDialog
 	) {}
 
 	ngOnInit(): void {
@@ -59,7 +62,10 @@ export class ReportingComponent implements OnInit, OnDestroy {
 			},
 			error: error => {
 				console.error('Error fetching bridgewebs CSV');
-				this.snackbar.open('Error fetching CSV data, please try again. If the issue persists, please contact admin@ibescore.com', 'Dismiss');
+				this.snackbar.open(
+					'Error fetching CSV data, please try again. If the issue persists, please contact admin@ibescore.com',
+					'Dismiss'
+				);
 			}
 		});
 	}
@@ -82,10 +88,20 @@ export class ReportingComponent implements OnInit, OnDestroy {
 			},
 			error: error => {
 				console.error('error fetching EBU', error);
-				this.snackbar.open('Error fetching XML data, please try again. If the issue persists, please contact admin@ibescore.com', 'Dismiss');
+				this.snackbar.open(
+					'Error fetching XML data, please try again. If the issue persists, please contact admin@ibescore.com',
+					'Dismiss'
+				);
 			}
 		});
 		// }
+	}
+
+	openHtmlPdf() {
+		this.dialog
+			.open(HtmlPdfDialogComponent, { width: '400px' })
+			.afterClosed()
+			.subscribe();
 	}
 	ngOnDestroy(): void {}
 }

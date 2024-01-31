@@ -1,17 +1,22 @@
-<div class="container column main center">
+<div
+	class="container column main"
+	[ngClass]="currentBreakpoint">
 	<h2>Database Operations</h2>
 	<h4>Update to and from BridgeWebs or your computer/device</h4>
 
 	<div
 		class="container column center database-operations"
 		[ngClass]="currentBreakpoint">
-		<div class="container column center section import-export">
-			<div class="block">
+		<div
+			class="container column center section import-export"
+			[ngClass]="currentBreakpoint + (csvMapping ? ' expand' : '')">
+			<div
+				class="block"
+				[ngClass]="currentBreakpoint + (csvMapping ? ' expand' : '')">
 				<h3 class="import-export">Import / Export to and from file</h3>
 				<div
 					class="container column center inner"
-					[ngClass]="currentBreakpoint"
-					[ngClass]="csvMapping ? 'expand' : ''">
+					[ngClass]="currentBreakpoint + (csvMapping ? ' expand' : '')">
 					<div class="container column center">
 						<h4>Upload from disk</h4>
 						<!-- <app-upload-file
@@ -22,16 +27,53 @@
 								triggerMappingContainer($event)
 							"></app-database-import>
 					</div>
-					<div class="container download column center">
-						<h4>Download to computer / device</h4>
-						<button
-							class="form-button download"
-							color="primary"
-							mat-flat-button
-							(click)="onDatabaseExport()">
-							Download
-						</button>
-					</div>
+				</div>
+			</div>
+			<!-- <div class="block">
+				<div class="container download column center">
+					<h4>Download to computer / device</h4>
+					<button
+						class="form-button download"
+						color="primary"
+						mat-flat-button
+						(click)="onDatabaseExport()">
+						Download
+					</button>
+				</div>
+			</div> -->
+		</div>
+		<div class="container column center section download">
+			<div
+				class="block"
+				[ngClass]="currentBreakpoint + (csvMapping ? ' expand' : '')">
+				<div
+					class="container column center inner"
+					[ngClass]="currentBreakpoint + (csvMapping ? ' expand' : '')">
+					<h3 class="download">Download to computer / device</h3>
+					<button
+						class="form-button download"
+						color="primary"
+						mat-flat-button
+						(click)="onDatabaseExport()">
+						Download
+					</button>
+				</div>
+			</div>
+		</div>
+
+		<div class="container column section center delete">
+			<div class="block">
+				<h3>Clear Database</h3>
+				<div
+					class="container column center inner"
+					[ngClass]="currentBreakpoint">
+					<span>This will delete the entire player database. Use carefully.</span>
+					<button
+						mat-flat-button
+						color="warn"
+						(click)="onDelete()">
+						Delete
+					</button>
 				</div>
 			</div>
 		</div>
@@ -115,25 +157,26 @@
 			</div>
 		</div>
 	</div>
-	<!-- <div class="container column section center delete">
-		<div class="block">
-			<h3>Clear Database</h3>
-			<div class="container column center inner">
-				<span>This will delete the entire player database. Use carefully.</span>
-				<button
-					mat-flat-button
-					color="warn"
-					(click)="onDelete()">
-					Delete
-				</button>
-			</div>
-		</div>
-	</div> -->
 </div>
 
-<ng-template #deleteDialog>
-	<div class="container column center">
+<ng-template
+	#deleteDialog
+	let-dialogRef>
+	<div class="container column center delete-dialog">
 		<h3>Are you sure you want to delete?</h3>
-		<button (click)="closeDeleteDialog()">Delete</button>
+		<div class="container row button-wrapper">
+			<button
+				mat-flat-button
+				color="warn"
+				(click)="closeDeleteDialog(true)">
+				Delete
+			</button>
+			<button
+				mat-flat-button
+				color="accent"
+				(click)="closeDeleteDialog(false)">
+				Cancel
+			</button>
+		</div>
 	</div>
 </ng-template>

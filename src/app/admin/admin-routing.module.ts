@@ -13,6 +13,8 @@ import { DatabaseLandingComponent } from './games/database-landing/database-land
 import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.component';
 import { LinExtractionComponent } from '../shared/lin-extraction/lin-extraction.component';
 import { AdminToolsComponent } from './admin-tools/admin-tools.component';
+import { ImportExportComponent } from './games/database-landing/import-export/import-export.component';
+
 const routes: Routes = [
 	{
 		path: '',
@@ -58,6 +60,11 @@ const routes: Routes = [
 				path: 'player-database',
 				component: DatabaseLandingComponent,
 				data: { menuLabel: 'Player Database' }
+			},
+			{
+				path: 'database-admin',
+				component: ImportExportComponent,
+				data: { menuLabel: 'Database Admin' }
 			},
 			{
 				path: 'admin-tools',

@@ -77,6 +77,8 @@ export class DataService implements OnInit, OnDestroy {
 			const storeMapping = this.mapData(data);
 			const playerDbStoreMapping = this.getPlayerDbStoreMapping(data);
 
+			console.log('Player db store mapping: ', playerDbStoreMapping);
+
 			const expectedNames = [
 				...Object.keys(storeMapping),
 				...Object.keys(playerDbStoreMapping)
@@ -112,6 +114,7 @@ export class DataService implements OnInit, OnDestroy {
 			}
 			return false;
 		} catch (error) {
+			console.error('Error: ', error);
 			throw new Error('error checking db');
 		}
 	}
@@ -209,6 +212,8 @@ export class DataService implements OnInit, OnDestroy {
 			console.log('playerDB Store mapping complete');
 
 			return playerDbMapping;
+		} else {
+			return { player: [], team: [], event: [], loc: [] };
 		}
 	}
 
