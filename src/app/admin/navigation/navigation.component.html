@@ -69,6 +69,20 @@
 					(click)="handleLinkClick()"
 					>Player Database</a
 				>
+				<a
+					routerLink="/admin/database-admin"
+					[routerLinkActive]="['active-link']"
+					class="nav-link"
+					(click)="handleLinkClick()"
+					>Database Admin</a
+				>
+				<a
+					routerLink="/admin/admin-tools"
+					[routerLinkActive]="['active-link']"
+					class="nav-link"
+					(click)="handleLinkClick()"
+					>Admin Tools</a
+				>
 			</div>
 			<ng-container
 				*ngIf="currentBreakpoint === 'handset' || currentBreakpoint === 'medium'">
