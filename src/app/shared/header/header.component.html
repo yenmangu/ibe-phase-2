@@ -47,11 +47,13 @@
 				<ng-container
 					*ngIf="
 						(authService.isAuthedSubject$ | async) &&
-						currentBreakpoint !== 'handset'
+						currentBreakpoint !== 'handset' &&
+						currentBreakpoint !== 'medium'
 					">
 					<app-user-details></app-user-details>
 				</ng-container>
-				<ng-container *ngIf="currentBreakpoint !== 'handset'">
+				<ng-container
+					*ngIf="currentBreakpoint !== 'handset' && currentBreakpoint !== 'medium'">
 					<button
 						mat-flat-button
 						color="warn"
