@@ -21,7 +21,7 @@ const routes: Routes = [
 			{
 				path: 'welcome-members',
 				component: WelcomeScreenComponent,
-				data: { menuLabel: 'Welcome' }
+				data: { menuLabel: 'Members Area' }
 			},
 			{
 				path: 'games',

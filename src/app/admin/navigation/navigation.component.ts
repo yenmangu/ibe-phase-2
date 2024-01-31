@@ -39,7 +39,7 @@ export class NavigationComponent
 {
 	@ViewChild(MatDrawer) drawer: MatDrawer;
 	isOpen$ = this._sidenavService.isOpen$;
-	private subscription: Subscription;
+	private subscription: Subscription = new Subscription();
 	contentClass: string = 'shrink';
 	isOpen: boolean = false;
 	gameCode: string = '';
@@ -50,6 +50,7 @@ export class NavigationComponent
 	selectedMatchType$: any = '';
 	currentBreakpoint;
 	currentLabel: string = '';
+	private readonly STORAGE_KEY = 'menuLabel';
 	// End dev
 	//
 	constructor(
@@ -80,7 +81,7 @@ export class NavigationComponent
 
 	ngOnInit(): void {
 		console.log('\n\nNAVIGATION COMPONENT\n\n');
-
+		this.setMenuLabel();
 		this.router.events
 			.pipe(filter(event => event instanceof NavigationEnd))
 			.subscribe(() => {
@@ -144,14 +145,17 @@ export class NavigationComponent
 		this.drawer.toggle();
 	}
 
-	ngOnDestroy(): void {
-		this.subscription.unsubscribe();
-	}
 	handleLogout(): void {
 		this.sharedDataService.logoutSubject.next(true);
 	}
 
 	private getMatchData(type): Observable<any> {
 		return this.currentEventService.getAndDecompressData(type);
+	}
+
+	ngOnDestroy(): void {
+		if (this.subscription) {
+			this.subscription.unsubscribe();
+		}
 	}
 }
