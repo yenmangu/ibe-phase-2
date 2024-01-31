@@ -17,6 +17,13 @@
 	justify-content: center;
 	align-items: center;
 }
+.view.handset {
+	justify-content: flex-start;
+}
+
+.view.handset.authed {
+	justify-content: center;
+}
 button.menu {
 	position: absolute;
 	left: 0;

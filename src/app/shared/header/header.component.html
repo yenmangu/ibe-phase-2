@@ -13,7 +13,9 @@
 		</div>
 	</ng-container>
 	<ng-container *ngIf="!isPublicLink">
-		<div class="container row view">
+		<div
+			class="container row view"
+			[ngClass]="currentBreakpoint + (authed ? ' authed' : '')">
 			<ng-container *ngIf="authService.isAuthedSubject$ | async">
 				<button
 					class="menu"

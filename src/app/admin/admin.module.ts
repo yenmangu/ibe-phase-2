@@ -42,6 +42,7 @@ import { DeleteDialogComponent } from './hands/delete-dialog/delete-dialog.compo
 import { ReportingComponent } from './reporting/reporting.component';
 import { AdminToolsComponent } from './admin-tools/admin-tools.component';
 import { HtmlPdfDialogComponent } from './reporting/html-pdf-dialog/html-pdf-dialog.component';
+import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.component';
 @NgModule({
 	declarations: [
 		NavigationComponent,
@@ -60,7 +61,8 @@ import { HtmlPdfDialogComponent } from './reporting/html-pdf-dialog/html-pdf-dia
 		DeleteDialogComponent,
 		ReportingComponent,
 		AdminToolsComponent,
-		HtmlPdfDialogComponent
+		HtmlPdfDialogComponent,
+		WelcomeScreenComponent
 	],
 	imports: [
 		CommonModule,

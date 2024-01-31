@@ -35,6 +35,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 	userLoggedOut: boolean = false;
 	currentBreakpoint;
 	isPublicLink: boolean = false;
+	authed: boolean | null = null;
 
 	private sidenavSubscription: Subscription;
 	constructor(
@@ -59,6 +60,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 			});
 
 		this.userDetailsService.updateFromLocalStorage();
+		this.authService.isAuthedSubject$.subscribe(authed => {
+			if (authed) {
+				this.authed = authed;
+			} else {
+				this.authed = false;
+			}
+		});
 		this.cdr.detectChanges();
 		this.sharedDataService.logout$.subscribe(logout => {
 			if (logout) {
