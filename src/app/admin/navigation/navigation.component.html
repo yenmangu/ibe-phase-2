@@ -70,7 +70,8 @@
 					>Player Database</a
 				>
 			</div>
-			<ng-container *ngIf="currentBreakpoint === 'handset'">
+			<ng-container
+				*ngIf="currentBreakpoint === 'handset' || currentBreakpoint === 'medium'">
 				<div class="container column center user-details">
 					<h3>Game Code</h3>
 					<span class="gamecode">{{ gameCode }}</span>
