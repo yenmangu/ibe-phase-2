@@ -2,26 +2,44 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+	providedIn: 'root'
 })
 export class NavigationService {
+	private readonly STORAGE_KEY = 'menuLabel';
 
-  isSelectedSubject = new Subject<boolean>()
-  isSelected$ = this.isSelectedSubject.asObservable()
+	navLoadedSubject = new Subject<boolean>();
+	navLoaded$ = this.navLoadedSubject.asObservable();
 
-  currentSelectedSubject = new Subject<string>()
-  currentSelected$ = this.currentSelectedSubject.asObservable()
+	isSelectedSubject = new Subject<boolean>();
+	isSelected$ = this.isSelectedSubject.asObservable();
 
-  constructor() { }
+	currentSelectedSubject = new BehaviorSubject<string>(
+		this.getSelectedFromStorage()
+	);
+	currentSelected$ = this.currentSelectedSubject.asObservable();
 
-  setSelected(selected){
-    console.log('current selected: ', selected);
-    this.currentSelectedSubject.next(selected)
-  }
+	retrievedSelected: string = '';
 
-  getSelected(){
-    return this.currentSelectedSubject.asObservable()
-  }
+	constructor() {}
 
-  
+	setSelected(selected) {
+		console.log('current selected: ', selected);
+		this.currentSelectedSubject.next(selected);
+		sessionStorage.setItem(this.STORAGE_KEY, selected);
+	}
+
+	getSelected(): BehaviorSubject<string> {
+		this.retrievedSelected = sessionStorage.getItem(this.STORAGE_KEY);
+		return this.currentSelectedSubject;
+	}
+	private getSelectedFromStorage(): string {
+		return sessionStorage.getItem(this.STORAGE_KEY) || '';
+	}
+
+	setLoaded(isLoaded: boolean) {
+		this.navLoadedSubject.next(isLoaded);
+	}
+	getLoaded() {
+		return this.navLoadedSubject;
+	}
 }

@@ -18,6 +18,7 @@ import { DialogService } from '../services/dialog.service';
 import { PasswordRecoverComponent } from 'src/app/auth/password-recover/password-recover.component';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { IconRegistryService } from '../services/icon-registry.service';
+import { NavigationService } from 'src/app/admin/navigation/navigation.service';
 @Component({
 	selector: 'app-header',
 	templateUrl: './header.component.html',
@@ -36,6 +37,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 	currentBreakpoint;
 	isPublicLink: boolean = false;
 
+	isNavLoaded: boolean = false;
+
 	private sidenavSubscription: Subscription;
 	constructor(
 		private router: Router,
@@ -48,7 +51,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 		private IDBStatus: IndexedDatabaseStatusService,
 		private sharedGameDataService: SharedGameDataService,
 		private breakpointService: BreakpointService,
-		private dialog: MatDialog
+		private dialog: MatDialog,
+		private navigationService: NavigationService
 	) {}
 
 	ngOnInit(): void {
@@ -69,6 +73,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 		this.breakpointService.currentBreakpoint$.subscribe(breakpoint => {
 			this.currentBreakpoint = breakpoint;
 			console.log(this.currentBreakpoint);
+		});
+
+		this.navigationService.getLoaded().subscribe(loaded => {
+			this.isNavLoaded = loaded;
 		});
 	}
 
