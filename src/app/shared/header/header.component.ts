@@ -38,6 +38,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 	isPublicLink: boolean = false;
 
 	isNavLoaded: boolean = false;
+	authed: boolean | null = null;
 
 	private sidenavSubscription: Subscription;
 	constructor(
@@ -73,6 +74,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 		this.breakpointService.currentBreakpoint$.subscribe(breakpoint => {
 			this.currentBreakpoint = breakpoint;
 			console.log(this.currentBreakpoint);
+		});
+
+		this.authService.isAuthedSubject$.subscribe(authed => {
+			if (authed) {
+				this.authed = authed;
+			} else {
+				this.authed = false;
+			}
 		});
 
 		this.navigationService.getLoaded().subscribe(loaded => {
