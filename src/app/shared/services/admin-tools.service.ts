@@ -26,4 +26,10 @@ export class AdminToolsService {
 			responseType: 'blob'
 		}) as Observable<Blob>;
 	}
+
+	batchConvertReq(): Observable<any> {
+		let headers = new HttpHeaders();
+		headers = headers.set('Authorization', 'Bearer ' + this.authToken);
+		return this.http.get(`${this.apiUrl}/webhook/bulk-convert`, { headers });
+	}
 }

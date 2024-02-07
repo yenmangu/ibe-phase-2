@@ -1,3 +1,19 @@
-<div class="container row main">
+<div
+	class="container row main"
+	[ngClass]="currentBreakpoint">
 	<app-lin-extraction></app-lin-extraction>
+	<ng-container *ngIf="isSuperAdmin">
+		<div class="container column center">
+			<h3>
+				Use the button below to batch convert any rows in the Hand_Database - BULK
+				tab.
+			</h3>
+			<button
+				mat-flat-button
+				color="primary"
+				(click)="onBatchConvert()">
+				Batch Convert
+			</button>
+		</div>
+	</ng-container>
 </div>

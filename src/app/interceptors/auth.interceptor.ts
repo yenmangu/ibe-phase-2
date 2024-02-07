@@ -16,6 +16,9 @@ export class AuthInterceptor implements HttpInterceptor {
 		request: HttpRequest<any>,
 		next: HttpHandler
 	): Observable<HttpEvent<any>> {
+		if (request.url.includes('/webhook/bulk-convert')) {
+			return next.handle(request);
+		}
 		const token = this.tokenService.getToken();
 
 		if (token) {
