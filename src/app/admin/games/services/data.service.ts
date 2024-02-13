@@ -34,7 +34,7 @@ export class DataService implements OnInit, OnDestroy {
 	}
 
 	async ngOnInit() {
-		console.log('data service ngOnInit called');
+		// console.log('data service ngOnInit called');
 	}
 
 	public async dev_checkDatabase(): Promise<any> {
@@ -77,7 +77,7 @@ export class DataService implements OnInit, OnDestroy {
 			const storeMapping = this.mapData(data);
 			const playerDbStoreMapping = this.getPlayerDbStoreMapping(data);
 
-			console.log('Player db store mapping: ', playerDbStoreMapping);
+			// console.log('Player db store mapping: ', playerDbStoreMapping);
 
 			const expectedNames = [
 				...Object.keys(storeMapping),
@@ -106,7 +106,7 @@ export class DataService implements OnInit, OnDestroy {
 			);
 
 			if (exists) {
-				console.log('database exists in dev mode... no need to refresh');
+				// console.log('database exists in dev mode... no need to refresh');
 
 				this.IDBStatusService.bypassProgress();
 
@@ -209,7 +209,7 @@ export class DataService implements OnInit, OnDestroy {
 				[`event`]: temp_eventArray,
 				[`loc`]: temp_venuesArray
 			};
-			console.log('playerDB Store mapping complete');
+			// console.log('playerDB Store mapping complete');
 
 			return playerDbMapping;
 		} else {
@@ -298,7 +298,7 @@ export class DataService implements OnInit, OnDestroy {
 			this.indexedDB
 				.deleteIndexedDBDatabase(this.dbName)
 				.then(() => {
-					console.log('database deleted, updating observable');
+					// console.log('database deleted, updating observable');
 					this.sharedGameData.databaseDeleted$.next(true);
 					resolve();
 				})
@@ -313,14 +313,14 @@ export class DataService implements OnInit, OnDestroy {
 		console.log('delete indexed db called');
 
 		return new Promise<void>((resolve, reject) => {
-			console.log('delete indexed db promise created');
+			// console.log('delete indexed db promise created');
 
 			const deleteRequest = indexedDB.deleteDatabase(`${this.dbName}`);
 			if (deleteRequest) {
-				console.log('delete request: ');
+				// console.log('delete request: ');
 
 				deleteRequest.onsuccess = () => {
-					console.log(`IndexedDB database '${this.dbName}' deleted successfully`);
+					// console.log(`IndexedDB database '${this.dbName}' deleted successfully`);
 					resolve();
 				};
 

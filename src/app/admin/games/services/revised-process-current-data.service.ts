@@ -109,6 +109,27 @@ export class RevisedProcessCurrentDataService {
 		} catch (error) {}
 	}
 
+	async getSingleEventName() {
+		try {
+			const settingsTxt = await this.indexedDB.getByKey(
+				'current_game_data',
+				'settingstxt'
+			);
+			const value = settingsTxt.value;
+			const valueArray = value[0].split('\n');
+			const eventNameString: string = valueArray[4];
+			const eventName: string = eventNameString.substring(3);
+			if (eventName) {
+				return eventName;
+			} else {
+				throw new Error('Error getting event name');
+			}
+		} catch (error) {
+			console.error('Error retrieving eventName');
+			throw error
+		}
+	}
+
 	// START NEW CODE
 
 	async generateConfig(

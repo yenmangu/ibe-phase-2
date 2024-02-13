@@ -23,7 +23,7 @@ export class NavigationService {
 	constructor() {}
 
 	setSelected(selected) {
-		console.log('current selected: ', selected);
+		// console.log('current selected: ', selected);
 		this.currentSelectedSubject.next(selected);
 		sessionStorage.setItem(this.STORAGE_KEY, selected);
 	}

@@ -94,7 +94,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 	checkRoute(): boolean {
 		const urlSegments = this.router.url.split('/');
 		const firstPath = urlSegments.length > 1 && urlSegments[1];
-		console.log('first path: ', firstPath);
+		// console.log('first path: ', firstPath);
 
 		if (firstPath.startsWith('starting-lineup')) {
 			return true;

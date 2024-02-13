@@ -80,7 +80,7 @@ export class NavigationComponent
 	}
 
 	ngOnInit(): void {
-		console.log('\n\nNAVIGATION COMPONENT\n\n');
+		// console.log('\n\nNAVIGATION COMPONENT\n\n');
 		this.navigationService.setLoaded(true);
 		this.setMenuLabel();
 		this.router.events
@@ -108,7 +108,7 @@ export class NavigationComponent
 		// this.getMatchData(this.matchTypeControl.value);
 		if (this.drawer) {
 			this.drawer.openedChange.subscribe(state => {
-				console.log(`current drawer state: ${state}`);
+				// console.log(`current drawer state: ${state}`);
 				this._sidenavService.isOpenSubject.next(state);
 			});
 			this._sidenavService.isOpen$.subscribe((isOpen: boolean) => {
@@ -139,7 +139,7 @@ export class NavigationComponent
 	}
 
 	handleLinkClick() {
-		console.log('HandleLinkClick');
+		// console.log('HandleLinkClick');
 		this.toggleSidenav();
 	}
 

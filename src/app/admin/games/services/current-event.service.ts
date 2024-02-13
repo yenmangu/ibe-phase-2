@@ -56,7 +56,7 @@ export class CurrentEventService implements OnInit {
 			);
 	}
 	public getLiveData(gameCode: string, dirKey: string): Observable<any> {
-		console.log('calling http service');
+		// console.log('calling http service');
 		return this.httpService.fetchData(gameCode, dirKey).pipe(
 			catchError(err => {
 				console.error('Error in getLiveData: ', err);
@@ -74,7 +74,7 @@ export class CurrentEventService implements OnInit {
 				selectedMatchType
 			);
 			if (handData) {
-				console.log('hand data: ', handData.value);
+				// console.log('hand data: ', handData.value);
 
 				return handData;
 			} else {

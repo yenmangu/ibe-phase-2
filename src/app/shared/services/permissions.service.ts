@@ -32,20 +32,20 @@ class PermissionsService {
 			take(1),
 			switchMap(isAuthed => {
 				if (isAuthed) {
-					console.log('isAuthed', isAuthed);
+					// console.log('isAuthed', isAuthed);
 				}
 				// console.log(state);
 				// Add logic once user permissions implemented
 				const hasPermissions = true;
 				if (!isAuthed) {
 					if (url !== '/home') {
-						console.log('redirecting to home');
+						// console.log('redirecting to home');
 						this.router.navigate(['/home']);
 					}
 					return of(true);
 				} else if (url === '/home') {
 					this.router.navigate(['/admin']);
-					console.log('home denied to authed. redirecting to /admin');
+					// console.log('home denied to authed. redirecting to /admin');
 					this.IDBStatus.resetProgress();
 					return of(false);
 				} else {

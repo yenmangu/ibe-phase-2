@@ -50,7 +50,6 @@ export class AdminComponent implements OnInit, OnDestroy {
 		// console.log('admin loaded');
 	}
 	ngOnInit(): void {
-		console.log('admin init');
 		this.gameCode$ = this.userDetailsService.gameCode$;
 		this.directorKey$ = this.userDetailsService.directorKey$;
 		this.gameCode = localStorage.getItem('GAME_CODE');
@@ -129,11 +128,11 @@ export class AdminComponent implements OnInit, OnDestroy {
 						this.gameCode = gamecode;
 						this.dirKey = dirkey;
 						// const exists = this.checkDBExists
-						console.log(
-							'checking game code and dirkey: ',
-							this.gameCode,
-							this.dirKey
-						);
+						// console.log(
+						// 	'checking game code and dirkey: ',
+						// 	this.gameCode,
+						// 	this.dirKey
+						// );
 
 						return this.fetchData(this.gameCode, this.dirKey);
 					} else {
@@ -143,7 +142,7 @@ export class AdminComponent implements OnInit, OnDestroy {
 				}),
 				switchMap(data => {
 					if (data !== 'EMPTY') {
-						console.log('\ninitial fetched data: ', data);
+						// console.log('\ninitial fetched data: ', data);
 						const remoteServerDbRevision = data.currentDBRevision.toString();
 						this.sharedGameData.databaseRevisionSubject.next(
 							remoteServerDbRevision
@@ -171,7 +170,7 @@ export class AdminComponent implements OnInit, OnDestroy {
 	}
 
 	fetchData(gameCode: string, dirKey: string): Observable<any> {
-		console.log('fetch data called with: ', gameCode, dirKey);
+		// console.log('fetch data called with: ', gameCode, dirKey);
 
 		return this.currentEventService.getLiveData(gameCode, dirKey).pipe(
 			catchError(error => {
@@ -181,17 +180,17 @@ export class AdminComponent implements OnInit, OnDestroy {
 		);
 	}
 	private async processData(data): Promise<void> {
-		console.log('processData() called with data: ', data);
+		// console.log('processData() called with data: ', data);
 		try {
 			const dbExists = await this.dataService.checkDatabase(data);
 			if (dbExists) {
-				console.log('db exists');
+				// console.log('db exists');
 				return;
 			} else {
 				await this.dataService.initialiseDB(data);
 				await this.storeInitialData(data);
 			}
-			console.log('Store initial data complete');
+			// console.log('Store initial data complete');
 		} catch (err) {
 			console.error('Error during data processing: ', err);
 		}

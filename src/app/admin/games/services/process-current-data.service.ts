@@ -92,6 +92,9 @@ export class ProcessCurrentDataService {
 			const teamsValue = this.destructureAndSplitTeams(teams);
 			const sidesValue = this.destructureAndSplitTeams(sides);
 			const matchTypeObject = this.getMatchType(settingsText);
+
+			//
+
 			console.log('current match type: ', matchTypeObject);
 
 			// console.log('movement value: ', movementValue);

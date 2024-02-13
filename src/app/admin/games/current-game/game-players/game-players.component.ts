@@ -115,9 +115,9 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 
 		this.origin = window.location.href;
 		// console.log('game-players initialTableData: ', this.initialTableData);
-		this.pairsForm.formValuesChanged.subscribe(value => {
-			console.log('formValues changed detected in parent component: ', value);
-		});
+		// this.pairsForm.formValuesChanged.subscribe(value => {
+		// 	console.log('formValues changed detected in parent component: ', value);
+		// });
 
 		this.updateButtonAfterDelay();
 	}
@@ -135,6 +135,7 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 						console.log('initialTableData in gamePlayers: ', data);
 						this.initialTableData = data;
 						this.eventName = data.eventName;
+						this.sharedDataService.updateEventName(this.eventName);
 						const { matchType } = data;
 						matchType.pairs
 							? (this.matchType = 'pairs')

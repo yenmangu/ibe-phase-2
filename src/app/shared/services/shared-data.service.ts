@@ -15,6 +15,7 @@ export class SharedDataService {
 	public emailSubject = new BehaviorSubject<string>('');
 	public dirKeySubject = new Subject<string>();
 	public TabChangeSubject = new BehaviorSubject<number>(undefined);
+	public eventNameSubject = new BehaviorSubject<string>('');
 
 	public logoutSubject = new Subject<boolean>();
 
@@ -23,6 +24,7 @@ export class SharedDataService {
 	tabChange$: Observable<number> = this.TabChangeSubject.asObservable();
 	dirKey$: Observable<string> = this.dirKeySubject.asObservable();
 	logout$: Observable<boolean> = this.logoutSubject.asObservable();
+	eventName$: Observable<string> = this.eventNameSubject.asObservable();
 
 	public userDataReadySubject = new BehaviorSubject<boolean>(false);
 	userDataReady$: Observable<boolean> = this.userDataReadySubject.asObservable();
@@ -92,6 +94,14 @@ export class SharedDataService {
 
 	setLocalStorageItem(key: string, value: any): void {
 		localStorage.setItem(key, value);
+	}
+
+	public updateEventName(eventName: string): void {
+		this.eventNameSubject.next(eventName);
+	}
+
+	public getEventName(): Observable<string> {
+		return this.eventNameSubject.asObservable();
 	}
 
 	public clearAll(): void {

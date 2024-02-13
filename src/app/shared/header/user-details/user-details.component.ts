@@ -36,7 +36,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
 	) {}
 
 	ngOnInit(): void {
-		console.log('user details component init');
+		// console.log('user details component init');
 
 		this.isAuthSubscription = this.authService.isAuthedSubject$
 			// .pipe(tag('auth'))
@@ -64,7 +64,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnDestroy(): void {
-		console.log('user-details component being destroyed');
+		// console.log('user-details component being destroyed');
 
 		this.isAuthSubscription.unsubscribe();
 		this.emailSubscription.unsubscribe();

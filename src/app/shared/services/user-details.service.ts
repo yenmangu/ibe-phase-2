@@ -59,37 +59,26 @@ export class UserDetailsService {
 		return updateStatus;
 	}
 
-	// clearAllSubjects(): void {
-	// 	this.emailSubject.next('');
-	// 	this.gameCodeSubject.next('');
-	// 	this.directorKeySubject.next('');
-	// 	this.loggedInSubject.next(false);
-
-	// 	this.emailSubject.complete();
-	// 	this.gameCodeSubject.complete();
-	// 	this.directorKeySubject.complete();
-	// }
-
 	updateLoggedIn(status: boolean): void {
-		console.log('updating loggedIn status: ', status);
+		// console.log('updating loggedIn status: ', status);
 
 		this.loggedInSubject.next(status);
 	}
 
 	updateGameCode(gamecode: string): void {
-		console.log('update gamecode: ', gamecode);
+		// console.log('update gamecode: ', gamecode);
 
 		localStorage.setItem('GAME_CODE', gamecode);
 		this.gameCodeSubject.next(gamecode);
 	}
 	updateEmail(email: string): void {
-		console.log('updating email: ', email);
+		// console.log('updating email: ', email);
 		localStorage.setItem('EMAIL', email);
 		this.emailSubject.next(email);
 	}
 
 	updateDirectorKey(directorKey: string): void {
-		console.log('updating director key: ', directorKey);
+		// console.log('updating director key: ', directorKey);
 		localStorage.setItem('DIR_KEY', directorKey);
 		this.directorKeySubject.next(directorKey);
 	}
