@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 
@@ -19,6 +19,14 @@ export class AdminToolsService {
 			'Content-Type': 'application/json',
 			'Authorization': `Bearer ${this.authToken}`
 		});
+	}
+
+	verifyAdmin(gameCode): Observable<any> {
+		let params = new HttpParams();
+		params = params.append('gameCode', gameCode);
+		// console.log('Params before request: ', params);
+
+		return this.http.get(`${this.apiUrl}/verification/admin-verify`, { params });
 	}
 
 	sendUrls(data): Observable<Blob> {

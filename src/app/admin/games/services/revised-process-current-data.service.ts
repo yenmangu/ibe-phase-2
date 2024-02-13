@@ -35,7 +35,7 @@ export class RevisedProcessCurrentDataService {
 		try {
 			await firstValueFrom(
 				this.indexedDatabaseStatus.isInitialised$.pipe(
-					tag('process-match-data is init sub'),
+					// tag('process-match-data is init sub'),
 					filter(isInitialised => isInitialised),
 					first(),
 					take(1)
@@ -656,7 +656,6 @@ export class RevisedProcessCurrentDataService {
 		if (labelsValue) {
 			console.log('labels value: ', labelsValue);
 			console.log('Total tables: ', totalTables);
-
 		}
 
 		const totalPairs = totalTables * 2;
@@ -675,8 +674,8 @@ export class RevisedProcessCurrentDataService {
 
 		console.log('replaced array after processing: ', replacedArray);
 		const pairsMissing = totalPairs - replacedArray.length;
-		const teamsMissing = totalTables - replacedArray.length
-		const emptyToAdd = matchType.pairs === true ? pairsMissing : teamsMissing
+		const teamsMissing = totalTables - replacedArray.length;
+		const emptyToAdd = matchType.pairs === true ? pairsMissing : teamsMissing;
 		// console.log('replaced array: ', replacedArray);
 		// console.log('empty to add: ', emptyToAdd);
 
@@ -697,7 +696,7 @@ export class RevisedProcessCurrentDataService {
 		let teamData: any = [];
 
 		let expectedTotal = matchType.teams === true ? totalTables : totalPairs;
-		expectedTotal = parseInt(expectedTotal,10)
+		expectedTotal = parseInt(expectedTotal, 10);
 
 		if (replacedArray.length !== expectedTotal) {
 			console.error(

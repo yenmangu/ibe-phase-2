@@ -63,7 +63,7 @@ export class TeamsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 		private tablesService: TablesService
 	) {
 		this.tablesService.tablesConfig$
-			.pipe(tag('team tables config'))
+			// .pipe(tag('team tables config'))
 			.subscribe(config => {
 				this.tableConfig = config;
 				this.tableConfiguration = Object.keys(this.tableConfig);
@@ -80,7 +80,10 @@ export class TeamsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 		if (this.initialTableData) {
 			const { tables, sideTeamMap, teams, sidesOf } = this.initialTableData;
 			this.sideTeamMap = sideTeamMap;
-			console.log('Initial table data in teams tables component: ', this.initialTableData);
+			console.log(
+				'Initial table data in teams tables component: ',
+				this.initialTableData
+			);
 			this.tableNumbers = Object.keys(this.initialTableData.tableConfig);
 			this.tableData = this.initialTableData.tables;
 			this.pairConfig = this.initialTableData.pairConfig;

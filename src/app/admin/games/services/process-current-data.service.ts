@@ -36,7 +36,7 @@ export class ProcessCurrentDataService {
 		try {
 			await firstValueFrom(
 				this.indexedDatabaseStatus.isInitialised$.pipe(
-					tag('process-match-data is init sub'),
+					// tag('process-match-data is init sub'),
 					filter(isInitialised => isInitialised),
 					first(),
 					take(1)
@@ -76,10 +76,10 @@ export class ProcessCurrentDataService {
 
 			const sides = await this.indexedDB.readFromDB([store], 'sidenamestxt');
 			const settingsText = await this.indexedDB.readFromDB([store], 'settingstxt');
-			const sitText = await this.indexedDB.readFromDB([store],'sittext')
+			const sitText = await this.indexedDB.readFromDB([store], 'sittext');
 
 			console.log('Sitters Text: ', sitText);
-			
+
 			// console.log(settingsText);
 			// console.log('people initial: ', people);
 			const movementValue = this.destructureValue(movement, 'current_game_data');

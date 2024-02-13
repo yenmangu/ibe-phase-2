@@ -47,7 +47,7 @@ export class FetchCurrentDataService implements OnDestroy {
 
 		this.indexedDatabaseStatus
 			.isInitialised()
-			.pipe(tag(''))
+			// .pipe(tag(''))
 			.subscribe(intialised => {
 				this.isDBInitialised = intialised;
 			});
@@ -416,7 +416,6 @@ export class FetchCurrentDataService implements OnDestroy {
 			throw err;
 		}
 	}
-
 
 	private async getPlayerDataFromDB(): Promise<any> {
 		try {

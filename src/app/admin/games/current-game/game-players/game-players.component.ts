@@ -212,7 +212,7 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 
 		this.apiCoordination
 			.invokeAPICoordination(combinedFormData, game_code, dir_key)
-			.pipe(tag('current game form'))
+			// .pipe(tag('current game form'))
 			.subscribe({
 				next: response => {
 					console.log('response from http services: ', response);

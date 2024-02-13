@@ -66,7 +66,7 @@ export class CurrentGamesDatabaseServiceService {
 		console.log('fetch and process data invoked');
 
 		return this.processCurrentDataService.getInitialTableData().pipe(
-			tag('getInitial'),
+			// tag('getInitial'),
 			catchError(error => {
 				console.error('Error fetching and processing game data', error);
 				return throwError(() => error);

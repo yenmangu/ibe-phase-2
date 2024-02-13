@@ -61,14 +61,18 @@ export class PairsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 		private breakpointService: BreakpointService,
 		private tablesService: TablesService
 	) {
-		this.tablesService.tablesConfig$.pipe(tag('pairs-table')).subscribe(config => {
-			this.tableConfig = config;
-			console.log('tableConfig in component: ', this.tableConfig);
+		this.tablesService.tablesConfig$
+			.pipe
+			// tag('pairs-table')
+			()
+			.subscribe(config => {
+				this.tableConfig = config;
+				console.log('tableConfig in component: ', this.tableConfig);
 
-			this.tableConfigOption = Object.keys(config);
+				this.tableConfigOption = Object.keys(config);
 
-			// console.log('pairs-table config: ', this.tableConfig);
-		});
+				// console.log('pairs-table config: ', this.tableConfig);
+			});
 		this.isLoading$ = true;
 		this.breakpointService.currentBreakpoint$.subscribe(breakpoint => {
 			this.currentBreakpoint = breakpoint;

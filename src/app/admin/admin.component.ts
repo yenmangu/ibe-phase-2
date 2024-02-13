@@ -74,7 +74,7 @@ export class AdminComponent implements OnInit, OnDestroy {
 
 		this.sharedGameData.triggerRefreshObservable
 			.pipe(
-				tag('triggerRefreshObservable'),
+				// tag('triggerRefreshObservable'),
 				tap(() => {
 					console.log('before deleting database');
 					this.dataService.requestDeleteDB();

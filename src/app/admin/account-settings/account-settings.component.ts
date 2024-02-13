@@ -85,39 +85,47 @@ export class AccountSettingsComponent implements OnInit, OnDestroy {
 			email: formData.email
 		};
 		const { email } = data;
-		return this.apiData
-			.changeEmail(data)
-			.pipe(tag('email-response'))
-			.subscribe({
-				next: response => {
-					if (response.success && response.updated) {
-						this.successMessage = true;
+		return (
+			this.apiData
+				.changeEmail(data)
+				// .pipe(tag('email-response'))
+				.subscribe({
+					next: response => {
+						if (response.success && response.updated) {
+							this.successMessage = true;
+							this.dialogService
+								.openDialog(
+									'emailUpdateSuccess',
+									undefined,
+									email,
+									undefined,
+									undefined
+								)
+								.afterClosed()
+								.subscribe(response => {
+									if (response) {
+										this.emailForm.reset();
+									}
+								});
+						}
+					},
+					error: error => {
+						const originalData = { ...this.emailForm.value };
 						this.dialogService
 							.openDialog(
-								'emailUpdateSuccess',
-								undefined,
+								'errorUpdatingEmail',
+								error,
 								email,
 								undefined,
-								undefined
+								originalData
 							)
 							.afterClosed()
-							.subscribe(response => {
-								if (response) {
-									this.emailForm.reset();
-								}
+							.subscribe(() => {
+								this.emailForm.setValue(originalData);
 							});
 					}
-				},
-				error: error => {
-					const originalData = { ...this.emailForm.value };
-					this.dialogService
-						.openDialog('errorUpdatingEmail', error, email, undefined, originalData)
-						.afterClosed()
-						.subscribe(() => {
-							this.emailForm.setValue(originalData);
-						});
-				}
-			});
+				})
+		);
 	}
 
 	getNewDirectorKey() {
@@ -131,44 +139,51 @@ export class AccountSettingsComponent implements OnInit, OnDestroy {
 		};
 		const { newKey } = data;
 
-		return this.apiData
-			.updatePassword(data)
-			.pipe(tag('password-response'))
-			.subscribe({
-				next: response => {
-					console.log('repsonse data: ', response);
-					
-					
-					if (response.success && response.updated) {
-						this.successMessage = true;
+		return (
+			this.apiData
+				.updatePassword(data)
+				// .pipe(tag('password-response'))
+				.subscribe({
+					next: response => {
+						console.log('repsonse data: ', response);
+
+						if (response.success && response.updated) {
+							this.successMessage = true;
+							this.dialogService
+								.openDialog(
+									'keyUpdateSuccess',
+									undefined,
+									undefined,
+									newKey,
+									undefined
+								)
+								.afterClosed()
+								.subscribe(result => {
+									if (result) {
+										this.directorKeyForm.reset();
+										const details = { newKey };
+										this.authService.updateUserDetails(details);
+									}
+								});
+						}
+					},
+					error: error => {
+						const originalData = { ...this.directorKeyForm.value };
 						this.dialogService
 							.openDialog(
-								'keyUpdateSuccess',
-								undefined,
+								'errorUpdatingKey',
+								error,
 								undefined,
 								newKey,
-								undefined
+								originalData
 							)
 							.afterClosed()
-							.subscribe(result => {
-								if (result) {
-									this.directorKeyForm.reset();
-									const details = { newKey };
-									this.authService.updateUserDetails(details);
-								}
+							.subscribe(() => {
+								this.directorKeyForm.setValue(originalData);
 							});
 					}
-				},
-				error: error => {
-					const originalData = { ...this.directorKeyForm.value };
-					this.dialogService
-						.openDialog('errorUpdatingKey', error, undefined, newKey, originalData)
-						.afterClosed()
-						.subscribe(() => {
-							this.directorKeyForm.setValue(originalData);
-						});
-				}
-			});
+				})
+		);
 	}
 
 	onTabChange(event: MatTabChangeEvent) {}

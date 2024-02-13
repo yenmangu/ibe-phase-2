@@ -4,6 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { CustomSnackbarComponent } from 'src/app/shared/custom-snackbar/custom-snackbar.component';
 import { BreakpointService } from 'src/app/shared/services/breakpoint.service';
 import { UserDetailsService } from 'src/app/shared/services/user-details.service';
+import { switchMap } from 'rxjs';
 
 @Component({
 	selector: 'app-admin-tools',
@@ -11,7 +12,8 @@ import { UserDetailsService } from 'src/app/shared/services/user-details.service
 	styleUrls: ['./admin-tools.component.scss']
 })
 export class AdminToolsComponent implements OnInit {
-	isSuperAdmin: boolean = true;
+	gameCode: string = '';
+	isSuperAdmin: boolean = false;
 	currentBreakpoint: string = '';
 	constructor(
 		private adminToolsService: AdminToolsService,
@@ -24,6 +26,31 @@ export class AdminToolsComponent implements OnInit {
 		this.breakpointService.currentBreakpoint$.subscribe(breakpoint => {
 			this.currentBreakpoint = breakpoint;
 		});
+
+		this.userDetailsService.gameCode$
+			.pipe(
+				switchMap(gamecode => {
+					console.log('User details in admin-tools component: ', gamecode);
+					this.gameCode = gamecode;
+					return this.adminToolsService.verifyAdmin(this.gameCode);
+				})
+			)
+			.subscribe(response => {
+				if (response.authStatus) {
+					this.isSuperAdmin = true;
+				}
+			});
+
+		// this.userDetailsService.gameCode$.subscribe(gamecode => {
+		// 	console.log('User details in admin-tools component: ', gamecode);
+		// 	this.gameCode = gamecode;
+		// });
+
+		// this.adminToolsService.verifyAdmin(this.gameCode).subscribe(response => {
+		// 	if (response.authStatus) {
+		// 		this.isSuperAdmin = true;
+		// 	}
+		// });
 	}
 
 	onBatchConvert() {

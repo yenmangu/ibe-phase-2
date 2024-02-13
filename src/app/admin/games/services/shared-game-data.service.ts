@@ -11,7 +11,7 @@ export class SharedGameDataService {
 	private startingLineupSubject = new BehaviorSubject<any>('');
 	private triggerRefresh$ = new Subject<boolean>();
 	public gameActionsSubject = new BehaviorSubject<any>('');
-	private eventConfigSubject = new BehaviorSubject<any>('')
+	private eventConfigSubject = new BehaviorSubject<any>('');
 
 	public databaseRevisionSubject = new BehaviorSubject<string>('');
 	public databaseRevision$ = this.databaseRevisionSubject.asObservable();
@@ -29,7 +29,7 @@ export class SharedGameDataService {
 	tableConfigOption$ = this.tableConfigOptionSubject.asObservable();
 	refreshDatabase$ = this.refreshDatabaseSubject.asObservable();
 	twoPageStartupValue$ = this.twoPageStartupSubject.asObservable();
-	eventConfig$  = this.eventConfigSubject.asObservable()
+	eventConfig$ = this.eventConfigSubject.asObservable();
 	constructor() {}
 
 	setTableConfigOption(option: string) {
@@ -50,7 +50,7 @@ export class SharedGameDataService {
 
 	get triggerRefreshObservable(): Observable<boolean> {
 		return this.triggerRefresh$.pipe(
-			tag('triggerRefreshObservable'),
+			// tag('triggerRefreshObservable'),
 			switchMap(triggerValue => {
 				if (triggerValue) {
 					return this.refreshDatabaseSubject.pipe(take(1));

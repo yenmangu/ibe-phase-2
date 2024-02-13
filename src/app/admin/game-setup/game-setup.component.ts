@@ -120,7 +120,7 @@ export class GameSetupComponent implements OnInit, AfterViewInit, OnDestroy {
 
 		this.sharedSettingsService
 			.getGameSettings()
-			.pipe(tag('settings'))
+			// .pipe(tag('settings'))
 			.subscribe({
 				next: data => {
 					if (data) {
