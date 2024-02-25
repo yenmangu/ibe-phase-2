@@ -176,7 +176,7 @@ export class PlayerDatabaseComponent
 		const mappedDataSource = updatedData.map(item => item.value);
 		this.dataSource.data = mappedDataSource;
 
-		console.log('dataSource.data: ', this.dataSource.data);
+		// console.log('dataSource.data: ', this.dataSource.data);
 
 		// console.log('new datasource: ', this.dataSource.data);
 	}

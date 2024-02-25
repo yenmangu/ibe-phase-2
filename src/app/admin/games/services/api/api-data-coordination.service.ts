@@ -29,13 +29,12 @@ export class ApiDataCoordinationService {
 			const gameCode = localStorage.getItem('GAME_CODE');
 			const dirKey = localStorage.getItem('DIR_KEY');
 			let dbRevision;
-			const currentDatabaseRevisionSubscription = this.sharedGameData.databaseRevision$
-				.pipe(take(1))
-				.subscribe(revision => {
+			const currentDatabaseRevisionSubscription =
+				this.sharedGameData.databaseRevision$.pipe(take(1)).subscribe(revision => {
 					dbRevision = revision;
 				});
 			const newData = { ...data, gameCode, dirKey, dbRevision };
-			currentDatabaseRevisionSubscription.unsubscribe()
+			currentDatabaseRevisionSubscription.unsubscribe();
 			return this.sendToHttp(newData);
 		} else {
 			if (data.settings) {
@@ -67,10 +66,12 @@ export class ApiDataCoordinationService {
 
 	private sendToHttp(databaseData): Observable<any> {
 		console.log('Database data: ', databaseData);
-		
-		if (databaseData.data.isNew) {
+
+		if (databaseData.data && databaseData.data.isNew) {
 			return this.httpService.addNewEntry(databaseData);
 		} else {
+			console.log('Not new ');
+
 			return this.httpService.updateEntry(databaseData);
 		}
 	}

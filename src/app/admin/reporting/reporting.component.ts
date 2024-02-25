@@ -6,6 +6,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { HtmlPdfDialogComponent } from './html-pdf-dialog/html-pdf-dialog.component';
+import { EbuXmlDialogComponent } from './ebu-xml-dialog/ebu-xml-dialog.component';
 
 @Component({
 	selector: 'app-reporting',
@@ -95,6 +96,12 @@ export class ReportingComponent implements OnInit, OnDestroy {
 			}
 		});
 		// }
+	}
+
+	openEbu() {
+		this.dialog.open(EbuXmlDialogComponent, { width: '400px' });
+		// .afterClosed()
+		// .subscribe();
 	}
 
 	openHtmlPdf() {

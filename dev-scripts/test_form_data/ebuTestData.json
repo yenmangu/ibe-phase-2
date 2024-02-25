@@ -1,0 +1,13 @@
+{
+	"clubName": "Test Club Name",
+	"clubId": "ID1245554455",
+	"eventName": "Test event name",
+	"chargeCode": "10",
+	"awardMp": true,
+	"perMatchWon": true,
+	"mpType": "black",
+	"mpScale": "Club",
+	"directorName": "Rob Test",
+	"directorEmail": "robert.shelford@googlemail.com",
+	"comments": "any comments here"
+}

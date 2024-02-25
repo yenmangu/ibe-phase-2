@@ -43,6 +43,7 @@ import { ReportingComponent } from './reporting/reporting.component';
 import { AdminToolsComponent } from './admin-tools/admin-tools.component';
 import { HtmlPdfDialogComponent } from './reporting/html-pdf-dialog/html-pdf-dialog.component';
 import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.component';
+import { EbuXmlDialogComponent } from './reporting/ebu-xml-dialog/ebu-xml-dialog.component';
 @NgModule({
 	declarations: [
 		NavigationComponent,
@@ -62,7 +63,8 @@ import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.componen
 		ReportingComponent,
 		AdminToolsComponent,
 		HtmlPdfDialogComponent,
-		WelcomeScreenComponent
+		WelcomeScreenComponent,
+  EbuXmlDialogComponent
 	],
 	imports: [
 		CommonModule,

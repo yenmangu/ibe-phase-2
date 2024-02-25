@@ -1,0 +1,125 @@
+<div class="container column center">
+	<h3 mat-dialog-title>Download EBU XML</h3>
+	<div
+		class="form container column"
+		mat-dialog-content>
+		<form [formGroup]="ebuXmlForm">
+			<div class="form-inner container column">
+				<h4>Club Details</h4>
+				<mat-form-field>
+					<mat-label>EBU Club Name</mat-label>
+					<input
+						matInput
+						formControlName="clubName" />
+				</mat-form-field>
+				<mat-form-field>
+					<mat-label>EBU Club ID</mat-label>
+					<input
+						matInput
+						formControlName="clubId" />
+				</mat-form-field>
+				<mat-form-field>
+					<mat-label>Event Name</mat-label>
+					<input
+						matInput
+						formControlName="eventName" />
+				</mat-form-field>
+
+				<mat-form-field>
+					<mat-label>Charge Code</mat-label>
+					<mat-select formControlName="chargeCode">
+						<mat-option
+							*ngFor="let code of ebuChargeCodes"
+							[value]="code.value"
+							>{{ code.display }}</mat-option
+						>
+					</mat-select>
+					<mat-hint
+						>Please see
+						<a
+							href="https://www.ebu.co.uk/documents/universal-membership/player-session-rates.pdf"
+							class="codes"
+							>here</a
+						>
+						for a full list of charge codes and descriptions</mat-hint
+					>
+				</mat-form-field>
+				<div class="container column checkbox">
+					<mat-checkbox formControlName="awardMp"
+						>Award Master Points?</mat-checkbox
+					>
+					<mat-checkbox formControlName="perMatchWon"
+						>Master Points per match won?</mat-checkbox
+					>
+				</div>
+				<mat-form-field>
+					<mat-label>Type of Master Points</mat-label>
+					<mat-select formControlName="mpType">
+						<mat-option value="black">Black</mat-option>
+						<mat-option value="blue">Blue</mat-option>
+						<mat-option value="green">Green</mat-option>
+					</mat-select>
+				</mat-form-field>
+
+				<mat-form-field>
+					<mat-label>Master Point Scale</mat-label>
+					<mat-select formControlName="mpScale">
+						<mat-option
+							*ngFor="let scaleVal of mpScale"
+							[value]="scaleVal"
+							>{{ scaleVal }}</mat-option
+						>
+					</mat-select>
+				</mat-form-field>
+				<h4>Director Details</h4>
+				<mat-form-field>
+					<mat-label>Director Name</mat-label>
+					<input
+						matInput
+						formControlName="directorName" />
+				</mat-form-field>
+
+				<mat-form-field>
+					<mat-label>Director Email</mat-label>
+					<input
+						matInput
+						formControlName="directorEmail" />
+				</mat-form-field>
+
+				<mat-form-field>
+					<mat-label>Comments</mat-label>
+					<textarea
+						matInput
+						formControlName="comments"></textarea>
+				</mat-form-field>
+			</div>
+		</form>
+
+		<div class="button-wrapper container row"></div>
+		<div
+			class="button-wrapper container row"
+			mat-dialog-actions>
+			<button
+				[disabled]="!ebuXmlForm.valid"
+				mat-flat-button
+				color="accent"
+				(click)="handleSubmit()">
+				Confirm
+			</button>
+			<button
+				mat-flat-button
+				color="warn"
+				(click)="closeDialog()">
+				Cancel
+			</button>
+		</div>
+		<div class="dev container row">
+			<button
+				mat-flat-button
+				color="warn"
+				(click)="testEbuSubmit()">
+				Test EBU Submit
+			</button>
+		</div>
+	</div>
+</div>
