@@ -5,6 +5,7 @@ import { HttpService } from 'src/app/shared/services/http.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CustomSnackbarComponent } from '../../../../shared/custom-snackbar/custom-snackbar.component';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+
 @Component({
 	selector: 'app-import-export',
 	templateUrl: './import-export.component.html',
@@ -33,6 +34,9 @@ export class ImportExportComponent implements OnInit {
 	deleteSuccess: boolean | null = null;
 
 	dialogRef: MatDialogRef<any> | null = null;
+
+	bridgeWebUpdating: boolean = false;
+	bwButton: string = 'Update';
 
 	constructor(
 		private fb: FormBuilder,
@@ -80,6 +84,7 @@ export class ImportExportComponent implements OnInit {
 	}
 
 	public bridgeWebsUpdateFrom() {
+		this.setBwState(true);
 		let formData;
 		if (this.bwUpdateForm.valid) {
 			formData = { ...this.bwUpdateForm.value };
@@ -87,14 +92,18 @@ export class ImportExportComponent implements OnInit {
 		}
 		const data = { gameCode: this.gameCode, dirKey: this.dirKey, formData };
 
+		console.log('Data in bridgeWebsUpdate: ', data);
+
 		this.httpService.dbBwFrom(data).subscribe({
 			next: response => {
 				if (response.success) {
+					this.setBwState(false);
 					this.snackbar.open(
 						'Success updating database from BridgeWebs. Please refresh the database to see the latest changes.',
 						'Dismiss'
 					);
 				} else if (response.error) {
+					this.setBwState(false);
 					this.openSnackbar(
 						'Error updating database from BridgeWebs.',
 						true,
@@ -103,9 +112,20 @@ export class ImportExportComponent implements OnInit {
 				}
 			},
 			error: error => {
+				this.setBwState(false);
 				this.openSnackbar(`Error updating from BridgeWebs. `);
 			}
 		});
+	}
+
+	private setBwState(updating: boolean): void {
+		if (updating === true) {
+			this.bwButton = 'Please wait...';
+			this.bridgeWebUpdating = true;
+		} else {
+			this.bwButton = 'Update';
+			this.bridgeWebUpdating = false;
+		}
 	}
 
 	triggerMappingContainer(event) {

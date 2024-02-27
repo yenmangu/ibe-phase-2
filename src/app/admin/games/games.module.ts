@@ -56,6 +56,7 @@ import { RestoreDialogComponent } from './historic-games/restore-dialog/restore-
 import { ImportExportComponent } from './database-landing/import-export/import-export.component';
 
 import { SharedModule } from 'src/app/shared/shared.module';
+import { BridgewebsDialogComponent } from './database-landing/bridgewebs-dialog/bridgewebs-dialog.component';
 
 @NgModule({
 	declarations: [
@@ -81,7 +82,8 @@ import { SharedModule } from 'src/app/shared/shared.module';
 		PdfGenerationComponent,
 		CreateGameComponent,
 		RestoreDialogComponent,
-		ImportExportComponent
+		ImportExportComponent,
+  BridgewebsDialogComponent
 	],
 	imports: [
 		CommonModule,

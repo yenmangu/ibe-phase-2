@@ -112,13 +112,18 @@
 									>{{ hide ? 'visibility_off' : 'visbility_on' }}</mat-icon
 								>
 							</mat-form-field>
+							<div
+								*ngIf="bridgeWebUpdating"
+								class="container spinner">
+								<mat-spinner></mat-spinner>
+							</div>
 							<button
 								class="form-button upload"
 								[disabled]="bwUpdateForm.invalid"
 								mat-flat-button
 								color="primary"
 								(click)="bridgeWebsUpdateFrom()">
-								Upload
+								{{ bwButton }}
 							</button>
 						</div>
 					</form>

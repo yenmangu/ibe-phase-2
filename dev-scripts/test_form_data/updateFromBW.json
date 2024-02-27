@@ -1,0 +1,22 @@
+[
+	{
+		"gameCode": "pairdum",
+		"dirKey": "puma",
+		"formData": {
+			"contactInfo": true,
+			"excludePlayers": true,
+			"bwAccount": "robs",
+			"bwPass": "password"
+		}
+	},
+	{
+		"gameCode": "pairdum",
+		"dirKey": "puma",
+		"formData": {
+			"contactInfo": true,
+			"excludePlayers": true,
+			"bwAccount": "brian",
+			"bwPass": "nicole"
+		}
+	}
+]
