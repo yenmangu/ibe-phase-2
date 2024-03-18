@@ -45,6 +45,7 @@ export class ApiDataCoordinationService {
 
 			if (data.table_config) {
 				console.log('post current invoked');
+				console.log('Data in this.postCurrent: ', data);
 
 				return this.postCurrent(dir_key, game_code, data);
 			}

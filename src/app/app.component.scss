@@ -5,7 +5,7 @@
 	display: block;
 	display: flex;
 	flex-direction: column;
-	justify-content: space-between;                                                                                                                                                                                                                                                                                                         
+	justify-content: space-between;
 	overflow: scroll;
 }
 .host::-webkit-scrollbar {
@@ -27,4 +27,19 @@ router-outlet {
 
 app-footer {
 	order: 3;
+}
+
+.app-container {
+	display: flex;
+	flex-direction: column;
+	height: 100vh; /* Ensure app container takes up full viewport height */
+}
+
+.content-container {
+	flex-grow: 1; /* Content container grows to take remaining space */
+	transition: margin-left 0.3s ease; /* Add transition for smooth animation */
+}
+
+.drawer.opened + .content-container {
+	margin-left: 250px; /* Adjust the margin to match the width of the drawer */
 }

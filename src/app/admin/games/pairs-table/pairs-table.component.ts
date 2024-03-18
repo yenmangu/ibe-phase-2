@@ -45,12 +45,22 @@ export class PairsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 	ewSitters: any[] = [];
 	nsLabels: any[] = [];
 	ewLabels: any[] = [];
+	n_sitters: any[] = [];
+	s_sitters: any[] = [];
+	e_sitters: any[] = [];
+	w_sitters: any[] = [];
+	n_handi: any[] = [];
+	s_handi: any[] = [];
+	e_handi: any[] = [];
+	w_handi: any[] = [];
 
 	originalFormValues: any;
 	changedFields: { [key: string]: { previousValue: any; newValue: any } } = {};
 	tableNumbers: string[];
 
 	breakpoint: string = '';
+
+	individual: boolean;
 
 	private tableConfigSubscription: Subscription;
 	private destroy$ = new Subject<void>();
@@ -85,16 +95,23 @@ export class PairsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 
 		// console.log('tables: ', this.initialTableData.tables);
 		this.matchType = this.initialTableData.matchString;
+		if (this.matchType === 'individual') {
+			this.individual = true;
+		} else {
+			this.individual = false;
+		}
 		this.tableNumbers = Object.keys(this.initialTableData.tableConfig);
 		this.fromDataTableData = this.initialTableData.tables;
 		this.pairConfig = this.initialTableData.pairConfig;
 		// console.log('pair config: ', this.pairConfig);
 
 		this.pairNumbers = this.initialTableData.pairNumbers;
-		this.nsSitters = this.initialTableData.sitters.nsSitters;
-		this.ewSitters = this.initialTableData.sitters.ewSitters;
-		this.nsLabels = this.initialTableData.labels.nsLabels;
-		this.ewLabels = this.initialTableData.labels.ewLabels;
+		if (this.matchType !== 'individual') {
+			this.nsSitters = this.initialTableData.sitters.nsSitters;
+			this.ewSitters = this.initialTableData.sitters.ewSitters;
+			this.nsLabels = this.initialTableData.labels.nsLabels;
+			this.ewLabels = this.initialTableData.labels.ewLabels;
+		}
 		this.pairsForm = this.createNewPairsForm();
 		const {
 			cardinals: { north, south, east, west }
@@ -180,7 +197,15 @@ export class PairsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 			'boardCol',
 			'time_from',
 			'time_to',
-			'lunch'
+			'lunch',
+			'n_sitters',
+			's_sitters',
+			'e_sitters',
+			'w_sitters',
+			'n_handi',
+			's_handi',
+			'e_handi',
+			'w_handi'
 		];
 
 		if (namesArray) {
@@ -230,6 +255,26 @@ export class PairsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 				} else {
 					const controlName = `${field}`;
 					tableControls[field] = [null];
+				}
+
+				if (
+					field === 'n_sitters' ||
+					field === 's_sitters' ||
+					field === 'e_sitters' ||
+					field === 'w_sitters'
+				) {
+					if (field === 'n_sitters') {
+						tableControls[field] = this.n_sitters[index] || false;
+					}
+					if (field === 's_sitters') {
+						tableControls[field] = this.s_sitters[index] || false;
+					}
+					if (field === 'e_sitters') {
+						tableControls[field] = this.e_sitters[index] || false;
+					}
+					if (field === 'w_sitters') {
+						tableControls[field] = this.w_sitters[index] || false;
+					}
 				}
 			}
 		}

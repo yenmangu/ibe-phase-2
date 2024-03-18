@@ -7,7 +7,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { HtmlPdfDialogComponent } from './html-pdf-dialog/html-pdf-dialog.component';
 import { EbuXmlDialogComponent } from './ebu-xml-dialog/ebu-xml-dialog.component';
-
+import { AccountSettingsService } from '../services/account-settings.service';
+import { Subject, takeUntil } from 'rxjs';
 @Component({
 	selector: 'app-reporting',
 	templateUrl: './reporting.component.html',
@@ -19,23 +20,36 @@ export class ReportingComponent implements OnInit, OnDestroy {
 	bridgewebsForm: FormGroup;
 	bridgeWebsMasterPoints: boolean = false;
 
+	accountData: any;
+
+	private destroy$ = new Subject<void>();
+
 	constructor(
 		private handActionsHttp: HandActionsHttpService,
 		private breakpointService: BreakpointService,
+		private accountSettings: AccountSettingsService,
 		private fb: FormBuilder,
 		private snackbar: MatSnackBar,
 		private dialog: MatDialog
 	) {}
 
 	ngOnInit(): void {
-		this.breakpointService.currentBreakpoint$.subscribe(breakpoint => {
-			this.currentBreakpoint = breakpoint;
-		});
+		this.breakpointService.currentBreakpoint$
+			.pipe(takeUntil(this.destroy$))
+			.subscribe(breakpoint => {
+				this.currentBreakpoint = breakpoint;
+			});
 		this.gameCode = localStorage.getItem('GAME_CODE');
-		// this.buildBridgeWebsForm();
-		// this.bridgewebsForm.get('masterpoints').valueChanges.subscribe(value => {
-		// 	this.bridgeWebsMasterPoints = value;
-		// });
+		this.accountSettings.accountData$
+			.pipe(takeUntil(this.destroy$))
+			.subscribe(data => {
+				// console.log('Data: ', data);
+				if (data) {
+					this.accountData = data;
+					console.log('Account Data in Component: ', this.accountData);
+				}
+			});
+		this.accountSettings.fetchAccountSettings();
 	}
 
 	// buildBridgeWebsForm() {
@@ -99,7 +113,19 @@ export class ReportingComponent implements OnInit, OnDestroy {
 	}
 
 	openEbu() {
-		this.dialog.open(EbuXmlDialogComponent, { width: '400px' });
+		this.dialog.open(EbuXmlDialogComponent, {
+			width: '400px',
+			data: {
+				england: this.accountData.england,
+				ebu: this.accountData.ebu,
+				ebuDetails: this.accountData.ebuDetails,
+				ids: this.accountData.ids,
+				accountDetails: this.accountData.accountDetails,
+				eventName: this.accountData.eventName
+
+				// ebu: this.accountData.ids
+			}
+		});
 		// .afterClosed()
 		// .subscribe();
 	}
@@ -110,5 +136,8 @@ export class ReportingComponent implements OnInit, OnDestroy {
 			.afterClosed()
 			.subscribe();
 	}
-	ngOnDestroy(): void {}
+	ngOnDestroy(): void {
+		this.destroy$.next();
+		this.destroy$.complete();
+	}
 }

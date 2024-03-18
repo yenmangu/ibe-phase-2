@@ -44,6 +44,7 @@ import { AdminToolsComponent } from './admin-tools/admin-tools.component';
 import { HtmlPdfDialogComponent } from './reporting/html-pdf-dialog/html-pdf-dialog.component';
 import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.component';
 import { EbuXmlDialogComponent } from './reporting/ebu-xml-dialog/ebu-xml-dialog.component';
+import { UploadPbnComponent } from './admin-tools/upload-pbn/upload-pbn.component';
 @NgModule({
 	declarations: [
 		NavigationComponent,
@@ -64,7 +65,8 @@ import { EbuXmlDialogComponent } from './reporting/ebu-xml-dialog/ebu-xml-dialog
 		AdminToolsComponent,
 		HtmlPdfDialogComponent,
 		WelcomeScreenComponent,
-  EbuXmlDialogComponent
+		EbuXmlDialogComponent,
+		UploadPbnComponent
 	],
 	imports: [
 		CommonModule,
@@ -93,6 +95,7 @@ import { EbuXmlDialogComponent } from './reporting/ebu-xml-dialog/ebu-xml-dialog
 		DashboardModule,
 		GamesModule
 	],
+	exports: [],
 	providers: [
 		{ provide: MatDialogModule, useValue: {} },
 		{ provide: MatDialogRef, useValue: {} }

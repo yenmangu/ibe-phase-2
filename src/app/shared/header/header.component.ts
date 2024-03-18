@@ -14,15 +14,22 @@ import { UserDetailsService } from '../services/user-details.service';
 import { IndexedDatabaseStatusService } from '../services/indexed-database-status.service';
 import { SharedGameDataService } from 'src/app/admin/games/services/shared-game-data.service';
 import { BreakpointService } from '../services/breakpoint.service';
-import { DialogService } from '../services/dialog.service';
 import { PasswordRecoverComponent } from 'src/app/auth/password-recover/password-recover.component';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { IconRegistryService } from '../services/icon-registry.service';
 import { NavigationService } from 'src/app/admin/navigation/navigation.service';
+import { animate, state, style, transition, trigger } from '@angular/animations';
+
 @Component({
 	selector: 'app-header',
 	templateUrl: './header.component.html',
-	styleUrls: ['./header.component.scss']
+	styleUrls: ['./header.component.scss'],
+	animations: [
+		trigger('drawerAnimation', [
+			state('opened', style({ height: '200px' })),
+			state('closed', style({ height: '0' })),
+			transition('opened <=> closed', animate('300ms ease'))
+		])
+	]
 })
 export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 	isAuthenticated: boolean = false;
@@ -39,6 +46,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 
 	isNavLoaded: boolean = false;
 	authed: boolean | null = null;
+
+	drawerState: 'opened' | 'closed' = 'closed';
 
 	private sidenavSubscription: Subscription;
 	constructor(
@@ -106,6 +115,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 	toggleSidenav(): void {
 		this.sidenavService.toggle();
 		// console.log('sidenav button clicked');
+	}
+
+	toggleDrawer() {
+		this.drawerState = this.drawerState === 'closed' ? 'opened' : 'closed';
 	}
 
 	isLoggedIn(): boolean {

@@ -2,7 +2,7 @@
 
 .toolbar {
 	width: 100%;
-	height: 60px;
+	// height: 60px;
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
@@ -12,7 +12,7 @@
 .view {
 	position: relative;
 	width: 100%;
-	max-width: 1440px;
+	max-width: 80rem;
 	margin: auto;
 	justify-content: center;
 	align-items: center;
@@ -67,4 +67,26 @@ img.logo {
 	display: block;
 	height: 40px;
 	width: 40px;
+}
+
+// Testing drawer
+
+.drawer-container {
+	display: flex;
+	flex-direction: row;
+	height: 100%;
+}
+
+.drawer {
+	height: 0;
+	overflow: hidden;
+	transition: height 0.3s ease;
+}
+
+.main-content {
+	flex: 1;
+}
+
+.drawer.opened {
+	height: 200px; /* Adjust height as needed */
 }

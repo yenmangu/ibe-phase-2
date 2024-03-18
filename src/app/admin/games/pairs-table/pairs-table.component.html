@@ -1,5 +1,4 @@
 <div class="container column main">
-	
 	<form
 		[formGroup]="pairsForm"
 		(ngSubmit)="onSubmit()">
@@ -29,24 +28,39 @@
 							<th>
 								{{ currentBreakpoint === 'handset' ? 'Player No.' : 'Player No.' }}
 							</th>
+							<ng-container *ngIf="tableConfig.sitters"
+								><th>Sitters</th>
+							</ng-container>
 						</ng-container>
+
 						<th class="north">North</th>
+						<ng-container
+							*ngIf="matchType === 'individual' && tableConfig.handicaps">
+							<th>Handicap</th>
+						</ng-container>
 
 						<th class="divider"></th>
 						<ng-container *ngIf="matchType === 'individual'">
 							<th>
 								{{ currentBreakpoint === 'handset' ? 'Player No.' : 'Player No.' }}
 							</th>
+							<ng-container *ngIf="tableConfig.sitters"
+								><th>Sitters</th>
+							</ng-container>
 						</ng-container>
 
 						<th class="south">South</th>
+						<ng-container
+							*ngIf="matchType === 'individual' && tableConfig.handicaps">
+							<th>Handicap</th>
+						</ng-container>
 						<th
 							*ngIf="tableConfig.stratification"
 							class="conditional empty">
 							Stratification
 						</th>
 						<th
-							*ngIf="tableConfig.sitters"
+							*ngIf="tableConfig.sitters && !individual"
 							class="conditional empty sitters">
 							Sitters
 						</th>
@@ -56,7 +70,7 @@
 							Adjust
 						</th>
 						<th
-							*ngIf="tableConfig.handicaps"
+							*ngIf="tableConfig.handicaps && !individual"
 							class="conditional empty">
 							Handicap
 						</th>
@@ -80,22 +94,36 @@
 							<th>
 								{{ currentBreakpoint === 'handset' ? 'Player No.' : 'Player No.' }}
 							</th>
+							<ng-container *ngIf="tableConfig.sitters"
+								><th>Sitters</th>
+							</ng-container>
 						</ng-container>
 						<th class="east">East</th>
+						<ng-container
+							*ngIf="matchType === 'individual' && tableConfig.handicaps">
+							<th>Handicap</th>
+						</ng-container>
 						<th class="divider"></th>
 						<ng-container *ngIf="matchType === 'individual'">
 							<th>
 								{{ currentBreakpoint === 'handset' ? 'Player No.' : 'Player No.' }}
 							</th>
+							<ng-container *ngIf="tableConfig.sitters"
+								><th>Sitters</th>
+							</ng-container>
 						</ng-container>
 						<th class="west">West</th>
+						<ng-container
+							*ngIf="matchType === 'individual' && tableConfig.handicaps">
+							<th>Handicap</th>
+						</ng-container>
 						<th
 							*ngIf="tableConfig.stratification"
 							class="conditional empty">
 							Stratification
 						</th>
 						<th
-							*ngIf="tableConfig.sitters"
+							*ngIf="tableConfig.sitters && !individual"
 							class="conditional empty sitters">
 							Sitters
 						</th>
@@ -105,7 +133,7 @@
 							Adjust
 						</th>
 						<th
-							*ngIf="tableConfig.handicaps"
+							*ngIf="tableConfig.handicaps && !individual"
 							class="conditional empty">
 							Handicap
 						</th>
@@ -166,6 +194,16 @@
 								<td>
 									{{ individualNumbers.north[i] }}
 								</td>
+								<ng-container *ngIf="tableConfig.sitters">
+									<td
+										class="conditional sitters"
+										*ngFor="let column of ['n_sitters']">
+										<input
+											class="table-input"
+											[formControlName]="column"
+											type="checkbox" />
+									</td>
+								</ng-container>
 							</ng-container>
 
 							<td *ngFor="let column of ['north']">
@@ -173,17 +211,47 @@
 									class="table-input"
 									[formControlName]="column" />
 							</td>
+							<ng-container *ngIf="individual && tableConfig.handicaps">
+								<td
+									class="conditional handicaps"
+									*ngFor="let column of ['n_handi']">
+									<input
+										class="table-input"
+										[formControlName]="column"
+										type="checkbox" />
+								</td>
+							</ng-container>
 							<td class="divider">&</td>
 							<ng-container *ngIf="matchType === 'individual'">
 								<td>
 									{{ individualNumbers.south[i] }}
 								</td>
+								<ng-container *ngIf="tableConfig.sitters">
+									<td
+										class="conditional sitters"
+										*ngFor="let column of ['s_sitters']">
+										<input
+											class="table-input"
+											[formControlName]="column"
+											type="checkbox" />
+									</td>
+								</ng-container>
 							</ng-container>
 							<td *ngFor="let column of ['south']">
 								<input
 									class="table-input"
 									[formControlName]="column" />
 							</td>
+							<ng-container *ngIf="individual && tableConfig.handicaps">
+								<td
+									class="conditional handicaps"
+									*ngFor="let column of ['s_handi']">
+									<input
+										class="table-input"
+										[formControlName]="column"
+										type="checkbox" />
+								</td>
+							</ng-container>
 							<ng-container *ngIf="tableConfig.stratification">
 								<td
 									class="conditional"
@@ -193,7 +261,8 @@
 										[formControlName]="column" />
 								</td>
 							</ng-container>
-							<ng-container *ngIf="tableConfig.sitters">
+
+							<ng-container *ngIf="tableConfig.sitters && !individual">
 								<td
 									class="conditional sitters"
 									*ngFor="let column of ['ns_sitters']">
@@ -255,23 +324,63 @@
 								<td>
 									{{ individualNumbers.east[i] }}
 								</td>
+								<ng-container *ngIf="tableConfig.sitters">
+									<td
+										class="conditional sitters"
+										*ngFor="let column of ['e_sitters']">
+										<input
+											class="table-input"
+											[formControlName]="column"
+											type="checkbox" />
+									</td>
+								</ng-container>
 							</ng-container>
 							<td *ngFor="let column of ['east']">
 								<input
 									class="table-input"
 									[formControlName]="column" />
 							</td>
+							<ng-container *ngIf="individual && tableConfig.handicaps">
+								<td
+									class="conditional handicaps"
+									*ngFor="let column of ['n_handi']">
+									<input
+										class="table-input"
+										[formControlName]="column"
+										type="checkbox" />
+								</td>
+							</ng-container>
 							<td class="divider">&</td>
 							<ng-container *ngIf="matchType === 'individual'">
 								<td>
 									{{ individualNumbers.west[i] }}
 								</td>
+								<ng-container *ngIf="tableConfig.sitters">
+									<td
+										class="conditional sitters"
+										*ngFor="let column of ['w_sitters']">
+										<input
+											class="table-input"
+											[formControlName]="column"
+											type="checkbox" />
+									</td>
+								</ng-container>
 							</ng-container>
 							<td *ngFor="let column of ['west']">
 								<input
 									class="table-input"
 									[formControlName]="column" />
 							</td>
+							<ng-container *ngIf="individual && tableConfig.handicaps">
+								<td
+									class="conditional handicaps"
+									*ngFor="let column of ['n_handi']">
+									<input
+										class="table-input"
+										[formControlName]="column"
+										type="checkbox" />
+								</td>
+							</ng-container>
 							<ng-container *ngIf="tableConfig.stratification">
 								<td
 									class="conditional"
@@ -281,7 +390,7 @@
 										[formControlName]="column" />
 								</td>
 							</ng-container>
-							<ng-container *ngIf="tableConfig.sitters">
+							<ng-container *ngIf="tableConfig.sitters && !individual">
 								<td
 									class="conditional sitters"
 									*ngFor="let column of ['ew_sitters']">

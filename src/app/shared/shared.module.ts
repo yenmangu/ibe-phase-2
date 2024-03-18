@@ -1,11 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 // Material
 // import { MatToolbarModule } from '@angular/material/toolbar';
 import { MaterialModule } from '../material/material.module';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatSidenavModule } from '@angular/material/sidenav';
 
 // Components
 import { HeaderComponent } from './header/header.component';
@@ -29,7 +31,7 @@ import { CustomSnackbarComponent } from './custom-snackbar/custom-snackbar.compo
 import { CsvMappingComponent } from './csv-mapping/csv-mapping.component';
 import { DatabaseImportComponent } from './database-import/database-import.component';
 import { LinExtractionComponent } from './lin-extraction/lin-extraction.component';
-
+import { HeaderNavComponent } from './header-nav/header-nav.component';
 // Modules
 
 @NgModule({
@@ -54,15 +56,18 @@ import { LinExtractionComponent } from './lin-extraction/lin-extraction.componen
 		CustomSnackbarComponent,
 		CsvMappingComponent,
 		DatabaseImportComponent,
-		LinExtractionComponent
+		LinExtractionComponent,
+		HeaderNavComponent
 	],
 	imports: [
 		CommonModule,
+		RouterModule,
 		MaterialModule,
 		FormsModule,
 		ReactiveFormsModule,
 		MatFormFieldModule,
-		MatDialogModule
+		MatDialogModule,
+		MatSidenavModule
 	],
 	exports: [
 		HeaderComponent,
@@ -73,7 +78,8 @@ import { LinExtractionComponent } from './lin-extraction/lin-extraction.componen
 		CustomSnackbarComponent,
 		LinExtractionComponent,
 		DatabaseImportComponent,
-		CsvMappingComponent
+		CsvMappingComponent,
+		HeaderNavComponent
 	],
 
 	providers: [

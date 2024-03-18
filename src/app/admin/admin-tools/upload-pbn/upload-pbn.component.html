@@ -1,0 +1,72 @@
+<div class="upload-container">
+	<h3>Upload .pbn file to convert to .lin</h3>
+	<div
+		#dragBox
+		class="container column dragbox upload"
+		(dragover)="onDragOver($event)"
+		(drop)="onDrop($event)"
+		(dragleave)="onDragLeave($event)">
+		<label
+			for="upload"
+			class="custom-file">
+			<span>Drag or drop file here for upload, or click to browse</span>
+			<input
+				id="upload"
+				type="file"
+				#fileInput
+				name="upload"
+				color="primary"
+				style="display: none"
+				(change)="onChange($event)"
+				(click)="fileInput.value = null" />
+			<mat-icon>cloud_upload</mat-icon>
+		</label>
+		<div class="container column file-list">
+			<span *ngIf="selectedFiles.length">{{ selectedFiles[0].name }}</span>
+		</div>
+		<div class="container row button-wrapper">
+			<button
+				*ngIf="selectedFiles.length"
+				mat-flat-button
+				color="primary"
+				[disabled]="!selectedFiles.length"
+				(click)="onUpload()">
+				Upload
+			</button>
+			<button
+				*ngIf="selectedFiles.length"
+				mat-flat-button
+				color="warn"
+				[disabled]="!selectedFiles.length"
+				(click)="clearFiles()">
+				Clear
+			</button>
+		</div>
+		<ng-container *ngIf="success">
+			<div class="container row success">
+				<span>Success</span>
+				<button
+					mat-flat-button
+					color="accent"
+					(click)="dismissSuccess()">
+					Dismiss
+				</button>
+			</div>
+		</ng-container>
+	</div>
+</div>
+
+<ng-template #errorTemplate>
+	<div class="container column center">
+		<span>
+			Error converting {{ selectedFiles[0].name }} to .lin format. Please contact
+			<a href="mailto:admin@ibescore.com">admin@ibescore.com</a> for
+			assistance</span
+		>
+		<button
+			mat-flat-button
+			(click)="dismiss()">
+			Dismiss
+		</button>
+	</div>
+</ng-template>

@@ -1,0 +1,29 @@
+<ul class="navigation-links container row space-between">
+	<li class="nav-link">
+		<a
+			routerLink="/admin/games"
+			[routerLinkActive]="['active-link']"
+			class="nav-link"
+			(click)="handleLinkClick()"
+			>Current Session</a
+		>
+	</li>
+	<li class="nav-link">
+		<a
+			routerLink="/admin/hand-records"
+			[routerLinkActive]="['active-link']"
+			class="nav-link"
+			(click)="handleLinkClick()"
+			>Hand Records</a
+		>
+	</li>
+	<li class="nav-link">
+		<a
+			routerLink="/admin/reporting"
+			[routerLinkActive]="['active-link']"
+			class="nav-link"
+			(click)="handleLinkClick()"
+			>Reporting</a
+		>
+	</li>
+</ul>

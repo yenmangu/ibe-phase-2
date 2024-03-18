@@ -2,7 +2,7 @@
 
 :host {
 	width: 100%;
-	max-width: 1440px;
+	max-width: 80rem;
 	height: 100%;
 	display: flex;
 	flex-direction: column;
@@ -12,7 +12,7 @@
 }
 .view {
 	width: 100%;
-	max-width: 1440px;
+	max-width: 80rem;
 }
 .main {
 	padding: 0;
@@ -217,5 +217,5 @@ app-naming-numbering {
 .container.row.handset {
 	flex-direction: column;
 	align-items: center;
-	gap: 1rem
+	gap: 1rem;
 }

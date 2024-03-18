@@ -4,6 +4,7 @@ import { HandActionsHttpService } from 'src/app/shared/services/hand-actions-htt
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component';
+import { BreakpointService } from 'src/app/shared/services/breakpoint.service';
 @Component({
 	selector: 'app-hand-records-landing',
 	templateUrl: './hand-records-landing.component.html',
@@ -20,15 +21,21 @@ export class HandRecordsLandingComponent implements OnInit {
 	// turn off when finished
 	selectedTabIndex = 1;
 
+	currentBreakpoint: string;
+
 	constructor(
 		private handActions: HandActionsHttpService,
 		private snackbar: MatSnackBar,
-		private dialog: MatDialog
+		private dialog: MatDialog,
+		private breakpointsService: BreakpointService
 	) {}
 
 	ngOnInit(): void {
 		this.gameCode = localStorage.getItem('GAME_CODE');
 		this.dirKey = localStorage.getItem('DIR_KEY');
+		this.breakpointsService.currentBreakpoint$.subscribe(
+			bp => (this.currentBreakpoint = bp)
+		);
 	}
 
 	handleFiles(files: File[]) {

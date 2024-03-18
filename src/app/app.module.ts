@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { MaterialModule } from './material/material.module';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatIconModule } from '@angular/material/icon';
 
@@ -24,6 +24,7 @@ import { HandDisplayComponent } from './dev/hand/hand-display/hand-display.compo
 import { PaginationComponent } from './dev/hand/pagination/pagination.component';
 import { IconRegistryService } from './shared/services/icon-registry.service';
 import { FontSizeDirective } from './font-size.directive';
+import { ResponseInterceptor } from './response.interceptor';
 
 // Pipes
 // import { KeysPipe } from './shared/pipes/keys.pipe';
@@ -52,6 +53,7 @@ import { FontSizeDirective } from './font-size.directive';
 	providers: [
 		{ provide: MatDialogModule, useValue: {} },
 		{ provide: MatDialogRef, useValue: {} },
+		// { provide: HTTP_INTERCEPTORS, useClass: ResponseInterceptor, multi: true },
 		SidenavService,
 		IconRegistryService
 	],

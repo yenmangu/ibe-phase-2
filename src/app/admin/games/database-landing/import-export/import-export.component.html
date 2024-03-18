@@ -112,6 +112,14 @@
 									>{{ hide ? 'visibility_off' : 'visbility_on' }}</mat-icon
 								>
 							</mat-form-field>
+							<ng-container *ngIf="bwUpdateForm.valid">
+								<span
+									><h3>
+										Warning. This will completely over write the current database
+									</h3></span
+								>
+							</ng-container>
+
 							<div
 								*ngIf="bridgeWebUpdating"
 								class="container spinner">

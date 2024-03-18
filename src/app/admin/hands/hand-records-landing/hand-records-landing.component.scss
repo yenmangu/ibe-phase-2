@@ -1,7 +1,7 @@
 :host {
 	display: block;
 	width: 100%;
-	max-width: 1440px;
+	max-width: 80rem;
 	margin: 0 auto;
 }
 h2,
@@ -12,6 +12,11 @@ h4 {
 .main {
 	justify-content: center;
 	gap: 2rem;
+}
+
+.handset.main,
+.tablet.main {
+	flex-direction: column;
 }
 
 .left,

@@ -20,7 +20,9 @@ export class BridgewebsDialogComponent implements OnInit, OnDestroy {
 
 	ngOnInit(): void {}
 
-	private createBridgeWebsForm() {}
+	private createBridgeWebsForm() {
+		this.bridgeWebsForm = this.fb.group({});
+	}
 
 	ngOnDestroy(): void {}
 }

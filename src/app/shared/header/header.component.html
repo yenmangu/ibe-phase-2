@@ -69,3 +69,59 @@
 		</div>
 	</ng-container>
 </mat-toolbar>
+<header>
+	<nav class="header">
+		<div class="wrapper block">
+			<mat-toolbar
+				color="accent"
+				class="toolbar">
+				<!-- tool bar content -->
+				<ng-container *ngIf="isPublicLink">
+					<div class="container row public-view">
+						<span class="header-text">IBEScore Companion</span>
+						<div class="logo-container">
+							<img
+								class="logo"
+								src="assets/images/logo/globe-cards-icon.png"
+								alt="Globe cards icon." />
+						</div>
+					</div>
+				</ng-container>
+				<ng-container *ngIf="!isPublicLink">
+					<div
+						class="container row view space-between"
+						[ngClass]="currentBreakpoint + (authed ? ' authed' : '')">
+						<ng-container *ngIf="authed">
+							<app-header-nav></app-header-nav>
+							<!-- header-nav.component.html -->
+							<!-- test drawer -->
+							<div class="drawer-container">
+								<div
+									class="drawer"
+									[@drawerAnimation]="drawerState">
+									<!-- Drawer content goes here -->
+									<p>Drawer content here</p>
+								</div>
+
+								<!-- Your main content here -->
+								<div class="main-content">
+									<!-- Main content goes here -->
+									<p>Main content here</p>
+									<button
+										mat-flat-button
+										color="primary"
+										(click)="toggleDrawer()">
+										Toggle Drawer
+									</button>
+								</div>
+							</div>
+						</ng-container>
+					</div>
+				</ng-container>
+			</mat-toolbar>
+		</div>
+	</nav>
+	<div class="masthead">
+		<!-- welcome to ibescore -->
+	</div>
+</header>

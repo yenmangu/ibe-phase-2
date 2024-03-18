@@ -66,6 +66,30 @@ export class RevisedProcessCurrentDataService {
 		);
 	}
 
+	async getAccount() {
+		try {
+			const accountData = await this.fetchAccountData();
+			if (accountData) {
+				return accountData;
+			}
+		} catch (error) {
+			console.error('Error getting account data: ', error);
+		}
+	}
+
+	private async fetchAccountData() {
+		try {
+			const store = 'xml_settings';
+			const account = await this.indexedDB.readFromDB([store], 'acctsets');
+			console.log('Raw account data: ', account);
+			const accountvalue = this.destructureValue(account, 'acctsets');
+			console.log('Raw account value: ', accountvalue);
+			return accountvalue;
+		} catch (error) {
+			console.error('Error fetching account details: ', error);
+		}
+	}
+
 	private async fetchAndProcessCurrentGameData() {
 		try {
 			const store = 'current_game_data';
@@ -106,7 +130,9 @@ export class RevisedProcessCurrentDataService {
 				labelsValue
 			);
 			return currentGameConfig;
-		} catch (error) {}
+		} catch (error) {
+			console.error('Error fetching game details: ', error);
+		}
 	}
 
 	async getSingleEventName() {
@@ -126,7 +152,7 @@ export class RevisedProcessCurrentDataService {
 			}
 		} catch (error) {
 			console.error('Error retrieving eventName');
-			throw error
+			throw error;
 		}
 	}
 
@@ -152,6 +178,8 @@ export class RevisedProcessCurrentDataService {
 				matchType
 			);
 
+			console.log('movements and pairs: ', movementAndPairs);
+
 			const cleanedMovement = this.processMovementText(movementtxt);
 			const numOfTables = cleanedMovement[1][1];
 			let notUsebio = false;
@@ -175,7 +203,7 @@ export class RevisedProcessCurrentDataService {
 			console.log('eventName: ', eventName);
 
 			const {
-				totalTables,
+				// totalTables,
 				totalPairs,
 				pairNumbers,
 				movementOnly,
@@ -183,17 +211,23 @@ export class RevisedProcessCurrentDataService {
 				individuals,
 				isIndividuals
 			} = movementAndPairs;
+			let totalTables = movementAndPairs.totalTables;
 
 			let finalConfig: any = {};
 
 			console.log('namestext: ', namestxt);
 
+			console.log('Match Type before pairsObject call: ', matchType);
+
 			const pairsObject = await this.retrievePairList(namestxt, totalPairs);
+
+			console.log('Pairs Object: ', pairsObject);
 
 			let tableConfig: any = {};
 			let wholeTeamConfig: any = {};
 			let sideTeamMap: any = {};
 			let assignedIndividuals: any = {};
+			let allPlayers: any;
 			let cardinals: any = {};
 			let tables: any = {};
 			if (!isIndividuals) {
@@ -229,11 +263,13 @@ export class RevisedProcessCurrentDataService {
 				cardinals = await this.assignCardinalColumns(tableConfig);
 				tables = await this.generateTables(tableConfig);
 			} else {
-				assignedIndividuals = this.assignIndividualNumbers(
+				const playerObject = this.assignIndividualNumbers(
 					namestxt,
 					movementOnly,
 					totalTables
 				);
+				assignedIndividuals = playerObject.assignedNames;
+				allPlayers = playerObject.allPlayers;
 
 				console.log('aassigned individuals: ', assignedIndividuals);
 
@@ -245,6 +281,11 @@ export class RevisedProcessCurrentDataService {
 			}
 
 			console.log('tableConfig: ', tableConfig);
+			console.log('Tables: ', tables);
+
+			if (matchType.individual) {
+				totalTables = Object.entries(tables).length;
+			}
 
 			const sittersObj = this.processExtras(
 				matchType,
@@ -274,6 +315,7 @@ export class RevisedProcessCurrentDataService {
 			finalConfig.eventName = eventName;
 			finalConfig.sitters = sittersObj;
 			finalConfig.labels = labelsObject;
+			finalConfig.allPlayers = allPlayers;
 
 			// console.log('final tableConfig: ', tableConfig);
 
@@ -329,7 +371,9 @@ export class RevisedProcessCurrentDataService {
 			assignedNames[flattenedMovements[index]] = individualNames[index];
 		});
 
-		return assignedNames;
+		const allPlayers = individualNames;
+
+		return { assignedNames, allPlayers };
 	}
 
 	generateTeamConfig(tableConfig, teamsValue, totalTables: number) {
@@ -673,82 +717,96 @@ export class RevisedProcessCurrentDataService {
 	}
 
 	private processExtras(matchType, totalTables, sittersValue?, labelsValue?) {
+		console.log('Match Type: ', matchType);
+		let totalPairs;
+		if (matchType.individual) {
+			// dev logging
+			console.log('TOTAL TABLES: ', totalTables);
+			console.log('SittersValue: ', sittersValue);
+			console.log('labelsValue: ', labelsValue);
+
+			return;
+		}
+
 		// Dev statements and logging
 		if (labelsValue) {
 			console.log('labels value: ', labelsValue);
 			console.log('Total tables: ', totalTables);
 		}
-
-		const totalPairs = totalTables * 2;
-		let dataString: string;
-		let replacedArray: any[];
-		if (sittersValue) {
-			dataString = sittersValue[0];
-			replacedArray = dataString
-				.split(/\n/)
-				.map(value => (value === 'y' ? true : false));
-		}
-		if (labelsValue) {
-			dataString = labelsValue[0];
-			replacedArray = dataString.split(/\n/);
-		}
-
-		console.log('replaced array after processing: ', replacedArray);
-		const pairsMissing = totalPairs - replacedArray.length;
-		const teamsMissing = totalTables - replacedArray.length;
-		const emptyToAdd = matchType.pairs === true ? pairsMissing : teamsMissing;
-		// console.log('replaced array: ', replacedArray);
-		// console.log('empty to add: ', emptyToAdd);
-
-		if (emptyToAdd > 0) {
-			for (let i = 0; i < emptyToAdd; i++) {
-				replacedArray.push(sittersValue ? false : '\n');
+		if (!matchType.individual) {
+			totalPairs = totalTables * 2;
+			let dataString: string;
+			let replacedArray: any[];
+			if (sittersValue) {
+				dataString = sittersValue[0];
+				replacedArray = dataString
+					.split(/\n/)
+					.map(value => (value === 'y' ? true : false));
 			}
-		}
+			if (labelsValue) {
+				dataString = labelsValue[0];
+				replacedArray = dataString.split(/\n/);
+			}
 
-		// console.log('After pushing, replacedArray: ', replacedArray);
-		// console.log(
-		// 	`sanity check: replacedArray should have length of ${totalPairs}. \nreplacedArray length: ${replacedArray.length}`
-		// );
-		let half: number;
-		let dataObj: any;
-		let nsPairs: any[];
-		let ewPairs: any[];
-		let teamData: any = [];
+			console.log('replaced array after processing: ', replacedArray);
+			const pairsMissing = totalPairs - replacedArray.length;
+			const teamsMissing = totalTables - replacedArray.length;
+			const emptyToAdd = matchType.pairs === true ? pairsMissing : teamsMissing;
+			// console.log('replaced array: ', replacedArray);
+			// console.log('empty to add: ', emptyToAdd);
 
-		let expectedTotal = matchType.teams === true ? totalTables : totalPairs;
-		expectedTotal = parseInt(expectedTotal, 10);
-
-		if (replacedArray.length !== expectedTotal) {
-			console.error(
-				`Error processing sitters, array length does not equal total pairs. please check xml and json \nExpected total: ${expectedTotal} and actual total: ${replacedArray.length}`
-			);
-		} else {
-			if (matchType.pairs) {
-				const replacedLength = replacedArray.length;
-				if (replacedLength % 2 !== 0) {
-					console.error('Error dividing sitters array in two. Check XML and JSON');
-				} else {
-					half = replacedArray.length / 2;
-					nsPairs = replacedArray.slice(0, half);
-					ewPairs = replacedArray.slice(half);
-				}
-				if (sittersValue) {
-					dataObj = { nsSitters: nsPairs, ewSitters: ewPairs };
-				}
-
-				if (labelsValue) {
-					dataObj = { nsLabels: nsPairs, ewLabels: ewPairs };
+			if (emptyToAdd > 0) {
+				for (let i = 0; i < emptyToAdd; i++) {
+					replacedArray.push(sittersValue ? false : '\n');
 				}
 			}
-			if (matchType.teams) {
-				teamData = replacedArray;
-				dataObj = { teamData };
-			}
-		}
 
-		console.log('data object: ', dataObj);
-		return dataObj;
+			// console.log('After pushing, replacedArray: ', replacedArray);
+			// console.log(
+			// 	`sanity check: replacedArray should have length of ${totalPairs}. \nreplacedArray length: ${replacedArray.length}`
+			// );
+			let half: number;
+			let dataObj: any;
+			let nsPairs: any[];
+			let ewPairs: any[];
+			let teamData: any = [];
+
+			let expectedTotal = matchType.teams === true ? totalTables : totalPairs;
+			expectedTotal = parseInt(expectedTotal, 10);
+
+			if (replacedArray.length !== expectedTotal) {
+				console.error(
+					`Error processing sitters, array length does not equal total pairs. please check xml and json \nExpected total: ${expectedTotal} and actual total: ${replacedArray.length}`
+				);
+			} else {
+				if (matchType.pairs) {
+					const replacedLength = replacedArray.length;
+					if (replacedLength % 2 !== 0) {
+						console.error(
+							'Error dividing sitters array in two. Check XML and JSON'
+						);
+					} else {
+						half = replacedArray.length / 2;
+						nsPairs = replacedArray.slice(0, half);
+						ewPairs = replacedArray.slice(half);
+					}
+					if (sittersValue) {
+						dataObj = { nsSitters: nsPairs, ewSitters: ewPairs };
+					}
+
+					if (labelsValue) {
+						dataObj = { nsLabels: nsPairs, ewLabels: ewPairs };
+					}
+				}
+				if (matchType.teams) {
+					teamData = replacedArray;
+					dataObj = { teamData };
+				}
+			}
+
+			console.log('data object: ', dataObj);
+			return dataObj;
+		}
 	}
 
 	private processHandicap(handicapValue, totalTables) {
