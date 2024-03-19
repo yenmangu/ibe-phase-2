@@ -9,7 +9,14 @@ import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { SharedDataService } from '../services/shared-data.service';
 import { SidenavService } from '../services/sidenav.service';
-import { Subscription, filter } from 'rxjs';
+import {
+	Subject,
+	Subscription,
+	distinctUntilChanged,
+	filter,
+	switchMap,
+	takeUntil
+} from 'rxjs';
 import { UserDetailsService } from '../services/user-details.service';
 import { IndexedDatabaseStatusService } from '../services/indexed-database-status.service';
 import { SharedGameDataService } from 'src/app/admin/games/services/shared-game-data.service';
@@ -18,14 +25,15 @@ import { PasswordRecoverComponent } from 'src/app/auth/password-recover/password
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { NavigationService } from 'src/app/admin/navigation/navigation.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-
+import { DrawerService } from '../services/drawer.service';
+import { AdminToolsService } from '../services/admin-tools.service';
 @Component({
 	selector: 'app-header',
 	templateUrl: './header.component.html',
 	styleUrls: ['./header.component.scss'],
 	animations: [
 		trigger('drawerAnimation', [
-			state('opened', style({ height: '200px' })),
+			state('opened', style({ height: '64px' })),
 			state('closed', style({ height: '0' })),
 			transition('opened <=> closed', animate('300ms ease'))
 		])
@@ -47,14 +55,18 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 	isNavLoaded: boolean = false;
 	authed: boolean | null = null;
 
+	isSuperAdmin: boolean | null = null;
+
 	drawerState: 'opened' | 'closed' = 'closed';
 
 	private sidenavSubscription: Subscription;
+	private destroy$ = new Subject<void>();
 	constructor(
 		private router: Router,
 		private activatedRoute: ActivatedRoute,
 		public authService: AuthService,
 		public sharedDataService: SharedDataService,
+		private drawerService: DrawerService,
 		private sidenavService: SidenavService,
 		public userDetailsService: UserDetailsService,
 		private cdr: ChangeDetectorRef,
@@ -62,7 +74,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 		private sharedGameDataService: SharedGameDataService,
 		private breakpointService: BreakpointService,
 		private dialog: MatDialog,
-		private navigationService: NavigationService
+		private navigationService: NavigationService,
+		private adminToolsService: AdminToolsService
 	) {}
 
 	ngOnInit(): void {
@@ -80,10 +93,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 			}
 		});
 
-		this.breakpointService.currentBreakpoint$.subscribe(breakpoint => {
-			this.currentBreakpoint = breakpoint;
-			console.log(this.currentBreakpoint);
-		});
+		this.breakpointService.currentBreakpoint$
+			.pipe(takeUntil(this.destroy$))
+			.subscribe(breakpoint => {
+				this.currentBreakpoint = breakpoint;
+				console.log(this.currentBreakpoint);
+			});
 
 		this.authService.isAuthedSubject$.subscribe(authed => {
 			if (authed) {
@@ -93,9 +108,38 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 			}
 		});
 
+		this.userDetailsService.gameCode$
+			.pipe(
+				switchMap(gameCode => {
+					console.log('gameCode: ', gameCode);
+
+					// this.gameCode = gameCode;
+					return this.adminToolsService.verifyAdmin(gameCode);
+				})
+			)
+			.subscribe(response => {
+				console.log('Response in component: ', response);
+
+				if (response.authStatus === true) {
+					this.isSuperAdmin = true;
+				} else if (response.authStatus === false) {
+					this.isSuperAdmin = false;
+				} else {
+					console.error('Error in verifying admin, ', response);
+				}
+			});
+
 		this.navigationService.getLoaded().subscribe(loaded => {
 			this.isNavLoaded = loaded;
 		});
+
+		this.drawerService.isOpen$
+			.pipe(takeUntil(this.destroy$), distinctUntilChanged())
+			.subscribe(state => {
+				console.log('Drawer state: ', state);
+
+				state === true ? (this.drawerState = 'opened') : 'closed';
+			});
 	}
 
 	ngAfterViewInit(): void {}
@@ -119,6 +163,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 
 	toggleDrawer() {
 		this.drawerState = this.drawerState === 'closed' ? 'opened' : 'closed';
+		this.drawerService.toggle();
 	}
 
 	isLoggedIn(): boolean {
@@ -160,5 +205,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 
 	ngOnDestroy(): void {
 		this.sidenavSubscription.unsubscribe();
+		this.destroy$.next();
+		this.destroy$.complete();
 	}
 }

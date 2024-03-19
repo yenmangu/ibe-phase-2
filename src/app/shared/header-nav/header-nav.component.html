@@ -1,6 +1,24 @@
 <ul class="navigation-links container row space-between">
 	<li class="nav-link">
 		<a
+			routerLink="/admin/game-setup"
+			[routerLinkActive]="['active-link']"
+			class="nav-link"
+			(click)="handleLinkClick()"
+			>App Settings</a
+		>
+	</li>
+	<li class="nav-link">
+		<a
+			routerLink="/admin/player-database"
+			[routerLinkActive]="['active-link']"
+			class="nav-link"
+			(click)="handleLinkClick()"
+			>Player Database</a
+		>
+	</li>
+	<li class="nav-link">
+		<a
 			routerLink="/admin/games"
 			[routerLinkActive]="['active-link']"
 			class="nav-link"
@@ -23,7 +41,9 @@
 			[routerLinkActive]="['active-link']"
 			class="nav-link"
 			(click)="handleLinkClick()"
-			>Reporting</a
+			>Reports</a
 		>
 	</li>
+
+	<li class="nav-link"></li>
 </ul>

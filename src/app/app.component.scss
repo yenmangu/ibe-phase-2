@@ -37,9 +37,9 @@ app-footer {
 
 .content-container {
 	flex-grow: 1; /* Content container grows to take remaining space */
-	transition: margin-left 0.3s ease; /* Add transition for smooth animation */
+	transition: margin-top 0.3s ease; /* Add transition for smooth animation */
 }
 
 .drawer.opened + .content-container {
-	margin-left: 250px; /* Adjust the margin to match the width of the drawer */
+	margin-top: 64px; /* Adjust the margin to match the width of the drawer */
 }

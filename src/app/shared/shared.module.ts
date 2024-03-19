@@ -32,6 +32,7 @@ import { CsvMappingComponent } from './csv-mapping/csv-mapping.component';
 import { DatabaseImportComponent } from './database-import/database-import.component';
 import { LinExtractionComponent } from './lin-extraction/lin-extraction.component';
 import { HeaderNavComponent } from './header-nav/header-nav.component';
+import { HeaderNavDrawerComponent } from './header-nav-drawer/header-nav-drawer.component';
 // Modules
 
 @NgModule({
@@ -57,7 +58,8 @@ import { HeaderNavComponent } from './header-nav/header-nav.component';
 		CsvMappingComponent,
 		DatabaseImportComponent,
 		LinExtractionComponent,
-		HeaderNavComponent
+		HeaderNavComponent,
+  HeaderNavDrawerComponent
 	],
 	imports: [
 		CommonModule,

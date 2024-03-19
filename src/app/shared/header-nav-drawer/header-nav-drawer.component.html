@@ -1,0 +1,45 @@
+<div class="drawer-content container row">
+	<ul class="navigation-links container row space-between">
+		<li class="nav-link">
+			<a
+				routerLink="/admin/account"
+				[routerLinkActive]="['active-link']"
+				class="nav-link"
+				(click)="handleLinkClick()"
+				>Account Settings</a
+			>
+		</li>
+		<li class="nav-link">
+			<a
+				routerLink="/admin/database-admin"
+				[routerLinkActive]="['active-link']"
+				class="nav-link"
+				(click)="handleLinkClick()"
+				>Database Admin</a
+			>
+		</li>
+		<li class="nav-link">
+			<a
+				routerLink="/admin/historic-games"
+				[routerLinkActive]="['active-link']"
+				class="nav-link"
+				(click)="handleLinkClick()"
+				>Historic Games</a
+			>
+		</li>
+		<li class="nav-link">
+			<a
+				routerLink="/admin/admin-tools"
+				[routerLinkActive]="['active-link']"
+				class="nav-link"
+				(click)="handleLinkClick()"
+				>Admin Tools</a
+			>
+		</li>
+	</ul>
+	<span
+		class="close"
+		(click)="closeDrawer()">
+		<mat-icon>close</mat-icon>
+	</span>
+</div>

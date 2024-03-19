@@ -1,6 +1,8 @@
 <div class="app-container">
 	<app-header></app-header>
-	<div class="content-container">
+	<div
+		class="content-container"
+		[class.drawer-opened]="isDrawerOpen">
 		<router-outlet [appFontSize]=""></router-outlet>
 	</div>
 	<app-footer></app-footer>

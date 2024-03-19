@@ -1,4 +1,5 @@
 <mat-toolbar
+	*ngIf="!isSuperAdmin"
 	color="accent"
 	class="toolbar">
 	<ng-container *ngIf="isPublicLink">
@@ -69,7 +70,8 @@
 		</div>
 	</ng-container>
 </mat-toolbar>
-<header>
+
+<header *ngIf="isSuperAdmin">
 	<nav class="header">
 		<div class="wrapper block">
 			<mat-toolbar
@@ -89,36 +91,71 @@
 				</ng-container>
 				<ng-container *ngIf="!isPublicLink">
 					<div
-						class="container row view space-between"
+						class="container row view space-between test"
 						[ngClass]="currentBreakpoint + (authed ? ' authed' : '')">
 						<ng-container *ngIf="authed">
+							<div class="logo-container">
+								<img
+									class="logo"
+									src="assets/images/logo/globe-cards-icon.png"
+									alt="Globe cards icon." />
+							</div>
+
+							<app-user-details></app-user-details>
 							<app-header-nav></app-header-nav>
+							<button
+								mat-flat-button
+								class="button-white hamburger"
+								color="primary"
+								(click)="toggleDrawer()">
+								<mat-icon *ngIf="drawerState === 'closed'">menu</mat-icon>
+								<mat-icon *ngIf="drawerState === 'opened'">close</mat-icon>
+							</button>
+							<button
+								*ngIf="authService.isAuthedSubject$ | async"
+								class="button-white"
+								mat-flat-button
+								color="primary"
+								(click)="refreshDatabase()">
+								{{
+									currentBreakpoint === 'handset' ? 'Refresh' : 'Refresh Database'
+								}}
+							</button>
+							<ng-container
+								*ngIf="
+									currentBreakpoint !== 'handset' && currentBreakpoint !== 'medium'
+								">
+								<button
+									mat-flat-button
+									color="warn"
+									routerLink="/auth/logout"
+									*ngIf="authService.isAuthedSubject$ | async"
+									(click)="logout()">
+									Logout
+								</button>
+							</ng-container>
 							<!-- header-nav.component.html -->
 							<!-- test drawer -->
-							<div class="drawer-container">
-								<div
-									class="drawer"
-									[@drawerAnimation]="drawerState">
-									<!-- Drawer content goes here -->
-									<p>Drawer content here</p>
-								</div>
-
-								<!-- Your main content here -->
-								<div class="main-content">
-									<!-- Main content goes here -->
-									<p>Main content here</p>
-									<button
-										mat-flat-button
-										color="primary"
-										(click)="toggleDrawer()">
-										Toggle Drawer
-									</button>
-								</div>
-							</div>
 						</ng-container>
 					</div>
 				</ng-container>
 			</mat-toolbar>
+		</div>
+		<!-- drawer -->
+		<div class="drawer-container">
+			<div
+				class="drawer"
+				[@drawerAnimation]="drawerState">
+				<!-- Drawer content goes here -->
+				<app-header-nav-drawer (emitClose)="toggleDrawer()"></app-header-nav-drawer>
+			</div>
+
+			<!-- Your main content here -->
+			<!-- <div class="main-content"> -->
+			<!-- Main App Content -->
+			<!-- Main content goes here -->
+			<!-- <p>Main content here</p> -->
+			<!-- </div> -->
 		</div>
 	</nav>
 	<div class="masthead">

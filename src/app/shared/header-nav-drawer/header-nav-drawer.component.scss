@@ -4,7 +4,15 @@
 	width: fit-content;
 	max-width: 80rem;
 }
+.drawer-content {
+	position: relative;
+	justify-content: flex-start;
+	align-items: center;
+	gap: 2rem;
 
+	width: max-content;
+	width: -webkit-fill-available;
+}
 ul {
 	padding: 0;
 	list-style: none;
@@ -18,7 +26,7 @@ ul {
 
 li.nav-link a {
 	position: relative;
-	color: $ibe-green-single;
+	color: $ibe-magenta-single;
 	text-decoration: none;
 }
 
@@ -29,10 +37,13 @@ li.nav-link a::after {
 	bottom: -2px;
 	width: 0;
 	height: 2px;
-	background-color: $ibe-green-single;
+	background-color: $ibe-magenta-single;
 	transition: width 0.3s ease;
 }
 
 li.nav-link a:hover::after {
 	width: 100%;
+}
+span.close:hover {
+	cursor: pointer;
 }

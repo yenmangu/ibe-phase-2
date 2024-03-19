@@ -36,8 +36,14 @@ export class AdminToolsComponent implements OnInit {
 				})
 			)
 			.subscribe(response => {
-				if (response.authStatus) {
+				console.log('Response in component: ', response);
+
+				if (response.authStatus === true) {
 					this.isSuperAdmin = true;
+				} else if (response.authStatus === false) {
+					this.isSuperAdmin = false;
+				} else {
+					console.error('Error in verifying admin, ', response);
 				}
 			});
 

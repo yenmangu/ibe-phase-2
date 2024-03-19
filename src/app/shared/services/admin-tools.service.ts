@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import {
 	HttpClient,
+	HttpErrorResponse,
 	HttpHeaders,
 	HttpParams,
 	HttpResponse
 } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-import { Observable, map, tap } from 'rxjs';
+import { Observable, map, tap, of, catchError } from 'rxjs';
 
 export interface ResponseData {
 	headers: any;
@@ -35,7 +36,30 @@ export class AdminToolsService {
 		params = params.append('gameCode', gameCode);
 		// console.log('Params before request: ', params);
 
-		return this.http.get(`${this.apiUrl}/verification/admin-verify`, { params });
+		return this.http
+			.get(`${this.apiUrl}/verification/admin-verify`, {
+				params,
+				observe: 'response'
+			})
+			.pipe(
+				map((response: HttpResponse<any>) => {
+					console.log('Response Status in service: ', response);
+
+					if (response.status === 200) {
+						return response.body;
+					} else {
+						throw new Error(`Unexpected response status: ${response.status}`);
+					}
+				}),
+				catchError((error: HttpErrorResponse) => {
+					if (error.status === 400) {
+						return of({ authStatus: false });
+					} else {
+						console.error('An error occurred: ', error);
+						return of(null);
+					}
+				})
+			);
 	}
 
 	sendUrls(data): Observable<Blob> {

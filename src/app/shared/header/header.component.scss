@@ -72,21 +72,54 @@ img.logo {
 // Testing drawer
 
 .drawer-container {
-	display: flex;
-	flex-direction: row;
+	display: block;
 	height: 100%;
+	// border: 1px solid red;
+	p {
+		margin-block-start: 0;
+		margin-block-end: 0;
+	}
 }
 
 .drawer {
+	// max-width: 80rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	height: 0;
 	overflow: hidden;
 	transition: height 0.3s ease;
+	border-bottom: 2px solid $app-interface;
 }
 
 .main-content {
+	display: flex;
+	flex-direction: row;
+	align-items: flex-start;
+	gap: 1rem;
 	flex: 1;
+	// border: 1px solid blue;
 }
 
 .drawer.opened {
-	height: 200px; /* Adjust height as needed */
+	height: 64px; /* Adjust height as needed */
+	// border: 1px solid yellow;
+}
+
+.test {
+	align-items: center;
+	justify-content: space-between;
+	gap: 1rem;
+}
+mat-icon {
+	margin: 0;
+}
+
+.hamburger {
+	width: 40px;
+	min-width: 40px;
+	padding: 0.2rem;
+}
+:host ::ng-deep .mat-mdc-unelevated-button > .mat-icon {
+	margin: 0;
 }
