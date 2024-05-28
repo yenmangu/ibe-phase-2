@@ -33,11 +33,13 @@
 			<div class="header-right container">
 				<button
 					*ngIf="authService.isAuthedSubject$ | async"
-					class="button-white"
+					class="button-white refresh"
 					mat-flat-button
 					color="primary"
 					(click)="refreshDatabase()">
-					{{ currentBreakpoint === 'handset' ? 'Refresh' : 'Refresh Database' }}
+					<mat-icon
+						class="icon"
+						svgIcon="rotate"></mat-icon>
 				</button>
 				<button
 					mat-flat-button
@@ -70,7 +72,10 @@
 		</div>
 	</ng-container>
 </mat-toolbar>
-
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
 <header *ngIf="isSuperAdmin">
 	<nav class="header">
 		<div class="wrapper block">
@@ -91,36 +96,43 @@
 				</ng-container>
 				<ng-container *ngIf="!isPublicLink">
 					<div
-						class="container row view space-between test"
+						class="container row view space-between nav-wrapper"
 						[ngClass]="currentBreakpoint + (authed ? ' authed' : '')">
 						<ng-container *ngIf="authed">
-							<div class="logo-container">
+							<div
+								class="logo-container container row"
+								[ngClass]="currentBreakpoint">
 								<img
 									class="logo"
 									src="assets/images/logo/globe-cards-icon.png"
 									alt="Globe cards icon." />
+								<a routerLink="/admin/welcome-members">
+									<mat-icon
+										class="icon"
+										svgIcon="home"
+										routerLink="/admin/welcome-members"></mat-icon>
+								</a>
 							</div>
-
-							<app-user-details></app-user-details>
-							<app-header-nav></app-header-nav>
-							<button
-								mat-flat-button
-								class="button-white hamburger"
-								color="primary"
-								(click)="toggleDrawer()">
-								<mat-icon *ngIf="drawerState === 'closed'">menu</mat-icon>
-								<mat-icon *ngIf="drawerState === 'opened'">close</mat-icon>
-							</button>
-							<button
-								*ngIf="authService.isAuthedSubject$ | async"
-								class="button-white"
-								mat-flat-button
-								color="primary"
-								(click)="refreshDatabase()">
-								{{
-									currentBreakpoint === 'handset' ? 'Refresh' : 'Refresh Database'
-								}}
-							</button>
+							<ng-container
+								*ngIf="
+									currentBreakpoint !== 'handset' && currentBreakpoint !== 'medium'
+								">
+								<app-user-details></app-user-details>
+							</ng-container>
+							<app-header-nav #topBar></app-header-nav>
+							<div
+								class="container row nav-right"
+								[ngClass]="currentBreakpoint">
+								<button
+									mat-flat-button
+									class="button-white hamburger"
+									color="primary"
+									(click)="toggleDrawer()">
+									<mat-icon
+										class="icon"
+										svgIcon="menu"></mat-icon>
+								</button>
+							</div>
 							<ng-container
 								*ngIf="
 									currentBreakpoint !== 'handset' && currentBreakpoint !== 'medium'
@@ -145,17 +157,15 @@
 		<div class="drawer-container">
 			<div
 				class="drawer"
-				[@drawerAnimation]="drawerState">
+				[ngClass]="currentBreakpoint"
+				#drawer
+				[style.height]="height">
 				<!-- Drawer content goes here -->
-				<app-header-nav-drawer (emitClose)="toggleDrawer()"></app-header-nav-drawer>
+				<app-header-nav-drawer
+					(emitClose)="toggleDrawer()"
+					(emitLogout)="logout()"
+					(emitRefresh)="refreshDatabase()"></app-header-nav-drawer>
 			</div>
-
-			<!-- Your main content here -->
-			<!-- <div class="main-content"> -->
-			<!-- Main App Content -->
-			<!-- Main content goes here -->
-			<!-- <p>Main content here</p> -->
-			<!-- </div> -->
 		</div>
 	</nav>
 	<div class="masthead">

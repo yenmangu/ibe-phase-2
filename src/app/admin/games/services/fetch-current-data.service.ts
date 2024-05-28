@@ -91,7 +91,7 @@ export class FetchCurrentDataService implements OnDestroy {
 			// console.log(` ${storeName}`)
 			await firstValueFrom(
 				this.indexedDatabaseStatus.isInitialised$.pipe(
-					tag('process-match-data is init sub'),
+					// tag('process-match-data is init sub'),
 					filter(isInitialised => isInitialised),
 					first(),
 					take(1)

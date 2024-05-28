@@ -59,7 +59,7 @@ import { HeaderNavDrawerComponent } from './header-nav-drawer/header-nav-drawer.
 		DatabaseImportComponent,
 		LinExtractionComponent,
 		HeaderNavComponent,
-  HeaderNavDrawerComponent
+		HeaderNavDrawerComponent
 	],
 	imports: [
 		CommonModule,

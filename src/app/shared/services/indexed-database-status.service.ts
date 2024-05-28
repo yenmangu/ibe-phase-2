@@ -20,19 +20,19 @@ export class IndexedDatabaseStatusService {
 	}
 
 	isInitialised(): Observable<boolean> {
-		console.log('isInitialised observable');
+		// console.log('isInitialised observable');
 		return this.isInitialisedsubject.asObservable();
 	}
 
 	setProgress(totalStores: number, storesAdded: number): void {
-		const initialProgress = 5
+		const initialProgress = 5;
 		const actualProgress = (storesAdded / totalStores) * 95;
-		const totalProgress = initialProgress + actualProgress
+		const totalProgress = initialProgress + actualProgress;
 		this.dataProgressSubject.next(totalProgress);
 	}
 
 	resetProgress(): void {
-		console.log('resetting progress to 5%');
+		// console.log('resetting progress to 5%');
 
 		this.dataProgressSubject.next(5);
 	}
@@ -40,7 +40,7 @@ export class IndexedDatabaseStatusService {
 	bypassProgress() {
 		this.dataProgressSubject.next(100);
 		this.isInitialisedsubject.next(true);
-		this.dataFinishedLoadingSubject.next(true)
+		this.dataFinishedLoadingSubject.next(true);
 	}
 
 	setStoreNamesExist(initalised: boolean) {

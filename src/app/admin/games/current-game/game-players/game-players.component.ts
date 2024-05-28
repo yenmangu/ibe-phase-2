@@ -22,6 +22,8 @@ import { ApiDataCoordinationService } from '../../services/api/api-data-coordina
 import { UserDetailsService } from 'src/app/shared/services/user-details.service';
 import { DomainService } from 'src/app/shared/services/domain.service';
 import { SharedDataService } from 'src/app/shared/services/shared-data.service';
+import { SharedGameDataService } from '../../services/shared-game-data.service';
+import { TeamsService } from '../../services/teams.service';
 @Component({
 	selector: 'app-game-players',
 	templateUrl: './game-players.component.html',
@@ -76,6 +78,8 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 	isPairs: boolean = false;
 	isIndividual: boolean = false;
 
+	disableSave: boolean = false;
+
 	constructor(
 		private route: ActivatedRoute,
 		private breakpointService: BreakpointService,
@@ -85,7 +89,9 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 		private currentGamesDatabase: CurrentGamesDatabaseServiceService,
 		private apiCoordination: ApiDataCoordinationService,
 		private userDetailService: UserDetailsService,
+		private sharedGameDataService: SharedGameDataService,
 		private domainService: DomainService,
+		private teamsService: TeamsService,
 		private clipboard: Clipboard,
 		private snackbar: MatSnackBar
 	) {
@@ -124,10 +130,17 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 
 	ngAfterViewInit(): void {}
 
+	onRecieveDisableSave(disable: boolean) {
+		disable === false ? (this.disableSave = false) : (this.disableSave = true);
+	}
+
 	fetchInitialTableData(): void {
 		this.currentGamesDatabase
 			.fetchAndProcessGameData()
-			.pipe(takeUntil(this.destroy$), tag('currentGame fetchProcessData'))
+			.pipe(
+				takeUntil(this.destroy$)
+				// tag('currentGame fetchProcessData')
+			)
 			.subscribe({
 				next: data => {
 					if (data) {
@@ -215,11 +228,14 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 
 		this.apiCoordination
 			.invokeAPICoordination(combinedFormData, game_code, dir_key)
-			.pipe(tag('current game form'))
+			.pipe
+			// tag('current game form')
+			()
 			.subscribe({
 				next: response => {
 					console.log('response from http services: ', response);
 					this.successMessage = 'success';
+					this.sharedGameDataService.triggerRefreshDatabase();
 				},
 				error: error => {
 					console.error('error in the response from http service: ', error);
@@ -242,29 +258,79 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 		// console.log(this.tablesConfig);
 	}
 
+	getTeamsStartingLineup() {
+		const { nsStartOrder, ewStartOrder, totalTeams, pairConfig } =
+			this.initialTableData;
+		const startOrder = true;
+
+		const arraysData = this.teamsService.generateArrays(
+			this.initialTableData.teams,
+			startOrder,
+			totalTeams,
+			pairConfig,
+			nsStartOrder,
+			ewStartOrder
+		);
+
+		console.log('ArraysData: ', arraysData);
+		const cardinals = this.buildCardinals(arraysData);
+		return cardinals;
+	}
+
+	private buildCardinals(arraysData: any) {
+		const north: string[] = [];
+		const south: string[] = [];
+		const east: string[] = [];
+		const west: string[] = [];
+		Object.keys(arraysData).forEach(key => {
+			if (arraysData.hasOwnProperty(key)) {
+				north.push(arraysData[key][0]);
+				south.push(arraysData[key][1]);
+				east.push(arraysData[key][2]);
+				west.push(arraysData[key][3]);
+			}
+		});
+		return { north, south, east, west };
+	}
+
 	private generatePublicLink() {
 		const data: any = {};
 		data.gameCode = this.gameCode;
-
+		let northSide;
+		let southSide;
+		let eastSide;
+		let westSide;
 		const {
 			pairConfig,
 			pairNumbers,
-			cardinals: {
-				north: northSide,
-				south: southSide,
-				east: eastSide,
-				west: westSide
-			},
+
 			tables,
 			teamConfig,
 			individuals
 		} = this.initialTableData;
 
+		console.log('Tables: ', tables);
+
+		if (this.initialTableData.matchType && this.initialTableData.matchType.teams) {
+			const cardinals: any = this.getTeamsStartingLineup();
+			console.log('Cardinals: ', cardinals);
+
+			northSide = cardinals.north;
+			southSide = cardinals.south;
+			eastSide = cardinals.east;
+			westSide = cardinals.west;
+		} else {
+			const cardinals = this.initialTableData.cardinals;
+			northSide = cardinals.north;
+			southSide = cardinals.south;
+			eastSide = cardinals.east;
+			westSide = cardinals.west;
+		}
+
 		// const tablesLength = Object.keys(tables).length
 		console.log(tables);
 		const eventName = this.eventName;
 
-		console.log(northSide, southSide, eastSide, westSide);
 		const matchType = this.matchType;
 		const gameConfig: {
 			pairConfig;
@@ -350,11 +416,15 @@ export class GamePlayersComponent implements OnInit, AfterViewInit, OnDestroy {
 			});
 	}
 
-	getButtonMessage(): boolean {
-		if (!this.clicked && this.successMessage) {
-			return true;
+	getButtonMessage(): string {
+		if (!this.disableSave) {
+			if (!this.clicked && this.successMessage) {
+				return 'Success';
+			} else {
+				return 'Save';
+			}
 		} else {
-			return false;
+			return 'Save disabled in start view';
 		}
 	}
 

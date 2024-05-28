@@ -38,12 +38,13 @@
 
 			<button
 				class="main-save"
+				[disabled]="disableSave"
 				mat-flat-button
 				matSuffix
 				color="primary"
 				(click)="captureFormData()">
 				<!-- {{ getButtonMessage() ? 'Success' : 'Save' }} -->
-				{{ buttonText }}
+				{{ getButtonMessage() }}
 			</button>
 		</div>
 	</div>
@@ -66,7 +67,8 @@
 	<ng-container *ngIf="!isLoading && initialTableData && matchType === 'teams'">
 		<app-teams-table
 			[initialTableData]="initialTableData"
-			[loadingStatus]="isLoading"></app-teams-table>
+			[loadingStatus]="isLoading"
+			(startView)="onRecieveDisableSave($event)"></app-teams-table>
 	</ng-container>
 	<!-- <app-match-tables [initialTableData]="initialTableData"
 		(formValuesChanged)="(onTeamTableValueChanged)"></app-match-tables> -->
@@ -76,9 +78,10 @@
 	<button
 		class="main-save"
 		mat-flat-button
+		[disabled]="disableSave"
 		color="primary"
 		(click)="captureFormData()">
-		{{ getButtonMessage() ? 'Success' : 'Save' }}
+		{{ getButtonMessage() }}
 	</button>
 </div>
 <div class="container row download">
@@ -139,9 +142,10 @@
 		<button
 			class="main-save"
 			mat-flat-button
+			[disabled]="disableSave"
 			color="primary"
 			(click)="captureFormData()">
-			{{ getButtonMessage() ? 'Success' : 'Save' }}
+			{{ getButtonMessage() }}
 			<!-- {{ buttonText }} -->
 		</button>
 	</div>

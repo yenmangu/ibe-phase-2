@@ -1,13 +1,26 @@
 <div
 	class="main"
 	*ngIf="initialTableData">
+	<div class="button-wrapper order-wrapper container row">
+		<button
+			mat-flat-button
+			class="order-button"
+			[ngClass]="currentBreakpoint"
+			[color]="teamOrder ? 'primary' : 'accent'"
+			(click)="onSwitchOrder()">
+			{{ teamOrder ? 'Show Start Order' : 'Show Team Order' }}
+		</button>
+		<span *ngIf="!teamOrder"
+			><h4>Editing not permitted in starting matchup view</h4></span
+		>
+	</div>
 	<form
 		[formGroup]="teamsForm"
 		(ngSubmit)="onSubmit()">
 		<div class="table-wrapper">
 			<table *ngIf="!tableConfig.timesLunch">
 				<tr class="header-row">
-					<th>Table Number</th>
+					<th>{{ teamOrder ? 'Team' : 'Table' }} Number</th>
 					<!-- <th>Pair Number</th> -->
 					<th
 						class="conditional"
@@ -19,7 +32,10 @@
 						class="conditional empty">
 						Colours
 					</th>
-					<th class="Team Name">Team Name</th>
+					<ng-container *ngIf="teamOrder">
+						<th class="Team Name">Team Name</th>
+					</ng-container>
+
 					<th class="north">North</th>
 					<th class="divider"></th>
 					<th class="south">South</th>
@@ -103,8 +119,8 @@
 					</ng-container>
 					<tr
 						class="tables-row"
-						*ngIf="teamsForm?.get(tableNumber.toString())"
-						[formGroupName]="tableNumber.toString()">
+						*ngIf="teamsForm?.get(tableNumber)"
+						[formGroupName]="tableNumber">
 						<td>{{ i + 1 }}</td>
 						<!-- Pair Number -->
 						<!-- <td *ngFor="let column of ['nsPairs']">
@@ -115,26 +131,38 @@
 							<td
 								class="conditional"
 								*ngFor="let column of ['venues']">
-								<input [formControlName]="column" />
+								<input
+									[attr.disabled]="disableControls"
+									[formControlName]="column" />
 							</td>
 						</ng-container>
 						<ng-container *ngIf="tableConfig.boardCol">
 							<td
 								class="conditional"
 								*ngFor="let column of ['boardCol']">
-								<input [formControlName]="column" />
+								<input
+									[attr.disabled]="disableControls"
+									[formControlName]="column" />
 							</td>
 						</ng-container>
-						<td *ngFor="let column of ['team_name']">
-							<input [formControlName]="column" />
-						</td>
+						<ng-container *ngIf="teamOrder">
+							<td *ngFor="let column of ['team_name']">
+								<input
+									[formControlName]="column"
+									[attr.disabled]="disableControls" />
+							</td>
+						</ng-container>
 
 						<td *ngFor="let column of ['north']">
-							<input [formControlName]="column" />
+							<input
+								[attr.disabled]="disableControls"
+								[formControlName]="column" />
 						</td>
 						<td class="divider">&</td>
 						<td *ngFor="let column of ['south']">
-							<input [formControlName]="column" />
+							<input
+								[attr.disabled]="disableControls"
+								[formControlName]="column" />
 						</td>
 						<!-- <ng-container *ngIf="tableConfig.stratification">
 							<td
@@ -178,17 +206,23 @@
 							<input [formControlName]="column" />
 						</td> -->
 						<td *ngFor="let column of ['east']">
-							<input [formControlName]="column" />
+							<input
+								[attr.disabled]="disableControls"
+								[formControlName]="column" />
 						</td>
 						<td class="divider">&</td>
 						<td *ngFor="let column of ['west']">
-							<input [formControlName]="column" />
+							<input
+								[attr.disabled]="disableControls"
+								[formControlName]="column" />
 						</td>
 						<ng-container *ngIf="tableConfig.stratification">
 							<td
 								class="conditional"
 								*ngFor="let column of ['ew_stratification']">
-								<input [formControlName]="column" />
+								<input
+									[attr.disabled]="disableControls"
+									[formControlName]="column" />
 							</td>
 						</ng-container>
 						<ng-container *ngIf="tableConfig.sitters">
@@ -196,6 +230,7 @@
 								class="conditional sitters"
 								*ngFor="let column of ['ew_sitters']">
 								<input
+									[attr.disabled]="disableControls"
 									[formControlName]="column"
 									type="checkbox" />
 							</td>
@@ -204,28 +239,36 @@
 							<td
 								class="conditional"
 								*ngFor="let column of ['ew_adjustments']">
-								<input [formControlName]="column" />
+								<input
+									[attr.disabled]="disableControls"
+									[formControlName]="column" />
 							</td>
 						</ng-container>
 						<ng-container *ngIf="tableConfig.handicaps">
 							<td
 								class="conditional"
 								*ngFor="let column of ['ew_handicaps']">
-								<input [formControlName]="column" />
+								<input
+									[attr.disabled]="disableControls"
+									[formControlName]="column" />
 							</td>
 						</ng-container>
 						<ng-container *ngIf="tableConfig.labels">
 							<td
 								class="conditional"
 								*ngFor="let column of ['ew_labels']">
-								<input [formControlName]="column" />
+								<input
+									[attr.disabled]="disableControls"
+									[formControlName]="column" />
 							</td>
 						</ng-container>
 						<ng-container *ngIf="tableConfig.abbrev">
 							<td
 								class="conditional"
 								*ngFor="let column of ['ew_abbrev']">
-								<input [formControlName]="column" />
+								<input
+									[formControlName]="column"
+									[attr.disabled]="disableControls" />
 							</td>
 						</ng-container>
 					</tr>

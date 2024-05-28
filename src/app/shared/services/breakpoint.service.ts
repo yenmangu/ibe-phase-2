@@ -12,19 +12,27 @@ export class BreakpointService {
 		return this.breakpointObserver.observe(Object.values(Breakpoints)).pipe(
 			map(state => {
 				// console.log('BREAKPOINT: ',state);
+				// console.log('Breakpoint : ', state);
+				// console.log(
+				// 	Object.keys(state.breakpoints).find(bp => state.breakpoints[bp] === true)
+				// );
+
 				let size = '';
 				let width = 0;
 
-				if (state.breakpoints[Breakpoints.Large]) {
+				if (state.breakpoints[Breakpoints.XLarge]) {
+					size = 'xlarge';
+				} else if (state.breakpoints[Breakpoints.Large]) {
 					size = 'large';
-				} else if (state.breakpoints[Breakpoints.Tablet]) {
-					size = 'tablet';
 				} else if (state.breakpoints[Breakpoints.Medium]) {
 					size = 'medium';
+				} else if (state.breakpoints[Breakpoints.Tablet]) {
+					size = 'tablet';
 				} else {
 					size = 'handset';
 				}
-				// console.log('breakpoint size as determined by the bp service: ', size);
+
+				console.log('breakpoint size as determined by the bp service: ', size);
 				return size;
 			}),
 			// Debugging
@@ -34,3 +42,10 @@ export class BreakpointService {
 		);
 	}
 }
+// Further responsiveness
+// @Injectable({
+// 	providedIn: 'root'
+// })
+// export class WindowSizeService {
+// 	constructor(private breakpointObserver: BreakpointObserver) {}
+// }

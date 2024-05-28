@@ -17,13 +17,13 @@
 	justify-content: center;
 	align-items: center;
 }
-.view.handset {
-	justify-content: flex-start;
-}
+// .view.handset {
+// 	justify-content: flex-start;
+// }
 
-.view.handset.authed {
-	justify-content: center;
-}
+// .view.handset.authed {
+// 	justify-content: center;
+// }
 button.menu {
 	position: absolute;
 	left: 0;
@@ -56,11 +56,20 @@ button.menu {
 	align-items: center;
 	gap: 2rem;
 }
+
 .logo-container {
 	width: auto;
 	height: auto;
-	display: grid;
-	place-items: center;
+	align-items: center;
+	gap: 1rem;
+}
+
+.logo-container:not(.handset):not(.medium) {
+	mat-icon {
+		width: 36px;
+		height: 36px;
+		margin-top: 8px;
+	}
 }
 
 img.logo {
@@ -70,6 +79,41 @@ img.logo {
 }
 
 // Testing drawer
+
+// .toolbar {
+// 	padding: 0 1rem;
+// }
+
+.nav-wrapper {
+	position: relative;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1rem;
+}
+
+// .nav-wrapper.handset,
+.nav-wrapper.medium {
+	justify-content: center;
+	.logo-container {
+		position: absolute;
+		left: 1rem;
+	}
+}
+
+// .logo-container.handset,
+.logo-container.medium {
+	position: absolute;
+	left: 1rem;
+}
+
+.nav-right {
+	gap: 1rem;
+}
+// .nav-right.handset,
+.nav-right.medium {
+	position: absolute;
+	right: 1rem;
+}
 
 .drawer-container {
 	display: block;
@@ -87,6 +131,7 @@ img.logo {
 	align-items: center;
 	justify-content: center;
 	height: 0;
+
 	overflow: hidden;
 	transition: height 0.3s ease;
 	border-bottom: 2px solid $app-interface;
@@ -102,24 +147,36 @@ img.logo {
 }
 
 .drawer.opened {
-	height: 64px; /* Adjust height as needed */
+	// max-height: 500px; /* Adjust height as needed */
+	height: 64px;
+	max-height: none;
+	// padding: 1rem 0;
 	// border: 1px solid yellow;
+	user-details {
+		margin-bottom: 1rem;
+	}
 }
 
-.test {
-	align-items: center;
-	justify-content: space-between;
-	gap: 1rem;
+.drawer.opened.handset,
+.drawer.opened.medium {
+	height: 120px;
 }
+
 mat-icon {
 	margin: 0;
 }
 
-.hamburger {
+// .hamburger {
+// 	width: 40px;
+// 	min-width: 40px;
+// 	padding: 0.2rem;
+// }
+:host ::ng-deep .mat-mdc-unelevated-button > .mat-icon {
+	margin: 0;
+}
+.home,
+.button-white.hamburger {
 	width: 40px;
 	min-width: 40px;
 	padding: 0.2rem;
-}
-:host ::ng-deep .mat-mdc-unelevated-button > .mat-icon {
-	margin: 0;
 }

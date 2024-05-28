@@ -1,0 +1,588 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<siteauthresponse sf="s">
+  <lock tf="f" />
+  <params>
+    <country>
+      <![CDATA[England]]>
+    </country>
+    <email>
+      <![CDATA[victorlesk@hotmail.com]]>
+    </email>
+    <varprefs>
+      <![CDATA[x.26 May 2023.1 Jan 2034.1000.100.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x]]>
+    </varprefs>
+  </params>
+  <xmlsettings>
+    <acctsets v="1">
+      <name>
+        <![CDATA[Victor Lesk]]>
+      </name>
+      <pname>
+        <![CDATA[]]>
+      </pname>
+      <email>
+        <![CDATA[victorlesk@hotmail.com]]>
+      </email>
+      <phone>
+        <![CDATA[]]>
+      </phone>
+      <ctry>
+        <![CDATA[England]]>
+      </ctry>
+      <actgrp>
+        <![CDATA[bexsilver]]>
+      </actgrp>
+      <showipt val=""/>
+      <startdt val=""/>
+      <paidtilldt val="01/01/34"/>
+      <acttype val=""/>
+      <payextbutlbl val=""/>
+      <uptodtcol val=""/>
+      <boolexpi val=""/>
+      <creds val=""/>
+      <cmnlt val=""/>
+      <ids>
+        <id type="EBU" val=""/>
+        <id type="Bridgenix" val=""/>
+        <id type="SBU" val=""/>
+        <id type="IBF" val=""/>
+      </ids>
+    </acctsets>
+    <initsets v="1">
+      <nidscr val="y"/>
+      <prenam val="n"/>
+      <ims>
+        <im type="playername" pref="y"/>
+        <im type="nativeclub"/>
+        <im type="id" fid="EBU"/>
+      </ims>
+      <popup val="y"/>
+      <ttid val="y"/>
+    </initsets>
+    <namsets v="1">
+      <mn val="10"/>
+      <stn val="a"/>
+      <sh val="l"/>
+      <dpn val="0"/>
+    </namsets>
+    <pluisets v="1">
+      <pcsee hands="y" results="y" rankings="y" asd="y"/>
+      <flash val="y"/>
+      <tos val="30"/>
+      <pcchg dan="y" pn="y" tsn="y" rcr="y"/>
+      <qaba val="y"/>
+      <pci leads="y" auctions="y" deals="y" notes="n"/>
+      <warn sw="y" sh="y" oo="y" un="y" nn="n"/>
+      <scov val="y"/>
+    </pluisets>
+    <scosets v="1">
+      <pet val="p"/>
+      <pnt val="6"/>
+      <scms>
+        <scm for="i" type="mp" bds="0x0"/>
+        <scm for="p" type="mp" bds="0x0"/>
+        <scm for="t" type="imp" bds="0x0"/>
+        <scm for="8" type="imp" bds="0x0"/>
+        <scm for="12" type="imp" bds="0x0"/>
+        <scm for="16" type="imp" bds="0x0"/>
+        <scm for="sp" type="vpmp" bds="0x0"/>
+        <scm for="st" type="vpimp" bds="0x0"/>
+      </scms>
+      <neu val="d"/>
+    </scosets>
+    <secsets v="1">
+      <mlpc val="u"/>
+      <pin on="n" len="4" type="n" case="c"/>
+      <spec web="y" app="y"/>
+    </secsets>
+    <usesets>
+      <ubs val="p"/>
+    </usesets>
+  </xmlsettings>
+  <playerdb>
+    <root rev="0">
+      <!-- n: key -->
+      <!-- name: player name -->
+      <!-- id code="347875" type="EBU" or type ="club" -->
+    </root>
+  </playerdb>
+  <hrevtxt>
+    <![CDATA[]]>
+  </hrevtxt>
+  <hands>
+    <![CDATA[]]>
+  </hands>
+  <handanxs>
+  </handanxs>
+  <hist rev="999"></hist>
+  <currentgamedata >
+    <settingstxt>
+      <![CDATA[MV TS169-1
+ROVER false
+ATT ATTACHEDTOTABLE
+PN NP
+EN crypt event 5
+ASW .
+OTH 1.8.0.-1.-1.x.1.1.1.1.1.1.1.0.30000.0.x.x.0.0.0.0.0.1.1.0.x.0.0.0.1.0.0.0.0.0.0.1.0.0.0.0.1.0.0.0.1.0.0.-1.-1.-1.-1.-1.0.0.1.0.-1.-1.1.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x
+DUMMY
+]]>
+    </settingstxt>
+    <movementtxt>
+      <![CDATA[Basic teams of 8, scored as two teams of 4
+5,4,32,8,4,0,-1
+1,7,1,1,7,2,1,8,3,1,8,4
+3,5,1,3,5,2,4,5,3,4,5,4
+8,2,2,6,4,1,6,3,4,6,3,3
+6,4,2,8,2,1,7,2,4,7,2,3
+]]>
+    </movementtxt>
+    <movedesctxt>
+      <![CDATA[]]>
+    </movedesctxt>
+    <namestxt>
+      <![CDATA[Victor & Valerie
+Rob & Rachel
+Nicholas & New Name
+Boris & Beverley
+Vincent & Veronica
+Roderick & Rihanna
+Norbert & Nadine
+Buster & Brenda
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+Tap here & Tap here
+]]>
+    </namestxt>
+    <teamnamestxt>
+      <![CDATA[The Vs
+The Rs
+The Ns
+The Bs
+Team 1
+Team 2
+Team 3
+Team 4
+Team 5
+Team 6
+Team 7
+Team 8
+Team 9
+Team 10
+Team 11
+Team 12
+Team 13
+Team 14
+Team 15
+Team 16
+Team 17
+Team 18
+Team 19
+Team 20
+Team 21
+Team 22
+Team 23
+Team 24
+Team 25
+Team 26
+Team 27
+Team 28
+Team 29
+Team 30
+Team 31
+Team 32
+Team 33
+Team 34
+Team 35
+Team 36
+Team 37
+Team 38
+Team 39
+Team 40
+Team 41
+Team 42
+Team 43
+Team 44
+Team 45
+Team 46
+Team 47
+Team 48
+Team 49
+Team 50
+Team 51
+Team 52
+Team 53
+Team 54
+Team 55
+Team 56
+Team 57
+Team 58
+Team 59
+Team 60
+Team 61
+Team 62
+Team 63
+Team 64
+Team 65
+Team 66
+Team 67
+Team 68
+Team 69
+Team 70
+Team 71
+Team 72
+Team 73
+Team 74
+Team 75
+Team 76
+Team 77
+Team 78
+Team 79
+Team 80
+Team 81
+Team 82
+Team 83
+Team 84
+Team 85
+Team 86
+Team 87
+Team 88
+Team 89
+Team 90
+Team 91
+Team 92
+Team 93
+Team 94
+Team 95
+Team 96
+Team 97
+Team 98
+Team 99
+Team 100
+]]>
+    </teamnamestxt>
+    <sidenamestxt>
+      <![CDATA[The Vs
+The Rs
+The Ns
+The Bs
+Side 1
+Side 2
+Side 3
+Side 4
+Side 5
+Side 6
+Side 7
+Side 8
+Side 9
+Side 10
+Side 11
+Side 12
+Side 13
+Side 14
+Side 15
+Side 16
+Side 17
+Side 18
+Side 19
+Side 20
+Side 21
+Side 22
+Side 23
+Side 24
+Side 25
+Side 26
+Side 27
+Side 28
+Side 29
+Side 30
+Side 31
+Side 32
+Side 33
+Side 34
+Side 35
+Side 36
+Side 37
+Side 38
+Side 39
+Side 40
+Side 41
+Side 42
+Side 43
+Side 44
+Side 45
+Side 46
+Side 47
+Side 48
+Side 49
+Side 50
+Side 51
+Side 52
+Side 53
+Side 54
+Side 55
+Side 56
+Side 57
+Side 58
+Side 59
+Side 60
+Side 61
+Side 62
+Side 63
+Side 64
+Side 65
+Side 66
+Side 67
+Side 68
+Side 69
+Side 70
+Side 71
+Side 72
+Side 73
+Side 74
+Side 75
+Side 76
+Side 77
+Side 78
+Side 79
+Side 80
+Side 81
+Side 82
+Side 83
+Side 84
+Side 85
+Side 86
+Side 87
+Side 88
+Side 89
+Side 90
+Side 91
+Side 92
+Side 93
+Side 94
+Side 95
+Side 96
+Side 97
+Side 98
+Side 99
+Side 100
+]]>
+    </sidenamestxt>
+    <tablenamestxt>
+      <![CDATA[]]>
+    </tablenamestxt>
+    <nrevtxt>
+      <![CDATA[1100
+]]>
+    </nrevtxt>
+    <rrevtxt>
+      <![CDATA[0
+]]>
+    </rrevtxt>
+    <grevtxt>
+      <![CDATA[2]]>
+    </grevtxt>
+    <paratxt>
+      <![CDATA[]]>
+    </paratxt>
+    <tagstxt>
+      <![CDATA[
+WS
+
+WS
+]]>
+    </tagstxt>
+    <strattxt>
+      <![CDATA[A
+
+D
+C
+]]>
+    </strattxt>
+    <sittxt>
+      <![CDATA[
+y
+y
+]]>
+    </sittxt>
+    <leaverstxt>
+      <![CDATA[]]>
+    </leaverstxt>
+    <handitxt>
+      <![CDATA[1.0
+
+-4.7
+]]>
+    </handitxt>
+    <gradjtxt>
+      <![CDATA[
+5.1
+
+-2.2
+]]>
+    </gradjtxt>
+    <nkstxt>
+      <![CDATA[]]>
+    </nkstxt>
+    <colstxt>
+      <![CDATA[]]>
+    </colstxt>
+    <rdtstxt>
+      <![CDATA[]]>
+    </rdtstxt>
+    <lunchtxt>
+      <![CDATA[]]>
+    </lunchtxt>
+    <bdresets>
+      <![CDATA[]]>
+    </bdresets>
+    <othfiles>
+      <![CDATA[]]>
+    </othfiles>
+  </currentgamedata>
+</siteauthresponse>

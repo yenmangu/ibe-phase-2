@@ -29,7 +29,9 @@ export class CurrentGameComponent implements OnInit, OnDestroy {
 
 	ngOnInit(): void {
 		this.IDBStatusSubscription = this.IDBStatusService.dataFinished$
-			.pipe(tag('idb-data-loaded'))
+			.pipe
+			// tag('idb-data-loaded')
+			()
 			.subscribe(status => {
 				this.IDB_DataStatus = status;
 			});

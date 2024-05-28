@@ -9,6 +9,17 @@
 </ng-container>
 <ng-container
 	*ngIf="(authService.isAuthedSubject$ | async) && loadingStatus === 100">
-	<app-navigation></app-navigation>
-	<router-outlet></router-outlet>
+	<ng-container *ngIf="!superAdmin">
+		<app-navigation></app-navigation>
+	</ng-container>
+	<ng-container *ngIf="superAdmin">
+		<ng-container
+			><div class="container column center current-label">
+				<h2 class="breadcrumb">
+					{{ currentLabel }}
+				</h2>
+			</div></ng-container
+		>
+		<router-outlet></router-outlet>
+	</ng-container>
 </ng-container>

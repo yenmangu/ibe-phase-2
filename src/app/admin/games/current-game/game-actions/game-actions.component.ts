@@ -63,9 +63,13 @@ export class GameActionsComponent implements OnInit, OnDestroy {
 		this.currentGameData.fetchLock().then(response => {
 			console.log('fetch lock response: ', response);
 
-			this.sharedGameData.GameAction$.pipe(tag('lock value')).subscribe(lock => {
-				this.lockValue = lock;
-			});
+			this.sharedGameData.GameAction$
+				.pipe
+				// tag('lock value')
+				()
+				.subscribe(lock => {
+					this.lockValue = lock;
+				});
 		});
 		this.gameCode = localStorage.getItem('GAME_CODE');
 		this.dirKey = localStorage.getItem('DIR_KEY');
@@ -138,7 +142,7 @@ export class GameActionsComponent implements OnInit, OnDestroy {
 		this.openBBODialog();
 	}
 	onImportUSEBIO() {
-		this.openUSEBIODialog()
+		this.openUSEBIODialog();
 	}
 
 	// uploadFilesInArray() {
@@ -237,10 +241,10 @@ export class GameActionsComponent implements OnInit, OnDestroy {
 		});
 	}
 
-	private openUSEBIODialog(){
-		const dialogRef = this.dialog.open(UsebioComponent,{
+	private openUSEBIODialog() {
+		const dialogRef = this.dialog.open(UsebioComponent, {
 			width: '500px',
-			data:{
+			data: {
 				title: 'Import USEBIO Digest',
 				message: 'Drag USEBIO .lin file here, or click to select',
 				gameCode: this.gameCode
@@ -248,8 +252,7 @@ export class GameActionsComponent implements OnInit, OnDestroy {
 		});
 		dialogRef.afterClosed().subscribe(result => {
 			console.log('Dialog Closed');
-
-		})
+		});
 	}
 
 	ngOnDestroy(): void {

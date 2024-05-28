@@ -5,7 +5,8 @@ import {
 	Input,
 	OnInit,
 	OnDestroy,
-	AfterViewInit
+	AfterViewInit,
+	ChangeDetectorRef
 } from '@angular/core';
 import {
 	FormGroup,
@@ -17,6 +18,7 @@ import {
 import { Subject, Subscription, takeUntil } from 'rxjs';
 import { tag } from 'rxjs-spy/cjs/operators';
 import { TablesService } from '../services/tables.service';
+import { TeamsService } from '../services/teams.service';
 
 @Component({
 	selector: 'app-teams-table',
@@ -27,6 +29,7 @@ export class TeamsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 	@Input() initialTableData: any;
 	@Input() loadingStatus: boolean = true;
 	@Output() teamFormData: EventEmitter<any> = new EventEmitter<any>();
+	@Output() startView: EventEmitter<boolean> = new EventEmitter<boolean>();
 	teamsForm: FormGroup;
 	pairConfig: any = {};
 	tableConfig: any;
@@ -40,12 +43,18 @@ export class TeamsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 	sideLabels: FormArray;
 	numberOfSides: number;
 	sideTeamMap: any = {};
-	northSide: [] = [];
-	southSide: [] = [];
-	eastSide: [] = [];
-	westSide: [] = [];
+	// northSide: any[] = [];
+	// southSide: any[] = [];
+	// eastSide: any[] = [];
+	// westSide: any[] = [];
 	sitters: any[] = [];
+	stratification: any[] = [];
 	labels: any = [];
+	abbreviations: any[] = [];
+	boardCols: any[] = [];
+	tables: { north: string[]; south: string[]; east: string[]; west: string[] };
+
+	teamOrder: boolean = true;
 	// ewSitters: any[] = [];
 
 	originalFormValues: any;
@@ -54,13 +63,20 @@ export class TeamsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 	columns: string[] = ['north', 'n/s', 'south', 'east', 'e/w', 'west'];
 	tableNumbers: string[];
 	isLoading$: boolean = true;
+	nsStartOrder: number[] = [];
+	ewStartOrder: number[] = [];
+	totalTables: number;
+	public cardinalObject: { north: any[]; south: any[]; east: any[]; west: any[] };
 
-	private tableData: any = {};
+	private arraysData: any = {};
+
+	public disableControls: boolean | null | undefined = false;
 
 	constructor(
 		private fb: FormBuilder,
 
-		private tablesService: TablesService
+		private tablesService: TablesService,
+		private teamsService: TeamsService
 	) {
 		this.tablesService.tablesConfig$
 			// .pipe(tag('team tables config'))
@@ -78,33 +94,56 @@ export class TeamsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	ngOnInit(): void {
 		if (this.initialTableData) {
-			const { tables, sideTeamMap, teams, sidesOf } = this.initialTableData;
+			const { sideTeamMap, teams, sidesOf, teamNumbers } = this.initialTableData;
 			this.sideTeamMap = sideTeamMap;
 			console.log(
 				'Initial table data in teams tables component: ',
 				this.initialTableData
 			);
-			this.tableNumbers = Object.keys(this.initialTableData.tableConfig);
-			this.tableData = this.initialTableData.tables;
+			this.tableNumbers = Object.keys(teams);
+			// console.log('Table numbers in teams.component: ', this.tableNumbers);
+
 			this.pairConfig = this.initialTableData.pairConfig;
 			this.pairNumbers = this.initialTableData.pairNumbers;
 			this.teamsPerSide = teams.length / sideTeamMap.totalSides;
 			this.numberOfSides = sideTeamMap.totalSides;
-			console.log('total sides: ', sideTeamMap.totalSides);
-			this.sitters = this.initialTableData.sitters.teamData;
-			this.labels = this.initialTableData.labels.teamData;
-
+			// console.log('total sides: ', sideTeamMap.totalSides);
+			this.sitters = this.initialTableData.sitters.ewSitters;
+			this.labels = this.initialTableData.labels.ewLabels;
+			this.stratification = this.initialTableData.stratification.ewStratification;
+			this.abbreviations = this.initialTableData.abbreviations.ewAbbreviations;
+			this.boardCols = this.initialTableData.boardCols;
+			this.tables = this.teamsService.generateTables(teams, teamNumbers);
+			this.nsStartOrder = this.initialTableData.nsStartOrder;
+			this.ewStartOrder = this.initialTableData.ewStartOrder;
+			this.totalTables = Number(this.initialTableData.totalTables);
 			// this.createSideLabelsFormArray(this.numberOfSides);
-			this.teamsForm = this.createNewTeamsForm();
-		}
-		const {
-			cardinals: { north, south, east, west }
-		} = this.initialTableData;
-		this.northSide = north;
-		this.southSide = south;
-		this.eastSide = east;
-		this.westSide = west;
+			this.arraysData = this.teamsService.generateArrays(
+				teams,
+				false,
+				this.initialTableData.totalTeams,
+				this.initialTableData.pairConfig,
+				teamNumbers
+			);
+			if (
+				this.arraysData &&
+				(this.arraysData !== undefined || this.arraysData !== null)
+			) {
+				// console.log('Generating team form:');
 
+				this.teamsForm = this.createNewTeamsForm();
+			}
+			this.teamsService.generateTableConfig(
+				this.initialTableData.teams,
+				this.nsStartOrder,
+				this.ewStartOrder,
+				this.totalTables
+			);
+		}
+		const cardinalObject = this.teamsService.builCardinals(
+			this.initialTableData.teamArray
+		);
+		// this.structureCardinals(cardinalObject);
 		if (this.teamsForm) {
 			console.log('teams form: ', this.teamsForm);
 		}
@@ -129,6 +168,90 @@ export class TeamsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 		console.log('teams form: ', this.teamsForm);
 	}
 
+	// structureCardinals(cardinalObject) {
+	// 	console.log('resturcturing cardinals');
+
+	// 	const { north, south, east, west } = cardinalObject;
+	// 	this.northSide = north;
+	// 	this.southSide = south;
+	// 	this.eastSide = east;
+	// 	this.westSide = west;
+	// }
+
+	onSwitchOrder(): void {
+		console.log('Switching order: ', this.teamOrder);
+
+		this.teamOrder = !this.teamOrder;
+		if (!this.teamOrder) {
+			this.startView.emit(true);
+			this.toggleInputs(true);
+		} else {
+			this.startView.emit(false);
+			this.toggleInputs(false);
+		}
+		const { orderArray, ewStartOrder } = this.getOrderArray(
+			this.teamOrder ? 'team' : 'start'
+		);
+		const sortedArr = this.changeArrayOrder(orderArray);
+		if (this.teamOrder) {
+			this.getArrays(orderArray);
+		} else {
+			this.getArrays(orderArray, ewStartOrder);
+		}
+		this.createNewTeamsForm();
+		// this.structureCardinals(cardinalObject);
+	}
+
+	toggleInputs(disabled: boolean): void {
+		this.switchDisableControls(disabled);
+	}
+
+	private switchDisableControls(disable: boolean): void {
+		if (disable) {
+			this.disableControls = true;
+		} else {
+			// Must use 'null' as using [attr.*] must take a non truthy value to re enable
+			this.disableControls = null;
+		}
+	}
+
+	/*
+	 *
+	 *
+	 *
+	 *
+	 */
+
+	private getOrderArray(order: 'team' | 'start') {
+		const { nsStartOrder, teamNumbers, ewStartOrder } = this.initialTableData;
+		let orderArray: any[] = [];
+		order === 'team' ? (orderArray = teamNumbers) : (orderArray = nsStartOrder);
+		return { orderArray, ewStartOrder };
+	}
+
+	private getArrays(orderArray: number[], ewStartOrder?: number[]) {
+		let startOrder: boolean = false;
+		if (!this.teamOrder) {
+			startOrder = true;
+		}
+		this.arraysData = this.teamsService.generateArrays(
+			this.initialTableData.teams,
+			startOrder,
+			this.initialTableData.totalTeams,
+			this.initialTableData.pairConfig,
+			orderArray,
+			ewStartOrder
+		);
+	}
+
+	changeArrayOrder(orderArray: number[]) {
+		const { teamArray } = this.initialTableData;
+		// console.log('teamArray before orderTeamArray: ', teamArray);
+		const sortedArr = this.teamsService.orderTeamArray(teamArray, orderArray);
+
+		return sortedArr;
+	}
+
 	private createNewTeamsForm(): FormGroup {
 		const teamsFormControls: any = {
 			// sideLabels: this.sideLabels
@@ -139,23 +262,33 @@ export class TeamsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 				this.sideTeamMap[i + 1].name
 			);
 		}
-		for (const tableNumber in this.tableData) {
-			if (this.tableData.hasOwnProperty(tableNumber)) {
-				const table = this.tableData[tableNumber];
-				const tableControls = this.createTableControls(table, tableNumber);
-				// const tableControls = this.createTableControl(table);
-				teamsFormControls[tableNumber] = this.fb.group(tableControls);
-			}
+		if (this.arraysData) {
+			const arrayKeys = Object.keys(this.arraysData);
+			// console.log('ArrayKeys: ', arrayKeys);
+
+			arrayKeys.forEach((key, index) => {
+				// console.log(`index: ${index}\nkey in question: ${key}`);
+
+				if (this.arraysData.hasOwnProperty(key)) {
+					const table = this.arraysData[key];
+					const tableControls = this.createTableControls(table, Number(key));
+					// const tableControls = this.createTableControl(table);
+					teamsFormControls[key] = this.fb.group(tableControls);
+				}
+			});
 		}
+
 		return (this.teamsForm = this.fb.group(teamsFormControls));
 	}
 
 	private createTableControls(
 		table: any,
-		tableNumber: string
+		arrayNumber: number
 	): { [key: string]: any } {
+		// console.log('Array number in createTableControls: ', arrayNumber);
+
 		const tableControls = {};
-		const namesArray = this.initialTableData.tables[tableNumber];
+		const namesArray = this.arraysData[arrayNumber];
 		const teamsArray = this.initialTableData.teams;
 		// console.log('teams array: ', teamsArray);
 
@@ -170,16 +303,17 @@ export class TeamsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 		const additionalArray = [
 			'team_name',
 			'venues',
-			// 'ns_stratification',
+			'ns_stratification',
 			'ew_stratification',
+			'ns_sitters',
 			'ew_sitters',
-			// 'ns_adjustments',
+			'ns_adjustments',
 			'ew_adjustments',
-			// 'ns_handicaps',
+			'ns_handicaps',
 			'ew_handicaps',
-			// 'ns_labels',
+			'ns_labels',
 			'ew_labels',
-			// 'ns_abbrev',
+			'ns_abbrev',
 			'ew_abbrev',
 			'boardCol',
 			'time_from',
@@ -187,7 +321,9 @@ export class TeamsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 			'lunch'
 		];
 		if (namesArray) {
-			const index = parseInt(tableNumber, 10) - 1;
+			const index = arrayNumber - 1;
+			console.log('Index used in createTablesControls: ', index);
+
 			for (const field of initialArray) {
 				// if (field === 'nsPairs' || field === 'ewPairs') {
 				// 	if (field === 'nsPairs') {
@@ -199,6 +335,8 @@ export class TeamsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 				// } else {
 				const controlName = `${field}`;
 				const initialValue = this.getInitialValue(namesArray, field);
+				console.log('field: ', field, '    initial value: ', initialValue);
+
 				tableControls[field] = [initialValue, Validators.required];
 				// }
 			}
@@ -206,38 +344,49 @@ export class TeamsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 				if (field === 'ns_sitters' || field === 'ew_sitters') {
 					// console.log('in sitters: ');
 
-					const index = parseInt(tableNumber, 10);
-					// if (field === 'ns_sitters' ) {
-					// 	// console.log('index: ', index);
+					if (field === 'ns_sitters') {
+						// console.log('index: ', index);
 
-					// 	tableControls[field] = null
-					// 	// console.log('tableControl for ns_sitters: ', tableControls[field]);
-					// }
+						tableControls[field] = null;
+						// console.log('tableControl for ns_sitters: ', tableControls[field]);
+					}
 					if (field === 'ew_sitters' && this.sitters) {
 						// console.log('index: ', index);
 						tableControls[field] = this.sitters[index] || false;
+						console.log('Sitters table control: ', tableControls[field]);
+
 						// console.log('tableControl for ew_sitters: ', tableControls[field]);
 					}
 				} else if (field === 'ns_labels' || field === 'ew_labels') {
-					// if (field === 'ns_labels') {
-					// 	tableControls[field] = null;
-					// }
+					if (field === 'ns_labels') {
+						tableControls[field] = null;
+					}
 					if (field === 'ew_labels') {
 						tableControls[field] = this.labels[index];
 					}
+					console.log('Labels tables controls: ', tableControls[field]);
+				} else if (field === 'ew_stratification') {
+					tableControls[field] = this.stratification[index];
+					console.log('Stratification table control: ', tableControls[field]);
+				} else if (field === 'ew_abbrev') {
+					tableControls[field] = this.abbreviations[index];
 				} else {
 					const controlName = `${field}`;
-					const initialValue = this.getInitialValue(namesArray, field);
+					// const initialValue = this.getInitialValue(namesArray, field);
 					tableControls[field] = null;
 				}
 			}
 
-			const teamIndex = Number(tableNumber) - 1;
-			const teamName = this.initialTableData.teamConfig[teamIndex]?.teamName || '';
+			const teamIndex = arrayNumber - 1;
+			const teamName = this.initialTableData.teams[teamIndex + 1]?.teamName || '';
 			tableControls['team_name'] = [teamName];
 		}
 
 		return tableControls;
+	}
+
+	private getAdditionalValue(array: any[], field: string) {
+		return array;
 	}
 
 	private getInitialValue(namesArray: any[], field: string) {
@@ -303,7 +452,7 @@ export class TeamsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 		if (this.teamsForm.valid) {
 			const formData = this.teamsForm.value;
 			const changedFields = this.changedFields;
-			return { formData, changedFields };
+			return { formData, changedFields, teams: true };
 		}
 		return null;
 	}

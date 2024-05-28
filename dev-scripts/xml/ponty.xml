@@ -1,0 +1,1600 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<siteauthresponse sf="s">
+	<lock tf="f" />
+	<params>
+		<country>
+			<![CDATA[Wales]]>
+		</country>
+		<email>
+			<![CDATA[ibescore@gmail.com]]>
+		</email>
+		<varprefs>
+			<![CDATA[x.23 Feb 2022.1 Jan 2034.-43340.100.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x]]>
+		</varprefs>
+	</params>
+	<xmlsettings>
+		<acctsets v="123">
+			<name>
+				<![CDATA[Pontypridd]]>
+			</name>
+			<pname>
+				<![CDATA[]]>
+			</pname>
+			<email>
+				<![CDATA[ibescore@gmail.com]]>
+			</email>
+			<phone>
+				<![CDATA[]]>
+			</phone>
+			<ctry>
+				<![CDATA[Wales]]>
+			</ctry>
+			<actgrp>
+				<![CDATA[bexgold]]>
+			</actgrp>
+			<showipt val=""/>
+			<startdt val=""/>
+			<paidtilldt val=""/>
+			<acttype val=""/>
+			<payextbutlbl val=""/>
+			<uptodtcol val=""/>
+			<boolexpi val=""/>
+			<creds val=""/>
+			<cmnlt val=""/>
+			<ids>
+				<id type="EBU" val="IOM"/>
+				<id type="Bridgenix" val=""/>
+				<id type="SBU" val=""/>
+				<id type="IBF" val=""/>
+			</ids>
+			<diremail>
+				<![CDATA[ibescore@gmail.com]]>
+			</diremail>
+			<ebuccode val="10"/>
+			<ebumptype val="Green"/>
+			<ebumpsc val="County"/>
+			<bwacct>
+				<![CDATA[sarahamos]]>
+			</bwacct>
+			<bwpass>
+				<![CDATA[P0ntyh0me]]>
+			</bwpass>
+			<maspyn val="N"/>
+			<director>
+				<![CDATA[Sarah]]>
+			</director>
+			<scorer>IBEscore</scorer>
+		</acctsets>
+		<initsets v="2">
+			<ims>
+				<im type="playername" pref="y"/>
+				<im type="nativeclub"/>
+				<im type="id" fid="EBU"/>
+			</ims>
+			<popup val="y"/>
+			<nidscr val="y"/>
+			<prenam val="n"/>
+			<ttid val="y"/>
+		</initsets>
+		<namsets v="2">
+			<mn val="10"/>
+			<stn val="a"/>
+			<sh val="l"/>
+			<dpn val="1"/>
+		</namsets>
+		<pluisets v="1">
+			<pcsee hands="y" results="y" rankings="y" asd="y"/>
+			<flash val="y"/>
+			<tos val="30"/>
+			<pcchg dan="y" pn="y" tsn="y" rcr="y"/>
+			<qaba val="y"/>
+			<pci leads="y" auctions="y" deals="y" notes="n"/>
+			<warn sw="y" sh="y" oo="y" un="y" nn="n"/>
+			<scov val="y"/>
+		</pluisets>
+		<scosets v="1">
+			<pet val="p"/>
+			<pnt val="6"/>
+			<scms>
+				<scm for="i" type="mp" bds="0x0"/>
+				<scm for="p" type="mp" bds="0x0"/>
+				<scm for="t" type="imp" bds="0x0"/>
+				<scm for="8" type="imp" bds="0x0"/>
+				<scm for="12" type="imp" bds="0x0"/>
+				<scm for="16" type="imp" bds="0x0"/>
+				<scm for="sp" type="vpmp" bds="0x0"/>
+				<scm for="st" type="vpimp" bds="0x0"/>
+			</scms>
+			<neu val="d"/>
+		</scosets>
+		<secsets v="1">
+			<mlpc val="u"/>
+			<pin on="n" len="4" type="n" case="c"/>
+			<spec web="y" app="y"/>
+		</secsets>
+		<usesets>
+			<ubs val="p"/>
+		</usesets>
+	</xmlsettings>
+	<playerdb>
+		<root rev="92">
+			<!-- n: key -->
+			<!-- name: player name -->
+			<!-- id code="347875" type="EBU" or type ="club" -->
+			<item type="player" n="204" adddate="25/02/22">
+				<name>Sarah Amos</name>
+				<lastplay date="28/06/23"/>
+				<pp n="413,413,413,413,413,413,436"/>
+				<id type="EBU" code="00405746"/>
+			</item>
+			<item type="player" n="205" adddate="25/02/22">
+				<name>Elizabeth Redrup</name>
+				<id type="EBU" code="00512769"/>
+				<lastplay date="24/02/24"/>
+				<pp n="209,209,209,209,209,209,242,242,242,242,242,242,209"/>
+			</item>
+			<item type="player" n="206" adddate="25/02/22">
+				<name>Graham Roberts</name>
+				<lastplay date="24/02/24"/>
+				<pp n="216,216,216,216,216,216,406,406,406,406,406,406,216"/>
+			</item>
+			<item type="player" n="209" adddate="25/02/22">
+				<name>Jenny Rogers</name>
+				<lastplay date="24/02/24"/>
+				<pp n="205,205,205,205,205,205,397,397,397,397,397,397,205"/>
+			</item>
+			<item type="player" n="212" adddate="25/02/22">
+				<name>Judy Clowes</name>
+				<lastplay date="24/02/24"/>
+				<pp n="218,218,218,218,218,218,422,422,422,422,422,422,218"/>
+			</item>
+			<item type="player" n="213" adddate="25/02/22">
+				<name>Lesley Chew</name>
+				<lastplay date="24/02/24"/>
+				<pp n="223,223,223,223,223,223,220,220,220,220,220,220,223"/>
+			</item>
+			<item type="player" n="215" adddate="25/02/22">
+				<name>Rachel Oliver</name>
+				<id type="EBU" code="00485980"/>
+				<lastplay date="24/02/24"/>
+				<pp n="518,409,409,409,409,409,409,203"/>
+			</item>
+			<item type="player" n="216" adddate="25/02/22">
+				<name>Alec Beer</name>
+				<lastplay date="24/02/24"/>
+				<pp n="206,206,206,206,206,206,424,424,424,424,424,424,206"/>
+			</item>
+			<item type="player" n="218" adddate="25/02/22">
+				<name>Michele Davies</name>
+				<id type="EBU" code="00072395"/>
+				<lastplay date="24/02/24"/>
+				<pp n="212,212,212,212,212,212,417,417,417,417,417,417,212"/>
+			</item>
+			<item type="player" n="219" adddate="25/02/22">
+				<name>Monica Scott</name>
+				<id type="EBU" code="00112202"/>
+				<lastplay date="24/02/24"/>
+				<pp n="497,497,497,497,497,497,426,426,426,426,426,426,220"/>
+			</item>
+			<item type="player" n="223" adddate="25/02/22">
+				<name>Phil Inch</name>
+				<id type="EBU" code="00493527"/>
+				<lastplay date="24/02/24"/>
+				<pp n="213,213,213,213,213,213,222,222,222,222,222,222,213"/>
+			</item>
+			<item type="player" n="224" adddate="25/02/22">
+				<name>Zena Hargest</name>
+				<id type="EBU" code="00491716"/>
+				<lastplay date="24/02/24"/>
+				<pp n="421,421,421,421,421,421,421,421,421,421,421,421,421,251"/>
+			</item>
+			<item type="player" n="240" adddate="25/02/22">
+				<name>Ann Smout</name>
+				<lastplay date="28/06/23"/>
+				<pp n="405,405,405,405,405,405,425,425,425,425,425,425,425,241"/>
+			</item>
+			<item type="event" n="1" adddate="26/02/22">
+				<name>Llandudno Saturday Afternoon</name>
+				<lastplay date="24/02/24"/>
+			</item>
+			<item type="team" n="1" adddate="27/02/22">
+				<name>Side 1</name>
+				<lastplay date="24/02/24"/>
+			</item>
+			<item type="team" n="2" adddate="27/02/22">
+				<name>Side 3</name>
+				<lastplay date="24/02/24"/>
+			</item>
+			<item type="team" n="3" adddate="27/02/22">
+				<name>Side 9</name>
+				<lastplay date="24/02/24"/>
+			</item>
+			<item type="event" n="2" adddate="27/02/22">
+				<name>Llandudno Teams</name>
+				<lastplay date="24/02/24"/>
+			</item>
+			<item type="event" n="3" adddate="03/07/22">
+				<name>Llandudno Swiss Pairs</name>
+				<lastplay date="24/02/24"/>
+			</item>
+			<item type="event" n="4" adddate="09/09/22">
+				<name/>
+				<lastplay date=""/>
+			</item>
+			<item type="event" n="5" adddate="09/09/22">
+				<name/>
+				<lastplay date=""/>
+			</item>
+			<item type="team" n="4" adddate="10/09/22">
+				<name>Davies</name>
+				<lastplay date="24/02/24"/>
+			</item>
+			<item type="team" n="5" adddate="10/09/22">
+				<name>Dawes</name>
+				<lastplay date="24/02/24"/>
+			</item>
+			<item type="team" n="6" adddate="10/09/22">
+				<name>Donelan</name>
+				<lastplay date="24/02/24"/>
+			</item>
+			<item type="team" n="7" adddate="10/09/22">
+				<name>Hay</name>
+				<lastplay date="24/02/24"/>
+			</item>
+			<item type="team" n="8" adddate="10/09/22">
+				<name>Kelly</name>
+				<lastplay date="24/02/24"/>
+			</item>
+			<item type="team" n="9" adddate="10/09/22">
+				<name>Kingston</name>
+				<lastplay date="24/02/24"/>
+			</item>
+			<item type="team" n="10" adddate="10/09/22">
+				<name>Lodewijks</name>
+				<lastplay date="24/02/24"/>
+			</item>
+			<item type="team" n="11" adddate="10/09/22">
+				<name>McGurgan</name>
+				<lastplay date="24/02/24"/>
+			</item>
+			<item type="team" n="12" adddate="10/09/22">
+				<name>Miller</name>
+				<lastplay date="24/02/24"/>
+			</item>
+			<item type="team" n="13" adddate="10/09/22">
+				<name>Millet</name>
+				<lastplay date="24/02/24"/>
+			</item>
+			<item type="team" n="14" adddate="10/09/22">
+				<name>Sargent</name>
+				<lastplay date="24/02/24"/>
+			</item>
+			<item type="team" n="15" adddate="10/09/22">
+				<name>Walker</name>
+				<lastplay date="24/02/24"/>
+			</item>
+			<item type="team" n="16" adddate="10/09/22">
+				<name>Whelan</name>
+				<lastplay date="24/02/24"/>
+			</item>
+			<item type="team" n="17" adddate="10/09/22">
+				<name>Willcox</name>
+				<lastplay date="24/02/24"/>
+			</item>
+			<item type="team" n="18" adddate="10/09/22">
+				<name>Woodcock</name>
+				<lastplay date="24/02/24"/>
+			</item>
+			<item type="side" n="1" adddate="10/09/22">
+				<name>10</name>
+				<lastplay date="24/02/24"/>
+			</item>
+			<item type="side" n="2" adddate="10/09/22">
+				<name>Davies</name>
+				<lastplay date="24/02/24"/>
+			</item>
+			<item type="event" n="6" adddate="10/09/22">
+				<name/>
+				<lastplay date=""/>
+			</item>
+			<item type="event" n="7" adddate="11/09/22">
+				<name>I O M Congress Swiss Teams</name>
+				<lastplay date="24/02/24"/>
+			</item>
+			<item type="event" n="8" adddate="11/09/22">
+				<name/>
+				<lastplay date=""/>
+			</item>
+			<item type="event" n="9" adddate="11/09/22">
+				<name/>
+				<lastplay date=""/>
+			</item>
+			<item type="event" n="10" adddate="11/09/22">
+				<name/>
+				<lastplay date=""/>
+			</item>
+			<item type="player" n="398" adddate="23/02/23">
+				<name>Shirley Radford</name>
+				<id type="EBU" code="00474668"/>
+				<lastplay date="24/02/24"/>
+				<pp n="399,399,399,399,399,399,416,416,416,416,416,416,399"/>
+			</item>
+			<item type="player" n="399" adddate="23/02/23">
+				<name>Marjorie Deans</name>
+				<lastplay date="24/02/24"/>
+				<pp n="398,398,398,398,398,398,407,407,407,407,407,407,398"/>
+			</item>
+			<item type="player" n="400" adddate="23/02/23">
+				<name>Jeff Kirby</name>
+				<lastplay date="24/02/24"/>
+				<pp n="401,401,401,401,401,401,208,208,208,208,208,208,401"/>
+			</item>
+			<item type="player" n="401" adddate="23/02/23">
+				<name>Dot Kirby</name>
+				<id type="EBU" code="00448795"/>
+				<lastplay date="24/02/24"/>
+				<pp n="400,400,400,400,400,400,234,234,234,234,234,234,400"/>
+			</item>
+			<item type="player" n="403" adddate="23/02/23">
+				<name>Carole Sachs</name>
+				<lastplay date="28/06/23"/>
+				<pp n="239,239,239,239,239,239,405"/>
+			</item>
+			<item type="player" n="405" adddate="23/02/23">
+				<name>Anne Kuehn</name>
+				<lastplay date="28/06/23"/>
+				<pp n="240,240,240,240,240,240,403"/>
+			</item>
+			<item type="player" n="406" adddate="23/02/23">
+				<name>Gill Dondos</name>
+				<lastplay date="28/06/23"/>
+				<pp n="206,206,206,206,206,206,402"/>
+			</item>
+			<item type="player" n="407" adddate="23/02/23">
+				<name>Marion Mitchell</name>
+				<lastplay date="24/02/24"/>
+				<pp n="408,408,408,408,408,408,399,399,399,399,399,399,408"/>
+			</item>
+			<item type="player" n="408" adddate="23/02/23">
+				<name>Janet Beach</name>
+				<lastplay date="24/02/24"/>
+				<pp n="407,407,407,407,407,407,437,437,437,437,437,437,407"/>
+			</item>
+			<item type="player" n="420" adddate="23/02/23">
+				<name>Chris Reynolds</name>
+				<lastplay date="24/02/24"/>
+				<pp n="505,505,505,505,505,505,442,440,442,440,442,440,442,440,442,440,442,440,243,243,243,413,413,413,243"/>
+			</item>
+			<item type="player" n="421" adddate="23/02/23">
+				<name>Janet Owen</name>
+				<lastplay date="24/02/24"/>
+				<pp n="224,224,224,224,224,224,208,208,208,208,208,208,224"/>
+			</item>
+			<item type="player" n="425" adddate="23/02/23">
+				<name>Sue Ratcliffe</name>
+				<id type="EBU" code="00528906"/>
+				<lastplay date="24/02/24"/>
+				<pp n="517,517,517,517,517,517,240"/>
+			</item>
+			<item type="event" n="11" adddate="24/02/23">
+				<name/>
+				<lastplay date=""/>
+			</item>
+			<item type="event" n="12" adddate="24/02/23">
+				<name>Llandudno Friday</name>
+				<lastplay date="24/02/24"/>
+			</item>
+			<item type="event" n="13" adddate="25/02/23">
+				<name/>
+				<lastplay date=""/>
+			</item>
+			<item type="event" n="14" adddate="25/02/23">
+				<name>Llandudno Sat Aft</name>
+				<lastplay date="24/02/24"/>
+			</item>
+			<item type="event" n="15" adddate="25/02/23">
+				<name/>
+				<lastplay date=""/>
+			</item>
+			<item type="event" n="16" adddate="25/02/23">
+				<name/>
+				<lastplay date=""/>
+			</item>
+			<item type="event" n="17" adddate="25/02/23">
+				<name/>
+				<lastplay date=""/>
+			</item>
+			<item type="event" n="18" adddate="25/02/23">
+				<name>Llandudno Sat Night</name>
+				<lastplay date="24/02/24"/>
+			</item>
+			<item type="event" n="19" adddate="25/02/23">
+				<name/>
+				<lastplay date=""/>
+			</item>
+			<item type="team" n="19" adddate="26/02/23">
+				<name>13</name>
+				<lastplay date="24/02/24"/>
+			</item>
+			<item type="team" n="20" adddate="26/02/23">
+				<name>Side 10</name>
+				<lastplay date="24/02/24"/>
+			</item>
+			<item type="team" n="21" adddate="26/02/23">
+				<name>Side 11</name>
+				<lastplay date="24/02/24"/>
+			</item>
+			<item type="team" n="22" adddate="26/02/23">
+				<name>Side 12</name>
+				<lastplay date="24/02/24"/>
+			</item>
+			<item type="team" n="23" adddate="26/02/23">
+				<name>Side 2</name>
+				<lastplay date="24/02/24"/>
+			</item>
+			<item type="team" n="24" adddate="26/02/23">
+				<name>Side 8</name>
+				<lastplay date="24/02/24"/>
+			</item>
+			<item type="side" n="3" adddate="26/02/23">
+				<name>13</name>
+				<lastplay date="24/02/24"/>
+			</item>
+			<item type="event" n="20" adddate="26/02/23">
+				<name/>
+				<lastplay date=""/>
+			</item>
+			<item type="event" n="21" adddate="26/02/23">
+				<name>Llandudno Sunday Teams</name>
+				<lastplay date="24/02/24"/>
+			</item>
+			<item type="event" n="22" adddate="09/05/23">
+				<name/>
+				<lastplay date=""/>
+			</item>
+			<item type="event" n="23" adddate="09/05/23">
+				<name>Italo Basiletti Ladies Pairs</name>
+				<lastplay date="24/02/24"/>
+			</item>
+			<item type="event" n="24" adddate="28/06/23">
+				<name/>
+				<lastplay date=""/>
+			</item>
+			<item type="event" n="25" adddate="28/06/23">
+				<name>Test</name>
+				<lastplay date="24/02/24"/>
+			</item>
+			<item type="event" n="26" adddate="28/06/23">
+				<name/>
+				<lastplay date=""/>
+			</item>
+			<item type="event" n="27" adddate="28/06/23">
+				<name/>
+				<lastplay date=""/>
+			</item>
+			<item type="event" n="28" adddate="28/06/23">
+				<name/>
+				<lastplay date=""/>
+			</item>
+			<item type="event" n="29" adddate="28/06/23">
+				<name/>
+				<lastplay date=""/>
+			</item>
+			<item type="event" n="30" adddate="29/06/23">
+				<name/>
+				<lastplay date=""/>
+			</item>
+			<item type="event" n="31" adddate="29/06/23">
+				<name/>
+				<lastplay date=""/>
+			</item>
+			<item type="event" n="32" adddate="29/06/23">
+				<name>Llandudno 2</name>
+				<lastplay date="24/02/24"/>
+			</item>
+			<item type="player" n="447" adddate="29/06/23">
+				<name>Andrea Knox</name>
+				<id type="EBU" code="00424066"/>
+				<lastplay date="09/09/23"/>
+				<pp n="448,448,448,448,448,448,479"/>
+			</item>
+			<item type="player" n="448" adddate="29/06/23">
+				<name>Martin Garvey</name>
+				<id type="EBU" code="72146"/>
+				<lastplay date="09/09/23"/>
+				<pp n="447,447,447,447,447,447,480"/>
+			</item>
+			<item type="event" n="33" adddate="01/07/23">
+				<name/>
+				<lastplay date=""/>
+			</item>
+			<item type="event" n="34" adddate="01/07/23">
+				<name>Llandudno Swiss Pairs 2023</name>
+				<lastplay date="24/02/24"/>
+			</item>
+			<item type="event" n="35" adddate="02/07/23">
+				<name/>
+				<lastplay date=""/>
+			</item>
+			<item type="event" n="36" adddate="02/07/23">
+				<name/>
+				<lastplay date=""/>
+			</item>
+			<item type="event" n="37" adddate="03/07/23">
+				<name/>
+				<lastplay date=""/>
+			</item>
+			<item type="side" n="4" adddate="09/09/23">
+				<name>2</name>
+				<lastplay date="24/02/24"/>
+			</item>
+			<item type="side" n="5" adddate="09/09/23">
+				<name>5</name>
+				<lastplay date="24/02/24"/>
+			</item>
+			<item type="side" n="6" adddate="09/09/23">
+				<name>The BBC</name>
+				<lastplay date="24/02/24"/>
+			</item>
+			<item type="event" n="38" adddate="09/09/23">
+				<name/>
+				<lastplay date=""/>
+			</item>
+			<item type="event" n="39" adddate="09/09/23">
+				<name>Manx Congress</name>
+				<lastplay date="24/02/24"/>
+			</item>
+			<item type="event" n="40" adddate="10/09/23">
+				<name/>
+				<lastplay date=""/>
+			</item>
+			<item type="event" n="41" adddate="12/09/23">
+				<name/>
+				<lastplay date=""/>
+			</item>
+			<item type="event" n="42" adddate="12/09/23">
+				<name>Manx Congress Swiss Teams</name>
+				<lastplay date="24/02/24"/>
+			</item>
+			<item type="event" n="43" adddate="12/09/23">
+				<name/>
+				<lastplay date=""/>
+			</item>
+			<item type="event" n="44" adddate="20/09/23">
+				<name/>
+				<lastplay date=""/>
+			</item>
+			<item type="event" n="45" adddate="20/09/23">
+				<name/>
+				<lastplay date=""/>
+			</item>
+			<item type="player" n="477" adddate="21/02/24">
+				<name>Janet Almond</name>
+				<lastplay date="24/02/24"/>
+				<pp n="503"/>
+			</item>
+			<item type="player" n="478" adddate="21/02/24">
+				<name>Pat Arthur</name>
+				<lastplay date="24/02/24"/>
+				<pp n="509"/>
+			</item>
+			<item type="player" n="479" adddate="21/02/24">
+				<name>Nikki Barclay</name>
+				<lastplay date="24/02/24"/>
+				<pp n="489"/>
+			</item>
+			<item type="player" n="480" adddate="21/02/24">
+				<name>Pam Booth-Jones</name>
+				<lastplay date="24/02/24"/>
+				<pp n="516"/>
+			</item>
+			<item type="player" n="481" adddate="21/02/24">
+				<name>Margaret Bridge</name>
+				<lastplay date="24/02/24"/>
+				<pp n="498"/>
+			</item>
+			<item type="player" n="482" adddate="21/02/24">
+				<name>Jan Bywater</name>
+				<lastplay date="24/02/24"/>
+				<pp n="493"/>
+			</item>
+			<item type="player" n="483" adddate="21/02/24">
+				<name>Anthony Cadley</name>
+				<lastplay date="24/02/24"/>
+				<pp n="484"/>
+			</item>
+			<item type="player" n="484" adddate="21/02/24">
+				<name>Jill Cadley</name>
+				<lastplay date="24/02/24"/>
+				<pp n="483"/>
+			</item>
+			<item type="player" n="485" adddate="21/02/24">
+				<name>Joan Eastwood</name>
+				<lastplay date="24/02/24"/>
+				<pp n="494"/>
+			</item>
+			<item type="player" n="486" adddate="21/02/24">
+				<name>Izabel Evans</name>
+				<lastplay date="24/02/24"/>
+				<pp n="492"/>
+			</item>
+			<item type="player" n="487" adddate="21/02/24">
+				<name>Joanna Gears</name>
+				<lastplay date="24/02/24"/>
+				<pp n="504"/>
+			</item>
+			<item type="player" n="488" adddate="21/02/24">
+				<name>Nicky Gill</name>
+				<lastplay date="24/02/24"/>
+				<pp n="500"/>
+			</item>
+			<item type="player" n="489" adddate="21/02/24">
+				<name>Nicola Haywood</name>
+				<lastplay date="24/02/24"/>
+				<pp n="479"/>
+			</item>
+			<item type="player" n="490" adddate="21/02/24">
+				<name>Sue Jarvis</name>
+				<lastplay date="24/02/24"/>
+				<pp n="511"/>
+			</item>
+			<item type="player" n="491" adddate="21/02/24">
+				<name>Pat Jenkins</name>
+				<lastplay date="24/02/24"/>
+				<pp n="499"/>
+			</item>
+			<item type="player" n="492" adddate="21/02/24">
+				<name>Tony Jones</name>
+				<lastplay date="24/02/24"/>
+				<pp n="486"/>
+			</item>
+			<item type="player" n="493" adddate="21/02/24">
+				<name>Johanna Keane</name>
+				<lastplay date="24/02/24"/>
+				<pp n="482"/>
+			</item>
+			<item type="player" n="494" adddate="21/02/24">
+				<name>Eunice King</name>
+				<lastplay date="24/02/24"/>
+				<pp n="485"/>
+			</item>
+			<item type="player" n="495" adddate="21/02/24">
+				<name>Hylary Kingham</name>
+				<lastplay date="24/02/24"/>
+				<pp n="501"/>
+			</item>
+			<item type="player" n="496" adddate="21/02/24">
+				<name>Barbara Lawton</name>
+				<lastplay date="24/02/24"/>
+				<pp n="512"/>
+			</item>
+			<item type="player" n="497" adddate="21/02/24">
+				<name>Mike McGarry</name>
+				<lastplay date="24/02/24"/>
+				<pp n="219"/>
+			</item>
+			<item type="player" n="498" adddate="21/02/24">
+				<name>Judy Mitchell</name>
+				<lastplay date="24/02/24"/>
+				<pp n="481"/>
+			</item>
+			<item type="player" n="499" adddate="21/02/24">
+				<name>Sue Munday</name>
+				<lastplay date="24/02/24"/>
+				<pp n="491"/>
+			</item>
+			<item type="player" n="500" adddate="21/02/24">
+				<name>Maire Noble</name>
+				<lastplay date="24/02/24"/>
+				<pp n="488"/>
+			</item>
+			<item type="player" n="501" adddate="21/02/24">
+				<name>Betty O'Donnell</name>
+				<lastplay date="24/02/24"/>
+				<pp n="495"/>
+			</item>
+			<item type="player" n="502" adddate="21/02/24">
+				<name>Annie Paul</name>
+				<lastplay date="24/02/24"/>
+				<pp n="508"/>
+			</item>
+			<item type="player" n="503" adddate="21/02/24">
+				<name>Kay Pierce</name>
+				<lastplay date="24/02/24"/>
+				<pp n="477"/>
+			</item>
+			<item type="player" n="504" adddate="21/02/24">
+				<name>Carole Pollock</name>
+				<lastplay date="24/02/24"/>
+				<pp n="487"/>
+			</item>
+			<item type="player" n="505" adddate="21/02/24">
+				<name>Tony Pummell</name>
+				<lastplay date="24/02/24"/>
+				<pp n="420"/>
+			</item>
+			<item type="player" n="506" adddate="21/02/24">
+				<name>Gary Seaman</name>
+				<lastplay date="24/02/24"/>
+				<pp n="507"/>
+			</item>
+			<item type="player" n="507" adddate="21/02/24">
+				<name>Karen Seaman</name>
+				<lastplay date="24/02/24"/>
+				<pp n="506"/>
+			</item>
+			<item type="player" n="508" adddate="21/02/24">
+				<name>Rita Simmons</name>
+				<lastplay date="24/02/24"/>
+				<pp n="502"/>
+			</item>
+			<item type="player" n="509" adddate="21/02/24">
+				<name>Myra Smith</name>
+				<lastplay date="24/02/24"/>
+				<pp n="478"/>
+			</item>
+			<item type="player" n="510" adddate="21/02/24">
+				<name>Nicky Sutton</name>
+				<lastplay date=""/>
+			</item>
+			<item type="player" n="511" adddate="21/02/24">
+				<name>Tess Szymanska</name>
+				<lastplay date="24/02/24"/>
+				<pp n="490"/>
+			</item>
+			<item type="player" n="512" adddate="21/02/24">
+				<name>Pat Tait</name>
+				<lastplay date="24/02/24"/>
+				<pp n="496"/>
+			</item>
+			<item type="player" n="513" adddate="21/02/24">
+				<name>Margaret Ward</name>
+				<lastplay date=""/>
+			</item>
+			<item type="player" n="514" adddate="21/02/24">
+				<name>Michael Wright</name>
+				<lastplay date="24/02/24"/>
+				<pp n="515"/>
+			</item>
+			<item type="player" n="515" adddate="21/02/24">
+				<name>Yvonne Wright</name>
+				<lastplay date="24/02/24"/>
+				<pp n="514"/>
+			</item>
+			<item type="player" n="516" adddate="21/02/24">
+				<name>Sue Yardley</name>
+				<lastplay date="24/02/24"/>
+				<pp n="480"/>
+			</item>
+			<item type="player" n="517" adddate="23/02/24">
+				<name>Anne Smout</name>
+				<lastplay date="24/02/24"/>
+				<pp n="425"/>
+			</item>
+			<item type="event" n="46" adddate="23/02/24">
+				<name>Friday Eve</name>
+				<lastplay date="24/02/24"/>
+			</item>
+			<item type="event" n="47" adddate="23/02/24">
+				<name/>
+				<lastplay date=""/>
+			</item>
+			<item type="event" n="48" adddate="24/02/24">
+				<name/>
+				<lastplay date=""/>
+			</item>
+			<item type="event" n="49" adddate="24/02/24">
+				<name>Saturday Afternoon</name>
+				<lastplay date="24/02/24"/>
+			</item>
+			<item type="event" n="50" adddate="24/02/24">
+				<name/>
+				<lastplay date=""/>
+			</item>
+			<item type="event" n="51" adddate="24/02/24">
+				<name/>
+				<lastplay date=""/>
+			</item>
+			<item type="event" n="52" adddate="24/02/24">
+				<name/>
+				<lastplay date=""/>
+			</item>
+			<item type="event" n="53" adddate="24/02/24">
+				<name>Saturday Eve</name>
+				<lastplay date="24/02/24"/>
+			</item>
+			<item type="player" n="518" adddate="25/02/24">
+				<name>Bill Loughlin</name>
+				<lastplay date="24/02/24"/>
+				<pp n="215"/>
+			</item>
+			<item type="team" n="25" adddate="25/02/24">
+				<name>2</name>
+				<lastplay date="24/02/24"/>
+			</item>
+			<item type="team" n="26" adddate="25/02/24">
+				<name>Side 13</name>
+				<lastplay date="24/02/24"/>
+			</item>
+			<item type="team" n="27" adddate="25/02/24">
+				<name>Side 14</name>
+				<lastplay date="24/02/24"/>
+			</item>
+			<item type="team" n="28" adddate="25/02/24">
+				<name>Side 7</name>
+				<lastplay date="24/02/24"/>
+			</item>
+			<item type="event" n="54" adddate="25/02/24">
+				<name/>
+				<lastplay date=""/>
+			</item>
+		</root>
+	</playerdb>
+	<hrevtxt>
+		<![CDATA[1388]]>
+	</hrevtxt>
+	<hands>
+		<![CDATA[051112182425293138404244460204101416172133343943485201030708131923272832353741 020305081219212425293640510409141617182223333841424306071015262730313234474850 040910121824253341444750520205060708151620222330485103111317192632343740424546 011112171824262935454950520407101920212527334142435105061316233031363839404446 020406101727293034353744510305111314192023263246475212151618212231333940414250 010205080919272835374145490307101314252629333444464704061112182021223138404243 101516212528333640414244450112131718202327323539435202040506070911192230313448 080911181920232526364143500515212729303337474849515201030407121431323435404546 071215182021243038444547490508131422262728313536404306101117232534374142465051 080914192324262832333536430102051013151622404246474803060711182038394445495051 101316171922272937444549520308121520212830343942485104050607091125323536384150 010811121718303134404449520206091015203235383946474803041619212224252933364245 010305161924253137414345480809101215222628353844495102041318212930363942465052 030406070913242831384145460810121921232733353739444801021116202526293242474951 030709181924253840424547490405081112131721222332354101021016202627293639434650 020307101319293140444547490112141820212227373941485206080911232428333436384351 010305111314172324283146490410293033343739424448505108091216192021252635414752 061215171823252730324344451619222426282936373847485002040508091420313539404151 020612151722283134373944450105071023244041434648495103091319212630333536384252 030912181927313233354447510104060814152122242534374205101316172023263839404650 131420232634383941434449500609111516223136424546474802040812171921253233353752 060810111315181929444751520205091722232731323438434601030414202124253335374249 020304050708121318233132510611141617242934353742464910192021363840414344454852 020410131416293137404448500612152024252630333846475201050708111821232734364349 010204121618232936384448510506070910131522273340435208111424252630313541424650 021519212426293032353640460103051320344143444748505116171823252728373942454952 061016171819232427293745500408111422313335384043484901121520253032343941424447 020409122023253233444648500313141924263435363739454707081617182228303840424351 040809121820262733364348510507101316232425414245464901030614151719283134404452 021721282933384043454750510607121318192324273442444903050910151622253031353946 050813151718202227384146480406111619253034394344474909142326293233354042455051 030607081017182225293037500509131420212832343642474901021112273133394041454648 010307112021232433353945510910262729343642444649505204050608151819323738404348 020306101317202227293148520712151821263033343637434501051119232425283538414649 030506091720233037404344510711131518192225323336464702121621293135384142484950 040510131516293844464849510103081122232731363941435206091214181921263334404550 020305081420252634354648520104061516233031323841474910121317181921272829404450 050911141523242934404849520710161719222527303841505102060812132021313242444547 031722293233343537394548490204050609121424253031365015182021232627283840414652 081217192325303435404647520102051620242628293342445103070911132227363741454950 020304050708101217263844480113141824283034353637454909151619222527313940414750 010204071416171926293050520508101122232732333639474803122021253134384142434446 070809192225313334374345520104101214172024262738464705061316182332364142495051 030714202125303138434445510612131823262832353637395201020509151619242940414647 030407111621222728313948510108152024253236424445474905061314181923293340465052 020405192526273536414249520309121516172124293839405001061314222832344445474851 061011152225343537394447500708091314171920282930334801020316182324324042434652 060709131620243339424344460305171925313436374041484901041018222326272830354550]]>
+	</hands>
+	<handanxs>
+		<handanx n="1">
+			<![CDATA[1 8 11 7 10 9 8 11 7 10 9 5 1 5 1 2 5 1 5 1 2]]>
+		</handanx>
+		<handanx n="2">
+			<![CDATA[2 3 7 4 8 6 3 7 4 8 6 10 6 8 5 5 10 6 8 5 5]]>
+		</handanx>
+		<handanx n="3">
+			<![CDATA[3 6 0 0 3 0 6 0 0 3 0 6 11 11 9 8 6 11 11 9 8]]>
+		</handanx>
+		<handanx n="4">
+			<![CDATA[4 4 4 4 3 4 4 4 4 3 4 9 9 9 10 9 9 9 9 10 9]]>
+		</handanx>
+		<handanx n="5">
+			<![CDATA[5 10 11 10 8 10 10 11 10 8 10 3 2 3 5 2 3 2 3 5 2]]>
+		</handanx>
+		<handanx n="6">
+			<![CDATA[6 7 8 7 11 7 7 8 7 11 7 5 5 6 2 6 5 5 6 2 6]]>
+		</handanx>
+		<handanx n="7">
+			<![CDATA[7 8 8 8 9 8 8 8 8 9 8 4 5 5 4 4 5 5 5 4 5]]>
+		</handanx>
+		<handanx n="8">
+			<![CDATA[8 6 5 8 8 5 6 5 8 9 5 6 8 5 4 7 6 8 5 4 7]]>
+		</handanx>
+		<handanx n="9">
+			<![CDATA[9 6 1 7 1 1 6 1 7 1 1 6 12 6 12 12 6 12 6 12 12]]>
+		</handanx>
+		<handanx n="10">
+			<![CDATA[10 3 3 4 2 3 3 3 4 2 3 10 10 9 10 10 10 10 9 10 10]]>
+		</handanx>
+		<handanx n="11">
+			<![CDATA[11 3 3 2 5 2 3 3 2 5 2 10 9 11 8 10 10 9 11 8 11]]>
+		</handanx>
+		<handanx n="12">
+			<![CDATA[12 5 5 7 5 6 5 5 7 5 6 8 7 5 8 7 8 7 6 8 7]]>
+		</handanx>
+		<handanx n="13">
+			<![CDATA[13 8 6 6 6 7 8 6 6 6 7 5 6 7 6 6 5 6 7 7 6]]>
+		</handanx>
+		<handanx n="14">
+			<![CDATA[14 7 4 4 9 6 7 4 4 9 6 6 9 8 4 7 6 9 8 4 7]]>
+		</handanx>
+		<handanx n="15">
+			<![CDATA[15 10 7 9 7 10 10 7 9 7 10 2 6 3 6 2 2 6 3 6 2]]>
+		</handanx>
+		<handanx n="16">
+			<![CDATA[16 7 8 4 9 5 7 8 4 9 5 5 5 9 4 8 6 5 9 4 8]]>
+		</handanx>
+		<handanx n="17">
+			<![CDATA[17 2 2 8 7 3 2 2 10 7 3 10 10 3 4 5 11 11 4 4 5]]>
+		</handanx>
+		<handanx n="18">
+			<![CDATA[18 7 7 7 7 8 7 7 7 7 9 6 6 6 5 4 6 6 5 5 4]]>
+		</handanx>
+		<handanx n="19">
+			<![CDATA[19 2 6 3 2 2 1 6 3 1 1 11 6 9 10 11 11 7 10 11 11]]>
+		</handanx>
+		<handanx n="20">
+			<![CDATA[20 2 4 5 2 2 2 4 5 2 2 10 9 8 10 9 10 9 8 10 9]]>
+		</handanx>
+		<handanx n="21">
+			<![CDATA[21 3 2 5 2 2 3 3 5 2 3 9 10 7 10 10 9 10 8 11 10]]>
+		</handanx>
+		<handanx n="22">
+			<![CDATA[22 5 4 9 9 5 6 4 9 9 5 7 9 4 4 8 7 9 4 4 8]]>
+		</handanx>
+		<handanx n="23">
+			<![CDATA[23 7 3 2 8 3 7 3 2 8 3 6 10 11 4 10 6 10 11 4 6]]>
+		</handanx>
+		<handanx n="24">
+			<![CDATA[24 9 8 7 10 10 9 8 7 10 10 4 5 6 3 3 4 5 6 3 3]]>
+		</handanx>
+		<handanx n="25">
+			<![CDATA[25 7 7 7 7 9 7 6 7 7 9 5 6 5 6 4 5 6 5 6 4]]>
+		</handanx>
+		<handanx n="26">
+			<![CDATA[26 4 9 11 0 4 4 10 11 0 4 9 2 2 12 7 9 2 2 12 7]]>
+		</handanx>
+		<handanx n="27">
+			<![CDATA[27 9 10 10 6 6 9 10 10 6 6 4 3 2 7 3 4 3 2 7 3]]>
+		</handanx>
+		<handanx n="28">
+			<![CDATA[28 6 2 5 4 3 6 2 5 5 5 6 10 8 8 8 6 10 8 8 8]]>
+		</handanx>
+		<handanx n="29">
+			<![CDATA[29 8 7 10 10 11 8 7 9 9 11 5 6 3 3 2 4 6 2 3 2]]>
+		</handanx>
+		<handanx n="30">
+			<![CDATA[30 7 9 7 6 6 7 9 7 6 6 5 3 6 6 6 5 3 6 6 6]]>
+		</handanx>
+		<handanx n="31">
+			<![CDATA[31 11 8 11 5 7 11 8 11 5 7 2 5 2 8 2 2 5 2 8 2]]>
+		</handanx>
+		<handanx n="32">
+			<![CDATA[32 10 10 7 13 10 10 10 7 13 10 3 2 6 0 2 2 2 6 0 2]]>
+		</handanx>
+		<handanx n="33">
+			<![CDATA[33 2 2 5 6 5 2 3 5 6 5 10 10 8 7 8 10 10 8 7 8]]>
+		</handanx>
+		<handanx n="34">
+			<![CDATA[34 5 5 6 8 5 5 5 6 8 5 8 8 6 4 5 8 8 6 4 5]]>
+		</handanx>
+		<handanx n="35">
+			<![CDATA[35 8 7 6 7 6 8 7 6 7 6 5 6 7 6 5 5 6 7 6 5]]>
+		</handanx>
+		<handanx n="36">
+			<![CDATA[36 6 3 5 4 3 6 3 5 4 3 7 10 8 9 9 7 10 8 9 9]]>
+		</handanx>
+		<handanx n="37">
+			<![CDATA[37 6 6 8 7 7 6 6 8 7 7 7 7 5 6 6 7 7 5 5 6]]>
+		</handanx>
+		<handanx n="38">
+			<![CDATA[38 7 3 3 7 3 7 3 3 7 3 6 10 9 6 10 6 10 9 6 10]]>
+		</handanx>
+		<handanx n="39">
+			<![CDATA[39 4 11 10 2 6 5 11 10 2 6 5 2 2 11 4 4 1 2 11 4]]>
+		</handanx>
+		<handanx n="40">
+			<![CDATA[40 7 4 4 6 4 7 4 4 6 4 6 9 9 7 9 6 9 9 6 8]]>
+		</handanx>
+		<handanx n="41">
+			<![CDATA[41 7 5 7 11 6 7 5 7 11 6 6 7 5 2 6 6 7 5 2 6]]>
+		</handanx>
+		<handanx n="42">
+			<![CDATA[42 10 8 10 9 8 10 8 10 9 8 3 5 3 3 3 3 5 3 3 3]]>
+		</handanx>
+		<handanx n="43">
+			<![CDATA[43 4 0 1 0 1 4 0 1 0 1 9 13 12 13 12 9 13 12 13 12]]>
+		</handanx>
+		<handanx n="44">
+			<![CDATA[44 11 7 11 10 11 11 7 11 10 11 2 5 2 3 2 2 5 2 3 2]]>
+		</handanx>
+		<handanx n="45">
+			<![CDATA[45 6 7 8 8 7 6 7 8 8 7 6 5 5 4 5 6 5 5 4 5]]>
+		</handanx>
+		<handanx n="46">
+			<![CDATA[46 10 8 7 8 8 10 8 7 8 8 3 5 6 4 3 3 5 6 4 3]]>
+		</handanx>
+		<handanx n="47">
+			<![CDATA[47 9 5 8 6 7 9 5 8 6 7 4 8 5 7 6 4 8 5 7 6]]>
+		</handanx>
+		<handanx n="48">
+			<![CDATA[48 6 6 7 7 7 6 6 7 7 7 6 7 6 6 6 6 7 6 6 6]]>
+		</handanx>
+	</handanxs>
+	<hist rev="999">
+		<histitem n="0">
+			<ename>unnamed</ename>
+			<edate>25 Feb 2024</edate>
+			<zipname>1708857604934101234</zipname>
+		</histitem>
+		<histitem n="1">
+			<ename>Saturday Eve</ename>
+			<edate>24 Feb 2024</edate>
+			<zipname>1708805199013649632</zipname>
+		</histitem>
+		<histitem n="2">
+			<ename>Saturday Afternoon (Refinalized 24/02/2024)</ename>
+			<edate>24 Feb 2024</edate>
+			<zipname>1708794406624764365</zipname>
+		</histitem>
+		<histitem n="3">
+			<ename>Saturday Afternoon (Refinalized 24/02/2024)</ename>
+			<edate>24 Feb 2024</edate>
+			<zipname>1708793519248620553</zipname>
+		</histitem>
+		<histitem n="4">
+			<ename>Saturday Afternoon</ename>
+			<edate>24 Feb 2024</edate>
+			<zipname>1708783740228443278</zipname>
+		</histitem>
+		<histitem n="5">
+			<ename>Friday Eve</ename>
+			<edate>23 Feb 2024</edate>
+			<zipname>1708718820910129220</zipname>
+		</histitem>
+		<histitem n="6">
+			<ename>Manx Congress Swiss Teams (Refinalized 20/09/2023)</ename>
+			<edate>09 Sep 2023</edate>
+			<zipname>1695199998197960609</zipname>
+		</histitem>
+		<histitem n="7">
+			<ename>Manx Congress Swiss Teams (Refinalized 20/09/2023)</ename>
+			<edate>09 Sep 2023</edate>
+			<zipname>1695199903255446216</zipname>
+		</histitem>
+		<histitem n="8">
+			<ename>Manx Congress Swiss Teams (Refinalized 12/09/2023)</ename>
+			<edate>09 Sep 2023</edate>
+			<zipname>1694512878788737606</zipname>
+		</histitem>
+		<histitem n="9">
+			<ename>Manx Congress Swiss Teams (Refinalized 12/09/2023)</ename>
+			<edate>09 Sep 2023</edate>
+			<zipname>1694512259431747172</zipname>
+		</histitem>
+		<histitem n="10">
+			<ename>Manx Congress (Refinalized 10/09/2023)</ename>
+			<edate>09 Sep 2023</edate>
+			<zipname>1694360610084611146</zipname>
+		</histitem>
+		<histitem n="11">
+			<ename>Manx Congress</ename>
+			<edate>09 Sep 2023</edate>
+			<zipname>1694263340753584774</zipname>
+		</histitem>
+		<histitem n="12">
+			<ename>Llandudno Swiss Pairs 2023 (Refinalized 03/07/2023)</ename>
+			<edate>01 Jul 2023</edate>
+			<zipname>1688377499064631439</zipname>
+		</histitem>
+		<histitem n="13">
+			<ename>Llandudno Swiss Pairs 2023 (Refinalized 02/07/2023)</ename>
+			<edate>01 Jul 2023</edate>
+			<zipname>1688312747718356255</zipname>
+		</histitem>
+		<histitem n="14">
+			<ename>Llandudno Swiss Pairs 2023 (Refinalized 02/07/2023)</ename>
+			<edate>01 Jul 2023</edate>
+			<zipname>1688299820266537532</zipname>
+		</histitem>
+		<histitem n="15">
+			<ename>Llandudno Swiss Pairs 2023</ename>
+			<edate>01 Jul 2023</edate>
+			<zipname>1688209666351309936</zipname>
+		</histitem>
+		<histitem n="16">
+			<ename>Llandudno 2</ename>
+			<edate>29 Jun 2023</edate>
+			<zipname>1688053873365264138</zipname>
+		</histitem>
+		<histitem n="17">
+			<ename>Test (Refinalized 29/06/2023)</ename>
+			<edate>28 Jun 2023</edate>
+			<zipname>1688040172016943315</zipname>
+		</histitem>
+		<histitem n="18">
+			<ename>Test (Refinalized 28/06/2023)</ename>
+			<edate>28 Jun 2023</edate>
+			<zipname>1687950321429658094</zipname>
+		</histitem>
+		<histitem n="19">
+			<ename>Test (Refinalized 28/06/2023)</ename>
+			<edate>28 Jun 2023</edate>
+			<zipname>1687948020888689412</zipname>
+		</histitem>
+		<histitem n="20">
+			<ename>Test (Refinalized 28/06/2023)</ename>
+			<edate>28 Jun 2023</edate>
+			<zipname>1687947782739737191</zipname>
+		</histitem>
+		<histitem n="21">
+			<ename>Test (Refinalized 28/06/2023)</ename>
+			<edate>28 Jun 2023</edate>
+			<zipname>1687947465451534968</zipname>
+		</histitem>
+		<histitem n="22">
+			<ename>Test</ename>
+			<edate>28 Jun 2023</edate>
+			<zipname>1687943704302372769</zipname>
+		</histitem>
+		<histitem n="23">
+			<ename>Italo Basiletti Ladies Pairs</ename>
+			<edate>09 May 2023</edate>
+			<zipname>1683655644985472631</zipname>
+		</histitem>
+		<histitem n="24">
+			<ename>Llandudno Sunday Teams</ename>
+			<edate>26 Feb 2023</edate>
+			<zipname>1677408108274811471</zipname>
+		</histitem>
+		<histitem n="25">
+			<ename>Llandudno Sat Night (Refinalized 25/02/2023)</ename>
+			<edate>25 Feb 2023</edate>
+			<zipname>1677365383947173060</zipname>
+		</histitem>
+		<histitem n="26">
+			<ename>Llandudno Sat Night</ename>
+			<edate>25 Feb 2023</edate>
+			<zipname>1677355448595464642</zipname>
+		</histitem>
+		<histitem n="27">
+			<ename>Llandudno Sat Aft (Refinalized 25/02/2023)</ename>
+			<edate>25 Feb 2023</edate>
+			<zipname>1677355232204119709</zipname>
+		</histitem>
+		<histitem n="28">
+			<ename>Llandudno Sat Aft (Refinalized 25/02/2023)</ename>
+			<edate>25 Feb 2023</edate>
+			<zipname>1677355159284389721</zipname>
+		</histitem>
+		<histitem n="29">
+			<ename>Llandudno Sat Aft</ename>
+			<edate>25 Feb 2023</edate>
+			<zipname>1677334588115713166</zipname>
+		</histitem>
+		<histitem n="30">
+			<ename>Llandudno Friday</ename>
+			<edate>24 Feb 2023</edate>
+			<zipname>1677269264968357107</zipname>
+		</histitem>
+		<histitem n="31">
+			<ename>I O M Congress Swiss Teams (Refinalized 11/09/2022)</ename>
+			<edate>10 Sep 2022</edate>
+			<zipname>1662912884404478110</zipname>
+		</histitem>
+		<histitem n="32">
+			<ename>I O M Congress Swiss Teams (Refinalized 11/09/2022)</ename>
+			<edate>10 Sep 2022</edate>
+			<zipname>1662912829482942162</zipname>
+		</histitem>
+		<histitem n="33">
+			<ename>I O M Congress Swiss Teams (Refinalized 11/09/2022)</ename>
+			<edate>10 Sep 2022</edate>
+			<zipname>1662893350039263587</zipname>
+		</histitem>
+		<histitem n="34">
+			<ename>unnamed</ename>
+			<edate>10 Sep 2022</edate>
+			<zipname>1662813611299858082</zipname>
+		</histitem>
+		<histitem n="35">
+			<ename>IoM Congress Mixed + Open Pairs (Refinalized 09/09/2022)</ename>
+			<edate>09 Sep 2022</edate>
+			<zipname>1662741222225151280</zipname>
+		</histitem>
+		<histitem n="36">
+			<ename>IoM Congress Mixed + Open Pairs</ename>
+			<edate>09 Sep 2022</edate>
+			<zipname>1662729073082356000</zipname>
+		</histitem>
+		<histitem n="37">
+			<ename>Llandudno Swiss Pairs (Refinalized 08/09/2022)</ename>
+			<edate>02 Jul 2022</edate>
+			<zipname>1662633622276334454</zipname>
+		</histitem>
+		<histitem n="38">
+			<ename>Llandudno Swiss Pairs (Refinalized 27/07/2022)</ename>
+			<edate>02 Jul 2022</edate>
+			<zipname>1658945064194928876</zipname>
+		</histitem>
+		<histitem n="39">
+			<ename>Llandudno Swiss Pairs (Refinalized 27/07/2022)</ename>
+			<edate>02 Jul 2022</edate>
+			<zipname>1658945011600265220</zipname>
+		</histitem>
+		<histitem n="40">
+			<ename>Llandudno Swiss Pairs (Refinalized 04/07/2022)</ename>
+			<edate>02 Jul 2022</edate>
+			<zipname>1656931022635239072</zipname>
+		</histitem>
+		<histitem n="41">
+			<ename>Llandudno Swiss Pairs (Refinalized 04/07/2022)</ename>
+			<edate>02 Jul 2022</edate>
+			<zipname>1656930964463122597</zipname>
+		</histitem>
+		<histitem n="42">
+			<ename>Llandudno Swiss Pairs (Refinalized 03/07/2022)</ename>
+			<edate>02 Jul 2022</edate>
+			<zipname>1656864216951494575</zipname>
+		</histitem>
+		<histitem n="43">
+			<ename>Llandudno Swiss Pairs (Refinalized 03/07/2022)</ename>
+			<edate>02 Jul 2022</edate>
+			<zipname>1656864203381444601</zipname>
+		</histitem>
+		<histitem n="44">
+			<ename>Llandudno Swiss Pairs (Refinalized 03/07/2022)</ename>
+			<edate>02 Jul 2022</edate>
+			<zipname>1656864190600298623</zipname>
+		</histitem>
+		<histitem n="45">
+			<ename>Llandudno Swiss Pairs (Refinalized 03/07/2022)</ename>
+			<edate>02 Jul 2022</edate>
+			<zipname>1656862967003871546</zipname>
+		</histitem>
+		<histitem n="46">
+			<ename>Llandudno Swiss Pairs (Refinalized 03/07/2022)</ename>
+			<edate>02 Jul 2022</edate>
+			<zipname>1656862914153602660</zipname>
+		</histitem>
+		<histitem n="47">
+			<ename>Llandudno Swiss Pairs</ename>
+			<edate>02 Jul 2022</edate>
+			<zipname>1656760291055603804</zipname>
+		</histitem>
+		<histitem n="48">
+			<ename>Llandudno Teams (Refinalized 28/02/2022)</ename>
+			<edate>27 Feb 2022</edate>
+			<zipname>1646006674386190601</zipname>
+		</histitem>
+		<histitem n="49">
+			<ename>Llandudno Teams (Refinalized 27/02/2022)</ename>
+			<edate>27 Feb 2022</edate>
+			<zipname>1645983052634793845</zipname>
+		</histitem>
+		<histitem n="50">
+			<ename>Llandudno Teams (Refinalized 27/02/2022)</ename>
+			<edate>27 Feb 2022</edate>
+			<zipname>1645982757370790877</zipname>
+		</histitem>
+		<histitem n="51">
+			<ename>Llandudno Teams (Refinalized 27/02/2022)</ename>
+			<edate>27 Feb 2022</edate>
+			<zipname>1645982658715587072</zipname>
+		</histitem>
+		<histitem n="52">
+			<ename>Llandudno Teams (Refinalized 27/02/2022)</ename>
+			<edate>27 Feb 2022</edate>
+			<zipname>1645982608703023918</zipname>
+		</histitem>
+		<histitem n="53">
+			<ename>Llandudno Teams</ename>
+			<edate>27 Feb 2022</edate>
+			<zipname>1645958415036437981</zipname>
+		</histitem>
+		<histitem n="54">
+			<ename>unnamed</ename>
+			<edate>26 Feb 2022</edate>
+			<zipname>1645905979450316331</zipname>
+		</histitem>
+		<histitem n="55">
+			<ename>Llandudno Saturday Afternoon</ename>
+			<edate>26 Feb 2022</edate>
+			<zipname>1645884570697311838</zipname>
+		</histitem>
+		<histitem n="56">
+			<ename>Llandudno 1</ename>
+			<edate>25 Feb 2022</edate>
+			<zipname>1645819284816665036</zipname>
+		</histitem>
+	</hist>
+	<currentgamedata >
+		<settingstxt>
+			<![CDATA[MV TS163-2
+ROVER false
+ATT ATTACHEDTOTABLE
+PN NP
+EN NN
+ASW .
+OTH 1.3.0.-1.-1.-1.1.1.1.1.0.1.1.0.30000.0.x.x.0.0.0.0.0.1.1.0.x.1.0.0.1.0.0.0.0.0.1.1.0.0.0.0.1.0.1.0.1.0.0.-1.-1.-1.-1.-1.0.0.1.0.-1.-1.1.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x
+DUMMY
+]]>
+		</settingstxt>
+		<movementtxt>
+			<![CDATA[EBU 12R No Scorebreak SPECIAL
+5,15,45,3,12,0,-1
+1,5,1,1,7,2,1,9,3,1,11,4,1,13,5,1,15,6,1,2,7,1,4,8,1,6,9,1,8,10,1,10,11,1,12,12
+2,6,2,2,8,3,2,10,4,2,12,5,2,14,6,2,1,7,2,3,8,2,5,9,2,7,10,2,9,11,2,11,12,2,13,13
+3,7,3,3,9,4,3,11,5,3,13,6,3,15,7,3,2,8,3,4,9,3,6,10,3,8,11,3,10,12,3,12,13,3,14,14
+4,8,4,4,10,5,4,12,6,4,14,7,4,1,8,4,3,9,4,5,10,4,7,11,4,9,12,4,11,13,4,13,14,4,15,15
+5,9,5,5,11,6,5,13,7,5,15,8,5,2,9,5,4,10,5,6,11,5,8,12,5,10,13,5,12,14,5,14,15,5,1,1
+6,10,6,6,12,7,6,14,8,6,1,9,6,3,10,6,5,11,6,7,12,6,9,13,6,11,14,6,13,15,6,15,1,6,2,2
+7,11,7,7,13,8,7,15,9,7,2,10,7,4,11,7,6,12,7,8,13,7,10,14,7,12,15,7,14,1,7,1,2,7,3,3
+8,12,8,8,14,9,8,1,10,8,3,11,8,5,12,8,7,13,8,9,14,8,11,15,8,13,1,8,15,2,8,2,3,8,4,4
+9,13,9,9,15,10,9,2,11,9,4,12,9,6,13,9,8,14,9,10,15,9,12,1,9,14,2,9,1,3,9,3,4,9,5,5
+10,14,10,10,1,11,10,3,12,10,5,13,10,7,14,10,9,15,10,11,1,10,13,2,10,15,3,10,2,4,10,4,5,10,6,6
+11,15,11,11,2,12,11,4,13,11,6,14,11,8,15,11,10,1,11,12,2,11,14,3,11,1,4,11,3,5,11,5,6,11,7,7
+12,1,12,12,3,13,12,5,14,12,7,15,12,9,1,12,11,2,12,13,3,12,15,4,12,2,5,12,4,6,12,6,7,12,8,8
+13,2,13,13,4,14,13,6,15,13,8,1,13,10,2,13,12,3,13,14,4,13,1,5,13,3,6,13,5,7,13,7,8,13,9,9
+14,3,14,14,5,15,14,7,1,14,9,2,14,11,3,14,13,4,14,15,5,14,2,6,14,4,7,14,6,8,14,8,9,14,10,10
+15,4,15,15,6,1,15,8,2,15,10,3,15,12,4,15,14,5,15,1,6,15,3,7,15,5,8,15,7,9,15,9,10,15,11,11
+]]>
+		</movementtxt>
+		<movedesctxt>
+			<![CDATA[]]>
+		</movedesctxt>
+		<namestxt>
+			<![CDATA[Bill Loughlin & Rachel Oliver
+Mike McGarry & Monica Scott
+Judy Clowes & Michele Davies
+Sue Yardley & Pam Booth-Jones
+Zena Hargest & Janet Owen
+Tess Szymanska & Sue Jarvis
+Janet Beach & Marion Mitchell
+Hylary Kingham & Betty O'Donnell
+Anthony Cadley & Jill Cadley
+Sue Munday & Pat Jenkins
+Chris Reynolds & Tony Pummell
+Phil Inch & Lesley Chew
+Pat Arthur & Myra Smith
+Dot Kirby & Jeff Kirby
+Yvonne Wright & Michael Wright
+Nicky Gill & Maire Noble
+Janet Almond & Kay Pierce
+Carole Pollock & Joanna Gears
+Annie Paul & Rita Simmons
+Karen Seaman & Gary Seaman
+Sue Ratcliffe & Anne Smout
+Nikki Barclay & Nicola Haywood
+Jenny Rogers & Elizabeth Redrup
+Tony Jones & Izabel Evans
+Pat Tait & Barbara Lawton
+Graham Roberts & Alec Beer
+Marjorie Deans & Shirley Radford
+Judy Mitchell & Margaret Bridge
+Johanna Keane & Jan Bywater
+Eunice King & Joan Eastwood
+]]>
+		</namestxt>
+		<teamnamestxt>
+			<![CDATA[Team 1
+2
+Side 3
+Team 4
+Team 5
+Team 6
+Side 7
+Side 8
+Side 9
+Team 10
+Team 11
+Team 12
+Side 13
+Side 14
+Team 15
+Team 16
+Team 17
+Team 18
+Team 19
+Team 20
+Team 21
+Team 22
+Team 23
+Team 24
+Team 25
+Team 26
+Team 27
+Team 28
+Team 29
+Team 30
+Team 31
+Team 32
+Team 33
+Team 34
+Team 35
+Team 36
+Team 37
+Team 38
+Team 39
+Team 40
+Team 41
+Team 42
+Team 43
+Team 44
+Team 45
+Team 46
+Team 47
+Team 48
+Team 49
+Team 50
+Team 51
+Team 52
+Team 53
+Team 54
+Team 55
+Team 56
+Team 57
+Team 58
+Team 59
+Team 60
+Team 61
+Team 62
+Team 63
+Team 64
+Team 65
+Team 66
+Team 67
+Team 68
+Team 69
+Team 70
+Team 71
+Team 72
+Team 73
+Team 74
+Team 75
+Team 76
+Team 77
+Team 78
+Team 79
+Team 80
+Team 81
+Team 82
+Team 83
+Team 84
+Team 85
+Team 86
+Team 87
+Team 88
+Team 89
+Team 90
+Team 91
+Team 92
+Team 93
+Team 94
+Team 95
+Team 96
+Team 97
+Team 98
+Team 99
+Team 100
+]]>
+		</teamnamestxt>
+		<sidenamestxt>
+			<![CDATA[Side 1
+2
+Side 3
+Side 4
+Side 5
+Side 6
+Side 7
+Side 8
+Side 9
+Side 10
+Side 11
+Side 12
+Side 13
+Side 14
+Side 15
+Side 16
+Side 17
+Side 18
+Side 19
+Side 20
+Side 21
+Side 22
+Side 23
+Side 24
+Side 25
+Side 26
+Side 27
+Side 28
+Side 29
+Side 30
+Side 31
+Side 32
+Side 33
+Side 34
+Side 35
+Side 36
+Side 37
+Side 38
+Side 39
+Side 40
+Side 41
+Side 42
+Side 43
+Side 44
+Side 45
+Side 46
+Side 47
+Side 48
+Side 49
+Side 50
+Side 51
+Side 52
+Side 53
+Side 54
+Side 55
+Side 56
+Side 57
+Side 58
+Side 59
+Side 60
+Side 61
+Side 62
+Side 63
+Side 64
+Side 65
+Side 66
+Side 67
+Side 68
+Side 69
+Side 70
+Side 71
+Side 72
+Side 73
+Side 74
+Side 75
+Side 76
+Side 77
+Side 78
+Side 79
+Side 80
+Side 81
+Side 82
+Side 83
+Side 84
+Side 85
+Side 86
+Side 87
+Side 88
+Side 89
+Side 90
+Side 91
+Side 92
+Side 93
+Side 94
+Side 95
+Side 96
+Side 97
+Side 98
+Side 99
+Side 100
+]]>
+		</sidenamestxt>
+		<tablenamestxt>
+			<![CDATA[]]>
+		</tablenamestxt>
+		<nrevtxt>
+			<![CDATA[15
+]]>
+		</nrevtxt>
+		<rrevtxt>
+			<![CDATA[555
+]]>
+		</rrevtxt>
+		<grevtxt>
+			<![CDATA[38]]>
+		</grevtxt>
+		<paratxt>
+			<![CDATA[]]>
+		</paratxt>
+		<tagstxt>
+			<![CDATA[]]>
+		</tagstxt>
+		<strattxt>
+			<![CDATA[]]>
+		</strattxt>
+		<sittxt>
+			<![CDATA[]]>
+		</sittxt>
+		<leaverstxt>
+			<![CDATA[]]>
+		</leaverstxt>
+		<handitxt>
+			<![CDATA[]]>
+		</handitxt>
+		<gradjtxt>
+			<![CDATA[]]>
+		</gradjtxt>
+		<nkstxt>
+			<![CDATA[]]>
+		</nkstxt>
+		<colstxt>
+			<![CDATA[]]>
+		</colstxt>
+		<rdtstxt>
+			<![CDATA[]]>
+		</rdtstxt>
+		<lunchtxt>
+			<![CDATA[]]>
+		</lunchtxt>
+		<bdresets>
+			<![CDATA[]]>
+		</bdresets>
+		<othfiles>
+			<![CDATA[]]>
+		</othfiles>
+	</currentgamedata>
+</siteauthresponse>

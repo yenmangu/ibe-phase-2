@@ -16,6 +16,7 @@ import { tag } from 'rxjs-spy/cjs/operators';
 
 import { IndexedDatabaseService } from './indexed-database.service';
 import { IndexedDatabaseStatusService } from '../../../shared/services/indexed-database-status.service';
+import { TeamsService } from './teams.service';
 
 @Injectable({
 	providedIn: 'root'
@@ -28,7 +29,8 @@ export class RevisedProcessCurrentDataService {
 
 	constructor(
 		private indexedDB: IndexedDatabaseService,
-		private indexedDatabaseStatus: IndexedDatabaseStatusService
+		private indexedDatabaseStatus: IndexedDatabaseStatusService,
+		private teamsService: TeamsService
 	) {}
 
 	async getData(storeName, key) {
@@ -103,6 +105,10 @@ export class RevisedProcessCurrentDataService {
 			const sitText = await this.indexedDB.readFromDB([store], 'sittxt');
 			const handicapText = await this.indexedDB.readFromDB([store], 'handitxt');
 			const labelsText = await this.indexedDB.readFromDB([store], 'tagstxt');
+			const stratText = await this.indexedDB.readFromDB([store], 'strattxt');
+			const abbrevText = await this.indexedDB.readFromDB([store], 'nkstxt');
+			const colsText = await this.indexedDB.readFromDB([store], 'colstxt');
+			console.log('StratText: ', stratText);
 
 			console.log('Sitters Text: ', sitText);
 
@@ -115,20 +121,45 @@ export class RevisedProcessCurrentDataService {
 				handicapText,
 				'current_game_data'
 			);
+			const stratValue = this.destructureValue(stratText, 'current_game_data');
+			const colsValue = this.destructureValue(colsText, 'current_game_data');
+			console.log('All people: ', peopleValue);
 			const labelsValue = this.destructureValue(labelsText, 'current_game_data');
+			const abbrevValue = this.destructureValue(abbrevText, 'current_game_data');
 			// console.log('Sitters Value: ', sittersValue);
 
 			console.log('\n\n\n teamsValue: ', teamsValue);
 
-			const currentGameConfig = await this.generateConfig(
-				movementValue,
-				peopleValue,
-				settingsText,
-				teamsValue,
-				sittersValue,
-				handicapValue,
-				labelsValue
-			);
+			const { matchType } = this.getMatchType(settingsText);
+			let currentGameConfig;
+			if (!matchType.teams) {
+				currentGameConfig = await this.generateConfig(
+					movementValue,
+					peopleValue,
+					settingsText,
+					teamsValue,
+					sittersValue,
+					handicapValue,
+					labelsValue
+				);
+			} else if (matchType.teams) {
+				console.log('using teams service to generate config');
+
+				currentGameConfig = this.teamsService.buildTeamConfig(
+					movementValue,
+					peopleValue,
+					settingsText,
+					teamsValue,
+					sittersValue,
+					labelsValue,
+					stratValue,
+					handicapValue,
+					abbrevValue,
+					colsValue
+				);
+			}
+			console.log('Current Game Config; ', currentGameConfig);
+
 			return currentGameConfig;
 		} catch (error) {
 			console.error('Error fetching game details: ', error);
@@ -172,16 +203,22 @@ export class RevisedProcessCurrentDataService {
 			const sidesOfInt = Number(sidesOf);
 
 			console.log('\n\n\n match type: \n\n\n', matchType);
-
+			// let movementAndPairs;
 			const movementAndPairs = await this.determinePairNumberStyle(
 				movementtxt,
 				matchType
 			);
+			// } else if (matchType.teams) {
+			// 	console.log('About to write the teams solution....');
+			// 	this.processTeams(movementtxt, teamsValue, namestxt);
+			// }
 
 			console.log('movements and pairs: ', movementAndPairs);
 
 			const cleanedMovement = this.processMovementText(movementtxt);
 			const numOfTables = cleanedMovement[1][1];
+			console.log('Num of tables: ', numOfTables);
+
 			let notUsebio = false;
 			let usebio = false;
 			let teamsOrPairs;
@@ -502,7 +539,7 @@ export class RevisedProcessCurrentDataService {
 				const pairAsNum = Number(pairNumString);
 				const pairToFind = pairAsNum + Number(totalTables);
 				ew = pairsObject[pairToFind.toString().trim()];
-				console.log('eastWest pair: ', ew);
+				// console.log('eastWest pair: ', ew);
 			} else {
 				ew = pairsObject[movement.split(',')[1].trim()];
 			}
@@ -525,6 +562,84 @@ export class RevisedProcessCurrentDataService {
 		return pairsObject;
 	}
 
+	processTeams(movementtxt, teamsValue, namestext) {
+		console.log('Movement text: ', movementtxt);
+		const { totalTables, movementOnly, movementLines } =
+			this.getMovementOnly(movementtxt);
+
+		console.log(
+			'in processTeams \ntotalTables: ',
+			totalTables,
+			'\nmovementOnly: ',
+			movementOnly,
+			'\nmovementLines: ',
+			movementLines
+		);
+		console.log('Names text: ', namestext);
+
+		const totalTeams = movementLines[1].split(',')[1];
+		const totalPairs = totalTeams * 2;
+		const pairsArray: string[] = namestext[0].split('\n').slice(0, totalPairs);
+
+		console.log('length of pairsArray: ', pairsArray.length);
+
+		let north: string[] = [];
+		let east: string[] = [];
+		let south: string[] = [];
+		let west: string[] = [];
+
+		let nsPairs: string[] = [];
+		let ewPairs: string[] = [];
+		let tempEwPairs: string[] = [];
+
+		nsPairs = pairsArray.slice(0, totalTeams);
+		ewPairs = pairsArray.slice(totalTeams, pairsArray.length);
+
+		console.log('nsPairs: ', nsPairs);
+		console.log('ewPairs: ', ewPairs);
+
+		let northPlayers: any[] = [];
+		let southPlayers: any[] = [];
+		let eastPlayers: any[] = [];
+		let westPlayers: any[] = [];
+
+		let nsSplit: any[];
+		let ewSplit: any[];
+
+		nsPairs.forEach((pair, index) => {
+			const arr = pair.split('&');
+			// console.log('Arr: ', arr);
+			const northPlayer = arr[0];
+			const southPlayer = arr[1];
+
+			northPlayers.push(northPlayer.trim());
+			southPlayers.push(southPlayer.trim());
+		});
+
+		ewPairs.forEach((pair, index) => {
+			const arr = pair.split('&');
+			const eastPlayer = arr[0];
+			const westPlayer = arr[1];
+
+			eastPlayers.push(eastPlayer.trim());
+			westPlayers.push(westPlayer.trim());
+		});
+
+		console.log('north: ', northPlayers);
+		console.log('south: ', southPlayers);
+		console.log('east: ', eastPlayers);
+		console.log('west: ', westPlayers);
+
+		movementOnly.forEach((movement, index) => {});
+	}
+
+	getMovementOnly(movementtxt) {
+		const movementLines: any[] = movementtxt[0].trim().split('\n');
+		const totalTables = movementLines[1].trim().split(',')[1].trim();
+		const movementOnly = movementLines.slice(2, movementLines.length);
+		return { totalTables, movementOnly, movementLines };
+	}
+
 	determinePairNumberStyle(movementtxt, matchType) {
 		console.log('Match type in determine pair numbering: \n', matchType);
 
@@ -536,6 +651,7 @@ export class RevisedProcessCurrentDataService {
 		movementAndPairs.totalTables = totalTables;
 
 		const movementOnly = movementLines.slice(2, movementLines.length);
+
 		let north: any[] = [];
 		let south: any[] = [];
 		let east: any[] = [];

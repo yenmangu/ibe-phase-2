@@ -8,6 +8,7 @@ import {
 	Subscription,
 	catchError,
 	combineLatest,
+	filter,
 	from,
 	of,
 	switchMap,
@@ -20,7 +21,9 @@ import { IndexedDatabaseStatusService } from '../shared/services/indexed-databas
 import { DataService } from './games/services/data.service';
 import { CurrentEventService } from './games/services/current-event.service';
 import { SharedGameDataService } from './games/services/shared-game-data.service';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
+import { AdminToolsService } from '../shared/services/admin-tools.service';
+import { NavigationService } from './navigation/navigation.service';
 
 @Component({
 	selector: 'app-admin',
@@ -34,9 +37,11 @@ export class AdminComponent implements OnInit, OnDestroy {
 	gameCodeSubscription = new Subscription();
 	gameCode$: Observable<string>;
 	directorKey$: Observable<string>;
-	private destroy$ = new Subject<void>();
 	loadingStatus: number = 0;
 
+	superAdmin: boolean;
+	currentLabel: string;
+	private destroy$ = new Subject<void>();
 	constructor(
 		private sharedDataService: SharedDataService,
 		public authService: AuthService,
@@ -45,23 +50,42 @@ export class AdminComponent implements OnInit, OnDestroy {
 		private dataService: DataService,
 		private currentEventService: CurrentEventService,
 		private sharedGameData: SharedGameDataService,
-		private router: Router
+		private router: Router,
+		private adminToolsService: AdminToolsService,
+		private navigationService: NavigationService
 	) {
 		// console.log('admin loaded');
 	}
 	ngOnInit(): void {
-		this.gameCode$ = this.userDetailsService.gameCode$;
-		this.directorKey$ = this.userDetailsService.directorKey$;
+		this.userDetailsService.gameCode$.subscribe(gc => {
+			this.gameCode = gc;
+		});
+		this.userDetailsService.directorKey$.subscribe(dk => {
+			this.dirKey = dk;
+		});
 		this.gameCode = localStorage.getItem('GAME_CODE');
 		this.dirKey = localStorage.getItem('DIR_KEY');
 
-		// this.gameCodeSubscription = this.gameCode$.pipe(take(1)).subscribe(gameCode => {
-		// 	// console.log('Game Code: ', gameCode);
-		// });
+		this.navigationService.setLoaded(true);
+		this.setMenuLabel();
+		this.router.events
+			.pipe(filter(event => event instanceof NavigationEnd))
+			.subscribe(() => {
+				this.setMenuLabel();
+			});
+		if (this.router.url === '/admin/games') {
+			this.setMenuLabel();
+		}
 
-		// this.dirKeySubscription = this.directorKey$.pipe(take(1)).subscribe(dirKey => {
-		// 	// console.log('Dir Key: ', dirKey);
-		// });
+		this.adminToolsService.verifyAdmin(this.gameCode).subscribe(response => {
+			if (response.authStatus === true) {
+				this.superAdmin = true;
+			} else if (response.authStatus === false) {
+				this.superAdmin = false;
+			} else {
+				console.error('Error in verifying admin, ', response);
+			}
+		});
 
 		this.subscribeToUserDetails();
 
@@ -212,6 +236,16 @@ export class AdminComponent implements OnInit, OnDestroy {
 				reject(`Error performing high level requestAndStore(): ${err}`);
 			}
 		});
+	}
+
+	setMenuLabel() {
+		let route = this.router.routerState.root;
+		while (route.firstChild) {
+			route = route.firstChild;
+		}
+		const currentLabel = route.snapshot.data?.menuLabel || '';
+		this.currentLabel = currentLabel;
+		this.navigationService.setSelected(currentLabel);
 	}
 
 	ngOnDestroy(): void {

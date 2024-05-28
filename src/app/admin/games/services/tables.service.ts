@@ -6,7 +6,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 })
 export class TablesService {
 	private _tablesConfigSubject: BehaviorSubject<any> = new BehaviorSubject<any>({
-		venues: false,
+		// venues: false,
 		stratification: false,
 		sitters: false,
 		adjustments: false,
@@ -17,18 +17,18 @@ export class TablesService {
 		timesLunch: false
 	});
 
-  tablesConfig$: Observable<any> = this._tablesConfigSubject.asObservable()
+	tablesConfig$: Observable<any> = this._tablesConfigSubject.asObservable();
 
 	constructor() {}
 
 	public updateTableConfig(selectedOption: string) {
-    const newConfig ={...this._tablesConfigSubject.value}
+		const newConfig = { ...this._tablesConfigSubject.value };
 		for (const key in newConfig) {
 			if (newConfig.hasOwnProperty(key)) {
 				newConfig[key] = key === selectedOption;
 			}
 		}
-    this._tablesConfigSubject.next(newConfig)
+		this._tablesConfigSubject.next(newConfig);
 		console.log(newConfig);
 	}
 }

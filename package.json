@@ -4,6 +4,7 @@
 	"scripts": {
 		"ng": "ng",
 		"start": "ng serve",
+		"startLocal": "ng serve --c server --host 192.168.68.100",
 		"start2": "ng serve --c server",
 		"build": "ng build",
 		"build2": "npm i && ng build --configuration production --base-href /",

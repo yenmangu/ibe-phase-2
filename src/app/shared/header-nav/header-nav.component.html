@@ -1,49 +1,17 @@
 <ul class="navigation-links container row space-between">
-	<li class="nav-link">
+	<li
+		*ngFor="let link of topBarLinks"
+		class="nav-link"
+		[ngClass]="link.textCol">
 		<a
-			routerLink="/admin/game-setup"
+			[routerLink]="link.routerLink"
 			[routerLinkActive]="['active-link']"
 			class="nav-link"
-			(click)="handleLinkClick()"
-			>App Settings</a
-		>
+			(click)="handleLinkClick()">
+			<mat-icon
+				class="icon"
+				[svgIcon]="link.icon"></mat-icon>
+			<span *ngIf="showText">{{ link.label }}</span>
+		</a>
 	</li>
-	<li class="nav-link">
-		<a
-			routerLink="/admin/player-database"
-			[routerLinkActive]="['active-link']"
-			class="nav-link"
-			(click)="handleLinkClick()"
-			>Player Database</a
-		>
-	</li>
-	<li class="nav-link">
-		<a
-			routerLink="/admin/games"
-			[routerLinkActive]="['active-link']"
-			class="nav-link"
-			(click)="handleLinkClick()"
-			>Current Session</a
-		>
-	</li>
-	<li class="nav-link">
-		<a
-			routerLink="/admin/hand-records"
-			[routerLinkActive]="['active-link']"
-			class="nav-link"
-			(click)="handleLinkClick()"
-			>Hand Records</a
-		>
-	</li>
-	<li class="nav-link">
-		<a
-			routerLink="/admin/reporting"
-			[routerLinkActive]="['active-link']"
-			class="nav-link"
-			(click)="handleLinkClick()"
-			>Reports</a
-		>
-	</li>
-
-	<li class="nav-link"></li>
 </ul>

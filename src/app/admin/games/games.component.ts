@@ -39,7 +39,7 @@ export class GamesComponent implements OnInit, OnDestroy {
 	dbInit: boolean = false;
 	progress = 0;
 	private progressSubscription: Subscription;
-	selectedTabIndex = 0
+	selectedTabIndex = 0;
 
 	private destroy$ = new Subject<void>();
 
@@ -58,18 +58,24 @@ export class GamesComponent implements OnInit, OnDestroy {
 
 		this.subscribeToGameCodeAndDirKey();
 
-		this.IDBStatusService.isInitialised$.pipe(tag('db-init')).subscribe(isInit => {
-			this.dbInit = isInit;
-		});
+		this.IDBStatusService.isInitialised$
+			.pipe
+			// tag('db-init')
+			()
+			.subscribe(isInit => {
+				this.dbInit = isInit;
+			});
 		this.progressSubscription = this.IDBStatusService.dataProgress$
-			.pipe(tag('db-progress'))
+			.pipe
+			// tag('db-progress')
+			()
 			.subscribe(value => {
 				console.log('db progress: ', this.progress);
 				this.progress = value;
 			});
 	}
-	shouldAlignTabsToStart(){
-		return this.selectedTabIndex === 0
+	shouldAlignTabsToStart() {
+		return this.selectedTabIndex === 0;
 	}
 
 	private subscribeToGameCodeAndDirKey(): void {

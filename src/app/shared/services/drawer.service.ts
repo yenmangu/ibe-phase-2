@@ -8,6 +8,8 @@ export class DrawerService {
 	private isOpenSubject = new BehaviorSubject<boolean>(false);
 	isOpen$ = this.isOpenSubject.asObservable();
 
+	drawerState: 'opened' | 'closed' = 'closed';
+
 	constructor() {}
 
 	toggle() {

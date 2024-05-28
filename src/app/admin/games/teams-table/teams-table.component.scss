@@ -1,6 +1,22 @@
 :host {
 }
 
+.button-wrapper {
+	margin-bottom: 1rem;
+	align-items: center;
+	gap: 1rem;
+	.order-button {
+		min-width: 140px;
+	}
+}
+
+::ng-deep :host {
+	button.order-button {
+		min-width: 140px !important;
+		width: 140px !important;
+	}
+}
+
 .table-wrapper {
 	width: fit-content;
 	margin: auto;

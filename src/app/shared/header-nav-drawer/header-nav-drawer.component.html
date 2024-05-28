@@ -1,45 +1,48 @@
-<div class="drawer-content container row">
-	<ul class="navigation-links container row space-between">
-		<li class="nav-link">
-			<a
-				routerLink="/admin/account"
-				[routerLinkActive]="['active-link']"
+<div class="drawer container column center">
+	<div class="drawer-content container row">
+		<ul class="navigation-links container row space-between">
+			<li
+				*ngFor="let link of drawerLinks"
 				class="nav-link"
-				(click)="handleLinkClick()"
-				>Account Settings</a
-			>
-		</li>
-		<li class="nav-link">
-			<a
-				routerLink="/admin/database-admin"
-				[routerLinkActive]="['active-link']"
-				class="nav-link"
-				(click)="handleLinkClick()"
-				>Database Admin</a
-			>
-		</li>
-		<li class="nav-link">
-			<a
-				routerLink="/admin/historic-games"
-				[routerLinkActive]="['active-link']"
-				class="nav-link"
-				(click)="handleLinkClick()"
-				>Historic Games</a
-			>
-		</li>
-		<li class="nav-link">
-			<a
-				routerLink="/admin/admin-tools"
-				[routerLinkActive]="['active-link']"
-				class="nav-link"
-				(click)="handleLinkClick()"
-				>Admin Tools</a
-			>
-		</li>
-	</ul>
-	<span
-		class="close"
-		(click)="closeDrawer()">
-		<mat-icon>close</mat-icon>
-	</span>
+				[ngClass]="link.textCol">
+				<a
+					[routerLink]="link.routerLink"
+					[routerLinkActive]="['active-link']"
+					class="nav-link"
+					(click)="handleLinkClick()">
+					<mat-icon
+						class="icon"
+						[svgIcon]="link.icon"></mat-icon
+					><span *ngIf="showText">{{ link.label }}</span>
+				</a>
+			</li>
+			<li>
+				<button
+					*ngIf="authService.isAuthedSubject$ | async"
+					class="button-white refresh"
+					mat-flat-button
+					color="primary"
+					(click)="refreshDatabase()">
+					<mat-icon
+						class="icon"
+						svgIcon="rotate"></mat-icon>
+				</button>
+			</li>
+		</ul>
+	</div>
+	<ng-container
+		*ngIf="currentbreakpoint === 'handset' || currentbreakpoint === 'medium'">
+		<div class="drawer-bottom container row center">
+			<app-user-details></app-user-details>
+			<button
+				class="logout"
+				mat-flat-button
+				color="warn"
+				routerLink="/auth/logout"
+				*ngIf="authService.isAuthedSubject$ | async"
+				(click)="logout()">
+				Logout
+			</button>
+		</div>
+	</ng-container>
 </div>

@@ -5,7 +5,7 @@ export interface EventDetailModel {
 }
 
 export const EventDetails: EventDetailModel[] = [
-	{ option: 'Venues', value: 'venues', data: '' },
+	// { option: 'Venues', value: 'venues', data: '' },
 	{ option: 'Stratification', value: 'stratification', data: '' },
 	{ option: 'Sitters', value: 'sitters', data: '' },
 	{ option: 'Adjustments', value: 'adjustments', data: '' },

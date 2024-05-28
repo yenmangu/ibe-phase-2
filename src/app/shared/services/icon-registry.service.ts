@@ -58,5 +58,81 @@ export class IconRegistryService {
 				domain + svgUrlBase + 'card-suits/diamonds.svg'
 			)
 		);
+
+		// Menu Icons
+		//
+		//
+		this._matIconRegistry.addSvgIcon(
+			'account-settings',
+			this._domSanitizer.bypassSecurityTrustResourceUrl(
+				domain + svgUrlBase + 'menu_icons/account_settings.svg'
+			)
+		);
+		this._matIconRegistry.addSvgIcon(
+			'admin-tools',
+			this._domSanitizer.bypassSecurityTrustResourceUrl(
+				domain + svgUrlBase + 'menu_icons/admin_tools.svg'
+			)
+		);
+		this._matIconRegistry.addSvgIcon(
+			'current-session',
+			this._domSanitizer.bypassSecurityTrustResourceUrl(
+				domain + svgUrlBase + 'menu_icons/current_session.svg'
+			)
+		);
+		this._matIconRegistry.addSvgIcon(
+			'database-admin',
+			this._domSanitizer.bypassSecurityTrustResourceUrl(
+				domain + svgUrlBase + 'menu_icons/database_admin.svg'
+			)
+		);
+		this._matIconRegistry.addSvgIcon(
+			'game-code-settings',
+			this._domSanitizer.bypassSecurityTrustResourceUrl(
+				domain + svgUrlBase + 'menu_icons/game_code_settings.svg'
+			)
+		);
+		this._matIconRegistry.addSvgIcon(
+			'hand-records',
+			this._domSanitizer.bypassSecurityTrustResourceUrl(
+				domain + svgUrlBase + 'menu_icons/hand_records.svg'
+			)
+		);
+		this._matIconRegistry.addSvgIcon(
+			'historic-games',
+			this._domSanitizer.bypassSecurityTrustResourceUrl(
+				domain + svgUrlBase + 'menu_icons/historic_games.svg'
+			)
+		);
+		this._matIconRegistry.addSvgIcon(
+			'home',
+			this._domSanitizer.bypassSecurityTrustResourceUrl(
+				domain + svgUrlBase + 'menu_icons/house_solid.svg'
+			)
+		);
+		this._matIconRegistry.addSvgIcon(
+			'menu',
+			this._domSanitizer.bypassSecurityTrustResourceUrl(
+				domain + svgUrlBase + 'menu_icons/menu_icon.svg'
+			)
+		);
+		this._matIconRegistry.addSvgIcon(
+			'player-db',
+			this._domSanitizer.bypassSecurityTrustResourceUrl(
+				domain + svgUrlBase + 'menu_icons/player_db.svg'
+			)
+		);
+		this._matIconRegistry.addSvgIcon(
+			'reports',
+			this._domSanitizer.bypassSecurityTrustResourceUrl(
+				domain + svgUrlBase + 'menu_icons/reports.svg'
+			)
+		);
+		this._matIconRegistry.addSvgIcon(
+			'rotate',
+			this._domSanitizer.bypassSecurityTrustResourceUrl(
+				domain + svgUrlBase + 'menu_icons/rotate.svg'
+			)
+		);
 	}
 }
