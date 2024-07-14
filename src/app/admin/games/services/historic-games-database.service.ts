@@ -44,9 +44,9 @@ export class HistoricGamesDatabaseService implements OnDestroy {
 		});
 	}
 
-	async fetchHistoricData(objectStore: string): Promise<any> {
+	async fetchDatabaseData(objectStore: string): Promise<any> {
 		try {
-			const data = await this.processMatchDataService.getHistoricData(objectStore);
+			const data = await this.processMatchDataService.getDatabaseData(objectStore);
 			this.dataLoadingSubject.next(data);
 			this.dataSubject$.next(data);
 			return data;
@@ -54,10 +54,21 @@ export class HistoricGamesDatabaseService implements OnDestroy {
 			this.dataLoadingSubject.next(err);
 		}
 	}
-
-	async getDatabaseVersion(): Promise<any>{
-		
+	async fetchHistoricData(objectStore: string, key: string): Promise<any> {
+		try {
+			const data = await this.processMatchDataService.getHistoricData(
+				objectStore,
+				key
+			);
+			this.dataLoadingSubject.next(data.value);
+			this.dataSubject$.next(data.value);
+			return data.value;
+		} catch (err) {
+			this.dataLoadingSubject.next(err);
+		}
 	}
+
+	async getDatabaseVersion(): Promise<any> {}
 
 	async fetchMainData(objectStore, key): Promise<any> {
 		try {

@@ -19,9 +19,10 @@
 		Simulate uploaded file
 	</button>
 </div> -->
-
-<ng-container *ngIf="importStart && !importSuccess">
-	<mat-spinner class="import-spinner"></mat-spinner>
+<ng-container *ngIf="!totalFail">
+	<ng-container *ngIf="importStart && !importSuccess">
+		<mat-spinner class="import-spinner"></mat-spinner>
+	</ng-container>
 </ng-container>
 
 <ng-container *ngIf="importSuccess">

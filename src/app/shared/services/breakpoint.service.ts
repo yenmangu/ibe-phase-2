@@ -32,7 +32,7 @@ export class BreakpointService {
 					size = 'handset';
 				}
 
-				console.log('breakpoint size as determined by the bp service: ', size);
+				// console.log('breakpoint size as determined by the bp service: ', size);
 				return size;
 			}),
 			// Debugging

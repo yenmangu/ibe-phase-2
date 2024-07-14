@@ -52,7 +52,7 @@ import { HandPaginationComponent } from '../hands/hand-pagination/hand-paginatio
 import { HandDisplayComponent } from '../hands/hand-display/hand-display.component';
 import { PdfGenerationComponent } from './current-game/game-players/pdf-generation/pdf-generation.component';
 import { CreateGameComponent } from './current-game/game-players/create-game/create-game.component';
-import { RestoreDialogComponent } from './historic-games/restore-dialog/restore-dialog.component';
+import { HistoricGamesDialogComponent } from './historic-games/historic-games-dialog/historic-games-dialog.component';
 import { ImportExportComponent } from './database-landing/import-export/import-export.component';
 
 import { SharedModule } from 'src/app/shared/shared.module';
@@ -81,7 +81,7 @@ import { BridgewebsDialogComponent } from './database-landing/bridgewebs-dialog/
 		HandDisplayComponent,
 		PdfGenerationComponent,
 		CreateGameComponent,
-		RestoreDialogComponent,
+		HistoricGamesDialogComponent,
 		ImportExportComponent,
   BridgewebsDialogComponent
 	],

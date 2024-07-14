@@ -92,7 +92,7 @@ export class VenuesDatabaseComponent
 	async fetchInitialData(): Promise<boolean> {
 		try {
 			console.log(this.storeName);
-			const venueData = await this.historicGamesDatabaseService.fetchHistoricData(
+			const venueData = await this.historicGamesDatabaseService.fetchDatabaseData(
 				'loc'
 			);
 			if (venueData) {

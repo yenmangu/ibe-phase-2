@@ -53,7 +53,7 @@ export class FetchCurrentDataService implements OnDestroy {
 			});
 	}
 
-	async getHistoricData(storeName: string) {
+	async getDatabaseData(storeName: string) {
 		try {
 			await firstValueFrom(
 				this.indexedDatabaseStatus.isInitialised$.pipe(
@@ -67,6 +67,20 @@ export class FetchCurrentDataService implements OnDestroy {
 		} catch (error) {
 			throw error;
 		}
+	}
+
+	async getHistoricData(storeName: string, key: string) {
+		try {
+			await firstValueFrom(
+				this.indexedDatabaseStatus.isInitialised$.pipe(
+					filter(isInit => isInit),
+					first(),
+					take(1)
+				)
+			);
+			const data = await this.indexedDB.getByKey(storeName, key);
+			return data;
+		} catch (error) {}
 	}
 
 	async getAllStoreData(storeName: string) {

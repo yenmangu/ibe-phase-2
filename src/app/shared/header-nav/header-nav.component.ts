@@ -24,7 +24,7 @@ export class HeaderNavComponent implements OnInit, OnDestroy {
 		this.breakpointsService.currentBreakpoint$
 			.pipe(takeUntil(this.destroy$))
 			.subscribe(bp => {
-				console.log('bp in header nav: ', bp);
+				// console.log('bp in header nav: ', bp);
 				this.showText = !(bp === 'handset' || bp === 'medium');
 				this.currentBreakpoint = bp;
 			});

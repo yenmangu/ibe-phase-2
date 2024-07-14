@@ -124,6 +124,9 @@ export class PlayerDatabaseComponent
 						this.refresh();
 						this.table.renderRows();
 					}
+				},
+				error: error => {
+					console.error('Error updating data: ', error);
 				}
 			});
 	}
@@ -149,7 +152,7 @@ export class PlayerDatabaseComponent
 	async fetchInitialData() {
 		try {
 			console.log(this.storeName);
-			const playerData = await this.historicDatabaseService.fetchHistoricData(
+			const playerData = await this.historicDatabaseService.fetchDatabaseData(
 				'player'
 			);
 			this.playerDataSubject.next(playerData);

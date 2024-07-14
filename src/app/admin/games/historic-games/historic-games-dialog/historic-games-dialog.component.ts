@@ -1,19 +1,19 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { HttpService } from 'src/app/shared/services/http.service';
+import { HttpService } from '../../../../shared/services/http.service';
 @Component({
-	selector: 'app-restore-dialog',
-	templateUrl: './restore-dialog.component.html',
-	styleUrls: ['./restore-dialog.component.scss']
+	selector: 'app-historic-games-dialog',
+	templateUrl: './historic-games-dialog.component.html',
+	styleUrls: ['./historic-games-dialog.component.scss']
 })
-export class RestoreDialogComponent implements OnInit {
+export class HistoricGamesDialogComponent implements OnInit {
 	zip: string = '';
 	gameCode: string = '';
 	dirKey: string = '';
 
 	constructor(
 		@Inject(MAT_DIALOG_DATA) public data: any,
-		private dialogRef: MatDialogRef<RestoreDialogComponent>,
+		private dialogRef: MatDialogRef<HistoricGamesDialogComponent>,
 		private httpService: HttpService
 	) {}
 

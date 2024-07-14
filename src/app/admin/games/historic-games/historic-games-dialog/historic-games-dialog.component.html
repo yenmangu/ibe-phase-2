@@ -5,16 +5,20 @@
 			alt="IBEScore Logo"
 			srcset="" />
 	</a>
-	<h2>{{ data.title }}</h2>
+	<h2>
+		<span>
+			{{ data.title }}
+		</span>
+	</h2>
 	<mat-dialog-content>
-		<span>{{data.message}}</span>
+		<span>{{ data.message }}</span>
 	</mat-dialog-content>
 	<mat-dialog-actions>
 		<button
 			mat-flat-button
 			color="primary"
 			(click)="onRestore()">
-			Restore
+			{{ data.button }}
 		</button>
 		<button
 			mat-flat-button

@@ -59,6 +59,8 @@ export class TeamsDatabaseComponent
 	ngOnInit(): void {
 		this.isLoading = true;
 		this.teamData$.subscribe(data => {
+			console.log('Raw data from teamData$: ', data);
+
 			this.teamArray = data;
 			console.log('team data: ', this.teamArray);
 			this.initDataSource();
@@ -81,6 +83,9 @@ export class TeamsDatabaseComponent
 					if (value) {
 						this.refresh();
 					}
+				},
+				error: error => {
+					console.error('Error updating data: ', error);
 				}
 			});
 	}
@@ -92,7 +97,7 @@ export class TeamsDatabaseComponent
 	async fetchInitialData() {
 		try {
 			console.log(this.storeName);
-			const teamData = await this.historicDatabaseService.fetchHistoricData('team');
+			const teamData = await this.historicDatabaseService.fetchDatabaseData('team');
 			this.teamDataSubject.next(teamData);
 		} catch (err) {
 			console.error('Error fetching initial: ', err);
@@ -165,8 +170,9 @@ export class TeamsDatabaseComponent
 				}
 			};
 		});
-		const mappedDataSource = updatedData.map(item => item.value);
-		this.dataSource.data = mappedDataSource;
+		// const mappedDataSource = updatedData.map(item => item.value);
+		// this.dataSource.data = mappedDataSource;
+		this.dataSource.data = updatedData.map(item => item.value);
 	}
 
 	private async refresh() {

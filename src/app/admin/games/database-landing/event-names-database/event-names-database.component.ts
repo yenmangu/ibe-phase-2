@@ -97,6 +97,9 @@ export class EventNamesDatabaseComponent
 						this.refresh();
 						this.table.renderRows();
 					}
+				},
+				error: error => {
+					console.error('Error updating data: ', error);
 				}
 			});
 	}
@@ -124,7 +127,7 @@ export class EventNamesDatabaseComponent
 	async fetchInitialData() {
 		try {
 			console.log(this.storeName);
-			const eventData = await this.historicDatabaseService.fetchHistoricData(
+			const eventData = await this.historicDatabaseService.fetchDatabaseData(
 				'event'
 			);
 			this.eventDataSubject.next(eventData);

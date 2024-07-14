@@ -43,7 +43,7 @@ export class AdminToolsService {
 			})
 			.pipe(
 				map((response: HttpResponse<any>) => {
-					console.log('Response Status in service: ', response);
+					// console.log('Response Status in service: ', response);
 
 					if (response.status === 200) {
 						return response.body;

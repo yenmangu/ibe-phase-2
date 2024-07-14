@@ -12,10 +12,14 @@ import { Subject, Subscription, takeUntil } from 'rxjs';
 import { IconRegistryService } from 'src/app/shared/services/icon-registry.service';
 import { IndexedDatabaseStatusService } from 'src/app/shared/services/indexed-database-status.service';
 import { MatDialog } from '@angular/material/dialog';
-import { RestoreDialogComponent } from './restore-dialog/restore-dialog.component';
+import { HistoricGamesDialogComponent } from './historic-games-dialog/historic-games-dialog.component';
 import { HttpService } from 'src/app/shared/services/http.service';
 import { SharedGameDataService } from '../services/shared-game-data.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSort, Sort, MatSortModule } from '@angular/material/sort';
+import { HistoricGame } from 'src/app/shared/data/interfaces/historic-game';
+import { CustomSnackbarComponent } from 'src/app/shared/custom-snackbar/custom-snackbar.component';
+
 @Component({
 	selector: 'app-historic-games',
 	templateUrl: './historic-games.component.html',
@@ -23,27 +27,48 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class HistoricGamesComponent implements OnInit, AfterViewInit, OnDestroy {
 	@ViewChild(MatPaginator) paginator: MatPaginator;
+	@ViewChild(MatSort) sort: MatSort;
+
 	applyMagentaGreyTheme: boolean = true;
-	currentPage = 1;
-	itemsPerPage = 12;
-	totalPages: number = undefined;
-	// dataSource = new MatTableDataSource<any>([]);
-	dataSource: MatTableDataSource<any>;
-	displayedColumns: any[] = ['number', 'name', 'date', 'delete'];
-	searchTerm: string = '';
-	databaseSubscription = new Subscription();
+	// currentPage = 1;
+	// itemsPerPage = 12;
+	// totalPages: number = undefined;
+	// // dataSource = new MatTableDataSource<any>([]);
+	// dataSource: MatTableDataSource<any>;
+	// originalData: any[];
+	// displayedColumns: any[] = ['number', 'name', 'date', 'delete'];
+	// searchTerm: string = '';
+	// databaseSubscription = new Subscription();
+	// isLoading: boolean = true;
+	// isDBInit: boolean = false;
+	// IDBStatusSubscription = new Subscription();
+
+	// New props
+
+	historicArray: HistoricGame[] = [];
+	private historicSubject = new Subject<HistoricGame[]>();
+	historicData$ = this.historicSubject.asObservable();
+
 	isLoading: boolean = true;
-	isDBInit: boolean = false;
-	IDBStatusSubscription = new Subscription();
+	updateDataSubscription: Subscription;
+	dataSource = new MatTableDataSource<any>();
+	displayedColumns: string[] = ['number', 'name', 'date', 'delete'];
+	searchTerm: string = '';
+	selectedRowData: HistoricGame | undefined;
+	updatedData: any[] = [];
+	sortedData: any[] = [];
 	zip: string = '';
 	gameCode: string = '';
 	dirKey: string = '';
+	storeName: string = 'historic_game_data';
+	storeKey: string = 'histitem';
+	deleteHovered: boolean = false;
+	rowHovered: boolean = false;
 
 	private destroy$ = new Subject<void>();
 
 	constructor(
-		private historicGamesService: HistoricGamesDatabaseService,
-		private IDBStatus: IndexedDatabaseStatusService,
+		private historicDatabaseService: HistoricGamesDatabaseService,
 		private dialog: MatDialog,
 		private httpService: HttpService,
 		private sharedGameDataService: SharedGameDataService,
@@ -51,92 +76,152 @@ export class HistoricGamesComponent implements OnInit, AfterViewInit, OnDestroy 
 	) {}
 
 	ngOnInit(): void {
-		console.log('historic games component init');
-		this.IDBStatusSubscription = this.IDBStatus.isInitialised$
-			.pipe(takeUntil(this.destroy$))
-			.subscribe(init => {
-				this.isDBInit = init;
-			});
-		if (this.isDBInit) {
-			this.databaseSubscription = this.historicGamesService.dataLoading$.subscribe(
-				data => {
-					this.dataSource = new MatTableDataSource();
+		this.isLoading = true;
+		this.historicData$.pipe(takeUntil(this.destroy$)).subscribe(data => {
+			console.log('Raw data from historicData$: ', data);
 
-					if (data) {
-						console.log('historic data: ', data);
-						this.dataSource.data = data.value;
-						this.dataSource.paginator = this.paginator;
-						this.isLoading = false;
-					} else {
-						console.log('no data');
-
-						this.dataSource.data = [];
-					}
-					console.log('historic games component: ', this.dataSource);
-				}
-			);
-		}
-		this.fetchData();
+			this.historicArray = data;
+			this.initDataSource();
+			this.isLoading = false;
+		});
+		this.fetchInitialData();
 		this.gameCode = localStorage.getItem('GAME_CODE');
 		this.dirKey = localStorage.getItem('DIR_KEY');
 	}
 
 	ngAfterViewInit(): void {
-		if (this.paginator) {
-			this.dataSource.paginator = this.paginator;
+		this.refreshSortPaginator();
+		this.updateDataSubscription = this.historicDatabaseService
+			.getDataUpdated$()
+			.pipe(takeUntil(this.destroy$))
+			.subscribe({
+				next: value => {
+					if (value) {
+						this.refresh();
+					}
+				},
+				error: error => {
+					console.error('Error updating data: ', error);
+				}
+			});
+	}
+
+	private checkIsLoading() {
+		if (this.dataSource.data.length < 1) {
+			this.isLoading = true;
 		}
 	}
 
-	private async fetchData() {
-		console.log('historic game component fetch data called');
+	private async fetchInitialData() {
 		try {
-			await this.historicGamesService.fetchMainData(
-				'historic_game_data',
-				'histitem'
-			);
-		} catch (err) {
-			console.error('Error fetching database data: ', err);
+			if (this.storeName && this.storeKey) {
+				this.historicSubject.next(
+					await this.historicDatabaseService.fetchHistoricData(
+						this.storeName,
+						this.storeKey
+					)
+				);
+			}
+		} catch (error) {
+			console.error('Error fetching initial data: ', error);
 		}
 	}
-	private compare(a: number | string, b: number | string, isAsc: boolean) {
-		return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+
+	refreshSortPaginator() {
+		if (this.paginator && this.sort) {
+			this.dataSource.paginator = this.paginator;
+			this.dataSource.sort = this.sort;
+		}
 	}
 
-	get paginatedData() {
-		const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-		const endIndex = startIndex + this.itemsPerPage;
-		const totalPages = Math.ceil(this.dataSource.data.length / this.itemsPerPage);
-		this.totalPages = totalPages;
-		// console.log('page data: ',this.historicGamesData.slice(startIndex, endIndex))
-		return this.dataSource.data.slice(startIndex, endIndex);
+	refreshDataSource() {
+		this.dataSource.data = this.historicArray;
 	}
-	setPage(pageNumber: number) {
-		this.currentPage = pageNumber;
+
+	private initDataSource() {
+		this.sortArray(this.historicArray);
+		const updatedData = this.historicArray.map(item => {
+			return {
+				...item,
+				value: {
+					key: item.key,
+					...item.value
+				}
+			};
+		});
+		this.dataSource.data = this.remapData(updatedData);
+	}
+
+	private remapData(data: any[]) {
+		return data.map(item => ({
+			number: Number(item['$'].n),
+			name: item.ename[0],
+			date: item.edate[0],
+			zipname: item.zipname[0],
+			deleteHovered: false
+		}));
+	}
+
+	private sortArray(data) {
+		return data.sort((a, b) => +b.key - +a.key);
+	}
+
+	private async refresh() {
+		try {
+			this.fetchInitialData();
+			this.refreshDataSource();
+			this.refreshSortPaginator();
+		} catch (error) {
+			console.error('Error refreshing data source: ', error);
+		}
 	}
 
 	applyFilter(event: Event) {
-		console.log('search term: ', event);
 		const filterValue = (event.target as HTMLInputElement).value;
 		this.dataSource.filter = filterValue.trim().toLowerCase();
 	}
 
-	onDeleteClicked(game: any) {
-		// alert(`Game ID ${}`)
+	// findRowData(clickedRow) {
+	// 	return this.historicArray.find(
+	// 		item => item.value.zipname === clickedRow.zipname
+	// 	);
+	// }
+
+	onDeleteClicked(event: Event, row: any) {
+		event.stopPropagation();
+		console.log('Game event: ', row);
+		this.zip = row.zipname;
+		const config = {
+			delete: true,
+			title: 'Delete this game from history?',
+			message:
+				'Deleting this game will permanently remove this game from the history and can never be restored again. Are you sure you wish to continue?',
+			button: 'Delete'
+		};
+
+		this.openDialog(config);
 	}
 
 	onRowClick(row): void {
-		console.log('row: ', row);
-		this.zip = row.zipname[0];
-		this.openDialog();
+		// console.log('row: ', row);
+		this.zip = row.zipname;
+		const config = {
+			restore: true,
+			title: 'Restore this game?',
+			message:
+				'Restoring this game will overwrite the current game, which will be achived and may be restored later',
+			button: 'Restore'
+		};
+		this.openDialog(config);
 	}
 
-	private openDialog() {
-		const dialogRef = this.dialog.open(RestoreDialogComponent, {
+	private openDialog(config) {
+		const dialogRef = this.dialog.open(HistoricGamesDialogComponent, {
 			width: '300px',
 			data: {
-				title: 'Restore this game?',
-				message:
-					'Restoring this game will overwrite the current game, which will be achived and may be restored later',
+				title: config.title,
+				message: config.message,
+				button: config.button,
 				zip: this.zip,
 				gameCode: this.gameCode,
 				dirKey: this.dirKey
@@ -144,38 +229,114 @@ export class HistoricGamesComponent implements OnInit, AfterViewInit, OnDestroy 
 		});
 		dialogRef.afterClosed().subscribe(result => {
 			if (result === true) {
-				console.log('dialog response: ', result);
+				// console.log('dialog response: ', result);
 
 				const payload = {
 					gameCode: this.gameCode,
 					dirKey: this.dirKey,
 					zipName: this.zip
 				};
-				this.httpService.restoreHistoricGame(payload).subscribe({
-					next: response => {
-						console.log('response from api: ', response);
-						if (response.result.success) {
-							console.log('Success restoring game');
-
-							this.sharedGameDataService.triggerRefreshDatabase();
+				if (config.restore && config.restore === true) {
+					this.httpService.restoreHistoricGame(payload).subscribe({
+						next: response => {
+							console.log('response from api: ', response);
+							if (response.result.success) {
+								console.log('Success restoring game');
+								this.openSuccessSnackbar('restore');
+							}
+						},
+						error: error => {
+							console.log('error from api: ', error);
+							this.snackbar.open(
+								'Error restoring game, please try again, or try restoring a different game',
+								'Dismiss'
+							);
 						}
-					},
-					error: error => {
-						console.log('error from api: ', error);
-						this.snackbar.open(
-							'Error restoring game, please try again, or try restoring a different game',
-							'Dismiss'
-						);
-					}
-				});
-				//
+					});
+				}
+				if (config.delete && config.delete === true) {
+					console.log('Delete');
+					console.log('Payload: ', payload);
+
+					this.httpService.deleteHistoricGame(payload).subscribe({
+						next: response => {
+							console.log('Response from delete request: ', response);
+							if (response.result.success) {
+								this.openSuccessSnackbar('delete');
+							}
+							if (response.result.success === false) {
+								const error = response.result?.error ?? 'Unknown Error';
+								this.snackbar.openFromComponent(CustomSnackbarComponent, {
+									data: {
+										message: 'Error deleting game from history.',
+										error: this.getReadableError(error)
+									}
+								});
+							}
+						},
+						error: error => {
+							console.error('Error deleting: ', error);
+							const serverError = error.error?.result?.error ?? 'Unknown Error';
+							this.snackbar.openFromComponent(CustomSnackbarComponent, {
+								data: {
+									message: 'Error deleting game from history.',
+									error: this.getReadableError(serverError)
+								}
+							});
+						}
+					});
+				}
 			}
 		});
 	}
 
+	private openSuccessSnackbar(type: 'delete' | 'restore') {
+		const verb = type === 'delete' ? 'deleting' : 'restoring';
+		this.snackbar
+			.open(
+				`Success ${verb} game from history. Dismiss to refresh the database.`,
+				'Dismiss'
+			)
+			.afterDismissed()
+			.subscribe(result => {
+				// console.log('Result from afterDismissed: ', result);
+				result.dismissedByAction
+					? this.sharedGameDataService.triggerRefreshDatabase()
+					: console.error('An Error Occurred with snackbar');
+			});
+	}
+
+	deleteHover(game) {
+		game.deleteHovered = !game.deleteHovered;
+	}
+
+	rowHover(row) {}
+
+	getReadableError(errorCode) {
+		let errorString: string = '';
+		switch (errorCode) {
+			case 'noolddir':
+				errorString = 'Game code exists but does not have archived game directory';
+				break;
+			case 'nozipname':
+				errorString = 'No game zipname provided';
+				break;
+			case 'notinoldlist':
+				errorString = 'Zipname provided does not exist';
+				break;
+			case 'nozipfile':
+				errorString = 'Game archive file does not exist. (Nothing to download).';
+				break;
+			case 'nogamedir':
+				errorString = 'Game code provided does not exist';
+				break;
+			default:
+				errorString = 'Unspecified error.';
+		}
+		return errorString;
+	}
+
 	ngOnDestroy(): void {
-		this.IDBStatusSubscription.unsubscribe();
-		this.databaseSubscription.unsubscribe();
 		this.destroy$.next();
 		this.destroy$.complete();
 	}

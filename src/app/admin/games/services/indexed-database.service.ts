@@ -42,13 +42,13 @@ export class IndexedDatabaseService {
 						// console.log('for..of storeName: ',storeName)
 						if (!db.objectStoreNames.contains(storeName)) {
 							db.createObjectStore(storeName, { keyPath: 'key' });
-							console.log(storeName, ': created');
+							// console.log(storeName, ': created');
 						}
 					}
 					for (const name of playerDbStoreNames) {
 						if (!db.objectStoreNames.contains(name)) {
 							db.createObjectStore(name, { keyPath: 'key' });
-							console.log(name, ': created');
+							// console.log(name, ': created');
 						}
 					}
 				}
@@ -217,7 +217,7 @@ export class IndexedDatabaseService {
 							storePromises.push(promise);
 						}
 					} else if (storeName === 'hand_data' || storeName === 'hrev_txt') {
-						console.log(`processing ${storeName} differently: `);
+						// console.log(`processing ${storeName} differently: `);
 						let dataToStore = { key: '', value: '' };
 						if (storeName === 'hand_data') {
 							dataToStore = { key: 'hands', value: storeMapping[storeName] };
@@ -481,12 +481,12 @@ export class IndexedDatabaseService {
 			const deleteRequest = indexedDB.deleteDatabase(databaseName);
 
 			await new Promise<void>((resolve, reject) => {
-				console.log('database delete promise made');
+				// console.log('database delete promise made');
 
 				deleteRequest.onsuccess = () => {
-					console.log(
-						`IndexedDB database '${databaseName}' deleted successfully, and promise resolved`
-					);
+					// console.log(
+					// 	`IndexedDB database '${databaseName}' deleted successfully, and promise resolved`
+					// );
 					resolve();
 				};
 

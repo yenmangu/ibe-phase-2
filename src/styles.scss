@@ -169,9 +169,8 @@ body.mat-dialog-open {
 	overflow: auto;
 }
 
-// app-welcome-screen {
-// 	width: 100%;
-// }
+$visible-window: 1280px;
+
 app-welcome-screen iframe {
 	height: 500px;
 }

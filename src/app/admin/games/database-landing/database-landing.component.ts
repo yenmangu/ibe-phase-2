@@ -95,7 +95,7 @@ export class DatabaseLandingComponent implements OnInit, OnDestroy {
 
 	async fetchInitialData(storeName: string) {
 		try {
-			await this.historicDatabaseService.fetchHistoricData(this.storeName);
+			await this.historicDatabaseService.fetchDatabaseData(this.storeName);
 		} catch (err) {
 			console.error('Error fetching initial: ', err);
 		}

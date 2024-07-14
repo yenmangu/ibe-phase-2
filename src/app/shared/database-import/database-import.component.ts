@@ -33,6 +33,7 @@ export class DatabaseImportComponent implements OnInit {
 	meta: any = {};
 	importStart: boolean = false;
 	importSuccess: boolean | null = false;
+	totalFail = false;
 
 	testMapping: { [key: string]: HeaderMapping } = {
 		'0': {
@@ -131,6 +132,7 @@ export class DatabaseImportComponent implements OnInit {
 		}
 
 		try {
+			this.totalFail = false;
 			console.log('Attempting to parse: ', this.fileAsString);
 
 			const parsedData = await this.csvService.parseCsvData(this.fileAsString);
@@ -160,6 +162,12 @@ export class DatabaseImportComponent implements OnInit {
 					},
 					error: error => {
 						console.error('Error from api: ', error);
+						this.openSnackbar(
+							'Error importing database',
+							undefined,
+							'Internal Server Error'
+						);
+						this.totalFail = true;
 					}
 				});
 			}

@@ -1,4 +1,4 @@
 export const environment = {
-	API_URL: 'https://monkey-awaited-yearly.ngrok-free.app/ibescore',
+	API_URL: 'https://api.ibescore.com/ibescore',
 	PROD: false
 };

@@ -1,7 +1,9 @@
 <div class="container row">
 	<div class="inner">
 		<span
-			>{{ message }} <span *ngIf="data.error">Error: {{ error }}</span>
+			>{{ message }} <br />
+			<span *ngIf="data.error">Error: {{ error }}</span>
+			<br />
 			<span *ngIf="!noContact">
 				Please contact
 				<span><a href="mailto:admin@ibescore.com"> admin@ibescore.com</a></span>

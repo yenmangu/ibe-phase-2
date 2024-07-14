@@ -1,13 +1,17 @@
 @import '../../../../styles.scss';
 @import url('../../../../table-styles.scss');
-:host {
+@import '../../../../colours.styles.scss';
+
+host {
+	display: block;
+	max-width: $visible-window;
 	margin: auto;
 	padding-bottom: 2rem;
 }
 
 .delete mat-icon {
-	transition: opactiy 200ms ease-out;
-
-	&:hover {
-	}
+	transition: color 200ms ease-out;
+}
+.delete:hover mat-icon.active {
+	color: $ibe-alert-single;
 }

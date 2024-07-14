@@ -10,7 +10,7 @@
 				<thead>
 					<tr class="header-row">
 						<!-- <div class="north-south"> -->
-						<th class="small">Table Number</th>
+						<th class="small table-number">Table Number</th>
 						<ng-container *ngIf="matchType === 'pairs'">
 							<th class="small">Pair Number</th>
 						</ng-container>
@@ -160,12 +160,12 @@
 							*ngIf="pairsForm?.get(tableNumber.toString())"
 							[formGroupName]="tableNumber.toString()">
 							<!-- <div class="north-south"> -->
-							<td class="small">{{ i + 1 }}</td>
+							<td class="small table-number">{{ i + 1 }}</td>
 							<!-- Pair Number -->
 							<ng-container *ngIf="matchType === 'pairs'">
 								<td
 									*ngFor="let column of ['nsPairs']"
-									class="small">
+									class="small pair-number">
 									<input
 										class="table-input"
 										[formControlName]="column" />
@@ -313,7 +313,7 @@
 							<ng-container *ngIf="matchType === 'pairs'">
 								<td
 									*ngFor="let column of ['ewPairs']"
-									class="small">
+									class="small pair-number">
 									<input
 										class="table-input"
 										[formControlName]="column" />
