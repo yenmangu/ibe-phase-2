@@ -7,6 +7,7 @@ import { BreakpointService } from 'src/app/shared/services/breakpoint.service';
 })
 export class WelcomeScreenComponent implements OnInit {
 	currentBreakpoint: string = '';
+	newLayout: boolean = false;
 	constructor(private bp: BreakpointService) {}
 
 	ngOnInit(): void {
