@@ -13,9 +13,9 @@ if [ -z "$project_name" ]; then
 fi
 
 # Construct the destination path and ssh paths
-destination_path="rob@141.136.42.220:/home/ibe/app/$project_name/"
-destination_hostname="rob@141.136.42.220"
-destination_directory="/home/ibe/app/$project_name/"
+destination_path="ibe-companion@141.136.42.220:/home/ibe-companion/htdocs/www.companion.ibescore.com/"
+destination_hostname="ibe-companion@141.136.42.220"
+destination_directory="/home/ibe-companion/htdocs/www.ibe-companion.ibescore.com/"
 
 # Delete old files first
 # ssh -i ~/.ssh/hostinger_id_ed25519 "$destination_hostname" \
@@ -24,7 +24,7 @@ destination_directory="/home/ibe/app/$project_name/"
 # $destination_directory*.html"
 
 # Run rsync over SSH
-rsync -avz --update --exclude "*.sh" --exclude "*.md" -e "ssh -i ~/.ssh/hostinger_id_ed25519" "$source_path" "$destination_path"
+rsync -avz --update --exclude "*.sh" --exclude "*.md" -e "ssh -i ~/.ssh/hostinger/ibe-companion_ed25519" "$source_path" "$destination_path"
 
 # Check rsync exit status
 if [ $? -eq 0 ]; then

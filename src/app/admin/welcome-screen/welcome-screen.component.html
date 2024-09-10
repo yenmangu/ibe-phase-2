@@ -1,16 +1,36 @@
 <div
 	class="main container column center"
 	[ngClass]="currentBreakpoint">
-	<div class="iframe">
-		<iframe
-			src="https://ibescore.com/companion-information-help/"
-			width="100%"
-			height="500px"
-			frameborder="0"></iframe>
-	</div>
+	<ng-container *ngIf="local">
+		<div class="iframe">
+			<iframe
+				src="https://ibescore.com/companion-information-help-local/"
+				width="100%"
+				height="500px"
+				frameborder="0"></iframe>
+		</div>
+	</ng-container>
+	<ng-container *ngIf="!local && !dev">
+		<div class="iframe">
+			<iframe
+				src="https://ibescore.com/companion-information-help/"
+				width="100%"
+				height="500px"
+				frameborder="0"></iframe>
+		</div>
+	</ng-container>
+	<ng-container *ngIf="!local && dev">
+		<div class="iframe">
+			<iframe
+				src="https://ibescore.com/companion-information-help-dev/"
+				width="100%"
+				height="500px"
+				frameborder="0"></iframe>
+		</div>
+	</ng-container>
 </div>
 
-<ng-container *ngIf="!newLayout">
+<ng-container *ngIf="newLayout">
 	<div class="main container column new-welcome">
 		<!-- LEFT -->
 		<div class="container left column">
