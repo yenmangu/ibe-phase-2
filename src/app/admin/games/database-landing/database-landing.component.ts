@@ -47,7 +47,7 @@ export class DatabaseLandingComponent implements OnInit, OnDestroy {
 	ngOnInit(): void {
 		this.dataSubscription = this.historicDatabaseService.fetchedData$.subscribe({
 			next: data => {
-				// console.log('data from observable: ', data);
+				console.log('data from observable: ', data);
 				this.dataArray = data;
 				// console.log(this.dataArray);
 			}

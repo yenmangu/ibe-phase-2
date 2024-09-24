@@ -45,6 +45,7 @@ import { HtmlPdfDialogComponent } from './reporting/html-pdf-dialog/html-pdf-dia
 import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.component';
 import { EbuXmlDialogComponent } from './reporting/ebu-xml-dialog/ebu-xml-dialog.component';
 import { UploadPbnComponent } from './admin-tools/upload-pbn/upload-pbn.component';
+import { UserActionsComponent } from './user-actions/user-actions.component';
 @NgModule({
 	declarations: [
 		NavigationComponent,
@@ -66,7 +67,8 @@ import { UploadPbnComponent } from './admin-tools/upload-pbn/upload-pbn.componen
 		HtmlPdfDialogComponent,
 		WelcomeScreenComponent,
 		EbuXmlDialogComponent,
-		UploadPbnComponent
+		UploadPbnComponent,
+		UserActionsComponent
 	],
 	imports: [
 		CommonModule,

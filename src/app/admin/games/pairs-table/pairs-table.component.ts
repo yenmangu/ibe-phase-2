@@ -77,7 +77,7 @@ export class PairsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 			()
 			.subscribe(config => {
 				this.tableConfig = config;
-				console.log('tableConfig in component: ', this.tableConfig);
+				// console.log('tableConfig in component: ', this.tableConfig);
 
 				this.tableConfigOption = Object.keys(config);
 
@@ -91,7 +91,7 @@ export class PairsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 	}
 
 	ngOnInit(): void {
-		console.log('initialTableData: ', this.initialTableData);
+		// console.log('initialTableData: ', this.initialTableData);
 
 		// console.log('tables: ', this.initialTableData.tables);
 		this.matchType = this.initialTableData.matchString;
@@ -122,7 +122,7 @@ export class PairsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 		this.westSide = west;
 		this.individualNumbers = this.initialTableData.individuals;
 
-		console.log('Sitters Array in  pairsTable: ', this.nsSitters, this.ewSitters);
+		// console.log('Sitters Array in  pairsTable: ', this.nsSitters, this.ewSitters);
 
 		// console.log('\n ***************** \n individual numbers: ', this.individualNumbers);
 
@@ -278,7 +278,7 @@ export class PairsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 				}
 			}
 		}
-		console.log('Table controls after populating: ', tableControls);
+		// console.log('Table controls after populating: ', tableControls);
 
 		return tableControls;
 	}

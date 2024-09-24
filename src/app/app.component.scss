@@ -1,16 +1,19 @@
 :host {
-	min-height: 100vh;
-	width: 100vw;
-
 	display: block;
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
+	min-height: calc((100% - 4rem));
 	overflow: scroll;
 }
-.host::-webkit-scrollbar {
+
+:host::-webkit-scrollbar {
 	display: none;
 }
+
+.content-container {
+	display: block;
+	height: 100%;
+	min-height: calc((100% - 8rem));
+}
+
 app-home {
 	width: 100%;
 	min-height: 100vh;
@@ -29,10 +32,23 @@ app-footer {
 	order: 3;
 }
 
+// .app-container {
+// 	display: flex;
+// 	flex-direction: column;
+// 	// height: 100vh; /* Ensure app container takes up full viewport height */
+// 	height: 100%;
+// }
+
+.app-container::-webkit-scrollbar {
+	display: none;
+}
+
 .app-container {
-	display: flex;
-	flex-direction: column;
-	height: 100vh; /* Ensure app container takes up full viewport height */
+	display: block;
+	// height: calc ((100% - 4rem));
+	height: 100%;
+	width: 100%;
+	overflow: scroll;
 }
 
 .content-container {

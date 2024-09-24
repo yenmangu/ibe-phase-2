@@ -52,7 +52,6 @@ export class LoginComponent implements OnInit, OnDestroy {
 		console.log('Submit Button Clicked');
 		this.authService.login(formData).subscribe({
 			next: response => {
-				console.log('Response from auth Service: ', response);
 				if (response === false) {
 					console.log('in "response === false" path');
 					this.loginClicked = false;
@@ -72,7 +71,6 @@ export class LoginComponent implements OnInit, OnDestroy {
 						}
 					});
 				} else if (response) {
-					console.log('response from authService: ', response);
 					this.userDetailsService.updateEmail(response.directorEmail);
 					this.userDetailsService.updateGameCode(gameCode);
 					this.userDetailsService.updateDirectorKey(dirKey);

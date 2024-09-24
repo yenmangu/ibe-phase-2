@@ -1,14 +1,22 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import {
+	Component,
+	HostListener,
+	OnInit,
+	ViewChild,
+	ElementRef
+} from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { BreakpointService } from 'src/app/shared/services/breakpoint.service';
 import { environment } from 'src/environments/environment';
+
 @Component({
 	selector: 'app-welcome-screen',
 	templateUrl: './welcome-screen.component.html',
 	styleUrls: ['./welcome-screen.component.scss']
 })
 export class WelcomeScreenComponent implements OnInit {
+	@ViewChild('iframe') iframeElemnent: ElementRef;
 	currentBreakpoint: string = '';
 	newLayout: boolean = false;
 	wpOrigin: string = 'https://ibescore.com';
@@ -37,11 +45,15 @@ export class WelcomeScreenComponent implements OnInit {
 
 	@HostListener('window:message', ['$event'])
 	onMessage(event: MessageEvent) {
-		if (!event.data || typeof event.data.target !== 'string') {
-			// console.log('not the message we want');
+		// if (!event.data || typeof event.data.target !== 'string') {
+		// 	// console.log('not the message we want');
+		// 	return;
+		// }
 
+		if (!this.checkMessage(event)) {
 			return;
 		}
+
 		console.log('Message Receiver invoked');
 		if (event.origin !== this.wpOrigin) {
 			console.warn('Untrusted origin: ', event.origin);
@@ -50,9 +62,40 @@ export class WelcomeScreenComponent implements OnInit {
 		console.log('Event : ', event);
 
 		console.log('Received message from origin: ', event.origin);
+		if (event.data.iframeHeight) {
+			const frameHeight = event.data.iframeHeight;
+			this.setFrameHeight(frameHeight);
+		}
 
 		const path = this.getPath(event.data.target);
 		this.router.navigate([`/admin/${path}`], { relativeTo: this.route });
+	}
+
+	ngOnInit(): void {
+		console.log('Envs: ', { local: this.local, dev: this.dev });
+		this.bp.currentBreakpoint$.subscribe(bp => {
+			this.currentBreakpoint = bp;
+		});
+	}
+
+	private checkMessage(event: MessageEvent): boolean {
+		if (
+			!event.data ||
+			(typeof event.data.target !== 'string' &&
+				typeof event.data.iframeHeight !== 'number')
+		) {
+			return false;
+		} else if (event.origin !== this.wpOrigin) {
+			console.warn('Untrusted origin: ', event.origin);
+			return false;
+		} else return true;
+	}
+
+	private setFrameHeight(height: number) {
+		if (this.iframeElemnent) {
+			console.log('Setting Height: ', height);
+			this.iframeElemnent.nativeElement.style.height = height + 'px';
+		}
 	}
 
 	private getPath(target) {
@@ -75,14 +118,10 @@ export class WelcomeScreenComponent implements OnInit {
 				return 'historic-games';
 			case 'adminTools':
 				return 'admin-tools';
+			case 'userActions':
+				return 'user-actions';
 			default:
 				return 'welcome-members';
 		}
-	}
-	ngOnInit(): void {
-		console.log('Envs: ', { local: this.local, dev: this.dev });
-		this.bp.currentBreakpoint$.subscribe(bp => {
-			this.currentBreakpoint = bp;
-		});
 	}
 }

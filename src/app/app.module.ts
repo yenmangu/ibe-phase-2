@@ -25,6 +25,7 @@ import { PaginationComponent } from './dev/hand/pagination/pagination.component'
 import { IconRegistryService } from './shared/services/icon-registry.service';
 import { FontSizeDirective } from './font-size.directive';
 import { ResponseInterceptor } from './response.interceptor';
+import { AdminModule } from './admin/admin.module';
 
 // Pipes
 // import { KeysPipe } from './shared/pipes/keys.pipe';
@@ -48,6 +49,7 @@ import { ResponseInterceptor } from './response.interceptor';
 		SharedModule,
 		HomeModule,
 		ClarityModule,
+		AdminModule,
 		StoreModule.forRoot({}, {})
 	],
 	providers: [

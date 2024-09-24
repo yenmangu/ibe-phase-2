@@ -33,6 +33,7 @@ import { DatabaseImportComponent } from './database-import/database-import.compo
 import { LinExtractionComponent } from './lin-extraction/lin-extraction.component';
 import { HeaderNavComponent } from './header-nav/header-nav.component';
 import { HeaderNavDrawerComponent } from './header-nav-drawer/header-nav-drawer.component';
+import { SafeUrlPipe } from './pipes/safe-url.pipe';
 // Modules
 
 @NgModule({
@@ -59,7 +60,8 @@ import { HeaderNavDrawerComponent } from './header-nav-drawer/header-nav-drawer.
 		DatabaseImportComponent,
 		LinExtractionComponent,
 		HeaderNavComponent,
-		HeaderNavDrawerComponent
+		HeaderNavDrawerComponent,
+		SafeUrlPipe
 	],
 	imports: [
 		CommonModule,
@@ -81,7 +83,8 @@ import { HeaderNavDrawerComponent } from './header-nav-drawer/header-nav-drawer.
 		LinExtractionComponent,
 		DatabaseImportComponent,
 		CsvMappingComponent,
-		HeaderNavComponent
+		HeaderNavComponent,
+		SafeUrlPipe
 	],
 
 	providers: [

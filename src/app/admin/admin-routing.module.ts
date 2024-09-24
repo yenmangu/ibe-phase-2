@@ -14,6 +14,7 @@ import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.componen
 import { LinExtractionComponent } from '../shared/lin-extraction/lin-extraction.component';
 import { AdminToolsComponent } from './admin-tools/admin-tools.component';
 import { ImportExportComponent } from './games/database-landing/import-export/import-export.component';
+import { UserActionsComponent } from './user-actions/user-actions.component';
 
 const routes: Routes = [
 	{
@@ -73,6 +74,11 @@ const routes: Routes = [
 			},
 			{ path: 'dashboard', component: DashboardComponent },
 			// Additional admin routes
+			{
+				path: 'user-actions',
+				component: UserActionsComponent,
+				data: { menuLabel: 'User Actions Log' }
+			},
 			{ path: '', pathMatch: 'full', redirectTo: 'welcome-members' }
 		]
 	}

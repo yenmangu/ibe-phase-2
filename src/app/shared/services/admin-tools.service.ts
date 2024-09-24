@@ -32,6 +32,8 @@ export class AdminToolsService {
 	}
 
 	verifyAdmin(gameCode: string): Observable<any> {
+		// console.log('Calling verifyAdmin');
+
 		let params = new HttpParams();
 		params = params.append('gameCode', gameCode);
 		// console.log('Params before request: ', params);

@@ -4,174 +4,31 @@
 	<ng-container *ngIf="local">
 		<div class="iframe">
 			<iframe
+				#iframe
 				src="https://ibescore.com/companion-information-help-local/"
 				width="100%"
-				height="500px"
+				height="900px"
 				frameborder="0"></iframe>
 		</div>
 	</ng-container>
 	<ng-container *ngIf="!local && !dev">
 		<div class="iframe">
 			<iframe
+				#iframe
 				src="https://ibescore.com/companion-information-help/"
 				width="100%"
-				height="500px"
+				height="900px"
 				frameborder="0"></iframe>
 		</div>
 	</ng-container>
 	<ng-container *ngIf="!local && dev">
 		<div class="iframe">
 			<iframe
+				#iframe
 				src="https://ibescore.com/companion-information-help-dev/"
 				width="100%"
-				height="500px"
+				height="900px"
 				frameborder="0"></iframe>
 		</div>
 	</ng-container>
 </div>
-
-<ng-container *ngIf="newLayout">
-	<div class="main container column new-welcome">
-		<!-- LEFT -->
-		<div class="container left column">
-			<span class="tagline">member's area</span>
-			<span class="heading"><h2>Customise your players' experience</h2> </span>
-			<span class="underline">Reporting, administration and more</span>
-			<div class="container bottom">
-				<div class="container settings">
-					<div class="block">
-						<div class="icon"></div>
-						<div class="card-heading">
-							<span>GAME CODE Settings</span>
-							<span>Update app new game preferences</span>
-						</div>
-					</div>
-				</div>
-				<div class="container database">
-					<div class="block">
-						<div class="icon"></div>
-						<div class="card-heading">
-							<span>GAME CODE Settings</span>
-							<span>Make changes to players names and numbers</span>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!-- RIGHT -->
-		<div class="container right column">
-			<!-- TABS -->
-			<div class="container row tabs">
-				<div class="tab link">
-					<span>IBEScore Manual</span>
-				</div>
-			</div>
-			<div class="container row tabs">
-				<div class="tab link">
-					<span>Companion HELP</span>
-				</div>
-			</div>
-			<div class="container row tabs">
-				<div class="tab link">
-					<span>Training Videos</span>
-				</div>
-			</div>
-			<!-- TOP and :before -->
-			<div class="layout-wrapper">
-				<div class="layout-top green"></div>
-				<div class="container row columns">
-					<div class="container column">
-						<div class="block">
-							current session
-							<div class="container column">
-								<div class="icon green">
-									<div class="heading">
-										<div class="info"></div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="container column">
-						<div class="block">
-							hand records
-							<div class="container column">
-								<div class="icon green">
-									<div class="heading">
-										<div class="info"></div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="container column">
-						<div class="block">
-							reports
-							<div class="container column">
-								<div class="icon green">
-									<div class="heading">
-										<div class="info"></div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<!-- BOTTOM -->
-			<div class="layout-wrapper">
-				<div class="layout-bottom pink"></div>
-				<div class="container row columns">
-					<div class="container column">
-						<div class="block">
-							acount settings
-							<div class="container column">
-								<div class="icon pink">
-									<div class="heading">
-										<div class="info"></div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="container column">
-						<div class="block">
-							database admin
-							<div class="container column">
-								<div class="icon pink">
-									<div class="heading">
-										<div class="info"></div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="container column">
-						<div class="block">
-							historic games
-							<div class="container column">
-								<div class="icon pink">
-									<div class="heading">
-										<div class="info"></div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="container column">
-						<div class="block">
-							admin tools
-							<div class="container column">
-								<div class="icon pink">
-									<div class="heading">
-										<div class="info"></div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</ng-container>

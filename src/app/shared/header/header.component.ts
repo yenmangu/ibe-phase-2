@@ -152,6 +152,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 						// console.log('String Gamecode: ', this.gameCode);
 
 						// this.gameCode = gameCode;
+						console.log('Calling verifyAdmin');
+
 						return this.adminToolsService.verifyAdmin(this.gameCode);
 					} else {
 						return of(null);

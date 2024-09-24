@@ -32,6 +32,8 @@ export class AdminToolsComponent implements OnInit {
 				switchMap(gamecode => {
 					console.log('User details in admin-tools component: ', gamecode);
 					this.gameCode = gamecode;
+					console.log('Calling verifyAdmin');
+
 					return this.adminToolsService.verifyAdmin(this.gameCode);
 				})
 			)
