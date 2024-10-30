@@ -5,6 +5,10 @@ import { HttpService } from '../services/http.service';
 import { switchMap, tap, Observable, catchError } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CustomSnackbarComponent } from '../custom-snackbar/custom-snackbar.component';
+import { MatDialog } from '@angular/material/dialog';
+import { MatDialogRef } from '@angular/material/dialog';
+import { DIALOG_DATA } from '@angular/cdk/dialog';
+import { CsvMappingComponent } from '../csv-mapping/csv-mapping.component';
 @Component({
 	selector: 'app-database-import',
 	templateUrl: './database-import.component.html',
@@ -33,6 +37,7 @@ export class DatabaseImportComponent implements OnInit {
 	meta: any = {};
 	importStart: boolean = false;
 	importSuccess: boolean | null = false;
+	errorObject: { message: string; files?: File[] };
 	totalFail = false;
 
 	testMapping: { [key: string]: HeaderMapping } = {
@@ -60,7 +65,7 @@ export class DatabaseImportComponent implements OnInit {
 	onFileListChange(files: any[]) {
 		this.clearImport = false;
 		this.selectedFiles = files;
-		this.signalMapping.emit(true);
+		// this.signalMapping.emit(true);
 		this.uploadedHeaders = [];
 		console.log('File list: ', this.selectedFiles);
 	}
@@ -87,6 +92,7 @@ export class DatabaseImportComponent implements OnInit {
 			if (headers.length > 0) {
 				this.uploadedHeaders = headers;
 				this.readyForMapping = true;
+				this.signalMapping.emit(true);
 			} else {
 				this.readyForMapping = false;
 			}
@@ -176,6 +182,23 @@ export class DatabaseImportComponent implements OnInit {
 		}
 	}
 
+	importToRemote(importData): Observable<any> {
+		const payload: any = {
+			gameCode: this.gameCode,
+			dirKey: this.dirKey,
+			importData,
+			meta: this.meta
+		};
+		console.log(JSON.stringify(payload, null, 2));
+
+		return this.httpService.importPlayerDatabase(payload);
+	}
+
+	receiveCancel(signal: boolean): void {
+		this.clearImport = signal;
+		this.signalMapping.emit(false);
+	}
+
 	openSnackbar(message: string, noContact?, error?): void {
 		this.snackbar
 			.openFromComponent(CustomSnackbarComponent, {
@@ -193,20 +216,24 @@ export class DatabaseImportComponent implements OnInit {
 			});
 	}
 
-	importToRemote(importData): Observable<any> {
-		const payload: any = {
-			gameCode: this.gameCode,
-			dirKey: this.dirKey,
-			importData,
-			meta: this.meta
-		};
-		console.log(JSON.stringify(payload, null, 2));
+	receiveError(error: any) {
+		console.log('Error receieved: ', error);
+		this.errorObject = error;
+		let fileNameList: string = '';
 
-		return this.httpService.importPlayerDatabase(payload);
-	}
+		this.errorObject.files.forEach((file, i) => {
+			fileNameList += file.name!;
 
-	receiveCancel(signal) {
-		this.clearImport = true;
+			if (i !== this.errorObject.files.length - 1) {
+				fileNameList += file.name! + ', ';
+			}
+		});
+
+		this.openSnackbar(
+			`${this.errorObject.message}: ${fileNameList}. Please upload '.csv' files only`,
+			undefined,
+			undefined
+		);
 	}
 
 	async dbImportTest() {

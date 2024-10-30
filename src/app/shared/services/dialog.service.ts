@@ -15,10 +15,10 @@ import { AdvancedOptionsDialogComponent } from 'src/app/admin/games/database-lan
 export class DialogService implements OnInit, OnDestroy {
 	public dialogs: DialogModel[] = dialogData;
 	public gameCode: string;
+	private dialogRef!: MatDialogRef<any> | null;
 	constructor(
 		private dialog: MatDialog,
-		private sharedDataService: SharedDataService,
-		private dialogRef: MatDialogRef<any> | null = null
+		private sharedDataService: SharedDataService
 	) {}
 
 	ngOnInit(): void {
@@ -45,6 +45,40 @@ export class DialogService implements OnInit, OnDestroy {
 		return undefined;
 	}
 
+	newOpenDialog(
+		dialogName: string,
+		error?: string,
+		email?: string,
+		dirKey?: string,
+		values?: any,
+		component?: any,
+		data?: any
+	): MatDialogRef<any> | undefined {
+		if (this.dialogRef) {
+			this.dialogRef.close();
+			this.dialogRef = null;
+		}
+
+		const foundDialog = this.findDialog(dialogName);
+		if (!foundDialog) {
+			return undefined;
+		}
+
+		const matDialogConfig = {
+			width: foundDialog.width,
+			// only add properties if they exist
+			// ...} as DialogModel['data'] <-- type assertion to match the DialogModel interface
+			data: {
+				...foundDialog.data,
+				...(error !== undefined && { error }),
+				...(email !== undefined && { email }),
+				...(dirKey !== undefined && { dirKey })
+			} as DialogModel['data']
+		};
+		this.dialogRef = this.dialog.open(DialogComponent, matDialogConfig);
+		return this.dialogRef;
+	}
+
 	openDialog(
 		dialogName: string,
 		error?: string,
@@ -57,38 +91,11 @@ export class DialogService implements OnInit, OnDestroy {
 		const dialogConfig = this.findDialog(dialogName);
 		let matDialogConfig: MatDialogConfig | undefined;
 
-		// Dialog Debugging
-		// const logParams: Record<string, any> = {
-		// 	dialogName
-		// };
-
-		// if (error !== undefined) {
-		// 	logParams.error = error;
-		// }
-		// if (email !== undefined) {
-		// 	logParams.email = email;
-		// }
-		// if (dirKey !== undefined) {
-		// 	logParams.dirKey = dirKey;
-		// }
-		// if (values !== undefined) {
-		// 	logParams.values = values;
-		// }
-		// if (component !== undefined) {
-		// 	logParams.component = component;
-		// }
-		// if (data !== undefined) {
-		// 	logParams.data = data;
-		// }
-
-		// console.log('Open dialog called with: ', logParams);
 		if (dialogConfig) {
 			matDialogConfig = {
 				width: dialogConfig.width,
 				data: { ...dialogConfig.data }
 			};
-
-
 
 			if (error) {
 				matDialogConfig.data.error = error;
@@ -123,6 +130,14 @@ export class DialogService implements OnInit, OnDestroy {
 			};
 		}
 		if (matDialogConfig) {
+			const {
+				data: { error, email, dirKey }
+			} = matDialogConfig;
+
+			if (error) {
+				// this.dialog.
+			}
+
 			this.dialogRef = this.dialog.open(DialogComponent, matDialogConfig);
 			return this.dialogRef;
 		}
@@ -195,10 +210,12 @@ export class DialogService implements OnInit, OnDestroy {
 	public closeAllDialogs(): void {
 		console.log('closeAllDialogs invoked');
 		if (this.dialogRef) {
+			console.log('DialogRef found: ', this.dialogRef);
+
 			this.dialogRef.close();
-			this.dialog.closeAll();
 			this.dialogRef = null;
 		}
+		this.dialog.closeAll();
 	}
 
 	ngOnDestroy(): void {

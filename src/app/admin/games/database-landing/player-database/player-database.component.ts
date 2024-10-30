@@ -13,7 +13,7 @@ import {
 import { Subscription, Subject, startWith } from 'rxjs';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { MatSort, Sort } from '@angular/material/sort';
+import { MatSort } from '@angular/material/sort';
 import { HistoricGamesDatabaseService } from '../../services/historic-games-database.service';
 import { SharedDataService } from 'src/app/shared/services/shared-data.service';
 import { Player } from '../../../../shared/data/interfaces/player-data';
@@ -57,7 +57,7 @@ export class PlayerDatabaseComponent
 	playerDatabaseSubscription: Subscription;
 	isLoading: boolean = true;
 	displayedColumns: string[] = [
-		'n',
+		'intKey',
 		'name',
 		'email',
 		'telephone',
@@ -172,16 +172,14 @@ export class PlayerDatabaseComponent
 				...item,
 				value: {
 					newKey: item.key,
+					intKey: parseInt(item.key, 10),
 					...item.value
 				}
 			};
 		});
 		const mappedDataSource = updatedData.map(item => item.value);
 		this.dataSource.data = mappedDataSource;
-
-		// console.log('dataSource.data: ', this.dataSource.data);
-
-		// console.log('new datasource: ', this.dataSource.data);
+		console.log('Mapped data source: ', this.dataSource.data);
 	}
 	applyFilter(event: Event) {
 		const filterValue = (event.target as HTMLInputElement).value
@@ -190,7 +188,7 @@ export class PlayerDatabaseComponent
 
 		this.dataSource.filter = filterValue;
 		this.searchTerm = filterValue;
-		console.log('filterValue: ', filterValue);
+		// console.log('filterValue: ', filterValue);
 	}
 
 	private refresh() {

@@ -7,7 +7,47 @@
 }
 .head,
 .search {
-	gap: 2rem;
+	width: 100%;
+	gap: 1rem;
+}
+
+.main {
+	gap: 0;
+	margin: 1rem 0 2rem 0;
+}
+
+.table-wrapper {
+	overflow-y: auto;
+	height: auto;
+}
+
+.options {
+	margin-top: 2rem;
+}
+
+@media only screen and (max-width: 500px) {
+	:is(mat-form-field).search-row {
+		height: 66px;
+	}
+	.mdc-button.add-row,
+	.mdc-button.clear-filter {
+		height: 46px !important;
+		width: 4.2rem !important;
+		padding: 0;
+	}
+	.mat-mdc-paginator-page-size-select {
+		width: auto !important;
+	}
+
+	:is(mat-paginator) {
+		.mat-mdc-paginator-container {
+			padding: 0 8px 8px 0;
+			:is(mat-form-field) .mat-mdc-text-field-wrapper.mdc-text-field--no-label {
+				padding: 0 1rem;
+				min-width: auto !important;
+			}
+		}
+	}
 }
 mat-spinner {
 	margin: auto;

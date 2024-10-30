@@ -5,6 +5,7 @@ import { HttpService } from 'src/app/shared/services/http.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CustomSnackbarComponent } from '../../../../shared/custom-snackbar/custom-snackbar.component';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { Subscription } from 'rxjs';
 
 @Component({
 	selector: 'app-import-export',
@@ -13,6 +14,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 })
 export class ImportExportComponent implements OnInit {
 	@ViewChild('deleteDialog') deleteDialog: TemplateRef<MatDialog>;
+	breakpointSubscription: Subscription;
 	currentBreakpoint: string = '';
 	hide: boolean = true;
 	// bridgeWebs
@@ -27,7 +29,7 @@ export class ImportExportComponent implements OnInit {
 	filesDetected: boolean = false;
 	uploadDetected: boolean = false;
 
-	csvMapping: boolean | null = null;
+	csvMapping: boolean = false;
 	gameCode: string = '';
 	dirKey: string = '';
 
@@ -38,6 +40,8 @@ export class ImportExportComponent implements OnInit {
 	bridgeWebUpdating: boolean = false;
 	bwButton: string = 'Update';
 
+	isDesktop: boolean;
+
 	constructor(
 		private fb: FormBuilder,
 		private breakpointService: BreakpointService,
@@ -47,14 +51,26 @@ export class ImportExportComponent implements OnInit {
 	) {}
 
 	ngOnInit(): void {
-		this.breakpointService.currentBreakpoint$.subscribe(bp => {
-			this.currentBreakpoint = bp;
-		});
+		this.breakpointSubscription =
+			this.breakpointService.currentBreakpoint$.subscribe(bp => {
+				this.currentBreakpoint = bp;
+				this.isDesktop = this.checkDesktop();
+			});
 		this.buildBwUpdateFromForm();
 		this.buildBwDownloadForm();
 		this.gameCode = localStorage.getItem('GAME_CODE');
 		this.dirKey = localStorage.getItem('DIR_KEY');
 	}
+	public checkDesktop(): boolean {
+		return (
+			this.currentBreakpoint === 'large' || this.currentBreakpoint === 'xlarge'
+		);
+	}
+	// public getClass() {
+	// 	if (this.csvMapping) {
+	// 		return `${this.currentBreakpoint} + expand`;
+	// 	}
+	// }
 
 	openSnackbar(message: string, noContact?, error?): void {
 		this.snackbar.openFromComponent(CustomSnackbarComponent, {
@@ -83,12 +99,12 @@ export class ImportExportComponent implements OnInit {
 		});
 	}
 
-	public bridgeWebsUpdateFrom() {
+	public updateFromBridgeWebs() {
 		this.setBwState(true);
 		let formData;
 		if (this.bwUpdateForm.valid) {
 			formData = { ...this.bwUpdateForm.value };
-			// console.log('FormData: ', formData);
+			console.log('FormData: ', formData);
 		}
 		const data = { gameCode: this.gameCode, dirKey: this.dirKey, formData };
 
@@ -96,24 +112,29 @@ export class ImportExportComponent implements OnInit {
 
 		this.httpService.dbBwFrom(data).subscribe({
 			next: response => {
-				if (response.success) {
-					this.setBwState(false);
+				if (response) this.setBwState(false);
+				if (response && response.success) {
 					this.snackbar.open(
 						'Success updating database from BridgeWebs. Please refresh the database to see the latest changes.',
 						'Dismiss'
 					);
-				} else if (response.error) {
-					this.setBwState(false);
+				} else if (response && response.success == false) {
+					let errorMessage: string = '';
+					const { clientError } = response;
+					errorMessage =
+						clientError === 'multebu'
+							? 'Two or more identical EBU numbers found'
+							: 'Please contact admin for more help';
 					this.openSnackbar(
 						'Error updating database from BridgeWebs.',
-						true,
-						response.error
+						false,
+						errorMessage
 					);
 				}
 			},
 			error: error => {
 				this.setBwState(false);
-				this.openSnackbar(`Error updating from BridgeWebs. `);
+				this.openSnackbar(`Error updating from BridgeWebs.`, false, error.messaeg);
 			}
 		});
 	}
@@ -128,8 +149,8 @@ export class ImportExportComponent implements OnInit {
 		}
 	}
 
-	triggerMappingContainer(event) {
-		this.csvMapping = true;
+	triggerMappingContainer(event: boolean) {
+		this.csvMapping = event;
 	}
 
 	public bridgeWebsDownload() {
@@ -183,7 +204,7 @@ export class ImportExportComponent implements OnInit {
 					},
 					error: error => {
 						this.snackbar.openFromComponent(CustomSnackbarComponent, {
-							data: { error: error }
+							data: { error: error.message }
 						});
 					}
 				});
@@ -199,5 +220,8 @@ export class ImportExportComponent implements OnInit {
 
 	public onDelete() {
 		this.openDeleteDialog();
+		if (this.breakpointSubscription) {
+			this.breakpointSubscription.unsubscribe();
+		}
 	}
 }

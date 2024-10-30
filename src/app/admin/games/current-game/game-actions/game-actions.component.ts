@@ -159,7 +159,7 @@ export class GameActionsComponent implements OnInit, OnDestroy {
 
 	onPurge() {
 		this.dialogService
-			.openDialog('PURGE')
+			.newOpenDialog('PURGE')
 			.afterClosed()
 			.subscribe(result => {
 				if (result === 'success') {

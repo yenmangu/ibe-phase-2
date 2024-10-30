@@ -1,7 +1,6 @@
 :host {
 	display: block;
-	width: 100%;
-	height: 100%;
+	padding: 0 16px 0 16px;
 }
 
 .iframe-container {
@@ -10,6 +9,165 @@
 	width: 100%;
 	height: 100%;
 	-webkit-overflow-scrolling: touch;
+}
+
+* {
+	font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande',
+		'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+#contentBox {
+	padding-top: 1rem;
+	display: block;
+	height: 100%;
+	width: 100%;
+	max-width: 80rem;
+}
+.controls {
+	margin: auto auto auto 0;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	gap: 1rem;
+}
+.input-wrapper {
+	width: max-content;
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	gap: 1rem;
+	white-space: pre;
+}
+
+.button-wrapper {
+	display: flex;
+	justify-content: flex-start;
+	flex-direction: row;
+	gap: 1rem;
+
+	button {
+		white-space: nowrap;
+		min-width: 44px;
+		min-height: 44px;
+		padding: 10px;
+	}
+}
+
+.input-wrapper {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+}
+
+label {
+	font-size: 0.8rem;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: 1rem;
+}
+label.start-from {
+	width: fit-content;
+}
+
+label {
+	input#startfrom {
+		// width: 2.5rem;
+		// max-width: fit-content;
+		// width: max-content;
+		field-sizing: content;
+		min-width: 2.4rem;
+	}
+	input#gamecode {
+		max-width: 8rem;
+	}
+}
+.wrapper {
+	display: flex;
+	gap: 1rem;
+}
+
+.pdf-download {
+	margin: auto;
+}
+
+.parameters {
+	margin-bottom: 1rem;
+}
+
+.filter-control {
+	margin: 0 0 1rem 0;
+	label {
+		font-size: 14px;
+	}
+}
+
+.spinner {
+	width: 120px;
+	height: 80px;
+}
+
+mat-spinner {
+	width: 60px;
+	height: 60px;
+	margin: auto;
+}
+
+.center {
+	text-align: center;
+}
+
+.table {
+	display: block;
+	max-width: 1280px;
+	width: 100%;
+	margin: auto;
+}
+
+select.table-filter {
+}
+
+table {
+	border-collapse: collapse;
+	table-layout: auto;
+	width: 100%;
+}
+th {
+	font-weight: 600;
+	vertical-align: text-top;
+}
+
+th.details {
+	text-align: left;
+	padding-left: 1rem;
+}
+
+td {
+	font-size: 12px;
+	padding: 0.2rem;
+	border-bottom: 1px solid #008080;
+}
+
+td.id,
+td.gamecode,
+td.command,
+td.date,
+td.unit,
+td.unumber {
+	font-size: 14px;
+	text-wrap: balance;
+}
+
+td.details {
+	font-size: 12px;
+	max-width: 600px;
+	white-space: pre !important;
+	text-wrap: wrap !important;
+	word-wrap: break-word !important;
+}
+.wrap {
+	max-width: 5rem;
+	white-space: pre-wrap;
 }
 
 // .iframe {

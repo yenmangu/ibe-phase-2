@@ -118,9 +118,11 @@ export class AuthService {
 						this.isAuthedSubject.next(false);
 						if (err.error.status === 'ERRORNOUSER') {
 							this.statusSubject.next('NO_USER');
+							return of(false);
 						}
 						if (err.error.status === 'ERRORPASS') {
 							this.statusSubject.next('PASS_ERROR');
+							return of(false);
 						} else {
 							this.statusSubject.next(undefined);
 						}

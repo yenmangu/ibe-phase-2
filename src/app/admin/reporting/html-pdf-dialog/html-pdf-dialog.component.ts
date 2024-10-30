@@ -4,10 +4,15 @@ import { HandActionsHttpService } from 'src/app/shared/services/hand-actions-htt
 import { MatDialogRef } from '@angular/material/dialog';
 import { SharedDataService } from 'src/app/shared/services/shared-data.service';
 import { RevisedProcessCurrentDataService } from '../../games/services/revised-process-current-data.service';
-
+import jsPDF from 'jspdf';
+import * as html2pdf from 'html2pdf.js';
+import html2canvas from 'html2canvas';
+import { DeviceService } from '../../services/device.service';
+import { HtmlPdfService } from '../../services/html-pdf.service';
 @Component({
 	selector: 'app-html-pdf-dialog',
 	templateUrl: './html-pdf-dialog.component.html',
+	// templateUrl: './html.html',
 	styleUrls: ['./html-pdf-dialog.component.scss']
 })
 export class HtmlPdfDialogComponent implements OnInit {
@@ -15,81 +20,86 @@ export class HtmlPdfDialogComponent implements OnInit {
 	gameCode: string = '';
 	dirKey: string = '';
 	eventName: string = '';
+	formValid: boolean = false;
+	public newTab: Window | null = null;
 	constructor(
 		private fb: FormBuilder,
 		private handActionsHttp: HandActionsHttpService,
 		private dialogRef: MatDialogRef<HtmlPdfDialogComponent>,
-		private sharedDataService: SharedDataService,
-		private currentDataService: RevisedProcessCurrentDataService
+		private currentDataService: RevisedProcessCurrentDataService,
+		private deviceService: DeviceService,
+		private htmlPdfService: HtmlPdfService
 	) {}
 
-	ngOnInit(): void {
+	async ngOnInit(): Promise<void> {
 		this.gameCode = localStorage.getItem('GAME_CODE');
 		this.buildHtmlForm();
-		this.getEventName();
-		// this.buildHtmlForm();
+		this.eventName = await this.getEventName();
+		if (this.eventName) {
+			this.htmlPdfForm.patchValue({ eventName: this.eventName });
+		}
 	}
 
-	async getEventName() {
+	async getEventName(): Promise<string> {
 		try {
-			const eventName = await this.currentDataService.getSingleEventName();
-			if (eventName) {
-				this.eventName = eventName;
-			} else {
-				this.eventName = '';
-			}
-			this.htmlPdfForm.patchValue({
-				eventName: this.eventName
-			});
+			return this.currentDataService.getSingleEventName();
 		} catch (error) {
 			console.log('Error retrieving eventName');
+			return '';
 		}
-		// const eventName = this.processCurrentDataService.getData()
 	}
 
 	buildHtmlForm() {
+		console.log('Building form');
+
 		this.htmlPdfForm = this.fb.group({
 			eventName: ['', [Validators.required]],
 			directorName: ['', [Validators.required]],
 			comments: [''],
-			fileType: [''],
+			// fileType: [''],
 			rankings: [false],
 			matrix: [false],
 			hands: [false],
 			scorecards: [false]
 		});
-		this.htmlPdfForm.patchValue({
-			fileType: 'html'
-		});
+		// this.htmlPdfForm.patchValue({
+		// 	fileType: 'html'
+		// });
 	}
+
+	handleRequest(options) {
+		if (options.preview) {
+			if (this.checkIosDevice()) {
+				this.newTab = window.open();
+				options = { ...options, ios: true };
+			}
+		}
+
+		this.handleHtmlPdf(options);
+	}
+
 	handleHtmlPdf(options) {
 		if (this.htmlPdfForm.valid) {
-			const fileType = this.htmlPdfForm.get('fileType').value;
+			// const fileType = this.htmlPdfForm.get('fileType').value;
+			const fileType = 'html';
 			const values = {
 				...this.htmlPdfForm.value,
 				gameCode: this.gameCode,
-				format: 'pdf'
+				fileType: 'html'
 			};
 			console.log('payload: ', values);
 			this.handActionsHttp.htmlPDF(values).subscribe({
 				next: (response: Blob) => {
 					// console.log('response: ', response);
 					// console.log('file type: ', fileType);
-
 					const blob = new Blob([response], {
-						type: fileType === 'pdf' ? 'application/pdf' : 'text/html'
+						// type: fileType === 'pdf' ? 'application/pdf' : 'text/html'
+						type: 'text/html'
 					});
-					const blobURL = window.URL.createObjectURL(blob);
 					if (options.preview) {
-						window.open(blobURL);
+						this.previewBlob(blob, options);
 					} else if (options.download) {
-						const link = document.createElement('a');
-						link.href = blobURL;
-						link.download = `${this.gameCode}.${fileType}`;
-						document.body.appendChild(link);
-						link.click();
-						document.body.removeChild(link);
-						URL.revokeObjectURL(link.href);
+						this.downloadBlob(blob);
 					}
 				},
 				error: error => {
@@ -98,7 +108,30 @@ export class HtmlPdfDialogComponent implements OnInit {
 			});
 		}
 	}
+
+	previewBlob(blob: Blob, options) {
+		if (options.ios) {
+			if (this.newTab) {
+				this.htmlPdfService.handleIos(blob, this.newTab);
+			} else {
+				console.error('Error: Failed to open new tab / window');
+			}
+		} else {
+			this.htmlPdfService.handleOtherDevice(blob);
+		}
+	}
+
+	downloadBlob(blob: Blob) {
+		this.htmlPdfService.handleDownload(blob, this.gameCode);
+	}
+
+	public checkIosDevice(): boolean {
+		return this.deviceService.isIos();
+	}
+
 	closeDialog() {
-		this.dialogRef.close();
+		if (this.dialogRef) {
+			this.dialogRef.close();
+		}
 	}
 }

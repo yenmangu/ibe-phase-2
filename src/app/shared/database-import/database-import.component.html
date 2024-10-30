@@ -6,7 +6,9 @@
 	<app-upload-file
 		(selectedFilesChange)="onFileListChange($event)"
 		(signalUpload)="receiveFile($event)"
-		(cancelSignal)="receiveCancel($event)"></app-upload-file>
+		(cancelSignal)="receiveCancel($event)"
+		(errorSignal)="receiveError($event)"
+		[fileType]="'csv'"></app-upload-file>
 </ng-container>
 <!-- <div
 	class="wrapper"

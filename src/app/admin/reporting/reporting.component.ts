@@ -131,10 +131,9 @@ export class ReportingComponent implements OnInit, OnDestroy {
 	}
 
 	openHtmlPdf() {
-		this.dialog
-			.open(HtmlPdfDialogComponent, { width: '400px' })
-			.afterClosed()
-			.subscribe();
+		if (this.dialog) {
+			this.dialog.open(HtmlPdfDialogComponent, { width: '400px' });
+		}
 	}
 	ngOnDestroy(): void {
 		this.destroy$.next();

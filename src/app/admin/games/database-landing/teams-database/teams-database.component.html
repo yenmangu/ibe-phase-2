@@ -11,19 +11,19 @@
 					(keyup)="applyFilter($event)" />
 			</mat-form-field>
 			<button
+				(click)="onTeamAdd()"
+				class="add-row team"
+				mat-flat-button
+				color="primary">
+				+ Team Name
+			</button>
+			<button
 				*ngIf="dataSource.filter !== ''"
 				class="clear-filter"
 				mat-flat-button
 				color="accent"
 				(click)="clearFilter(input)">
 				Clear
-			</button>
-			<button
-				(click)="onTeamAdd()"
-				class="add-row team"
-				mat-flat-button
-				color="primary">
-				+ Team Name
 			</button>
 		</div>
 	</div>
@@ -36,25 +36,25 @@
 				mat-table
 				[dataSource]="dataSource">
 				<!-- Number Column -->
-				<ng-container matColumnDef="number">
+				<ng-container matColumnDef="intKey">
 					<th
 						mat-header-cell
 						*matHeaderCellDef
-						mat-sort-header="number">
+						mat-sort-header="intKey">
 						#
 					</th>
 					<td
 						mat-cell
 						*matCellDef="let team">
-						{{ team.newKey || '' }}
+						{{ team.intKey || '' }}
 					</td>
 				</ng-container>
 				<!-- Team Column -->
-				<ng-container matColumnDef="team">
+				<ng-container matColumnDef="name">
 					<th
 						mat-header-cell
 						*matHeaderCellDef
-						mat-sort-header="team">
+						mat-sort-header="name">
 						Team
 					</th>
 					<td

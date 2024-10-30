@@ -37,6 +37,13 @@ export const navLinks: NavLink[] = [
 		icon: 'reports'
 	},
 	{
+		routerLink: '/admin/user-actions',
+		label: 'Activity',
+		position: 'bottom',
+		textCol: 'yellow',
+		icon: 'activity'
+	},
+	{
 		routerLink: '/admin/account',
 		label: 'Account Settings',
 		position: 'bottom',

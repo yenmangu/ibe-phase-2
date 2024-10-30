@@ -32,7 +32,6 @@ import { FormControlPipe } from '../form-control.pipe';
 import { PlayerIdentificationComponent } from './game-setup/player-identification/player-identification.component';
 import { AppInterfaceComponent } from './game-setup/app-interface/app-interface.component';
 import { NamingNumberingComponent } from './game-setup/naming-numbering/naming-numbering.component';
-import { UploadDownloadComponent } from './upload-download/upload-download.component';
 import { SharedModule } from '../shared/shared.module';
 import { adminReducer } from '../admin-state/admin.reducer';
 import { HandRecordsLandingComponent } from './hands/hand-records-landing/hand-records-landing.component';
@@ -57,7 +56,6 @@ import { UserActionsComponent } from './user-actions/user-actions.component';
 		FormControlPipe,
 		AppInterfaceComponent,
 		NamingNumberingComponent,
-		UploadDownloadComponent,
 		HandRecordsLandingComponent,
 		HandTabComponent,
 		HandActionsComponent,

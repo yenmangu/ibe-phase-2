@@ -74,8 +74,8 @@ export class DataService implements OnInit, OnDestroy {
 	}
 	public async checkDatabase(data): Promise<any> {
 		try {
-			const storeMapping = this.mapData(data);
-			const playerDbStoreMapping = this.getPlayerDbStoreMapping(data);
+			const storeMapping = await this.mapData(data);
+			const playerDbStoreMapping = await this.getPlayerDbStoreMapping(data);
 
 			// console.log('Player db store mapping: ', playerDbStoreMapping);
 
@@ -120,45 +120,62 @@ export class DataService implements OnInit, OnDestroy {
 	}
 
 	public initialiseDB = async data => {
-		return new Promise<void>(async (resolve, reject) => {
-			try {
-				// console.log('accessing playerdb array test: ', data.playerdb.root[0].item);
-				// console.log('matchType :', this.matchType);
-				const storeMapping = this.mapData(data);
-				const playerDbStoreMapping = this.getPlayerDbStoreMapping(data);
-				this.storeMapping = storeMapping;
-				this.playerDbStoreMapping = playerDbStoreMapping;
-				// console.log('initialiseDB storeMapping: ', storeMapping);
-				await this.indexedDB.initDatabase(
-					storeMapping,
-					playerDbStoreMapping,
-					`${this.dbName}`
-				);
-				// console.log(`database with name of ${this.dbName} initialised`);
+		return new Promise<{ storeMapping: any; playerDbStoreMapping: any }>(
+			async (resolve, reject) => {
+				try {
+					// console.log('accessing playerdb array test: ', data.playerdb.root[0].item);
+					// console.log('matchType :', this.matchType);
+					const storeMapping = await this.mapData(data);
+					const playerDbStoreMapping = await this.getPlayerDbStoreMapping(data);
+					this.storeMapping = storeMapping;
+					this.playerDbStoreMapping = playerDbStoreMapping;
+					// console.log('initialiseDB storeMapping: ', storeMapping);
+					await this.indexedDB.initDatabase(
+						storeMapping,
+						playerDbStoreMapping,
+						`${this.dbName}`
+					);
+					// console.log(`database with name of ${this.dbName} initialised`);
 
-				resolve();
-			} catch (err) {
-				reject(err);
+					resolve({
+						storeMapping: this.storeMapping,
+						playerDbStoreMapping: this.playerDbStoreMapping
+					});
+				} catch (err) {
+					reject(err);
+				}
 			}
-		});
+		);
 	};
 
-	private calculateTotalStores(data: any): number {
-		const playerDbStoreMapping = this.getPlayerDbStoreMapping(data);
-		const storeMapping = this.mapData(data);
+	private async calculateTotalStores(data: any): Promise<number> {
+		const playerDbStoreMapping = await this.getPlayerDbStoreMapping(data);
+		const storeMapping = await this.mapData(data);
 		const playerDBStoreCount = Object.keys(playerDbStoreMapping).length;
 		const storeCount = Object.keys(storeMapping).length;
+		console.log(
+			'player db store count: ',
+			playerDBStoreCount,
+			' store count: ',
+			storeCount
+		);
+
 		return playerDBStoreCount + storeCount;
 	}
 
-	async storeData(data: any): Promise<boolean> {
+	async storeData(dbData: {
+		data: any;
+		storeMapping: any;
+		playerDbStoreMapping: any;
+	}): Promise<boolean> {
 		try {
-			const totalStores = this.calculateTotalStores(data);
-			const playerDbStoreMapping = this.getPlayerDbStoreMapping(data);
-			const storeMapping = this.mapData(data);
+			const { data, storeMapping, playerDbStoreMapping } = dbData;
+			const totalStores = await this.calculateTotalStores(data);
+			// const playerDbStoreMapping = await this.getPlayerDbStoreMapping(data);
+			// const storeMapping = await this.mapData(data);
 
 			this.IDBStatusService.setProgress(totalStores, 0);
-			// console.log('total stores to process: ', totalStores);
+			console.log('total stores to process: ', totalStores);
 
 			const result = await this.indexedDB.initialiseWithGameData(
 				storeMapping,
@@ -176,7 +193,7 @@ export class DataService implements OnInit, OnDestroy {
 		}
 	}
 
-	private getPlayerDbStoreMapping(data: any): any {
+	private async getPlayerDbStoreMapping(data: any): Promise<any> {
 		if (data && data.playerdb.root[0].item) {
 			// console.log('storing player db data');
 			const dataArray: any[] = data.playerdb.root[0].item;
@@ -217,7 +234,7 @@ export class DataService implements OnInit, OnDestroy {
 		}
 	}
 
-	private mapData(data) {
+	private async mapData(data) {
 		// const playerdbObject = this.processData(data);
 		// console.log('initial player object: ', playerdbObject);
 		const {

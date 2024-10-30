@@ -24,19 +24,31 @@ export class UploadFileComponent implements OnInit, AfterViewInit {
 	@Input() isLoading: boolean = false;
 	@Input() uploadSuccess: boolean = false;
 	@ViewChild('dragBox') dragBox: ElementRef;
-	@ViewChild('fileInput') fileInput: ElementRef;
+	@ViewChild('fileInput') fileInput: ElementRef<HTMLInputElement>;
 	@Output() upload = new EventEmitter<any>();
 	@Output() signalUpload = new EventEmitter<boolean>();
 	@Output() signalAgain = new EventEmitter<boolean>();
-	@Output() selectedFilesChange = new EventEmitter<any[]>();
-	@Output() cancelSignal = new EventEmitter<any>();
-	selectedFiles: any[] = [];
+	@Output() selectedFilesChange = new EventEmitter<File[]>();
+	@Output() cancelSignal = new EventEmitter<boolean | null>();
+	@Output() errorSignal = new EventEmitter<any>();
+	selectedFiles: File[] = [];
 
 	constructor(private elementRef: ElementRef, private renderer: Renderer2) {}
 
 	ngOnInit(): void {
 		if (this.selectedFiles.length > 0) {
 			console.log('files in the import export component: ', this.selectedFiles);
+		}
+		if (this.fileInput) {
+			if (typeof this.fileType === 'string' && this.fileType === 'csv') {
+				console.log('Setting file type attribute');
+
+				this.renderer.setAttribute(
+					this.fileInput.nativeElement,
+					'accept',
+					this.fileType
+				);
+			}
 		}
 	}
 
@@ -59,12 +71,39 @@ export class UploadFileComponent implements OnInit, AfterViewInit {
 		this.signalAgain.emit(true);
 		this.selectedFiles = [];
 	}
+
 	onChange(event: Event) {
 		// console.log(event);
+		let fileErrObject: any = {};
+		const failedFiles: File[] = [];
 		const input = event.target as HTMLInputElement;
-		if (input.files) {
-			this.selectedFiles = Array.from(input.files);
+		if (input.files && input.files.length > 0) {
+			const filesArray: File[] = Array.from(input.files);
+			filesArray.forEach(file => {
+				const fName = file.name;
+				const fExtension = fName.slice(((fName.lastIndexOf('.') - 1) >>> 0) + 2);
+				if (
+					this.fileType &&
+					typeof this.fileType === 'string' &&
+					this.fileType !== fExtension
+				) {
+					failedFiles.push(file);
+					fileErrObject.message = 'Wrong file type';
+				} else {
+					this.selectedFiles.push(file);
+				}
+			});
+		} else {
+			fileErrObject.message = 'No files detected';
+			fileErrObject.files = [];
+		}
+		if (this.selectedFiles && this.selectedFiles.length > 0) {
 			this.selectedFilesChange.emit(this.selectedFiles);
+		} else {
+			console.log('Error: ', fileErrObject);
+
+			fileErrObject.files = failedFiles;
+			this.errorSignal.emit(fileErrObject);
 		}
 	}
 
@@ -102,6 +141,7 @@ export class UploadFileComponent implements OnInit, AfterViewInit {
 		console.log('emitFiles invoked with: ', fileArray);
 
 		this.upload.emit(fileArray);
+		this.selectedFilesChange.emit(fileArray);
 	}
 
 	clearFiles() {

@@ -2,8 +2,9 @@
 @import url('../../../../table-styles.scss');
 @import '../../../../colours.styles.scss';
 
-host {
+:host {
 	display: block;
+	width: 100%;
 	max-width: $visible-window;
 	margin: auto;
 	padding-bottom: 2rem;

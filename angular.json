@@ -39,8 +39,8 @@
 							"budgets": [
 								{
 									"type": "initial",
-									"maximumWarning": "2mb",
-									"maximumError": "4mb"
+									"maximumWarning": "4mb",
+									"maximumError": "5mb"
 								},
 								{
 									"type": "anyComponentStyle",
@@ -52,7 +52,11 @@
 						},
 						"server": {
 							"buildOptimizer": false,
-							"optimization": false,
+							"optimization": {
+								"scripts": false,
+								"styles": false,
+								"fonts": false
+							},
 							"vendorChunk": true,
 							"extractLicenses": false,
 							"sourceMap": true,

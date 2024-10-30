@@ -134,5 +134,11 @@ export class IconRegistryService {
 				domain + svgUrlBase + 'menu_icons/rotate.svg'
 			)
 		);
+		this._matIconRegistry.addSvgIcon(
+			'activity',
+			this._domSanitizer.bypassSecurityTrustResourceUrl(
+				domain + svgUrlBase + 'menu_icons/eye-solid.svg'
+			)
+		);
 	}
 }

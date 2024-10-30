@@ -1,7 +1,6 @@
 <div
 	class="container column main"
 	[ngClass]="currentBreakpoint">
-	<h2>Database Operations</h2>
 	<h4>Update to and from BridgeWebs or your computer/device</h4>
 
 	<div
@@ -22,10 +21,21 @@
 						<!-- <app-upload-file
 						(selectedFilesChange)="onFileListChange($event)"
 						(upload)="(selectedFile)"></app-upload-file> -->
-						<app-database-import
-							(signalMapping)="
-								triggerMappingContainer($event)
-							"></app-database-import>
+
+						<ng-container *ngIf="!isDesktop">
+							<div class="desktop-warning container row center">
+								<h3>
+									Not available on mobile or tablet devices. Please switch to a
+									desktop or laptop to import a database file.
+								</h3>
+							</div>
+						</ng-container>
+						<ng-container *ngIf="isDesktop">
+							<app-database-import
+								(signalMapping)="
+									triggerMappingContainer($event)
+								"></app-database-import>
+						</ng-container>
 					</div>
 				</div>
 			</div>
@@ -119,18 +129,17 @@
 									</h3></span
 								>
 							</ng-container>
-
-							<div
-								*ngIf="bridgeWebUpdating"
-								class="container spinner">
-								<mat-spinner></mat-spinner>
-							</div>
+							<ng-container *ngIf="bridgeWebUpdating">
+								<div class="container spinner">
+									<mat-spinner></mat-spinner>
+								</div>
+							</ng-container>
 							<button
 								class="form-button upload"
 								[disabled]="bwUpdateForm.invalid"
 								mat-flat-button
 								color="primary"
-								(click)="bridgeWebsUpdateFrom()">
+								(click)="updateFromBridgeWebs()">
 								{{ bwButton }}
 							</button>
 						</div>

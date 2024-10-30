@@ -7,9 +7,9 @@ export interface DialogModel {
 				title: string;
 				message: string;
 				gameCode?: string | null;
-				email?: string | null;
-				dirKey?: string | null;
-				error?: string;
+				email?: string | null | undefined;
+				dirKey?: string | null | undefined;
+				error?: string | undefined;
 		  }
 		| any;
 }

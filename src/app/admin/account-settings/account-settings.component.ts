@@ -94,7 +94,7 @@ export class AccountSettingsComponent implements OnInit, OnDestroy {
 						if (response.success && response.updated) {
 							this.successMessage = true;
 							this.dialogService
-								.openDialog(
+								.newOpenDialog(
 									'emailUpdateSuccess',
 									undefined,
 									email,
@@ -112,7 +112,7 @@ export class AccountSettingsComponent implements OnInit, OnDestroy {
 					error: error => {
 						const originalData = { ...this.emailForm.value };
 						this.dialogService
-							.openDialog(
+							.newOpenDialog(
 								'errorUpdatingEmail',
 								error,
 								email,
@@ -150,7 +150,7 @@ export class AccountSettingsComponent implements OnInit, OnDestroy {
 						if (response.success && response.updated) {
 							this.successMessage = true;
 							this.dialogService
-								.openDialog(
+								.newOpenDialog(
 									'keyUpdateSuccess',
 									undefined,
 									undefined,
@@ -170,7 +170,7 @@ export class AccountSettingsComponent implements OnInit, OnDestroy {
 					error: error => {
 						const originalData = { ...this.directorKeyForm.value };
 						this.dialogService
-							.openDialog(
+							.newOpenDialog(
 								'errorUpdatingKey',
 								error,
 								undefined,

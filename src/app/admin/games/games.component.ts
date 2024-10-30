@@ -157,8 +157,9 @@ export class GamesComponent implements OnInit, OnDestroy {
 				console.log('db exists');
 				return;
 			} else {
-				await this.dataService.initialiseDB(data);
-				await this.storeInitialData(data);
+				const dbData = await this.dataService.initialiseDB(data);
+				const returnValue = { ...dbData, data: data };
+				await this.storeInitialData(returnValue);
 			}
 			console.log('Store initial data complete');
 		} catch (err) {

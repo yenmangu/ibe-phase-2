@@ -24,6 +24,9 @@ li.nav-link a {
 	align-items: center;
 	gap: 0.4rem;
 }
+li.nav-link.yellow a {
+	color: $ibe-activity-single !important;
+}
 
 li.nav-link a::after {
 	content: '';
@@ -34,6 +37,9 @@ li.nav-link a::after {
 	height: 2px;
 	background-color: $ibe-green-single;
 	transition: width 0.3s ease;
+}
+li.nav-link.yellow a::after {
+	background-color: $ibe-activity-single;
 }
 
 li.nav-link a:hover::after {

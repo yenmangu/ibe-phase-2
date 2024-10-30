@@ -32,9 +32,14 @@ export class CsvService {
 	async extractHeaders(csvData: string): Promise<string[] | null> {
 		try {
 			const rows = csvData.split(/\r\n|\n/);
+			console.log('rows.length: ', rows.length);
 			if (rows.length === 0) {
+				console.log('Returning null');
+
 				return null;
 			}
+			console.log('advancing to header split');
+
 			const headerRow = rows[0];
 			const delimiters = [',', ';', '\t', '|'];
 			const detectedDelimiter = delimiters.find(
@@ -45,9 +50,11 @@ export class CsvService {
 				const headers = headerRow.split(detectedDelimiter);
 				return headers;
 			}
+			console.log('Returning null because no detected delimeter');
+
 			return null;
 		} catch (error) {
-			console.error('Error: ', error);
+			console.error('Error in extract headers: ', error);
 			return null;
 		}
 	}
@@ -111,4 +118,3 @@ export class CsvService {
 		return transformedCSV;
 	}
 }
-

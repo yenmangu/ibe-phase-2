@@ -39,7 +39,7 @@ export class TeamsDatabaseComponent
 	dataSource = new MatTableDataSource<any>();
 	tabChangeSubscription = new Subscription();
 	tabSelected: boolean = false;
-	displayedColumns: string[] = ['number', 'team', 'lastUsed', 'added', 'delete'];
+	displayedColumns: string[] = ['intKey', 'name', 'lastUsed', 'added', 'delete'];
 	searchTerm: string = '';
 	selectedRowData: Team | undefined;
 	currentRemoteDBRevision: string = '';
@@ -166,6 +166,7 @@ export class TeamsDatabaseComponent
 				...item,
 				value: {
 					newKey: item.key,
+					intKey: parseInt(item.key, 10),
 					...item.value
 				}
 			};

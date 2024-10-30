@@ -1,25 +1,8 @@
 @import url('../../../../../table-styles.scss');
 
-.main {
-	gap: 0;
+:host {
+	width: 100%;
+	display: block;
+	margin: auto;
 	margin-top: 1rem;
-}
-
-.table-wrapper {
-	margin-top: 1rem;
-	overflow-y: auto;
-	height: auto;
-}
-
-.options {
-	margin-top: 2rem;
-}
-
-@media only screen and (max-width: 500px) {
-	mat-form-field.search-row {
-		height: 66px;
-	}
-	.mdc-button.add-row {
-		height: 46px;
-	}
 }

@@ -1,4 +1,4 @@
-<div class="container column center">
+<div class="container column center dialog-main">
 	<h3>Download HTML / PDF</h3>
 	<form [formGroup]="htmlPdfForm">
 		<div class="form container column center">
@@ -20,33 +20,38 @@
 					matInput
 					formControlName="comments" />
 			</mat-form-field>
-			<div class="radio container row">
+			<!-- <div class="radio container row">
 				<mat-radio-group
 					formControlName="fileType"
 					aria-label="Select a file type option">
 					<mat-radio-button value="html">HTML</mat-radio-button>
 					<mat-radio-button value="pdf">PDF</mat-radio-button>
 				</mat-radio-group>
-			</div>
-			<div class="checkbox container column">
-				<mat-checkbox formControlName="rankings">Rankings</mat-checkbox>
-				<mat-checkbox formControlName="matrix">Matrix</mat-checkbox>
-				<mat-checkbox formControlName="hands">Hands</mat-checkbox>
-				<mat-checkbox formControlName="scorecards">Scorecards</mat-checkbox>
+			</div> -->
+			<div class="checkbox container row">
+				<div class="container column checkbox-col">
+					<mat-checkbox formControlName="rankings">Rankings</mat-checkbox>
+					<mat-checkbox formControlName="scorecards">Scorecards</mat-checkbox>
+				</div>
+				<div class="container column checkbox-col">
+					<mat-checkbox formControlName="matrix">Matrix</mat-checkbox>
+					<mat-checkbox formControlName="hands">Hands</mat-checkbox>
+				</div>
 			</div>
 			<div class="button-wrapper container row">
 				<button
 					[disabled]="!htmlPdfForm.valid"
 					mat-flat-button
 					color="accent"
-					(click)="handleHtmlPdf({ preview: true })">
+					(click)="handleRequest({ preview: true })">
 					Preview
 				</button>
+
 				<button
 					[disabled]="!htmlPdfForm.valid"
 					mat-flat-button
 					color="primary"
-					(click)="handleHtmlPdf({ download: true })">
+					(click)="handleRequest({ download: true })">
 					Download
 				</button>
 			</div>

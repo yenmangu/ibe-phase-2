@@ -6,6 +6,7 @@ import { AuthService } from '../services/auth.service';
 import { SharedDataService } from 'src/app/shared/services/shared-data.service';
 import { UserDetailsService } from 'src/app/shared/services/user-details.service';
 import { IndexedDatabaseStatusService } from 'src/app/shared/services/indexed-database-status.service';
+import { Subscription } from 'rxjs';
 @Component({
 	selector: 'app-login',
 	templateUrl: './login.component.html',
@@ -16,6 +17,8 @@ export class LoginComponent implements OnInit, OnDestroy {
 	hide = true;
 	hidePassword: boolean = true;
 	loginClicked: boolean = false;
+
+	private statusSubscription: Subscription;
 
 	constructor(
 		private fb: FormBuilder,
@@ -55,42 +58,64 @@ export class LoginComponent implements OnInit, OnDestroy {
 				if (response === false) {
 					console.log('in "response === false" path');
 					this.loginClicked = false;
-
-					this.authService.statusSubject$.subscribe(status => {
-						console.log('auth service status subject: ', status);
-						if (!status || status === undefined) {
-							this.dialogService.openDialog('generalFail');
-							return;
-						}
-						if (status === 'NO_USER') {
-							this.dialogService.openDialog('userFail');
-							return;
-						} else if (status === 'PASS_ERROR') {
-							this.dialogService.openDialog('passFail');
-							return;
-						}
-					});
+					this.handleLoginFailure();
 				} else if (response) {
-					this.userDetailsService.updateEmail(response.directorEmail);
-					this.userDetailsService.updateGameCode(gameCode);
-					this.userDetailsService.updateDirectorKey(dirKey);
-					this.userDetailsService.updateLoggedIn(true);
+					this.handleResponse(response, gameCode, dirKey);
 					this.dialogService.closeAllDialogs();
-					localStorage.setItem('LOGGED_IN', 'true');
-					localStorage.setItem('GAME_CODE', gameCode);
-					localStorage.setItem('DIR_KEY', dirKey);
-					localStorage.setItem('EMAIL', response.directorEmail);
 					this.IDBStatus.resetProgress();
 					this.router.navigate(['/admin']);
 				}
+			},
+			error: error => {
+				console.error('Error: ', error);
 			}
 		});
+	}
+
+	private handleResponse(response, gameCode, dirKey) {
+		this.setStorage(response, gameCode, dirKey);
+		this.updateDetails(response, gameCode, dirKey);
+	}
+
+	private handleLoginFailure() {
+		this.statusSubscription = this.authService.statusSubject$.subscribe(status => {
+			this.dialogService.closeAllDialogs(); // close any open dialogs
+			console.log('Status before conditional branches: ', status);
+			if (!status) {
+				console.log('No status from login');
+
+				this.dialogService.newOpenDialog('generalFail');
+				console.log('General Fail');
+			} else if (status === 'NO_USER') {
+				console.log('No User');
+
+				this.dialogService.newOpenDialog('userFail');
+			} else if (status === 'PASS_ERROR') {
+				console.log('Pass error');
+
+				this.dialogService.newOpenDialog('passFail');
+			}
+		});
+	}
+
+	private setStorage(response, gameCode, dirKey): void {
+		localStorage.setItem('LOGGED_IN', 'true');
+		localStorage.setItem('GAME_CODE', gameCode);
+		localStorage.setItem('DIR_KEY', dirKey);
+		localStorage.setItem('EMAIL', response.directorEmail);
+	}
+
+	private updateDetails(response, gameCode, dirKey): void {
+		this.userDetailsService.updateEmail(response.directorEmail);
+		this.userDetailsService.updateGameCode(gameCode);
+		this.userDetailsService.updateDirectorKey(dirKey);
+		this.userDetailsService.updateLoggedIn(true);
 	}
 
 	openFailDialog() {}
 
 	openRegistrationSuccessDialog() {
-		return this.dialogService.openDialog('registrationSuccess');
+		return this.dialogService.newOpenDialog('registrationSuccess');
 	}
 
 	toggleVisibility() {
@@ -99,9 +124,8 @@ export class LoginComponent implements OnInit, OnDestroy {
 
 	ngOnDestroy(): void {
 		this.loginClicked = false;
+		if (this.statusSubscription) {
+			this.statusSubscription.unsubscribe();
+		}
 	}
 }
-
-// this.sharedDataService.emailSubject.next(response.directorEmail);
-// this.sharedDataService.gameCodeSubject.next(gameCode);
-// this.sharedDataService.dirKeySubject.next(dirKey);

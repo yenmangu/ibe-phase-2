@@ -162,13 +162,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 			)
 			.subscribe(response => {
 				// console.log('Response in component: ', response);
-
-				if (response.authStatus === true) {
+				if (this.authed) {
+					// if (response.authStatus === true) {
+					// 	this.isSuperAdmin = true;
+					// } else if (response.authStatus === false) {
+					// 	this.isSuperAdmin = false;
+					// } else {
+					// 	console.error('Error in verifying admin, ', response);
+					// }
 					this.isSuperAdmin = true;
-				} else if (response.authStatus === false) {
-					this.isSuperAdmin = false;
-				} else {
-					console.error('Error in verifying admin, ', response);
 				}
 			});
 

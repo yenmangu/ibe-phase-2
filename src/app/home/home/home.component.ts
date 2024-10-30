@@ -6,6 +6,7 @@ import { DialogService } from 'src/app/shared/services/dialog.service';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { IndexedDatabaseStatusService } from 'src/app/shared/services/indexed-database-status.service';
 import { BreakpointService } from 'src/app/shared/services/breakpoint.service';
+import { MatDialogRef } from '@angular/material/dialog';
 @Component({
 	selector: 'app-home',
 	templateUrl: './home.component.html',
@@ -16,6 +17,7 @@ export class HomeComponent implements OnInit {
 	currentBreakpoint: string = '';
 
 	gameCode: string = '';
+	dialogRef: MatDialogRef<any> | null = null;
 
 	constructor(
 		private authService: AuthService,
@@ -40,10 +42,14 @@ export class HomeComponent implements OnInit {
 	// openDialog(type: string) : void {}
 
 	openDialog(type: string) {
-		const dialogRef = this.dialogService.openDialog('loginRegisterDialog');
+		if (this.dialogRef) {
+			this.dialogRef.close();
+		}
+
+		this.dialogRef = this.dialogService.newOpenDialog('loginRegisterDialog');
 		if (type === 'login') {
 			// login
-			dialogRef.componentInstance.data = {
+			this.dialogRef.componentInstance.data = {
 				message: 'Please Log In Below',
 				gameCode: '',
 				loginForm: LoginComponent
@@ -51,14 +57,16 @@ export class HomeComponent implements OnInit {
 		}
 		if (type === 'register') {
 			// register
-			dialogRef.componentInstance.data = {
+			this.dialogRef.componentInstance.data = {
 				title: 'Register',
 				message: 'Please Register Below',
 				gameCode: '',
 				registerForm: RegisterComponent
 			};
-			dialogRef.afterClosed().subscribe(result => {
+
+			this.dialogRef.afterClosed().subscribe(result => {
 				console.log('dialog result: ', result);
+				this.dialogRef = null;
 			});
 		}
 	}

@@ -11,15 +11,8 @@ export class BreakpointService {
 	get currentBreakpoint$(): Observable<string> {
 		return this.breakpointObserver.observe(Object.values(Breakpoints)).pipe(
 			map(state => {
-				// console.log('BREAKPOINT: ',state);
-				// console.log('Breakpoint : ', state);
-				// console.log(
-				// 	Object.keys(state.breakpoints).find(bp => state.breakpoints[bp] === true)
-				// );
-
 				let size = '';
 				let width = 0;
-
 				if (state.breakpoints[Breakpoints.XLarge]) {
 					size = 'xlarge';
 				} else if (state.breakpoints[Breakpoints.Large]) {
@@ -31,21 +24,10 @@ export class BreakpointService {
 				} else {
 					size = 'handset';
 				}
-
-				// console.log('breakpoint size as determined by the bp service: ', size);
 				return size;
 			}),
-			// Debugging
-			// tap(value => console.log(value)),
-			// Necessary
 			distinctUntilChanged()
+			// ,tap(size=>console.log('Breakoint Changed with: ', size))
 		);
 	}
 }
-// Further responsiveness
-// @Injectable({
-// 	providedIn: 'root'
-// })
-// export class WindowSizeService {
-// 	constructor(private breakpointObserver: BreakpointObserver) {}
-// }

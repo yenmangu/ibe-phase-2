@@ -1,8 +1,118 @@
-<div class="iframe-container">
-	<iframe
-		class="iframe"
-		#iframeElement
-		src="https://user-actions.ibescore.com#content"
-		frameborder="0"
-		width="100%"></iframe>
+<div
+	id="content"
+	#contentBox>
+	<div class="controls">
+		<div class="input-wrapper">
+			<label for="gamecode"
+				>Game Code
+
+				<input
+					type="text"
+					id="gamecode"
+					[(ngModel)]="params.gameCode"
+					[disabled]="true" />
+			</label>
+			<label
+				class="start-from"
+				for="startfrom">
+				From
+				<input
+					type="number"
+					id="startfrom"
+					min="1"
+					[(ngModel)]="params.startFrom"
+					(keyup.enter)="handleClick()" />
+				days ago
+			</label>
+		</div>
+		<div class="button-wrapper">
+			<button
+				id="execute"
+				(click)="handleClick()"
+				(touchstart)="handleTouchstart($event)">
+				{{ buttonString }}
+			</button>
+			<button
+				id="handlePdf"
+				class="pdf-download"
+				(click)="handlePDF()"
+				(touchstart)="handlePDF()">
+				Download PDF
+			</button>
+		</div>
+	</div>
+	<ng-container *ngIf="fetchingData">
+		<div class="spinner">
+			<mat-spinner></mat-spinner>
+		</div>
+	</ng-container>
+	<div
+		class="canvas"
+		#canvas
+		id="actionCanvas">
+		<div class="parameters">
+			<h4>Game Code: {{ params.gameCode }}</h4>
+			<h4>Start From: {{ params.startFrom }}</h4>
+			<h4
+				*ngIf="dev"
+				style="color: red; text-decoration: underline">
+				DEV MODE
+			</h4>
+		</div>
+
+		<ng-container *ngIf="requestSent">
+			<ng-container *ngIf="errorDisplay.display && errorDisplay.display === true">
+				<h3>{{ errorDisplay.message }}</h3>
+			</ng-container>
+			<ng-container *ngIf="tableReady">
+				<div class="table">
+					<div class="filter-control">
+						<label for="table-filter">Filter by device</label>
+						<select
+							class="table-filter"
+							name="table-filter"
+							id="filter"
+							(change)="onDeviceSelect($event)">
+							<option value="">Choose a device</option>
+							<option
+								*ngFor="let item of uniqueDeviceList"
+								[value]="item">
+								{{ item }}
+							</option>
+						</select>
+						<div class="total">
+							<h4>Total results: {{ filteredResults.length }}</h4>
+						</div>
+					</div>
+					<table
+						#breakdown
+						id="actionTable">
+						<tr>
+							<th>Date & Time</th>
+							<th>Game Code</th>
+							<th>Device ID</th>
+							<th class="wrap">Unit Number</th>
+							<th class="wrap">Unit Type</th>
+							<th>Command</th>
+							<th class="details">Details</th>
+						</tr>
+						<tr *ngFor="let action of filteredResults; let i = index">
+							<td class="date">{{ returnStringDate(action) }}</td>
+							<td class="center gamecode">{{ action.gameCode.gameCode }}</td>
+							<td
+								class="center id"
+								[style.color]="queryObject.deviceColours[action.deviceId]">
+								{{ action.deviceId }}
+							</td>
+
+							<td class="center unumber">{{ action.uNumber.number }}</td>
+							<td class="center unit">{{ action.uType.unitType }}</td>
+							<td class="command">{{ action.command.command }}</td>
+							<td class="details">{{ action.details.details }}</td>
+						</tr>
+					</table>
+				</div>
+			</ng-container>
+		</ng-container>
+	</div>
 </div>

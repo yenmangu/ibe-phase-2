@@ -99,6 +99,8 @@ export class IndexedDatabaseService {
 		totalStores
 	): Promise<boolean> {
 		try {
+			console.log('Total Stores: ', totalStores);
+
 			const data = Object.keys(storeMapping);
 			const playerDbData = Object.keys(playerDbStoreMapping);
 			if (this.db === null) {
@@ -150,7 +152,7 @@ export class IndexedDatabaseService {
 		playerDbStoreMapping: Record<string, any>,
 		storeNames: string[],
 		playerDbStoreNames: string[],
-		progressCallBack: (progress: number) => void
+		progressCallBack: (progress: number, complete?: boolean) => void
 	): Promise<Record<string, any>> {
 		const allStoreNames = storeNames.concat(playerDbStoreNames);
 		try {
@@ -161,7 +163,7 @@ export class IndexedDatabaseService {
 			const tx = this.db.transaction(allStoreNames, 'readwrite');
 
 			tx.oncomplete = () => {
-				progressCallBack(progress);
+				progressCallBack(progress, true);
 			};
 			for (const name of playerDbStoreNames) {
 				let id = 1;
@@ -175,9 +177,11 @@ export class IndexedDatabaseService {
 					for (const element of playerDbStoreMapping[name]) {
 						const value = element;
 						const existingData = await store.get(key);
-						// console.log('key: ', key);
+						// console.log('key: ', key, 'element: ', element);
 
 						const dataToStore = { key, value };
+						// console.log('Data to store: ', dataToStore);
+
 						if (existingData === undefined) {
 							const promise = store.add(dataToStore);
 							playerDbPromises.push(promise);
@@ -259,6 +263,7 @@ export class IndexedDatabaseService {
 			}
 			await Promise.all(playerDbPromises);
 			await Promise.all(storePromises);
+			progressCallBack(progress, true);
 			// await tx.complete;
 			return storeMapping;
 		} catch (err) {

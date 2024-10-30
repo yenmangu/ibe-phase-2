@@ -34,14 +34,12 @@
 			[ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }"
 			>EBU</mat-checkbox
 		>
-		<mat-form-field
-			*ngIf="ebuChecked"
-			[ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }">
+		<mat-form-field [ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }">
 			<mat-label [ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }"
 				>ID Code</mat-label
 			>
 			<input
-				[disabled]="!playerName"
+				[disabled]="!playerName || !ebuChecked"
 				[ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }"
 				matInput
 				[(ngModel)]="ebuId" />
@@ -54,14 +52,12 @@
 			[ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }"
 			>BBO</mat-checkbox
 		>
-		<mat-form-field
-			*ngIf="bboChecked"
-			[ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }">
+		<mat-form-field [ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }">
 			<mat-label [ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }"
 				>ID Code</mat-label
 			>
 			<input
-				[disabled]="!playerName"
+				[disabled]="!playerName || !bboChecked"
 				matInput
 				[(ngModel)]="bboId"
 				[ngClass]="{ 'grey-magenta-theme': applyMagentaGreyTheme }" />

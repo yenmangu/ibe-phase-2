@@ -25,7 +25,6 @@ export class RevisedProcessCurrentDataService {
 	matchTypeSubscription: Subscription;
 	currentMatchType: string = '';
 	isDBinitialised: boolean = false;
-	private destroy$ = new Subject<void>();
 
 	constructor(
 		private indexedDB: IndexedDatabaseService,

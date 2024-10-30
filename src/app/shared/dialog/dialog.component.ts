@@ -51,11 +51,16 @@ export class DialogComponent implements OnInit, OnDestroy {
 
 	onConfirm(): void {
 		this.confirm.emit();
-		this.dialogRef.close();
+		if (this.dialogRef) {
+			this.dialogRef.close();
+			this.dialogRef = null;
+		}
 	}
 
 	emitSuccess(): void {
-		this.dialogRef.close('success');
+		if (this.dialogRef) {
+			this.dialogRef.close('success');
+		}
 	}
 
 	sendDataToComponent(data: any) {
@@ -70,5 +75,7 @@ export class DialogComponent implements OnInit, OnDestroy {
 		this.dialogRef.close();
 	}
 
-	ngOnDestroy(): void {}
+	ngOnDestroy(): void {
+		this.data = null;
+	}
 }

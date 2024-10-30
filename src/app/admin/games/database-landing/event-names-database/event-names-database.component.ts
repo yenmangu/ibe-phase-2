@@ -46,7 +46,7 @@ export class EventNamesDatabaseComponent
 	dataSource = new MatTableDataSource<any>();
 	tabChangeSubscription: Subscription = new Subscription();
 	tabSelected: boolean = false;
-	displayedColumns: string[] = ['number', 'event', 'lastUsed', 'added', 'delete'];
+	displayedColumns: string[] = ['intKey', 'name', 'lastUsed', 'added', 'delete'];
 	searchTerm: string | undefined;
 	selectedRowData: EventInterface | undefined;
 	currentRemoteDBRevision: string = '';
@@ -147,6 +147,7 @@ export class EventNamesDatabaseComponent
 				...item,
 				value: {
 					newKey: item.key,
+					intKey: parseInt(item.key, 10),
 					...item.value
 				}
 			};

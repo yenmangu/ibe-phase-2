@@ -1,18 +1,14 @@
 import { HttpResponse } from '@angular/common/http';
 import {
 	Component,
-	Input,
 	OnInit,
 	ElementRef,
 	TemplateRef,
-	ViewChild,
-	AfterViewInit,
-	Output,
-	EventEmitter
+	ViewChild
 } from '@angular/core';
 import { Renderer2 } from '@angular/core';
 import { AdminToolsService } from 'src/app/shared/services/admin-tools.service';
-import { MatSnackBar, MatSnackBarRef } from '@angular/material/snack-bar';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ResponseData } from 'src/app/shared/services/admin-tools.service';
 
 @Component({

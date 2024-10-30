@@ -24,10 +24,31 @@ export class IndexedDatabaseStatusService {
 		return this.isInitialisedsubject.asObservable();
 	}
 
-	setProgress(totalStores: number, storesAdded: number): void {
+	setProgress(
+		totalStores: number,
+		storesAdded: number,
+		complete: boolean = false
+	): void {
+		if (complete) {
+			this.dataProgressSubject.next(100);
+			this.dataFinishedLoadingSubject.next(true);
+			return;
+		}
 		const initialProgress = 5;
 		const actualProgress = (storesAdded / totalStores) * 95;
 		const totalProgress = initialProgress + actualProgress;
+
+		// console.log(
+		// 	'total stores: ',
+		// 	totalStores,
+		// 	' stores added: ',
+		// 	storesAdded,
+		// 	' total progress: ',
+		// 	totalProgress,
+		// 	' actual progress: ',
+		// 	actualProgress
+		// );
+
 		this.dataProgressSubject.next(totalProgress);
 	}
 

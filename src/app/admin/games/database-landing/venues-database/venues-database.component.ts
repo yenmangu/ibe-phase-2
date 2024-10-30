@@ -44,7 +44,7 @@ export class VenuesDatabaseComponent
 	dataSource = new MatTableDataSource<any>();
 	tabChangeSubscription = new Subscription();
 	tabSelected: boolean = false;
-	displayedColumns: string[] = ['number', 'venue', 'lastUsed', 'added', 'delete'];
+	displayedColumns: string[] = ['intKey', 'name', 'lastUsed', 'added', 'delete'];
 	selectedRowData: Venue | undefined;
 	searchTerm: string = '';
 	currentRemoteDBRevision: string = '';
@@ -72,8 +72,12 @@ export class VenuesDatabaseComponent
 	}
 
 	ngAfterViewInit(): void {
-		if (this.paginator) {
+		if (this.table) {
+			this.table.updateStickyHeaderRowStyles();
+		}
+		if (this.paginator && this.sort) {
 			this.dataSource.paginator = this.paginator;
+			this.dataSource.sort = this.sort;
 		}
 	}
 
@@ -155,6 +159,7 @@ export class VenuesDatabaseComponent
 				...item,
 				value: {
 					newKey: item.key,
+					intKey: parseInt(item.key, 10),
 					...item.value
 				}
 			};

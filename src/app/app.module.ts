@@ -26,6 +26,7 @@ import { IconRegistryService } from './shared/services/icon-registry.service';
 import { FontSizeDirective } from './font-size.directive';
 import { ResponseInterceptor } from './response.interceptor';
 import { AdminModule } from './admin/admin.module';
+import { TimeoutInterceptor } from './timeout.interceptor';
 
 // Pipes
 // import { KeysPipe } from './shared/pipes/keys.pipe';
@@ -53,6 +54,7 @@ import { AdminModule } from './admin/admin.module';
 		StoreModule.forRoot({}, {})
 	],
 	providers: [
+		{ provide: HTTP_INTERCEPTORS, useClass: TimeoutInterceptor, multi: true },
 		{ provide: MatDialogModule, useValue: {} },
 		{ provide: MatDialogRef, useValue: {} },
 		// { provide: HTTP_INTERCEPTORS, useClass: ResponseInterceptor, multi: true },
