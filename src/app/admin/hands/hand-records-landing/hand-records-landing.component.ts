@@ -1,16 +1,30 @@
-import { Component, OnInit } from '@angular/core';
+import {
+	Component,
+	OnInit,
+	QueryList,
+	TemplateRef,
+	ViewChild,
+	ViewChildren,
+	AfterContentInit,
+	AfterViewInit
+} from '@angular/core';
 import { catchError, tap } from 'rxjs';
 import { HandActionsHttpService } from 'src/app/shared/services/hand-actions-http.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component';
 import { BreakpointService } from 'src/app/shared/services/breakpoint.service';
+import { NgTemplateNameDirective } from 'src/app/directives/ng-template-name.directive';
+
 @Component({
 	selector: 'app-hand-records-landing',
 	templateUrl: './hand-records-landing.component.html',
 	styleUrls: ['./hand-records-landing.component.scss']
 })
-export class HandRecordsLandingComponent implements OnInit {
+export class HandRecordsLandingComponent implements OnInit, AfterViewInit {
+	@ViewChildren(NgTemplateNameDirective)
+	private tabTemplates!: QueryList<NgTemplateNameDirective>;
+
 	filesEmitted: File[] = [];
 	uploadSuccess: boolean = false;
 	gameCode: string = '';
@@ -22,6 +36,18 @@ export class HandRecordsLandingComponent implements OnInit {
 	selectedTabIndex = 1;
 
 	currentBreakpoint: string;
+
+	// Tabs
+	templateMap: { [key: string]: TemplateRef<any> } = {};
+	activeTab: TemplateRef<any>;
+
+	// BridgeWebs
+	bwAccountName: string;
+	bwAccountPassword: string;
+	bwDirectorName: string;
+	bwEventName: string;
+	bwScorerName: string;
+	bwMasterPoints: boolean;
 
 	constructor(
 		private handActions: HandActionsHttpService,
@@ -36,6 +62,14 @@ export class HandRecordsLandingComponent implements OnInit {
 		this.breakpointsService.currentBreakpoint$.subscribe(
 			bp => (this.currentBreakpoint = bp)
 		);
+	}
+
+	ngAfterViewInit(): void {
+		console.log('templates: ', this.tabTemplates.toArray());
+		this.tabTemplates.forEach(template => {
+			const tabName = template.templateName;
+			this.templateMap[tabName] = template.templateRef;
+		});
 	}
 
 	handleFiles(files: File[]) {
@@ -60,6 +94,13 @@ export class HandRecordsLandingComponent implements OnInit {
 				}
 			});
 		}
+	}
+
+	public setActiveTab(event: MouseEvent): void {
+		const clickedElement = event.currentTarget as HTMLElement;
+		clickedElement.classList.add('active');
+		const tabName = clickedElement.getAttribute('tabname');
+		this.activeTab = this.templateMap[tabName];
 	}
 
 	resetStatus() {

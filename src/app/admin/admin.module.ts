@@ -45,6 +45,7 @@ import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.componen
 import { EbuXmlDialogComponent } from './reporting/ebu-xml-dialog/ebu-xml-dialog.component';
 import { UploadPbnComponent } from './admin-tools/upload-pbn/upload-pbn.component';
 import { UserActionsComponent } from './user-actions/user-actions.component';
+import { NgTemplateNameDirective } from '../directives/ng-template-name.directive';
 @NgModule({
 	declarations: [
 		NavigationComponent,

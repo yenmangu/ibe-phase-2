@@ -1,4 +1,14 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+	Component,
+	OnDestroy,
+	OnInit,
+	AfterViewInit,
+	ViewChildren,
+	QueryList,
+	TemplateRef,
+	ElementRef,
+	ChangeDetectorRef
+} from '@angular/core';
 import { HandActionsHttpService } from 'src/app/shared/services/hand-actions-http.service';
 import { BreakpointService } from 'src/app/shared/services/breakpoint.service';
 import { saveAs } from 'file-saver';
@@ -9,18 +19,30 @@ import { HtmlPdfDialogComponent } from './html-pdf-dialog/html-pdf-dialog.compon
 import { EbuXmlDialogComponent } from './ebu-xml-dialog/ebu-xml-dialog.component';
 import { AccountSettingsService } from '../services/account-settings.service';
 import { Subject, takeUntil } from 'rxjs';
+import { NgTemplateNameDirective } from 'src/app/directives/ng-template-name.directive';
+import { SharedDataService } from 'src/app/shared/services/shared-data.service';
 @Component({
 	selector: 'app-reporting',
 	templateUrl: './reporting.component.html',
 	styleUrls: ['./reporting.component.scss']
 })
-export class ReportingComponent implements OnInit, OnDestroy {
+export class ReportingComponent implements OnInit, AfterViewInit, OnDestroy {
+	@ViewChildren(NgTemplateNameDirective)
+	private templates!: QueryList<NgTemplateNameDirective>;
+	@ViewChildren('tabHeader') private tabHeaders!: QueryList<ElementRef>;
 	currentBreakpoint: string = '';
 	gameCode: string = '';
+	eventName: string = '';
 	bridgewebsForm: FormGroup;
 	bridgeWebsMasterPoints: boolean = false;
 
 	accountData: any;
+	bwAccount: string;
+
+	// Tabs
+	private tabHeaderArray: HTMLElement[] = [];
+	private templateMap: { [key: string]: TemplateRef<any> } = {};
+	public activeTab: TemplateRef<any> | null = null;
 
 	private destroy$ = new Subject<void>();
 
@@ -28,10 +50,14 @@ export class ReportingComponent implements OnInit, OnDestroy {
 		private handActionsHttp: HandActionsHttpService,
 		private breakpointService: BreakpointService,
 		private accountSettings: AccountSettingsService,
+		private sharedDataService: SharedDataService,
 		private fb: FormBuilder,
 		private snackbar: MatSnackBar,
-		private dialog: MatDialog
-	) {}
+		private dialog: MatDialog,
+		private cdr: ChangeDetectorRef
+	) {
+		this.buildBridgeWebsForm();
+	}
 
 	ngOnInit(): void {
 		this.breakpointService.currentBreakpoint$
@@ -47,22 +73,104 @@ export class ReportingComponent implements OnInit, OnDestroy {
 				if (data) {
 					this.accountData = data;
 					console.log('Account Data in Component: ', this.accountData);
+					this.patchFormValues();
 				}
 			});
+		// this.sharedDataService.eventName$.subscribe(eventName => {
+		// 	this.eventName = eventName !== null ? eventName : 'Un Named Event';
+		// });
+
 		this.accountSettings.fetchAccountSettings();
+		this.bridgewebsForm
+			.get('bwMasterpoints')
+			.valueChanges.subscribe((checked: boolean) => {
+				this.bridgeWebsMasterPoints = checked;
+				if (!checked) {
+					this.bridgewebsForm.patchValue({ masterpointsMatchWon: false });
+				}
+			});
 	}
 
-	// buildBridgeWebsForm() {
-	// 	this.bridgewebsForm = this.fb.group({
-	// 		eventName: [''],
-	// 		directorName: ['', [Validators.pattern('^[a-zA-Z]+$')]],
-	// 		scorerName: [''],
-	// 		bridgeWebsAccount: [''],
-	// 		masterpoints: [false],
-	// 		masterpointsMatchWon: [false],
-	// 		password: ['']
-	// 	});
-	// }
+	ngAfterViewInit(): void {
+		this.buildTabHeaderArray();
+		this.buildTemplateMap();
+		setTimeout(() => {
+			this.setActiveTab('handRecords');
+		});
+	}
+
+	private patchFormValues(): void {
+		if (this.accountData.bwDetails?.bwAccount) {
+			this.bwAccount = this.accountData.bwDetails.bwAccount;
+		} else this.bwAccount = '';
+		this.bridgewebsForm.get('bwEventName').patchValue(this.accountData.eventName);
+		this.bridgewebsForm.get('bwAccountName').patchValue(this.bwAccount);
+	}
+
+	private buildTabHeaderArray(): void {
+		this.tabHeaders.forEach(item => {
+			this.tabHeaderArray.push(item.nativeElement as HTMLElement);
+		});
+	}
+
+	private buildTemplateMap(): void {
+		this.templates.forEach(template => {
+			const templateName = template.templateName;
+			this.templateMap[templateName] = template.templateRef;
+		});
+	}
+
+	buildBridgeWebsForm() {
+		this.bridgewebsForm = this.fb.group({
+			bwEventName: [this.eventName],
+			bwDirectorName: ['', [Validators.pattern('^[a-zA-Z]+$')]],
+			bwScorerName: [''],
+			bwMasterpoints: [false],
+			masterpointsMatchWon: [false],
+			bwAccountName: ['', [Validators.required]],
+			bwPassword: ['', [Validators.required]]
+		});
+	}
+
+	public clearForm() {
+		this.bridgewebsForm.reset();
+		this.patchFormValues();
+	}
+
+	onTabClick(event: MouseEvent): void {
+		this.removeActiveTab();
+		const clickedElement = event.currentTarget as HTMLElement;
+		const tabName = clickedElement.getAttribute('tabname');
+		this.setTabClass(clickedElement);
+		this.setActiveTab(tabName);
+	}
+
+	setTabClass(htmlElement: HTMLElement): void {
+		htmlElement.classList.add('active');
+	}
+
+	removeActiveTab(): void {
+		const currentActiveTab = document.querySelector('.tab-header.active');
+		if (currentActiveTab) {
+			currentActiveTab.classList.remove('active');
+		}
+	}
+
+	setActiveTab(tabName: string): void {
+		this.getActiveTabHeader(tabName);
+		this.activeTab = this.templateMap[tabName];
+	}
+
+	getActiveTabHeader(tabName: string): void {
+		this.tabHeaderArray.forEach(tabHeader => {
+			const tabnameAttribute = tabHeader.getAttribute('tabname');
+			if (tabnameAttribute === tabName) {
+				tabHeader.classList.add('active');
+			} else {
+				tabHeader.classList.remove('active');
+			}
+		});
+	}
 
 	uploadBridgeWebs() {}
 	downloadBridgeWebs() {

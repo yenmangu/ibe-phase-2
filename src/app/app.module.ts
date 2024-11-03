@@ -27,6 +27,7 @@ import { FontSizeDirective } from './font-size.directive';
 import { ResponseInterceptor } from './response.interceptor';
 import { AdminModule } from './admin/admin.module';
 import { TimeoutInterceptor } from './timeout.interceptor';
+import { NgTemplateNameDirective } from './directives/ng-template-name.directive';
 
 // Pipes
 // import { KeysPipe } from './shared/pipes/keys.pipe';
@@ -53,6 +54,7 @@ import { TimeoutInterceptor } from './timeout.interceptor';
 		AdminModule,
 		StoreModule.forRoot({}, {})
 	],
+	exports: [],
 	providers: [
 		{ provide: HTTP_INTERCEPTORS, useClass: TimeoutInterceptor, multi: true },
 		{ provide: MatDialogModule, useValue: {} },

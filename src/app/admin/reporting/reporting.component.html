@@ -1,31 +1,133 @@
-<div
-	class="container column center"
-	[ngClass]="currentBreakpoint">
-	<h3>Download the game file</h3>
-	<div class="container row button-container">
-		<button
-			mat-flat-button
-			color="primary"
-			(click)="openEbu()">
-			XML
-		</button>
-
-		<button
-			mat-flat-button
-			color="primary"
-			(click)="downloadBridgeWebs()">
-			CSV
-		</button>
-		<button
-			mat-flat-button
-			color="primary"
-			(click)="openHtmlPdf()">
-			<!-- HTML/PDF -->
-			HTML
-		</button>
+<div class="main">
+	<div class="tabs container">
+		<ul class="tab-headers">
+			<li
+				#tabHeader
+				class="tab-header hand-records"
+				tabname="handRecords"
+				(click)="onTabClick($event)">
+				<span> <h2>Hand Records</h2> </span>
+			</li>
+			<li
+				#tabHeader
+				class="tab-header bridge-webs"
+				tabname="bridgeWebs"
+				(click)="onTabClick($event)">
+				<span><h2>BridgeWebs</h2></span>
+			</li>
+		</ul>
 	</div>
-	<div class="container column center"></div>
+	<div class="tab-content">
+		<ng-container *ngTemplateOutlet="activeTab"></ng-container>
+	</div>
 </div>
+
+<ng-template templateName="handRecords">
+	<div
+		class="container column center"
+		[ngClass]="currentBreakpoint">
+		<h3>Download the game file</h3>
+		<div class="container row button-container">
+			<button
+				mat-flat-button
+				color="primary"
+				(click)="openEbu()">
+				XML
+			</button>
+
+			<button
+				mat-flat-button
+				color="primary"
+				(click)="downloadBridgeWebs()">
+				CSV
+			</button>
+			<button
+				mat-flat-button
+				color="primary"
+				(click)="openHtmlPdf()">
+				<!-- HTML/PDF -->
+				HTML
+			</button>
+		</div>
+		<div class="container column center"></div>
+	</div>
+</ng-template>
+
+<ng-template
+	#bridgewebs
+	templateName="bridgeWebs">
+	<div class="container bw-form">
+		<form [formGroup]="bridgewebsForm">
+			<div class="container game-details">
+				<h3>Game Details</h3>
+				<mat-form-field>
+					<mat-label> Event Name </mat-label>
+					<input
+						matInput
+						formControlName="bwEventName" />
+				</mat-form-field>
+				<mat-form-field>
+					<mat-label> Director Name </mat-label>
+					<input
+						matInput
+						formControlName="bwDirectorName" />
+				</mat-form-field>
+				<mat-form-field>
+					<mat-label> Scorer Name </mat-label>
+					<input
+						matInput
+						formControlName="bwScorerName" />
+				</mat-form-field>
+				<div class="container column checkbox-col">
+					<mat-checkbox formControlName="bwMasterpoints"
+						>Include Masterpoints</mat-checkbox
+					>
+					<ng-container *ngIf="bridgeWebsMasterPoints">
+						<mat-checkbox formControlName="masterpointsMatchWon"
+							>Masterpoints per match won</mat-checkbox
+						>
+					</ng-container>
+				</div>
+			</div>
+			<div class="container account-details">
+				<h3>BridgeWebs Account</h3>
+				<mat-form-field>
+					<mat-label>Username</mat-label>
+					<input
+						matInput
+						formControlName="bwAccountName" />
+				</mat-form-field>
+				<mat-form-field>
+					<mat-label>Password</mat-label>
+					<input
+						matInput
+						formControlName="bwPassword" />
+				</mat-form-field>
+			</div>
+			<div class="container row button-wrapper">
+				<button
+					mat-flat-button
+					color="primary"
+					[disabled]="!bridgewebsForm.valid">
+					Upload
+				</button>
+				<button
+					mat-flat-button
+					color="accent"
+					[disabled]="!bridgewebsForm.valid">
+					Download
+				</button>
+				<button
+					mat-flat-button
+					[disabled]="bridgewebsForm.pristine"
+					color="warn"
+					(click)="clearForm()">
+					Reset
+				</button>
+			</div>
+		</form>
+	</div>
+</ng-template>
 
 <!-- <ng-container *ngIf="currentBreakpoint !== 'handset'">
 	<div class="container row main">

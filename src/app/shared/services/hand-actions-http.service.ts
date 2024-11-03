@@ -56,7 +56,7 @@ export class HandActionsHttpService {
 
 	uploadBridgeWebs(data) {
 		const payload = { ...data, upload: true };
-		return this.http.post(`${this.apiUrl}/hand-actions/masterpoints`, payload);
+		return this.http.post(`${this.apiUrl}/hand-actions/upload-bridgewebs`, payload);
 	}
 
 	downloadBridgeWebs(data) {

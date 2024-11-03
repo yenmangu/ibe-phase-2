@@ -10,7 +10,10 @@
 // :host ::ng-deep mat-progress-bar .mdc-linear-progress__bar-inner {
 // 	border-top-width: 20px
 // }
-
+.current-label > .breadcrumb {
+	font-size: 1.8rem;
+	text-decoration: underline;
+}
 .loading {
 	justify-content: center;
 	align-items: center;

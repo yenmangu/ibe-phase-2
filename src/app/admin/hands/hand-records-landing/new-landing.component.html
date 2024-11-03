@@ -1,0 +1,79 @@
+<div class="main">
+	<div class="container tab-headers">
+		<ul class="tab-headers">
+			<li
+				class="tab-header hand-records"
+				tabname="handRecords"
+				(click)="setActiveTab($event)">
+				<div class="container">
+					<span>Hand Records</span>
+				</div>
+			</li>
+			<li
+				class="tab-header current-deal"
+				tabname="currentDeal"
+				(click)="setActiveTab($event)">
+				<div class="container">
+					<span>Current Deal File</span>
+				</div>
+			</li>
+			<li
+				class="tab-header bridge-webs"
+				tabname="bridgeWebs"
+				(click)="setActiveTab($event)">
+				<div class="container">
+					<span>BridgeWebs</span>
+				</div>
+			</li>
+		</ul>
+	</div>
+	<div class="container tab-content"></div>
+	<ng-container [ngTemplateOutlet]="activeTab"> </ng-container>
+</div>
+
+<!-- Tab Templates -->
+<ng-template templateName="handRecords">Hand Records</ng-template>
+<ng-template
+	#currentDeal
+	templateName="currentDeal"
+	>Current Deal</ng-template
+>
+<ng-template
+	#bridgewebs
+	templateName="bridgeWebs">
+	<div class="container bw-form">
+		<h3>Game Details</h3>
+		<mat-form-field>
+			<mat-label> Event Name </mat-label>
+			<input
+				matInput
+				[(ngModel)]="bwEventName" />
+		</mat-form-field>
+		<mat-form-field>
+			<mat-label> Director Name </mat-label>
+			<input
+				matInput
+				[(ngModel)]="bwDirectorName" />
+		</mat-form-field>
+		<mat-form-field>
+			<mat-label> Scorer Name </mat-label>
+			<input
+				matInput
+				[(ngModel)]="bwScorerName" />
+		</mat-form-field>
+
+		<h3>BridgeWebs Account</h3>
+		<mat-form-field>
+			<mat-label>Username</mat-label>
+			<input
+				matInput
+				[(ngModel)]="bwAccountName" />
+		</mat-form-field>
+		<mat-form-field>
+			<mat-label>Password</mat-label>
+			<input
+				matInput
+				[(ngModel)]="bwAccountPassword" />
+		</mat-form-field>
+	</div>
+</ng-template>

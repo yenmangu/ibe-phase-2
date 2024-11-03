@@ -34,6 +34,7 @@ import { LinExtractionComponent } from './lin-extraction/lin-extraction.componen
 import { HeaderNavComponent } from './header-nav/header-nav.component';
 import { HeaderNavDrawerComponent } from './header-nav-drawer/header-nav-drawer.component';
 import { SafeUrlPipe } from './pipes/safe-url.pipe';
+import { NgTemplateNameDirective } from '../directives/ng-template-name.directive';
 // Modules
 
 @NgModule({
@@ -61,7 +62,8 @@ import { SafeUrlPipe } from './pipes/safe-url.pipe';
 		LinExtractionComponent,
 		HeaderNavComponent,
 		HeaderNavDrawerComponent,
-		SafeUrlPipe
+		SafeUrlPipe,
+		NgTemplateNameDirective
 	],
 	imports: [
 		CommonModule,
@@ -84,7 +86,8 @@ import { SafeUrlPipe } from './pipes/safe-url.pipe';
 		DatabaseImportComponent,
 		CsvMappingComponent,
 		HeaderNavComponent,
-		SafeUrlPipe
+		SafeUrlPipe,
+		NgTemplateNameDirective
 	],
 
 	providers: [
