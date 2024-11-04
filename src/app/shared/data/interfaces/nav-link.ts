@@ -4,4 +4,5 @@ export interface NavLink {
 	position: 'top' | 'bottom';
 	textCol: string;
 	icon?: string;
+	aria: string;
 }

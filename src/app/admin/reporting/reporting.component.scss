@@ -83,8 +83,8 @@ ul li.bridge-webs span::after {
 	background-color: $ibe-magenta-single;
 }
 
-li.tab-header.active span::after {
-	width: 100%;
+ul li.tab-header span.active::after {
+	width: 100% !important;
 }
 
 // BridgeWebs tab
@@ -122,4 +122,9 @@ li.tab-header.active span::after {
 	display: flex;
 	flex-direction: column;
 	gap: 0.4rem;
+}
+mat-spinner {
+	width: 40px !important;
+	height: 40px !important;
+	max-width: 40px !important;
 }

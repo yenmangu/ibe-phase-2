@@ -21,6 +21,7 @@ import { AccountSettingsService } from '../services/account-settings.service';
 import { Subject, takeUntil } from 'rxjs';
 import { NgTemplateNameDirective } from 'src/app/directives/ng-template-name.directive';
 import { SharedDataService } from 'src/app/shared/services/shared-data.service';
+import { CustomSnackbarComponent } from 'src/app/shared/custom-snackbar/custom-snackbar.component';
 @Component({
 	selector: 'app-reporting',
 	templateUrl: './reporting.component.html',
@@ -38,6 +39,14 @@ export class ReportingComponent implements OnInit, AfterViewInit, OnDestroy {
 
 	accountData: any;
 	bwAccount: string;
+
+	bwStatus: {
+		uploading: boolean;
+		downloading: boolean;
+	} = {
+		uploading: false,
+		downloading: false
+	};
 
 	// Tabs
 	private tabHeaderArray: HTMLElement[] = [];
@@ -123,7 +132,7 @@ export class ReportingComponent implements OnInit, AfterViewInit, OnDestroy {
 	buildBridgeWebsForm() {
 		this.bridgewebsForm = this.fb.group({
 			bwEventName: [this.eventName],
-			bwDirectorName: ['', [Validators.pattern('^[a-zA-Z]+$')]],
+			bwDirectorName: ['', [Validators.pattern('^[a-zA-Z\\s]+$')]],
 			bwScorerName: [''],
 			bwMasterpoints: [false],
 			masterpointsMatchWon: [false],
@@ -137,6 +146,12 @@ export class ReportingComponent implements OnInit, AfterViewInit, OnDestroy {
 		this.patchFormValues();
 	}
 
+	private openSnackbar(message: string, noContact?: boolean, error?: any): void {
+		this.snackbar.openFromComponent(CustomSnackbarComponent, {
+			data: { message, error, noContact }
+		});
+	}
+
 	onTabClick(event: MouseEvent): void {
 		this.removeActiveTab();
 		const clickedElement = event.currentTarget as HTMLElement;
@@ -146,11 +161,12 @@ export class ReportingComponent implements OnInit, AfterViewInit, OnDestroy {
 	}
 
 	setTabClass(htmlElement: HTMLElement): void {
-		htmlElement.classList.add('active');
+		// htmlElement.classList.add('active');
+		htmlElement.firstElementChild.classList.add('active');
 	}
 
 	removeActiveTab(): void {
-		const currentActiveTab = document.querySelector('.tab-header.active');
+		const currentActiveTab = document.querySelector('span.active');
 		if (currentActiveTab) {
 			currentActiveTab.classList.remove('active');
 		}
@@ -172,7 +188,44 @@ export class ReportingComponent implements OnInit, AfterViewInit, OnDestroy {
 		});
 	}
 
-	uploadBridgeWebs() {}
+	resetBridgewebs(): void {
+		this.bwStatus.downloading = false;
+		this.bwStatus.uploading = false;
+	}
+
+	uploadBridgeWebs() {
+		console.log('upload bridgewebs invoked');
+		this.bwStatus.uploading = true;
+		const data = { payload: this.bridgewebsForm.value, gameCode: this.gameCode };
+
+		this.handActionsHttp.uploadBridgeWebs(data).subscribe({
+			next: response => {
+				this.resetBridgewebs();
+				console.log('Response: ', response);
+				this.snackbar.open('Success uploading to BridgeWebs', 'Dismiss');
+			},
+			error: err => {
+				this.resetBridgewebs();
+				const {
+					error: { remoteSuccess }
+				} = err;
+				const errorArr: string[] = remoteSuccess.error;
+				let errorString: string;
+				if (remoteSuccess && remoteSuccess.error.length) {
+					errorString = errorArr.join(', ');
+				}
+				this.openSnackbar(
+					'Error uploading game file to BridgeWebs',
+					false,
+					errorString ? errorString : 'Unknown Error'
+				);
+
+				console.log('error: ', remoteSuccess.error);
+
+				this.openSnackbar(err.remoteSuccess.error[0]);
+			}
+		});
+	}
 	downloadBridgeWebs() {
 		console.log('download bridgewebs invoked');
 		const payload = { gameCode: this.gameCode };

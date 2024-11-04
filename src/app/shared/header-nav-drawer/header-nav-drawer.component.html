@@ -9,7 +9,8 @@
 					[routerLink]="link.routerLink"
 					[routerLinkActive]="['active-link']"
 					class="nav-link"
-					(click)="handleLinkClick()">
+					(click)="handleLinkClick()"
+					[attr.aria-label]="link.aria">
 					<mat-icon
 						class="icon"
 						[svgIcon]="link.icon"></mat-icon

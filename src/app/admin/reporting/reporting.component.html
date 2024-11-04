@@ -6,7 +6,7 @@
 				class="tab-header hand-records"
 				tabname="handRecords"
 				(click)="onTabClick($event)">
-				<span> <h2>Hand Records</h2> </span>
+				<span class="active"> <h2>Hand Records</h2> </span>
 			</li>
 			<li
 				#tabHeader
@@ -105,18 +105,39 @@
 				</mat-form-field>
 			</div>
 			<div class="container row button-wrapper">
-				<button
-					mat-flat-button
-					color="primary"
-					[disabled]="!bridgewebsForm.valid">
-					Upload
-				</button>
-				<button
-					mat-flat-button
-					color="accent"
-					[disabled]="!bridgewebsForm.valid">
-					Download
-				</button>
+				<div class="upload">
+					<ng-container *ngIf="!bwStatus.uploading">
+						<button
+							mat-flat-button
+							color="primary"
+							(click)="uploadBridgeWebs()"
+							[disabled]="!bridgewebsForm.valid || bwStatus.uploading">
+							Upload
+						</button>
+					</ng-container>
+					<ng-container *ngIf="bwStatus.uploading">
+						<mat-spinner class="upload"></mat-spinner>
+					</ng-container>
+				</div>
+
+				<ng-container *ngIf="false">
+					<div class="download">
+						<ng-container *ngIf="!bwStatus.downloading">
+							<button
+								mat-flat-button
+								color="accent"
+								[disabled]="!bridgewebsForm.valid">
+								Download
+							</button>
+						</ng-container>
+						<ng-container *ngIf="bwStatus.downloading">
+							<mat-spinner
+								color="accent"
+								class="download"></mat-spinner>
+						</ng-container>
+					</div>
+				</ng-container>
+
 				<button
 					mat-flat-button
 					[disabled]="bridgewebsForm.pristine"

@@ -54,9 +54,16 @@ export class HandActionsHttpService {
 		});
 	}
 
-	uploadBridgeWebs(data) {
-		const payload = { ...data, upload: true };
-		return this.http.post(`${this.apiUrl}/hand-actions/upload-bridgewebs`, payload);
+	uploadBridgeWebs(data: { gameCode: string; payload: any }): Observable<any> {
+		console.log('upload bridge webs http service with: ', data);
+
+		const params = new HttpParams().set('gameCode', data.gameCode);
+		params.set('gameCode', data.gameCode);
+		return this.http.post(
+			`${this.apiUrl}/hand-actions/upload-bridgewebs`,
+			data.payload,
+			{ params: params }
+		);
 	}
 
 	downloadBridgeWebs(data) {
