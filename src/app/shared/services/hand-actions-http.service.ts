@@ -1,5 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import {
+	HttpClient,
+	HttpContext,
+	HttpHeaders,
+	HttpParams
+} from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 @Injectable({
@@ -66,16 +71,57 @@ export class HandActionsHttpService {
 		);
 	}
 
-	downloadBridgeWebs(data) {
+	downloadBridgeWebs(data: { gameCode: string; payload: any }) {
 		console.log('Data in download bridgewebs: ', data);
 		const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-		const payload = { ...data, download: true };
+		const params = new HttpParams().set('gameCode', data.gameCode);
+		const payload = data.payload;
 		console.log('payload: ', payload);
 
-		return this.http.post<Blob>(`${this.apiUrl}/hand-actions/bridgewebs`, payload, {
-			headers,
-			responseType: 'blob' as 'json'
-		});
+		return this.http.post<Blob>(
+			`${this.apiUrl}/hand-actions/download-bridgewebs`,
+			payload,
+			{
+				headers,
+				responseType: 'blob' as 'json'
+			}
+		);
+	}
+
+	handleBridgeWebsHttp<T extends 'upload' | 'download'>(
+		action: 'upload' | 'download',
+		data: {
+			gameCode: string;
+			eventName: string;
+			[key: string]: any;
+		}
+	): Observable<T extends 'download' ? Blob : any> {
+		const params = new HttpParams().set('action', action);
+		const responseType = action === 'download' ? ('blob' as 'json') : 'json';
+		// const options: {
+		// 	headers?: HttpHeaders | { [header: string]: string | string[] };
+		// 	observe?: 'body' | 'response' | 'events';
+		// 	responseType: 'json' | 'blob';
+		// 	constext?: HttpContext;
+		// } = { responseType: action === 'download' ? 'blob' : 'json', observe: 'body' };
+		return this.http.post<T extends 'download' ? Blob : any>(
+			`${this.apiUrl}/hand-actions/bridgewebs`,
+			data,
+			{
+				params,
+				responseType
+			}
+		);
+	}
+
+	private getBridgeWebsHttpOptions(action: 'download' | 'upload') {
+		return {
+			responseType: action === 'download' ? 'blob' : 'json',
+			observe: 'body'
+		} as {
+			responseType: 'json' | 'blob';
+			observe: 'body' | 'response' | 'events';
+		};
 	}
 
 	fetchEBU(data): Observable<any> {

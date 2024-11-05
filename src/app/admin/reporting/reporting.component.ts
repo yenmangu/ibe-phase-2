@@ -22,6 +22,13 @@ import { Subject, takeUntil } from 'rxjs';
 import { NgTemplateNameDirective } from 'src/app/directives/ng-template-name.directive';
 import { SharedDataService } from 'src/app/shared/services/shared-data.service';
 import { CustomSnackbarComponent } from 'src/app/shared/custom-snackbar/custom-snackbar.component';
+
+interface PayloadData {
+	eventName: string;
+	gameCode: string;
+	data: { [key: string]: any };
+}
+
 @Component({
 	selector: 'app-reporting',
 	templateUrl: './reporting.component.html',
@@ -34,7 +41,8 @@ export class ReportingComponent implements OnInit, AfterViewInit, OnDestroy {
 	currentBreakpoint: string = '';
 	gameCode: string = '';
 	eventName: string = '';
-	bridgewebsForm: FormGroup;
+	bridgewebsGameDetailsForm: FormGroup;
+	bridgewebsAccountDetailsForm: FormGroup;
 	bridgeWebsMasterPoints: boolean = false;
 
 	accountData: any;
@@ -65,7 +73,7 @@ export class ReportingComponent implements OnInit, AfterViewInit, OnDestroy {
 		private dialog: MatDialog,
 		private cdr: ChangeDetectorRef
 	) {
-		this.buildBridgeWebsForm();
+		this.initialiseBridgewebsForms();
 	}
 
 	ngOnInit(): void {
@@ -90,12 +98,14 @@ export class ReportingComponent implements OnInit, AfterViewInit, OnDestroy {
 		// });
 
 		this.accountSettings.fetchAccountSettings();
-		this.bridgewebsForm
+		this.bridgewebsGameDetailsForm
 			.get('bwMasterpoints')
 			.valueChanges.subscribe((checked: boolean) => {
 				this.bridgeWebsMasterPoints = checked;
 				if (!checked) {
-					this.bridgewebsForm.patchValue({ masterpointsMatchWon: false });
+					this.bridgewebsGameDetailsForm.patchValue({
+						masterpointsMatchWon: false
+					});
 				}
 			});
 	}
@@ -112,8 +122,12 @@ export class ReportingComponent implements OnInit, AfterViewInit, OnDestroy {
 		if (this.accountData.bwDetails?.bwAccount) {
 			this.bwAccount = this.accountData.bwDetails.bwAccount;
 		} else this.bwAccount = '';
-		this.bridgewebsForm.get('bwEventName').patchValue(this.accountData.eventName);
-		this.bridgewebsForm.get('bwAccountName').patchValue(this.bwAccount);
+		this.bridgewebsGameDetailsForm
+			.get('bwEventName')
+			.patchValue(this.accountData.eventName);
+		this.bridgewebsAccountDetailsForm
+			.get('bwAccountName')
+			.patchValue(this.bwAccount);
 	}
 
 	private buildTabHeaderArray(): void {
@@ -129,21 +143,35 @@ export class ReportingComponent implements OnInit, AfterViewInit, OnDestroy {
 		});
 	}
 
-	buildBridgeWebsForm() {
-		this.bridgewebsForm = this.fb.group({
+	initialiseBridgewebsForms() {
+		this.buildBwGameDetailsForm();
+		this.buildBwAccountDetailsForm();
+	}
+
+	buildBwGameDetailsForm() {
+		this.bridgewebsGameDetailsForm = this.fb.group({
 			bwEventName: [this.eventName],
 			bwDirectorName: ['', [Validators.pattern('^[a-zA-Z\\s]+$')]],
 			bwScorerName: [''],
 			bwMasterpoints: [false],
-			masterpointsMatchWon: [false],
+			masterpointsMatchWon: [false]
+		});
+	}
+
+	buildBwAccountDetailsForm() {
+		this.bridgewebsAccountDetailsForm = this.fb.group({
 			bwAccountName: ['', [Validators.required]],
 			bwPassword: ['', [Validators.required]]
 		});
 	}
 
-	public clearForm() {
-		this.bridgewebsForm.reset();
+	public clearBwGameDetails() {
+		this.bridgewebsGameDetailsForm.reset();
 		this.patchFormValues();
+	}
+
+	public clearBwAccountDetails() {
+		this.bridgewebsAccountDetailsForm.reset();
 	}
 
 	private openSnackbar(message: string, noContact?: boolean, error?: any): void {
@@ -193,16 +221,35 @@ export class ReportingComponent implements OnInit, AfterViewInit, OnDestroy {
 		this.bwStatus.uploading = false;
 	}
 
+	getEventName(): string {
+		return this.eventName !==
+			this.bridgewebsGameDetailsForm.get('bwEventName').value
+			? this.eventName
+			: this.bridgewebsGameDetailsForm.get('bwEventName').value;
+	}
+
 	uploadBridgeWebs() {
 		console.log('upload bridgewebs invoked');
 		this.bwStatus.uploading = true;
-		const data = { payload: this.bridgewebsForm.value, gameCode: this.gameCode };
-
-		this.handActionsHttp.uploadBridgeWebs(data).subscribe({
+		const eventName = this.getEventName();
+		const data: PayloadData = {
+			...this.bridgewebsGameDetailsForm.value,
+			eventName,
+			gameCode: this.gameCode
+		};
+		this.handActionsHttp.handleBridgeWebsHttp('upload', data).subscribe({
 			next: response => {
 				this.resetBridgewebs();
 				console.log('Response: ', response);
-				this.snackbar.open('Success uploading to BridgeWebs', 'Dismiss');
+				if ((response.remoteSuccess = true)) {
+					this.snackbar.open('Success uploading to BridgeWebs', 'Dismiss');
+				} else {
+					this.openSnackbar(
+						'Error uploading to BridgeWebs.',
+						false,
+						'Unknown Error'
+					);
+				}
 			},
 			error: err => {
 				this.resetBridgewebs();
@@ -226,22 +273,29 @@ export class ReportingComponent implements OnInit, AfterViewInit, OnDestroy {
 			}
 		});
 	}
+
 	downloadBridgeWebs() {
 		console.log('download bridgewebs invoked');
-		const payload = { gameCode: this.gameCode };
-		this.handActionsHttp.downloadBridgeWebs(payload).subscribe({
+		this.bwStatus.downloading = true;
+		const data: PayloadData = {
+			gameCode: this.gameCode,
+			eventName: this.getEventName(),
+			data: this.bridgewebsGameDetailsForm.value
+		};
+		this.handActionsHttp.handleBridgeWebsHttp('download', data).subscribe({
 			next: (response: Blob) => {
 				if (response) {
+					console.log('response received');
+
+					this.resetBridgewebs();
 					const blob = new Blob([response], { type: 'text/csv' });
 					saveAs(blob, `${this.gameCode}.csv`);
 				}
 			},
 			error: error => {
-				console.error('Error fetching bridgewebs CSV');
-				this.snackbar.open(
-					'Error fetching CSV data, please try again. If the issue persists, please contact admin@ibescore.com',
-					'Dismiss'
-				);
+				this.resetBridgewebs();
+				console.error('Error fetching bridgewebs CSV', error);
+				this.openSnackbar('Error fetching BridgeWebs data.', false, error.error);
 			}
 		});
 	}

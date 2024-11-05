@@ -57,7 +57,7 @@
 	#bridgewebs
 	templateName="bridgeWebs">
 	<div class="container bw-form">
-		<form [formGroup]="bridgewebsForm">
+		<form [formGroup]="bridgewebsGameDetailsForm">
 			<div class="container game-details">
 				<h3>Game Details</h3>
 				<mat-form-field>
@@ -89,6 +89,34 @@
 					</ng-container>
 				</div>
 			</div>
+
+			<ng-container *ngIf="true">
+				<div class="download container button-wrapper row">
+					<ng-container *ngIf="!bwStatus.downloading">
+						<button
+							mat-flat-button
+							color="accent"
+							(click)="downloadBridgeWebs()"
+							[disabled]="!bridgewebsGameDetailsForm.valid">
+							Download
+						</button>
+					</ng-container>
+					<ng-container *ngIf="bwStatus.downloading">
+						<mat-spinner
+							color="accent"
+							class="download"></mat-spinner>
+					</ng-container>
+					<button
+						mat-flat-button
+						[disabled]="bridgewebsGameDetailsForm.pristine"
+						color="warn"
+						(click)="clearBwGameDetails()">
+						Reset
+					</button>
+				</div>
+			</ng-container>
+		</form>
+		<form [formGroup]="bridgewebsAccountDetailsForm">
 			<div class="container account-details">
 				<h3>BridgeWebs Account</h3>
 				<mat-form-field>
@@ -111,7 +139,10 @@
 							mat-flat-button
 							color="primary"
 							(click)="uploadBridgeWebs()"
-							[disabled]="!bridgewebsForm.valid || bwStatus.uploading">
+							[disabled]="
+								!bridgewebsAccountDetailsForm.valid ||
+								!bridgewebsGameDetailsForm.valid
+							">
 							Upload
 						</button>
 					</ng-container>
@@ -120,29 +151,11 @@
 					</ng-container>
 				</div>
 
-				<ng-container *ngIf="false">
-					<div class="download">
-						<ng-container *ngIf="!bwStatus.downloading">
-							<button
-								mat-flat-button
-								color="accent"
-								[disabled]="!bridgewebsForm.valid">
-								Download
-							</button>
-						</ng-container>
-						<ng-container *ngIf="bwStatus.downloading">
-							<mat-spinner
-								color="accent"
-								class="download"></mat-spinner>
-						</ng-container>
-					</div>
-				</ng-container>
-
 				<button
 					mat-flat-button
-					[disabled]="bridgewebsForm.pristine"
+					[disabled]="bridgewebsAccountDetailsForm.pristine"
 					color="warn"
-					(click)="clearForm()">
+					(click)="clearBwAccountDetails()">
 					Reset
 				</button>
 			</div>
@@ -154,7 +167,7 @@
 	<div class="container row main">
 		<div class="container column bridgewebs">
 			<h3>BridgeWebs</h3>
-			<form [formGroup]="bridgewebsForm">
+			<form [formGroup]="bridgewebsGameDetailsForm">
 				<div class="container column form">
 					<h3>Upload to BridgeWebs</h3>
 					<mat-form-field>

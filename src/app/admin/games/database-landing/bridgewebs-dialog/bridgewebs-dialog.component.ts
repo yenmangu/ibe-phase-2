@@ -11,7 +11,7 @@ import { UserDetailsService } from 'src/app/shared/services/user-details.service
 })
 export class BridgewebsDialogComponent implements OnInit, OnDestroy {
 	private subscription: Subscription;
-	bridgeWebsForm: FormGroup;
+	bridgewebsGameDetailsForm: FormGroup;
 	constructor(
 		private userDetailsService: UserDetailsService,
 		private fb: FormBuilder,
@@ -20,8 +20,8 @@ export class BridgewebsDialogComponent implements OnInit, OnDestroy {
 
 	ngOnInit(): void {}
 
-	private createBridgeWebsForm() {
-		this.bridgeWebsForm = this.fb.group({});
+	private createbridgewebsGameDetailsForm() {
+		this.bridgewebsGameDetailsForm = this.fb.group({});
 	}
 
 	ngOnDestroy(): void {}
